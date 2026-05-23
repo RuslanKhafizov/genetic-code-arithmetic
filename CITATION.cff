@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+
+message: "If you use this work, please cite it as below."
+
+type: dataset
+
+title: "Arithmetic structure of the standard genetic code: preprint, data, and code"
+
+authors:
+  - family-names: "Khafizov"
+    given-names: "Ruslan"
+    orcid: "https://orcid.org/0009-0004-0498-1229"
+
+abstract: >
+  Code, data, and preprint accompanying the analysis of
+  arithmetic regularities in the standard genetic code.
+  The work studies nucleon-count quantities (P, N, T)
+  across codon groups defined by the Rumer partition and
+  by third-position chemical axes, extending prior results
+  of Shcherbak-Makukov (2013) and Panov-Filatov (2024).
+  The repository contains the preprint (LaTeX source and
+  PDF), input and computed datasets, a reproducibility
+  script, and an interactive HTML visualizer.
+
+keywords:
+  - genetic code
+  - amino acids
+  - nucleon composition
+  - Rumer partition
+  - arithmetic regularities
+  - divisibility by 37
+
+license: CC-BY-4.0
+
+version: "1.0.0"
+
+date-released: "2026-05-23"
+
+repository-code: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
+url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"

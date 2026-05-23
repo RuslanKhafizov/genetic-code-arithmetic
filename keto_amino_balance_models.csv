@@ -1,0 +1,28 @@
+"Transl_Table","Code_Name","N_Keto_Pure","N_Amino_Pure","N_Diff_Pure","P_Keto_Pure","P_Amino_Pure","P_Diff_Pure","N_Keto_Pure_Alt","N_Amino_Pure_Alt","N_Diff_Pure_Alt","P_Keto_Pure_Alt","P_Amino_Pure_Alt","P_Diff_Pure_Alt"
+1,"The Standard Code",1813,1776,37,2108,2072,36,1813,1776,37,2108,2072,36
+2,"The Vertebrate Mitochondrial Code",1733,1802,-69,2014,2094,-80,1733,1802,-69,2014,2094,-80
+3,"The Yeast Mitochondrial Code",1805,1874,-69,2092,2172,-80,1805,1874,-69,2092,2172,-80
+4,"The Mold, Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code",1813,1872,-59,2108,2180,-72,1813,1872,-59,2108,2180,-72
+5,"The Invertebrate Mitochondrial Code",1782,1851,-69,2070,2150,-80,1782,1851,-69,2070,2150,-80
+6,"The Ciliate, Dasycladacean and Hexamita Nuclear Code",1881,1844,37,2186,2150,36,1881,1844,37,2186,2150,36
+9,"The Echinoderm and Flatworm Mitochondrial Code",1782,1837,-55,2070,2132,-62,1782,1837,-55,2070,2132,-62
+10,"The Euplotid Nuclear Code",1813,1833,-20,2108,2136,-28,1813,1833,-20,2108,2136,-28
+11,"The Bacterial, Archaeal and Plant Plastid Code",1813,1776,37,2108,2072,36,1813,1776,37,2108,2072,36
+12,"The Alternative Yeast Nuclear Code",1803,1776,27,2092,2072,20,1803,1776,27,2092,2072,20
+13,"The Ascidian Mitochondrial Code",1768,1837,-69,2054,2134,-80,1768,1837,-69,2054,2134,-80
+14,"The Alternative Flatworm Mitochondrial Code",1782,1922,-140,2070,2228,-158,1782,1922,-140,2070,2228,-158
+15,"Blepharisma Nuclear Code",1881,1776,105,2186,2072,114,1881,1776,105,2186,2072,114
+16,"Chlorophycean Mitochondrial Code",1872,1776,96,2180,2072,108,1872,1776,96,2180,2072,108
+21,"Trematode Mitochondrial Code",1782,1847,-65,2070,2140,-70,1782,1847,-65,2070,2140,-70
+22,"Scenedesmus obliquus Mitochondrial Code",1872,1727,145,2180,2016,164,1872,1727,145,2180,2016,164
+23,"Thraustochytrium Mitochondrial Code",1813,1717,96,2108,2000,108,1813,1717,96,2108,2000,108
+24,"Rhabdopleuridae Mitochondrial Code",1799,1841,-42,2094,2142,-48,1799,1841,-42,2094,2142,-48
+25,"Candidate Division SR1 and Gracilibacteria Code",1813,1811,2,2108,2112,-4,1813,1811,2,2108,2112,-4
+26,"Pachysolen tannophilus Nuclear Code",1795,1776,19,2084,2072,12,1795,1776,19,2084,2072,12
+27,"Karyorelict Nuclear Code",1881,1844,37,2186,2150,36,1881,1940,-59,2186,2258,-72
+28,"Condylostoma Nuclear Code",1813,1776,37,2108,2072,36,1881,1940,-59,2186,2258,-72
+29,"Mesodinium Nuclear Code",1898,1861,37,2204,2168,36,1898,1861,37,2204,2168,36
+30,"Peritrich Nuclear Code",1882,1845,37,2186,2150,36,1882,1845,37,2186,2150,36
+31,"Blastocrithidia Nuclear Code",1813,1872,-59,2108,2180,-72,1882,1941,-59,2186,2258,-72
+32,"Balanophoraceae Plastid Code",1909,1776,133,2216,2072,144,1909,1776,133,2216,2072,144
+33,"Cephalodiscidae Mitochondrial UAA-Tyr Code",1799,1926,-127,2094,2238,-144,1799,1926,-127,2094,2238,-144
