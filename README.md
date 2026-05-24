@@ -53,7 +53,7 @@ For the code and data package specifically:
 
 Ruslan Khafizov (2026). Code and data for "Arithmetic
 structure of the standard genetic code". Zenodo.
-https://doi.org/10.5281/zenodo.20360038
+https://doi.org/10.5281/zenodo.20360037
 
 A machine-readable citation entry is provided in
 `CITATION.cff`.
