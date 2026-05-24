@@ -276,19 +276,19 @@ present work we adopt this partition as one of the reference
 axes along which nucleon quantities are computed and
 compared.
 
-For all figures in this work the codon table is
-displayed in the ordering $C, G, T, A$ of bases on
-its axes, introduced by Rumer~\cite{rumer1968} on
-the basis of nucleobase chemistry (pyrimidines
-$C, T$ paired with purines $G, A$, each pair
-ordered from the hydrogen-bonding-stronger to the
-hydrogen-bonding-weaker member). This ordering is
-also one of four orderings (out of $24$ possible
-permutations of the four bases) in which
-$\mathrm{Octet}~\mathrm{I}$ and $\mathrm{Octet}~
-\mathrm{II}$ form connected regions on the codon
-matrix --- a geometric property independent of the
-chemical motivation that gives the same ordering. The codon table in this ordering, with nucleon
+For all figures in this work the codon table is displayed in
+the ordering $C, G, T, A$ of bases on its axes. This ordering
+has two independent justifications. Chemically, it was
+introduced by Rumer~\cite{rumer1968} on the basis of base type
+and hydrogen-bond strength: pyrimidines and purines alternate
+($C, T$ vs $G, A$), and within each pair the stronger member
+precedes the weaker ($C$ before $T$, $G$ before $A$).
+Geometrically, as shown by Panov and
+Filatov~\cite{panov2024}, it is one of exactly four orderings
+(out of $24$ possible permutations of the four bases) in
+which $\mathrm{Octet}~\mathrm{I}$ and
+$\mathrm{Octet}~\mathrm{II}$ form connected regions on the
+codon matrix. The codon table in this ordering, with nucleon
 parameters of the encoded amino acids, is shown in
 Figure~\ref{fig:codon-table}.
 
@@ -372,11 +372,11 @@ the two octets as groups of $32$ codons each; the six
 two-nucleotide groups and four one-nucleotide groups at the
 level of the full code; and their analogues within each
 octet, obtained by intersecting the corresponding chemical
-group with $\mathrm{Octet\,I}$ or $\mathrm{Octet\,II}$. We
+group with $\mathrm{Octet~I}$ or $\mathrm{Octet~II}$. We
 denote such intersections in the natural way: for example,
-$\mathrm{Keto} \cap \mathrm{Octet\,I}$ is the group of
+$\mathrm{Keto} \cap \mathrm{Octet~I}$ is the group of
 $16$ codons belonging both to the Keto group and to
-Octet~I, and $\{\mathrm{A}\} \cap \mathrm{Octet\,II}$ is
+Octet~I, and $\{\mathrm{A}\} \cap \mathrm{Octet~II}$ is
 the group of $8$ codons of Octet~II with adenine at the
 third position. All $33$ groups, together with their
 sizes, codon compositions, and Rumer-octet membership, are
@@ -1300,7 +1300,7 @@ $|\delta P| = 36$ is realized only by the same two
 pairs --- $\mathrm{Trp}$--$\mathrm{Ile}$ and
 $\mathrm{Trp}$--$\mathrm{Leu}$. The full distribution of
 $|\delta P|$ over the $190$ pairs is given in
-\texttt{amino\_acids\_proton\_differences.csv}. This offset by exactly one unit is not coincidental: it follows from a general parity property of the canonical amino acids, established in the next paragraph.
+\texttt{amino\_acids\_proton\_differences.csv}. This offset by exactly one unit is not coincidental: it follows from the parity property of the canonical amino acids discussed below.
 
 \emph{The induced value $|\delta T| = 73$.} The total
 nucleon difference of the pair satisfies
@@ -2398,9 +2398,8 @@ single-base level, the purine equality $\{\mathrm{G}\}
 the parametrization-independent pyrimidine equality
 $\{\mathrm{C}\} \equiv \{\mathrm{T}\}$. A
 parametrization-independent counterpart on the proton
-side gives $P(\mathrm{Octet~II~sense}) -
-P(\mathrm{Trp}) - P(\mathrm{Ile}) = P(\mathrm{Octet~I})
-= 2000$: the proton excess of Octet~II over Octet~I on
+side gives $P(\mathrm{Octet~II~sense}) - \bigl(P(\mathrm{Trp})
++ P(\mathrm{Ile})\bigr) = P(\mathrm{Octet~I}) = 2000$: the proton excess of Octet~II over Octet~I on
 the sense pool coincides exactly with the proton mass
 of the localizing pair, an identity that does not hold
 for neutrons.
@@ -2435,8 +2434,7 @@ of $100$, with $P(\mathrm{Octet~I})$ a multiple
 of~$1000$. Under Key~1 the cross-parameter equality
 $N(\mathrm{Octet~II}) = P(\mathrm{Octet~I}) = 2000$
 brings the neutron content of Octet~II onto the same
-scale, the proton excess of Octet~II over Octet~I on
-the sense pool equals $4000 = 4 \cdot 1000$, and the
+scale, and the
 neutron pools of the Purine and Pyrimidine groups
 satisfy $N(\mathrm{Purine}) = 1800$ and
 $N(\mathrm{Pyrimidine}) = 1900$. The Purine/Pyrimidine
@@ -2449,7 +2447,7 @@ regularity of the standard code under Key~1.
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Robustness of the Trp/Ile localization across alternative genetic codes}
+\subsection{Robustness of the Trp--Ile localization across alternative genetic codes}
 \label{sec:discussion-trpile-robustness}
 
 Section~\ref{sec:results-key1-ncbi} tested whether the
@@ -2472,16 +2470,17 @@ tables, computed in
 \texttt{keto\_amino\_balance\_models.csv}, shows that
 the sense-pool differences
 $N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense}) = 37$
-and $P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense}) =
-36$ are reproduced exactly in seven tables: Table~$1$
-(Standard), Table~$11$ (Bacterial, Archaeal, Plant
-Plastid), Table~$6$ (Ciliate, Dasycladacean and Hexamita
-Nuclear), Table~$29$ (Mesodinium Nuclear), and
-Table~$30$ (Peritrich Nuclear) reproduce the
-$(37, 36)$ signature under both sense-pool models, with
-Table~$27$ (Karyorelict Nuclear) and Table~$28$
-(Condylostoma Nuclear) reproducing it under the primary
-interpretation of context-dependent stop codons.
+and $P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense}) = 36$
+are reproduced exactly in seven tables. Five tables ---
+Table~$1$ (Standard), Table~$6$ (Ciliate, Dasycladacean
+and Hexamita Nuclear), Table~$11$ (Bacterial, Archaeal
+and Plant Plastid), Table~$29$ (Mesodinium Nuclear), and
+Table~$30$ (Peritrich Nuclear) --- reproduce the
+$(37, 36)$ signature under both sense-pool models. The
+remaining two, Table~$27$ (Karyorelict Nuclear) and
+Table~$28$ (Condylostoma Nuclear), reproduce it only
+under the primary interpretation of context-dependent
+stop codons.
 
 The mechanism is structural and operates differently in
 different tables. Table~$11$ has an amino acid
@@ -2494,7 +2493,7 @@ or $\mathrm{Glu}$ respectively); since $\mathrm{TAG}$
 sits in the Keto branch of family $\mathrm{TA}$ and
 $\mathrm{TAA}$ in the Amino branch, this symmetric
 reassignment contributes identically to both branches
-of the sense pool and the Keto--Amino differences are
+of the sense pool and the Keto/Amino differences are
 preserved. No codons other than $\mathrm{TAA}$ and $\mathrm{TAG}$
 are reassigned in these tables; in particular, neither
 $\mathrm{TGG}$ ($\mathrm{Trp}$) nor any codon of
