@@ -222,7 +222,7 @@ The full codon-to-product mapping is provided in the dataset
 \texttt{genetic\_code\_codons.csv}.
 
 A fundamental structural property of the standard code, first
-identified by Rumer~\cite{rumer1966, rumer1968}, is the partition of the $64$
+identified by Rumer~\cite{rumer1966,rumer1968}, is the partition of the $64$
 codons into two halves of $32$ codons each, distinguished by the
 degeneracy pattern of the third codon position. The first half,
 which we denote \emph{Octet~I}, consists of the eight codon families
@@ -688,36 +688,95 @@ enumerate, for all $190$ pairs of the twenty canonical amino
 acids, the absolute differences $|\delta P|$, $|\delta N|$
 and $|\delta T|$ respectively, and are used to locate coincidences at the level of individual amino acid pairs as described in Section~\ref{sec:criteria}.
 
-\paragraph{Comparative dataset across NCBI codes.}
+\paragraph{Sense-pool arithmetic across NCBI codes.}
 The computed dataset \texttt{deficit\_models\_analysis.csv}
-extends the analysis beyond the standard code by applying the
-same nucleon bookkeeping to every alternative translation
-table listed in \texttt{ncbi\_genetic\_code\_registry.csv}.
-For each alternative code, the dataset records the
-sense-coding neutron pool (total neutron count over all sense
-codons excluding the ATG initiator) and the total nucleon
-count of the corresponding Octet~I, the latter evaluated under
-two definitions: a \emph{structural} definition (the eight
-codon families occupying the Octet~I positions in the standard
-code, regardless of their amino acid assignments in the
+extends the analysis beyond the standard code by applying
+the same nucleon bookkeeping to every translation table
+listed in \texttt{ncbi\_genetic\_code\_registry.csv}. The
+standard code itself appears as one row of the dataset,
+serving as the reference point against which the
+remaining $26$ tables are compared.
+
+For each translation table the dataset records the global
+nucleon pools $N(\mathrm{All})$ and $P(\mathrm{All})$ and
+the sense-coding pools $N(\mathrm{All~sense})$ and
+$P(\mathrm{All~sense})$ (total counts over all sense
+codons excluding the $\mathrm{ATG}$ initiator). Two
+arithmetic tests are then tabulated, each with its own
+reference structure.
+
+The first test records the deficit of the sense-coding
+neutron pool relative to three reference anchors derived
+from Octet~I. The total nucleon count $T(\mathrm{Octet~I})$
+serving as each anchor is evaluated under two definitions:
+a \emph{structural} definition (the eight codon families
+occupying the Octet~I positions in the standard code,
+regardless of their amino acid assignments in the
 alternative code) and a \emph{functional} definition (the
 codon families that are fully four-fold degenerate in the
-alternative code itself). The two definitions coincide for
-the standard code but may differ when an alternative code
-reassigns or eliminates four-fold degeneracy in some families.
-The dataset then tabulates the deficit of the sense-coding
-neutron pool relative to three reference anchors: the
-constant~$3700$, the structural $T(\mathrm{Octet~I})$ and the
-functional $T(\mathrm{Octet~I})$. For the standard code all
-three deficits equal $111 = 3 \cdot 37$
-(Section~\ref{sec:results}); the alternative codes are
-evaluated against the same criterion, and the results are
-used in Section~\ref{sec:discussion} to assess the extent to
-which the arithmetic structure of the standard code is shared
-with its natural variants. A secondary model, in which three
-context-dependent stop codons (translation tables 27, 28, and
-31) are treated as sense codons rather than as stops, is
-tabulated in the \texttt{\_Alt} columns of the same dataset.
+alternative code itself). The three anchors are the
+constant $3700$, the structural $T(\mathrm{Octet~I})$ and
+the functional $T(\mathrm{Octet~I})$. For the standard
+code all three definitions coincide and the deficit equals
+$111 = 3 \cdot 37$ in all three columns
+(Section~\ref{sec:results-key1-neutrons}).
+
+The second test records the residue of the sense-coding
+proton pool $P(\mathrm{All~sense})$ modulo~$37$, without
+reference to any Octet~I-based anchor. For the standard code this residue is
+$-1 \equiv 36 \pmod{37}$, the parity-induced unit shift
+discussed in
+Section~\ref{sec:results-key1-protons}.
+
+The alternative codes are evaluated against the same two
+criteria, and the results are used in
+Section~\ref{sec:results-key1-ncbi} to assess the extent
+to which the arithmetic structure of the standard code is
+shared with its natural variants.
+
+A secondary model, in which the context-dependent stop
+codons of the three tables $27$, $28$, and $31$
+(Karyorelict, Condylostoma, and Blastocrithidia Nuclear
+Codes) are treated as sense codons rather than as stops,
+is tabulated in parallel in the \texttt{\_Alt} columns of
+the same dataset.
+
+\paragraph{Keto/Amino balance across NCBI codes.}
+The computed dataset
+\texttt{keto\_amino\_balance\_models.csv} extends the
+Keto/Amino balance analysis of
+Section~\ref{sec:results-key1-trpile} beyond the standard
+code by applying the same nucleon bookkeeping to every
+translation table listed in
+\texttt{ncbi\_genetic\_code\_registry.csv}. The standard
+code itself appears as one row of the dataset, serving as
+the reference point against which the remaining $26$
+tables are compared.
+
+For each translation table, the dataset records the
+sense-coding neutron and proton counts of the Keto and
+Amino half-codes,
+$N(\mathrm{Keto~sense})$, $N(\mathrm{Amino~sense})$,
+$P(\mathrm{Keto~sense})$, $P(\mathrm{Amino~sense})$,
+together with their pairwise differences
+$N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense})$ and
+$P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense})$. For
+the standard code these differences are $37$ and $36$
+respectively
+(Section~\ref{sec:results-key1-trpile}); the alternative
+codes are evaluated against the same pair of reference
+values, and the results are used in
+Section~\ref{sec:discussion-trpile-robustness} to
+identify codes that reproduce the Keto/Amino signature of
+the standard code.
+
+The same secondary sense-pool model as in the preceding
+paragraph --- in which the context-dependent stop codons
+of Tables~$27$, $28$, and $31$ are returned to the sense
+pool --- is tabulated in parallel in the \texttt{\_Alt}
+columns. For the standard code, which contains no
+context-dependent stop codons, the primary and
+alternative columns coincide.
 
 \paragraph{Reproducibility.}
 The complete pipeline --- input datasets, Python script, and
@@ -1145,7 +1204,7 @@ $\mathrm{ATG}$ also exhibits alignment:
 $\Delta(\{\mathrm{A}\}) = 148 = 4 \cdot 37$ (id~11). The
 sub-groups containing $\mathrm{ATG}$ give deviations:
 $\Delta(\{\mathrm{G}\} \cap \mathrm{Octet~II}) = 83$
-(id~31), $\Delta(\{\mathrm{G}\}) = 158$ (id~9). In every
+(id~31) and $\Delta(\{\mathrm{G}\}) = 158$ (id~9). In every
 case, the deviation is associated with the contribution of
 $\mathrm{ATG}$, treated under Key~0 as methionine with
 nucleon values $(80, 69)$ that are not aligned with the
