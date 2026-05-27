@@ -73,7 +73,7 @@ and the interactive visualizer is hosted at
     this same ordering is one of four (out of 24 possible
     permutations of the four bases) in which Octet I and Octet II
     form connected regions on the codon matrix.
-- `groups_key0.png` — graphical overview of nucleon
+  - `groups_key0.png` — graphical overview of nucleon
     parameters (T, P, N, Δ) for all codon groups under
     Key 0. Divisibility relations by 37, 111 and 999 are
     highlighted in color; cross-group equalities are
