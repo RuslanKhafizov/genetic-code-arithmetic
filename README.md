@@ -16,10 +16,10 @@ It provides:
 3. Five hand-curated **input datasets** describing the
    nucleon composition of the twenty canonical amino
    acids, the codon assignments of the standard genetic
-   code, the codon assignments of all 33 NCBI translation
-   tables, the partitioning of codons into analytical
-   groups, and the parametric keys used to handle start
-   and stop codons.
+   code, the codon assignments of all 27 NCBI translation
+   tables (numbered 1–33, with gaps), the partitioning of
+   codons into analytical groups, and the parametric keys
+   used to handle start and stop codons.
 
 4. A single Python script, `reproduce.py`, that consumes
    the five input datasets and generates thirteen
@@ -44,19 +44,14 @@ It provides:
 
 ## Citation
 
-If you use this work, please cite the preprint:
-
-Ruslan Khafizov (2026). Arithmetic structure of the standard
-genetic code.
-
-For the code and data package specifically:
-
-Ruslan Khafizov (2026). Code and data for "Arithmetic
-structure of the standard genetic code". Zenodo.
-https://doi.org/10.5281/zenodo.20360037
-
-A machine-readable citation entry is provided in
-`CITATION.cff`.
+A machine-readable citation record is provided in
+`CITATION.cff`. The complete package supporting this work
+is archived at Zenodo:
+[DOI:10.5281/zenodo.20360037](https://doi.org/10.5281/zenodo.20360037).
+The development repository is available on GitHub at
+[github.com/RuslanKhafizov/genetic-code-arithmetic](https://github.com/RuslanKhafizov/genetic-code-arithmetic),
+and the interactive visualizer is hosted at
+[ruslankhafizov.github.io/genetic-code-arithmetic](https://ruslankhafizov.github.io/genetic-code-arithmetic).
 
 ## Repository contents
 
@@ -70,14 +65,19 @@ A machine-readable citation entry is provided in
     table with nucleon parameters of the encoded amino
     acids under Key 0. Octet I codons (eight four-fold
     degenerate families) are shaded purple; Octet II
-    codons are shaded yellow. The codon table is
-    displayed in the ordering C, G, T, A introduced by
-    Rumer (1968), in which Octet I and Octet II form
-    connected regions.
-  - `groups_key0.png` — graphical overview of the
-    nucleon parameters (T, P, N, Δ) for all codon groups
-    under Key 0. Divisibility relations by 37, 111, and
-    999 are highlighted in color.
+    codons are shaded yellow. The codon table is displayed in the C, G, T, A ordering
+    introduced by Rumer (1968) on chemical grounds — pyrimidines
+    and purines alternate (C, T vs G, A), and within each pair
+    the stronger hydrogen-bond partner precedes the weaker (C
+    before T, G before A). As shown by Panov and Filatov (2024),
+    this same ordering is one of four (out of 24 possible
+    permutations of the four bases) in which Octet I and Octet II
+    form connected regions on the codon matrix.
+- `groups_key0.png` — graphical overview of nucleon
+    parameters (T, P, N, Δ) for all codon groups under
+    Key 0. Divisibility relations by 37, 111 and 999 are
+    highlighted in color; cross-group equalities are
+    highlighted in red.
   - `groups_key1.png` — the same overview under the
     analytically derived parametrization (Key 1). Under
     this parametrization the nucleon parameters of the
@@ -96,9 +96,10 @@ complete set of assumptions on which all computed results depend.
   of the twenty canonical amino acids.
 - `genetic_code_codons.csv` — codon assignments of the standard
   genetic code (NCBI translation table 1).
-- `ncbi_genetic_code_registry.csv` — codon assignments of all 33
-  translation tables maintained by NCBI, used for the comparative
-  analysis across natural genetic code variants.
+- `ncbi_genetic_code_registry.csv` — codon assignments of all 27
+  translation tables maintained by NCBI (numbered 1–33, with gaps),
+  used for the comparative analysis across natural genetic code
+  variants.
 - `codon_groups.csv` — definitions of all 33 codon groups
   (macro-groups, L16 sub-groups and L8 sub-groups) used in the
   study, together with twin-group assignments.
@@ -140,13 +141,14 @@ the difference.
 Comparative dataset across NCBI codes:
 
 - `deficit_models_analysis.csv` — applies the same nucleon
-  bookkeeping to all 33 NCBI translation tables to support the
-  comparative analysis between the standard code and its natural
-  variants.
+  bookkeeping to all 27 NCBI translation tables (numbered
+  1–33, with gaps) to support the comparative analysis
+  between the standard code and its natural variants.
 - `keto_amino_balance_models.csv` — reports the keto/amino
-  partition of the sense pool (third-position G/T vs A/C) in
-  both nucleon and proton counts, across all NCBI translation
-  tables and under both sense-pool models.
+  partition of the sense pool (third-position G/T vs A/C)
+  in both neutron and proton counts, across all 27 NCBI
+  translation tables (numbered 1–33, with gaps) and under
+  both sense-pool models.
 
 ### Reproducibility script
 
@@ -175,10 +177,9 @@ external dependencies.
 
 #### Main features
 
-- **Translation table selector.** Switching between all 33 NCBI
-  translation tables and several additional artificial
-  translation models that appear in the theoretical literature
-  on genetic code symmetries.
+- **Translation table selector.** Switching between all 27 NCBI
+  translation tables (numbered 1–33, with gaps) and several
+  additional artificial translation models.
 
 - **Parametric keys.** Quick switching between the zero
   parametrization (Key 0), the symmetrization (Key 1), and
@@ -219,12 +220,12 @@ external dependencies.
   organized into three tabs. The "Global" tab corresponds to
   the codon-group partitioning used in this study, including
   the macro-groups defined by the chemical type of the third
-  nucleotide and the Octet I / Octet II partition. The
-  "Combinatorial" tab includes several groupings introduced in
-  earlier work on genetic code symmetries (Shcherbak and
-  Makukov 2013, Panov and Filatov 2024) and allows their
-  arithmetic properties to be reproduced and explored under
-  any chosen parametric key. The "Quartets" tab contains
+  nucleotide and the Octet I / Octet II partition. The "Combinatorial" tab includes several groupings, some
+  introduced in earlier work on genetic code symmetries
+  (Shcherbak and Makukov 2013, Panov and Filatov 2024) and
+  others examined during the preparation of the present
+  work. It allows their arithmetic properties to be
+  reproduced and explored under any chosen parametric key. The "Quartets" tab contains
   experimental finer subdivisions of the code that are not
   discussed in the present preprint. Each preset button acts
   as a live scoreboard, displaying the nucleon quantities of
@@ -324,9 +325,10 @@ structural halves of 32 codons each:
 
 Unless otherwise noted, datasets describe the standard genetic
 code (NCBI translation table 1). The files
-`ncbi_genetic_code_registry.csv` and `deficit_models_analysis.csv`
-cover all genetic code variants recognized by NCBI (translation
-tables 1–33).
+`ncbi_genetic_code_registry.csv`, `deficit_models_analysis.csv`
+and `keto_amino_balance_models.csv` cover all genetic code
+variants recognized by NCBI (27 translation tables, numbered
+1–33, with gaps).
 
 ## The reproducibility script `reproduce.py`
 
@@ -1033,12 +1035,30 @@ in the Starts line.
   
 # deficit_models_analysis.csv
 
-This dataset provides a comparative mathematical analysis of the neutron
-deficit across all genetic code variants recognized by NCBI (translation
-tables 1–33). The dataset tests the consistency of the cross-parameter
-equality observed in the Standard Code, where the total nucleon mass of
-Octet I equals the total neutron count of the sense codons excluding the
-ATG initiator, plus a deficit of exactly 111 neutrons (3 × 37).
+This dataset provides a comparative arithmetic analysis of
+the sense-pool of the standard code across all genetic
+code variants recognized by NCBI (27 translation tables,
+numbered 1–33, with gaps). Two structurally distinct tests
+are tabulated:
+
+(1) the neutron deficit of the sense pool relative to
+three reference anchors derived from Octet I (the constant
+3700, the structural T(Octet I), and the functional
+T(Octet I)). For the standard code all three deficits
+equal 111 = 3·37.
+
+(2) the residue of the sense-pool proton count modulo 37,
+without reference to any Octet I-based anchor. For the
+standard code this residue is -1 ≡ 36 (mod 37), the
+parity-induced unit shift consistent with the structural
+forbiddenness of |δP| = 37 for any pair of canonical
+amino acids.
+
+The two tests reflect different aspects of how the
+standard code's sense pool aligns with the 37-lattice: the
+neutron test through dimensional matching against the
+Octet I scale, the proton test through residue analysis
+alone.
 
 This dataset is generated by `reproduce.py` from
 `amino_acids_nucleons.csv` and `ncbi_genetic_code_registry.csv`
@@ -1108,6 +1128,8 @@ Model 2 (`N_Pure_Alt`): context-dependent codons are treated as sense
 codons and included, consistent with their elongation capacity. For all
 other codes, `N_Pure_Alt` is identical to `N_Pure`.
 
+The same convention applies to the proton-side columns `P_Pure` and `P_Pure_Alt`.
+
 ## Octet I models
 
 In the Standard Code, Octet I consists of 8 fully 4-fold degenerate
@@ -1148,6 +1170,29 @@ nucleon count of the specific code (Octet1_Func_T − N_Pure).
 The same three deficits are also provided for Model 2 as
 `Deficit_vs_3700_Alt`, `Deficit_vs_Struct_Alt`, and
 `Deficit_vs_Func_Alt`.
+
+## Proton residue calculations
+
+Unlike the neutron deficit test described above, the proton
+residue test makes no reference to Octet I. It records the
+residue of the sense-coding proton pool modulo 37, computed
+directly from `P_Pure` (Model 1) or `P_Pure_Alt` (Model 2):
+
+`P_Pure_mod37` = `P_Pure` mod 37
+`P_Pure_Alt_mod37` = `P_Pure_Alt` mod 37
+
+For the standard code, `P_Pure_mod37` equals 36, which
+corresponds to −1 modulo 37 (the dataset records the
+non-negative representative). This residue of −1 is the
+parity-induced unit shift discussed in the preprint: the
+even-proton property of canonical amino acids forces
+|δP(Trp, Ile)| = 36 rather than the lattice multiplier 37,
+and the same shift propagates to the global sense pool.
+
+The distribution of `P_Pure_mod37` across NCBI tables
+identifies which alternative codes preserve this −1 mod 37
+alignment and which do not. As with the neutron deficit test,
+results under Model 2 are recorded in `P_Pure_Alt_mod37`.
 
 ## Columns
 
@@ -1212,18 +1257,18 @@ The same three deficits are also provided for Model 2 as
 
 # keto_amino_balance_models.csv
 
-This dataset reports the keto/amino partition of the sense pool across all genetic code variants recognized by NCBI (translation tables 1–33), in both nucleon and proton
-quantities, under the same two sense-pool models as
-`deficit_models_analysis.csv`.
+This dataset reports the keto/amino partition of the sense pool across all genetic code variants recognized by NCBI (27 translation tables, numbered 1–33, with gaps), in both neutron and proton quantities, under the same two sense-pool models as `deficit_models_analysis.csv`.
 
 The third codon position partitions all 64 codons into two halves of
 32 codons each: the `Keto` half (third position is G or T) and the
 `Amino` half (third position is A or C). For each NCBI table, the
 total neutron and proton counts of each half are computed over the
-sense pool only — i.e. service codons (those in the `Stop_Codons`
-column plus the ATG initiator, under Model 1; or only the ATG
-initiator for context-dependent codes, under Model 2) are excluded
-from both sums. This is the same exclusion convention used in
+sense pool only — service codons are excluded from both sums. Under
+Model 1, the excluded service codons are all codons listed in the
+`Stop_Codons` column plus the ATG initiator; under Model 2, only the
+ATG initiator is excluded for tables with context-dependent stops
+(27, 28, 31), while Model 2 coincides with Model 1 for all other
+tables. This is the same exclusion convention used in
 `deficit_models_analysis.csv`.
 
 For the standard code, the sense-pool keto/amino differences are
