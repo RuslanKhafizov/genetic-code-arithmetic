@@ -420,8 +420,7 @@ is recorded in the column \texttt{Twin\_Group\_ID}.
 The nucleon quantities $P$, $N$, $T$ and $\Delta$ of any codon
 group are obtained by summing the corresponding per-amino-acid
 values from Section~\ref{sec:composition} over all codons in
-the group. For the $60$ codons that encode an amino acid and carry no
-additional role, this summation is unambiguous: each such
+the group. For the the 60 sense codons (defined below), this summation is unambiguous: each such
 codon has a well-defined translation product with a
 well-defined molecular composition. The remaining four
 codons --- the three stop signals $\mathrm{TAA}$,
@@ -431,13 +430,25 @@ stop codons do not correspond to any translation product and
 because the start codon plays a dual role as an initiation
 signal and as a methionine-encoding codon. We refer to
 these four codons collectively as \emph{service codons}.
+The remaining $60$ codons we call \emph{sense codons}.
+The start codon $\mathrm{ATG}$ encodes methionine and is
+a fully functional sense codon at any internal position;
+it is grouped with the service codons, and excluded from
+the sense pool, solely in its role as the universal initiation signal, not because it lacks a
+translation product. Only the $\mathrm{ATG}$ initiator is
+removed on these grounds; every other codon that encodes
+an amino acid is counted as a sense codon. The sense pool
+is thus defined as the $64$ codons
+less the three stop codons and the $\mathrm{ATG}$
+initiator, and its membership does not depend on the
+choice of parametric key.
 
 To formalize this, we introduce the notion of a
 \emph{parametric key}: a fixed assignment of nucleon values
 $(P, N)$ to each of the four service codons. A parametric key
 specifies how service codons contribute to group sums; it
 affects only the four service codons, while the nucleon
-values of the 60 amino-acid-coding codons defined above are fixed by the
+values of the $60$ sense codons defined above are fixed by the
 amino acid composition of Section~\ref{sec:composition} and
 are unaffected by the choice of key. In the present study we
 employ two parametric keys, both of which are recorded in
@@ -700,13 +711,15 @@ remaining $26$ tables are compared.
 
 For each translation table the dataset records the global
 nucleon pools $N(\mathrm{All})$ and $P(\mathrm{All})$ and
-the sense-coding pools $N(\mathrm{All~sense})$ and
-$P(\mathrm{All~sense})$ (total counts over all sense
-codons excluding the $\mathrm{ATG}$ initiator). Two
+the sense pool pools $N(\mathrm{All~sense})$ and
+$P(\mathrm{All~sense})$ (total counts over the $60$ sense
+codons of Section~\ref{sec:parametrization}, that is,
+excluding the three stop codons and the $\mathrm{ATG}$
+initiator). Two
 arithmetic tests are then tabulated, each with its own
 reference structure.
 
-The first test records the deficit of the sense-coding
+The first test records the deficit of the sense pool
 neutron pool relative to three reference anchors derived
 from Octet~I. The total nucleon count $T(\mathrm{Octet~I})$
 serving as each anchor is evaluated under two definitions:
@@ -722,7 +735,7 @@ code all three definitions coincide and the deficit equals
 $111 = 3 \cdot 37$ in all three columns
 (Section~\ref{sec:results-key1-neutrons}).
 
-The second test records the residue of the sense-coding
+The second test records the residue of the sense pool
 proton pool $P(\mathrm{All~sense})$ modulo~$37$, without
 reference to any Octet~I-based anchor. For the standard code this residue is
 $-1 \equiv 36 \pmod{37}$, the parity-induced unit shift
@@ -755,7 +768,7 @@ the reference point against which the remaining $26$
 tables are compared.
 
 For each translation table, the dataset records the
-sense-coding neutron and proton counts of the Keto and
+sense pool neutron and proton counts of the Keto and
 Amino half-codes,
 $N(\mathrm{Keto~sense})$, $N(\mathrm{Amino~sense})$,
 $P(\mathrm{Keto~sense})$, $P(\mathrm{Amino~sense})$,
@@ -1309,8 +1322,11 @@ through its translation product $\mathrm{Met}$ under
 Key~0, and is the only service codon contributing to the
 difference under that parametrization. Excluding the
 service codons from the balance --- that is, comparing
-the sense-coding pools of Keto and Amino directly ---
-yields
+the sense pool pools of Keto and Amino directly ---
+yields the following, where for any codon group $G$ we
+write $X(G~\mathrm{sense})$ for the quantity $X \in
+\{T, P, N, \Delta\}$ summed over the sense codons of $G$
+(equivalently, $G$ with its service codons removed):
 \begin{align*}
 T(\mathrm{Keto~sense}) - T(\mathrm{Amino~sense}) &= 3921 - 3848 = 73, \\
 P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense}) &= 2108 - 2072 = 36, \\
@@ -1421,7 +1437,7 @@ Section~\ref{sec:results-pyrimidine-synonymy}.
 
 \paragraph{Balance equation for Keto and Amino.}
 The neutron pools of Keto and Amino, expressed through
-the sense-coding values established in
+the sense pool values established in
 Section~\ref{sec:results-key1-trpile} and the unknown
 parameters of the service codons, are
 \begin{align*}
@@ -1445,7 +1461,7 @@ second independent constraint is required to fix the
 parameters individually.
 
 \paragraph{Divisibility of the global neutron pool by~$37$.}
-The sense-coding pool of all $60$ sense codons of the
+The sense pool pool of all $60$ sense codons of the
 standard code carries
 \[
 N(\mathrm{All~sense}) =
@@ -1574,7 +1590,7 @@ also applies here without modification.
 
 \paragraph{Balance equation for Keto and Amino.}
 The proton pools of Keto and Amino, expressed through
-the sense-coding values established in
+the sense pool values established in
 Section~\ref{sec:results-key1-trpile} and the unknown
 parameters of the service codons, are
 \begin{align*}
@@ -1603,7 +1619,7 @@ independent constraint is required to fix the
 parameters individually.
 
 \paragraph{Divisibility of the global proton pool by~$37$.}
-The sense-coding pool of all $60$ sense codons of the
+The sense pool pool of all $60$ sense codons of the
 standard code carries
 \[
 P(\mathrm{All~sense}) =
@@ -1838,10 +1854,12 @@ computed under two model choices for the sense pool:
     stops in the NCBI registry are excluded, even when
     they are read as amino acids in context-dependent
     codes. The primary start codon $\mathrm{ATG}$ is excluded as
-the universal structural initiator. Alternative
-    start codons such as $\mathrm{GTG}$ and
-    $\mathrm{TTG}$ retain their amino acid meaning during
-    elongation and are included.
+the universal initiator. Initiation is a property of the
+    first codon position rather than of the triplet
+    itself, so exactly one initiator codon is removed;
+    alternative start codons such as $\mathrm{GTG}$ and
+    $\mathrm{TTG}$ carry their elongation meaning at every
+    internal position and are counted as sense codons.
   \item
     Sense pool, Model~2 (alternative): in the three
     codes with context-dependent stops (Tables~$27$,

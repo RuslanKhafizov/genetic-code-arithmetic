@@ -1071,8 +1071,7 @@ section above for details on how to regenerate it.
 The columns `N_Pure` and `Pure_Codons_Count` are computed over the set
 of sense codons excluding the ATG initiator. ATG encodes Methionine and
 is a fully functional sense codon at any internal position; it is
-excluded here solely in its structural role as the universal structural initiation
-codon. All other sense codons, including alternative start codons such as
+excluded here solely in its role as the universal initiation codon. All other sense codons, including alternative start codons such as
 GTG and TTG, retain their amino acid meaning during elongation and are
 included.
 
@@ -1091,6 +1090,13 @@ Pure_Codons_Count = 64 − Stop_Count − 1
 where Stop_Count is the number of codons listed in the `Stop_Codons`
 column of `ncbi_genetic_code_registry.csv` for the given translation
 table.
+
+In the notation of the preprint, this sense pool is written
+`N(All sense)` and `P(All sense)`; the dataset columns with the
+`_Pure` suffix (`N_Pure`, `P_Pure`, `N_Keto_Pure`, `P_Amino_Pure`,
+and so on) correspond to these sense-pool quantities. The preprint's
+term *sense codons* denotes exactly this 64 − Stop_Count − 1 set
+(stop codons and the ATG initiator excluded).
 
 The codon order used for the `Amino_Acids` string follows the standard
 NCBI enumeration described in the `ncbi_genetic_code_registry.csv`
