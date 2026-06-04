@@ -1,55 +1,43 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it as below."
 type: dataset
-title: "Atomic structural invariants of the standard genetic code: preprint, data, and code"
+title: "Arithmetic structure of the standard genetic code: preprint, data, and code"
 authors:
   - family-names: "Khafizov"
     given-names: "Ruslan"
     orcid: "https://orcid.org/0009-0004-0498-1229"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20360037
+    description: "Concept DOI (always points to the latest version)"
 abstract: >
-  Code, data, and preprint accompanying the analysis of atomic
-  structural invariants of the standard genetic code. The work
-  studies the atomic composition (C, H, N, O, S) of the encoded
-  amino acids across codon groups defined by family degeneracy and
-  by third-position chemical axes, and identifies a three-dimensional
-  space of linear invariants constant across the third-position
-  groups. It is a companion to "Arithmetic structure of the standard
-  genetic code", which analyses the same groups through nucleon
-  counts and divisibility by 37. The repository contains the preprint
-  (LaTeX source and PDF), input and computed datasets, and a
-  reproducibility script.
+  Code, data, and preprint accompanying the analysis of
+  arithmetic regularities in the standard genetic code.
+  The work studies nucleon-count quantities (P, N, T)
+  across codon groups defined by the Rumer partition and
+  by third-position chemical axes, extending prior results
+  of Shcherbak-Makukov (2013) and Panov-Filatov (2024).
+  The repository contains the preprint (LaTeX source and
+  PDF), input and computed datasets, a reproducibility
+  script, and an interactive HTML visualizer.
 keywords:
   - genetic code
   - amino acids
-  - atomic composition
-  - structural invariants
-  - wobble position
-  - codon degeneracy
+  - nucleon composition
+  - Rumer partition
+  - arithmetic regularities
+  - divisibility by 37
 license: CC-BY-4.0
-version: "1.1.1"
-date-released: "2026-06-03"
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.20501639
-    description: Concept DOI (resolves to the latest version)
-repository-code: "https://github.com/RuslanKhafizov/Atomic-structural-invariants-of-the-genetic-code"
-url: "https://github.com/RuslanKhafizov/Atomic-structural-invariants-of-the-genetic-code"
-references:
-  - type: article
-    authors:
-      - family-names: "Khafizov"
-        given-names: "Ruslan"
-        orcid: "https://orcid.org/0009-0004-0498-1229"
-    title: "Arithmetic structure of the standard genetic code"
-    year: 2026
-    doi: 10.5281/zenodo.20360037
-    notes: "Companion preprint analysing the same code through nucleon counts."
+version: "1.3.3"
+date-released: "2026-05-31"
+repository-code: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
+url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 preferred-citation:
   type: article
   authors:
     - family-names: "Khafizov"
       given-names: "Ruslan"
       orcid: "https://orcid.org/0009-0004-0498-1229"
-  title: "Atomic structural invariants of the standard genetic code"
+  title: "Arithmetic structure of the standard genetic code"
   year: 2026
-  doi: 10.5281/zenodo.20501639
+  url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic/blob/main/main.pdf"
