@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-reproduce.py — Generates all 12 derived CSV files from 5 input CSV files.
+reproduce.py — Generates all 13 derived CSV files from 5 input CSV files.
 
 Unified output rules for every file:
   - Encoding UTF-8, LF line endings, trailing newline.
