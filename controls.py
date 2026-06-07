@@ -24,6 +24,16 @@ input datasets and writes two supplementary control datasets:
         this holds in the value sets where 37 is not imposed, so the result is
         not an artifact of the Key 1 derivation.
 
+  * position_asymmetry_ncbi.csv
+        For each of the 27 NCBI translation tables, the Keto/Amino
+        functional-group axis ({G,T} vs {A,C}) sense-pool asymmetry for T, P, N
+        and Delta at each of the three codon positions, with residues modulo 37
+        (Model 1 sense pool: stops of that table and the ATG initiator
+        excluded). Establishes that the asymmetry is divisible by 37 at all
+        three codon positions only for the standard code and its exact
+        codon-to-amino-acid equivalent (Table 11); no other table reaches more
+        than one position.
+
 Output rules match reproduce.py:
   - Encoding UTF-8, LF line endings, trailing newline.
   - Quoting: csv.QUOTE_NONNUMERIC (string fields quoted, numbers bare).
@@ -52,6 +62,11 @@ for n1, n2, s1, s2 in AXES:
     AXIS_GROUPS.append((n1, s1))
     AXIS_GROUPS.append((n2, s2))
 
+# NCBI "ncbieaa" string codon order: base1, base2, base3 each cycling T,C,A,G.
+NCBI_ORDER = "TCAG"
+NCBI_CODONS = [NCBI_ORDER[i // 16] + NCBI_ORDER[(i // 4) % 4] + NCBI_ORDER[i % 4]
+               for i in range(64)]
+
 PRIME_LIMIT = 97
 
 
@@ -76,6 +91,7 @@ aa_rows = read_csv("amino_acids_nucleons.csv")
 codon_rows = read_csv("genetic_code_codons.csv")
 group_rows = read_csv("codon_groups.csv")
 key_rows = read_csv("key_parameters.csv")
+ncbi_rows = read_csv("ncbi_genetic_code_registry.csv")
 
 AA_BY_NAME = {
     r["Amino_Acid"]: {"P": int(r["Protons"]), "N": int(r["Neutrons"])}
@@ -86,6 +102,13 @@ CODON_TO_AA = {}
 for r in codon_rows:
     for c in r["Codons"].split(";"):
         CODON_TO_AA[c.strip()] = r["Product"]
+
+# One-letter amino acid code -> (P, N), for decoding NCBI ncbieaa strings.
+ONE_LETTER_PN = {}
+for r in codon_rows:
+    if r["Product"] in AA_BY_NAME:
+        ONE_LETTER_PN[r["One_Letter"]] = (AA_BY_NAME[r["Product"]]["P"],
+                                          AA_BY_NAME[r["Product"]]["N"])
 
 KEY_PARAMS = {}
 for r in key_rows:
@@ -234,13 +257,69 @@ def build_modulus_scan():
 
 # ── Main ───────────────────────────────────────────────────────────────────
 
+def build_position_asymmetry_ncbi():
+    # Control 3. For each of the 27 NCBI translation tables, the Keto/Amino
+    # functional-group axis ({G,T} vs {A,C}) sense-pool asymmetry
+    # (Keto minus Amino) for T, P, N and Delta at each of the three codon
+    # positions, with residues modulo 37. The sense pool follows Model 1: the
+    # table's stop codons and the universal initiator ATG are excluded; every
+    # other codon contributes its amino acid's (P, N). The standard code
+    # asymmetry is divisible by 37 at all three positions; this control records
+    # how many positions each table reaches, establishing that the full
+    # three-position signature is specific to the standard code and its exact
+    # codon-to-amino-acid equivalent.
+    header = ["Transl_Table", "Code_Name", "Position",
+              "Keto_minus_Amino_T", "Keto_minus_Amino_P",
+              "Keto_minus_Amino_N", "Keto_minus_Amino_Delta",
+              "T_mod37", "P_mod37", "N_mod37", "Delta_mod37",
+              "Position_Has_Div37", "Positions_With_Div37"]
+    rows = []
+    for tr in ncbi_rows:
+        table = int(tr["Transl_Table"])
+        name = tr["Code_Name"]
+        aa_string = tr["Amino_Acids"]
+        # Model 1 sense pool: exclude stops ('*') and the ATG initiator.
+        sense = {}
+        for i, codon in enumerate(NCBI_CODONS):
+            aa = aa_string[i]
+            if aa == "*" or codon == "ATG":
+                continue
+            sense[codon] = ONE_LETTER_PN[aa]
+        per_position = []
+        for pos in (1, 2, 3):
+            pk = nk = pa = na = 0
+            for codon, (p, n) in sense.items():
+                base = codon[pos - 1]
+                if base in "GT":        # Keto
+                    pk += p
+                    nk += n
+                elif base in "AC":      # Amino
+                    pa += p
+                    na += n
+            T = (pk + nk) - (pa + na)
+            P = pk - pa
+            N = nk - na
+            D = (pk - nk) - (pa - na)
+            has = int(any(v % 37 == 0 for v in (T, P, N, D)))
+            per_position.append((pos, T, P, N, D, has))
+        positions_with = sum(h for *_, h in per_position)
+        for pos, T, P, N, D, has in per_position:
+            rows.append([table, name, pos, T, P, N, D,
+                         T % 37, P % 37, N % 37, D % 37,
+                         has, positions_with])
+    rows.sort(key=lambda r: (r[0], r[2]))
+    return header, rows
+
+
 def main():
     verify_position3_against_registry()
     h1, r1 = build_position_analysis()
     write_csv("position_axis_analysis.csv", h1, r1)
     h2, r2 = build_modulus_scan()
     write_csv("prime_divisibility_scan.csv", h2, r2)
-    print("Done. 2 control files written.")
+    h3, r3 = build_position_asymmetry_ncbi()
+    write_csv("position_asymmetry_ncbi.csv", h3, r3)
+    print("Done. 3 control files written.")
 
 
 if __name__ == "__main__":
