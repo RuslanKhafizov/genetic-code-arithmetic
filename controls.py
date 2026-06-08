@@ -4,12 +4,12 @@ controls.py — Supplementary specificity controls for the standard genetic code
 
 This script is NOT part of the core reproducible pipeline (reproduce.py). It is
 a standalone, deterministic, exact-integer companion that consumes the same
-input datasets and writes two supplementary control datasets:
+input datasets and writes three supplementary control datasets:
 
   * position_axis_analysis.csv
         The three chemical axes (Keto/Amino, Strong/Weak, Purine/Pyrimidine)
         applied independently to the FIRST, SECOND and THIRD codon position,
-        under the sense pool and under Key 1. Establishes that the divisibility
+        under the sense pool, Key 0, and Key 1. Establishes that the divisibility
         structure modulo 37 is specific to the third codon position.
 
   * prime_divisibility_scan.csv
@@ -18,11 +18,20 @@ input datasets and writes two supplementary control datasets:
         imposed), the groups under Key 0 (37 not imposed by construction), and
         the groups under Key 1 (37 imposed by the derivation) -- the number of
         group quantities divisible by p, counted both over all instances and
-        over distinct nonzero values. Establishes that, after the trivial
-        moduli 2 (proton parity) and 5 (decimal round-number scale), 37 is the
-        only modulus dividing a non-chance share of the quantities, and that
-        this holds in the value sets where 37 is not imposed, so the result is
-        not an artifact of the Key 1 derivation.
+        over distinct nonzero values. Establishes that, after the small primes
+        2 (proton parity) and 5 (the round-number regularity), 37 is the only
+        modulus dividing a non-chance share of the quantities, and that this
+        holds in the value sets where 37 is not imposed, so the result is not
+        an artifact of the Key 1 derivation. The scan ranges over primes, not
+        all integers, because divisibility by a composite is the conjunction of
+        divisibilities by its prime-power factors (no new modulus), and because
+        a higher prime power only re-scores the SAME quantities against a
+        smaller chance rate 1/m and so inflates the excess factor without
+        adding information. 37 is distinguished from 2 and 5 on base-independent
+        grounds: it is a larger prime (rarer per hit under the null), has no
+        parity-type structural cause, and occurs at a single power -- no
+        quantity is divisible by 37^2, so its excess does not grow with the
+        modulus, unlike 5, whose multiples here are almost all multiples of 25.
 
   * position_asymmetry_ncbi.csv
         For each of the 27 NCBI translation tables, the Keto/Amino
@@ -157,7 +166,7 @@ def build_position_analysis():
               "Total_mod37", "Protons_mod37", "Neutrons_mod37", "Delta_mod37"]
     rows = []
     for pos in (1, 2, 3):
-        for pool in ("sense", "key1"):
+        for pool in ("sense", "key0", "key1"):
             for axis_name, members in AXIS_GROUPS:
                 codons = [c for c in ALL_CODONS if c[pos - 1] in members]
                 T, P, N, D, counted = group_quantities(codons, pool)
@@ -242,6 +251,11 @@ def build_modulus_scan():
     # Divisible_Distinct relative to Expected_Distinct.
     header = ["Value_Set", "Prime", "Divisible_All", "Total_All",
               "Divisible_Distinct", "Total_Distinct", "Expected_Distinct"]
+    # The scan ranges over primes only: divisibility by a composite is the
+    # conjunction of its prime-power factors (no new modulus), and a higher
+    # prime power merely re-scores the same values against a smaller chance
+    # rate 1/m, inflating the excess factor without adding information. The
+    # prime is therefore the irreducible unit of comparison.
     primes = sieve(PRIME_LIMIT)
     rows = []
     for set_name, values in value_sets:
