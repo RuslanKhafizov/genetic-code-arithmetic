@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -39,6 +38,7 @@
             border: 1px solid #d1d5db; 
             border-radius: 2px; overflow: hidden; text-align: center;
             cursor: pointer;
+            transition: all 0.2s;
         }
         .sub-row-item.selected-for-summing {
             outline: 2px solid #0d6efd; 
@@ -89,7 +89,7 @@
              display: flex; flex-direction: column;
         }
 
-.demo-set-btn {
+        .demo-set-btn {
             font-size: 0.7rem; padding: 0px 4px 4px 4px; border: 1px solid #ccc;
             border-radius: 0px; 
             background-color: #f8f9fa;
@@ -294,6 +294,7 @@
         const { useState, useMemo, useEffect, Fragment, useCallback } = React;
 
         const baseNucleotidesInternalGlobal = ['T', 'C', 'A', 'G'];
+        const SERVICE_CODONS = ['ATG', 'TAA', 'TAG', 'TGA'];
 
         function transformPair(pair, mode) {
             const [n1, n2] = pair.split('');
@@ -347,8 +348,6 @@
             transl_table_1: parseNcbICode("Standard Code (Pro: B=74, S=41)", 1, "FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'standard', null),
             transl_table_1_pro73: parseNcbICode("Standard Code (Pro: B=73, S=42)", "1_pro73", "FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'standard', { 'Pro': { backboneMass: 73, sideChainMass: 42 } }),
             transl_table_1_gly_alt: parseNcbICode("Standard Code (Gly: B=75, S=0, Pro: B=73, S=42)", "1_gly_alt", "FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'standard', { 'Pro': { backboneMass: 73, sideChainMass: 42 }, 'Gly': { backboneMass: 75, sideChainMass: 0 } }),
-            transl_table_artificial_1: parseNcbICode("Artificial Paitet Octet II Code", "artificial_1", "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'artificial'),
-            transl_table_artificial_2: parseNcbICode("Trp->Leu", "artificial_2", "FFLLSSSSYY**CC*LLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'artificial'),
             transl_table_12: parseNcbICode("Alternative Yeast Nuclear", 12, "FFLLSSSSYY**CC*WLLLSPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'nuclear'),
             transl_table_26: parseNcbICode("Pachysolen Nuclear", 26, "FFLLSSSSYY**CC*WLLLAPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'nuclear'),
             transl_table_29: parseNcbICode("Mesodinium Nuclear", 29, "FFLLSSSSYYYYCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'nuclear'),
@@ -381,7 +380,7 @@
             transl_table_37: parseNcbICode("Absconditabacterales Code (TGA->G, TAG->A)", 37, "FFLLSSSSYY*ACC*GLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'unofficial')
         };
 
-const KEY_SETS = {
+        const KEY_SETS = {
             Key0: { id: 'Key0', useIndividualStops: false, AMINO_ACIDS: JSON.parse(JSON.stringify(STANDARD_AMINO_ACIDS)), START: { sideChainMass: 0, protons: 0, neutrons: 0, backboneMass: null }, STOP: { ALL: { sideChainMass: 0, protons: 0, neutrons: 0, backboneMass: 0 } } },
             Key1: { id: 'Key1', useIndividualStops: false, AMINO_ACIDS: JSON.parse(JSON.stringify(STANDARD_AMINO_ACIDS)), START: { sideChainMass: -74, protons: -79, neutrons: -69, backboneMass: 0 }, STOP: { ALL: { sideChainMass: 74, protons: 37, neutrons: 37, backboneMass: 0 } } }, 
             Key2: { id: 'Key2', useIndividualStops: true, AMINO_ACIDS: JSON.parse(JSON.stringify(STANDARD_AMINO_ACIDS)), START: { sideChainMass: 0, protons: 0, neutrons: 0, backboneMass: null }, STOP: { TAA: { sideChainMass: 50, protons: 62, neutrons: 62, backboneMass: 74 }, TGA: { sideChainMass: 50, protons: 62, neutrons: 62, backboneMass: 74 }, TAG: { sideChainMass: -48, protons: 8, neutrons: 18, backboneMass: 74 } } }, 
@@ -424,92 +423,76 @@ const KEY_SETS = {
         STANDARD_OCTET_I_XY_PAIRS_INTERNAL.forEach(pair => { baseNucleotidesInternalGlobal.forEach(nuc3 => OCTET_I_CODONS.add(pair + nuc3)); });
         const OCTET_II_CODONS = new Set(ALL_CODONS_INTERNAL.filter(c => !OCTET_I_CODONS.has(c)));
         
-        const octetISection = { 
-            groups: [
-                { title: 'L32', layout: 'grid-cols-1', sets: [{ id: 'O1_SUM', label: 'Octet I: {C, G, A, T}', symmetryId: '12', refLabel: 'PF 2.0', getCodons: () => new Set(OCTET_I_CODONS), layoutProps: 'col-span-1' }]},
+        const createPosStructure = (posIndex, prefix) => {
+            const filterPos = (baseSet, nucs) => new Set(Array.from(baseSet).filter(c => nucs.includes(c[posIndex])));
+            
+            const octetIGroups = [
+                { title: 'L32', layout: 'grid-cols-1', sets: [{ id: `${prefix}_O1_SUM`, label: 'Octet I: {C, G, A, T}', symmetryId: '12', refLabel: posIndex === 2 ? 'PF 2.0' : null, getCodons: () => new Set(OCTET_I_CODONS), layoutProps: 'col-span-1' }]},
                 { title: 'L16', layout: 'grid-cols-2', sets: [
-                    { 
-                        id: 'O1_Box1', label: '{G, T}', symmetryId: '13', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === 'G' || c[2] === 'T')),
-                        pair: { id: 'O1_Box4', label: '{C, G}', symmetryId: '14', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === 'C' || c[2] === 'G')) }
-                    },
-                    { 
-                        id: 'O1_Box2', label: '{A, C}', symmetryId: '15', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === 'C' || c[2] === 'A')),
-                        pair: { id: 'O1_Box3', label: '{A, T}', symmetryId: '16', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === 'T' || c[2] === 'A')) }
-                    },
+                    { id: `${prefix}_O1_Box1`, label: '{G, T}', symmetryId: '13', getCodons: () => filterPos(OCTET_I_CODONS, ['G', 'T']), pair: { id: `${prefix}_O1_Box4`, label: '{C, G}', symmetryId: '14', getCodons: () => filterPos(OCTET_I_CODONS, ['C', 'G']) } },
+                    { id: `${prefix}_O1_Box2`, label: '{A, C}', symmetryId: '15', getCodons: () => filterPos(OCTET_I_CODONS, ['A', 'C']), pair: { id: `${prefix}_O1_Box3`, label: '{A, T}', symmetryId: '16', getCodons: () => filterPos(OCTET_I_CODONS, ['A', 'T']) } },
                 ]},
-                 { title: 'L16', layout: 'grid-cols-2', sets: [
-                    { id: 'O1_R', label: '{A, G}', symmetryId: '17', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === 'A' || c[2] === 'G')) },
-                    { id: 'O1_Y', label: '{C, T}', symmetryId: '18', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === 'C' || c[2] === 'T')) }
+                { title: 'L16', layout: 'grid-cols-2', sets: [
+                    { id: `${prefix}_O1_R`, label: '{A, G}', symmetryId: '17', getCodons: () => filterPos(OCTET_I_CODONS, ['A', 'G']) },
+                    { id: `${prefix}_O1_Y`, label: '{C, T}', symmetryId: '18', getCodons: () => filterPos(OCTET_I_CODONS, ['C', 'T']) }
                 ]},
                 { title: 'L8', layout: 'grid-cols-2', sets: [
-                    ...['C', 'G', 'T', 'A'].map((p, i) => ({ id: `O1_3${p}`, label: `{${p}}`, symmetryId: (19 + i).toString(), refLabel: 'PF 3.1 | SM Fig.7b', getCodons: () => new Set(Array.from(OCTET_I_CODONS).filter(c => c[2] === p)) }))
+                    ...['C', 'G', 'T', 'A'].map((p, i) => ({ id: `${prefix}_O1_3${p}`, label: `{${p}}`, symmetryId: (19 + i).toString(), refLabel: posIndex === 2 ? 'PF 3.1 | SM Fig.7b' : null, getCodons: () => filterPos(OCTET_I_CODONS, [p]) }))
                 ]}
-            ]
-        };
-        
-        const octetIISection = {
-            groups: [
-                { title: 'L32', layout: 'grid-cols-1', sets: [{ id: 'O2_SUM', label: 'Octet II: {C, G, A, T}', symmetryId: '23', refLabel: 'PF 2.0', getCodons: () => new Set(OCTET_II_CODONS), layoutProps: 'col-span-1' }]},
+            ];
+
+            const octetIIGroups = [
+                { title: 'L32', layout: 'grid-cols-1', sets: [{ id: `${prefix}_O2_SUM`, label: 'Octet II: {C, G, A, T}', symmetryId: '23', refLabel: posIndex === 2 ? 'PF 2.0' : null, getCodons: () => new Set(OCTET_II_CODONS), layoutProps: 'col-span-1' }]},
                 { title: 'L16', layout: 'grid-cols-2', sets: [
-                    { 
-                        id: 'O2_Box1', label: '{G, T}', symmetryId: '24', refLabel: 'PF 3.1 | SM Fig.7b', getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === 'G' || c[2] === 'T')),
-                        pair: { id: 'O2_Box4', label: '{C, G}', symmetryId: '25', getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === 'C' || c[2] === 'G')) }
-                    },
-                    { 
-                        id: 'O2_Box2', label: '{A, C}', symmetryId: '26', getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === 'C' || c[2] === 'A')),
-                        pair: { id: 'O2_Box3', label: '{A, T}', symmetryId: '27', getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === 'T' || c[2] === 'A')) }
-                    },
+                    { id: `${prefix}_O2_Box1`, label: '{G, T}', symmetryId: '24', refLabel: posIndex === 2 ? 'PF 3.1 | SM Fig.7b' : null, getCodons: () => filterPos(OCTET_II_CODONS, ['G', 'T']), pair: { id: `${prefix}_O2_Box4`, label: '{C, G}', symmetryId: '25', getCodons: () => filterPos(OCTET_II_CODONS, ['C', 'G']) } },
+                    { id: `${prefix}_O2_Box2`, label: '{A, C}', symmetryId: '26', getCodons: () => filterPos(OCTET_II_CODONS, ['A', 'C']), pair: { id: `${prefix}_O2_Box3`, label: '{A, T}', symmetryId: '27', getCodons: () => filterPos(OCTET_II_CODONS, ['A', 'T']) } },
                 ]},
                 { title: 'L16', layout: 'grid-cols-2', sets: [
-                    { id: 'O2_R', label: '{A, G}', symmetryId: '28', getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === 'A' || c[2] === 'G')) },
-                    { id: 'O2_Y', label: '{C, T}', symmetryId: '29', getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === 'C' || c[2] === 'T')) }
+                    { id: `${prefix}_O2_R`, label: '{A, G}', symmetryId: '28', getCodons: () => filterPos(OCTET_II_CODONS, ['A', 'G']) },
+                    { id: `${prefix}_O2_Y`, label: '{C, T}', symmetryId: '29', getCodons: () => filterPos(OCTET_II_CODONS, ['C', 'T']) }
                 ]},
                  { title: 'L8', layout: 'grid-cols-2', sets: [
-                    ...['C', 'G', 'T', 'A'].map((p, i) => ({ id: `O2_3${p}`, label: `{${p}}`, symmetryId: (30 + i).toString(), getCodons: () => new Set(Array.from(OCTET_II_CODONS).filter(c => c[2] === p)) }))
+                    ...['C', 'G', 'T', 'A'].map((p, i) => ({ id: `${prefix}_O2_3${p}`, label: `{${p}}`, symmetryId: (30 + i).toString(), getCodons: () => filterPos(OCTET_II_CODONS, [p]) }))
                 ]}
-            ]
+            ];
+
+            return [
+                {
+                    groups: [
+                        {
+                            title: 'L64',
+                            layout: 'grid-cols-1',
+                            sets: [ { id: `${prefix}_ALL`, label: 'ALL: {C, G, A, T}', symmetryId: '1', refLabel: posIndex === 2 ? 'PF 3.6 | SM Fig.6' : null, getCodons: () => new Set(ALL_CODONS_INTERNAL), layoutProps: 'col-span-1' } ]
+                        },
+                        {
+                            title: 'L32',
+                            layout: 'grid-cols-2',
+                            sets: [
+                                 { id: `${prefix}_TG`, label: 'Keto: {G, T}', symmetryId: '2', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['T', 'G']), pair: { id: `${prefix}_CG`, label: 'Strong: {C, G}', symmetryId: '3', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['C', 'G']) } },
+                                 { id: `${prefix}_AC`, label: 'Amino: {A, C}', symmetryId: '4', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['A', 'C']), pair: { id: `${prefix}_TA`, label: 'Weak: {A, T}', symmetryId: '5', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['T', 'A']) } },
+                                { id: `${prefix}_R`,  label: 'Purine: {A, G}', symmetryId: '6', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['A', 'G']) },
+                                { id: `${prefix}_Y`,  label: 'Pyrimidine: {C, T}', symmetryId: '7', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['C', 'T']) },
+                            ]
+                        },
+                         {
+                            title: 'L16',
+                            layout: 'grid-cols-4',
+                            sets: [
+                                 { id: `${prefix}_MID_C`, label: '{C}', level: 'L16', symmetryId: '8', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['C']) },
+                                 { id: `${prefix}_MID_G`, label: '{G}', level: 'L16', symmetryId: '9', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['G']) },
+                                 { id: `${prefix}_MID_T`, label: '{T}', level: 'L16', symmetryId: '10', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['T']) },
+                                 { id: `${prefix}_MID_A`, label: '{A}', level: 'L16', symmetryId: '11', getCodons: () => filterPos(ALL_CODONS_INTERNAL, ['A']) }
+                            ]
+                        }
+                    ]
+                },
+                { isOctetContainer: true, octetI: { groups: octetIGroups }, octetII: { groups: octetIIGroups } }
+            ];
         };
 
-        const NEW_DEMO_STRUCTURE = [
-            {
-                groups: [
-                    {
-                        title: 'L64',
-                        layout: 'grid-cols-1',
-                        sets: [ { id: 'GLOBAL_ALL', label: 'ALL: {C, G, A, T}', symmetryId: '1', refLabel: 'PF 3.6 | SM Fig.6', getCodons: () => new Set(ALL_CODONS_INTERNAL), layoutProps: 'col-span-1' } ]
-                    },
-                    {
-                        title: 'L32',
-                        layout: 'grid-cols-2',
-                        sets: [
-                             { 
-                                id: 'GLOBAL_TG', label: 'Keto: {G, T}', symmetryId: '2',
-                                getCodons: () => new Set(ALL_CODONS_INTERNAL.filter(c => c[2] === 'T' || c[2] === 'G')),
-                                pair: { id: 'GLOBAL_CG', label: 'Strong: {C, G}', symmetryId: '3', getCodons: () => new Set(ALL_CODONS_INTERNAL.filter(c => c[2] === 'C' || c[2] === 'G')) }
-                            },
-                             { 
-                                id: 'GLOBAL_AC', label: 'Amino: {A, C}', symmetryId: '4',
-                                getCodons: () => new Set(ALL_CODONS_INTERNAL.filter(c => c[2] === 'A' || c[2] === 'C')),
-                                pair: { id: 'GLOBAL_TA', label: 'Weak: {A, T}', symmetryId: '5', getCodons: () => new Set(ALL_CODONS_INTERNAL.filter(c => c[2] === 'T' || c[2] === 'A')) }
-                            },
-                            { id: 'GLOBAL_R',  label: 'Purine: {A, G}', symmetryId: '6', getCodons: () => new Set(ALL_CODONS_INTERNAL.filter(c => c[2] === 'A' || c[2] === 'G')) },
-                            { id: 'GLOBAL_Y',  label: 'Pyrimidine: {C, T}', symmetryId: '7', getCodons: () => new Set(ALL_CODONS_INTERNAL.filter(c => c[2] === 'C' || c[2] === 'T')) },
-                        ]
-                    },
-                     {
-                        title: 'L16',
-                        layout: 'grid-cols-4',
-                        sets: [
-                             { id: 'GLOBAL_MID_C', label: '{C}', level: 'L16', symmetryId: '8', getCodons: () => new Set(['AAC', 'ACC', 'AGC', 'ATC', 'CAC', 'CCC', 'CGC', 'CTC', 'GAC', 'GCC', 'GGC', 'GTC', 'TAC', 'TCC', 'TGC', 'TTC']) },
-                             { id: 'GLOBAL_MID_G', label: '{G}', level: 'L16', symmetryId: '9', getCodons: () => new Set(['AAG', 'ACG', 'AGG', 'ATG', 'CAG', 'CCG', 'CGG', 'CTG', 'GAG', 'GCG', 'GGG', 'GTG', 'TAG', 'TCG', 'TGG', 'TTG']) },
-                             { id: 'GLOBAL_MID_T', label: '{T}', level: 'L16', symmetryId: '10', getCodons: () => new Set(['AAT', 'ACT', 'AGT', 'ATT', 'CAT', 'CCT', 'CGT', 'CTT', 'GAT', 'GCT', 'GGT', 'GTT', 'TAT', 'TCT', 'TGT', 'TTT']) },
-                             { id: 'GLOBAL_MID_A', label: '{A}', level: 'L16', symmetryId: '11', getCodons: () => new Set(['AAA', 'ACA', 'AGA', 'ATA', 'CAA', 'CCA', 'CGA', 'CTA', 'GAA', 'GCA', 'GGA', 'GTA', 'TAA', 'TCA', 'TGA', 'TTA']) }
-                        ]
-                    }
-                ]
-            },
-            { isOctetContainer: true, octetI: octetISection, octetII: octetIISection }
-        ];
+        const POS1_STRUCTURE = createPosStructure(0, 'P1');
+        const POS2_STRUCTURE = createPosStructure(1, 'P2');
+        const POS3_STRUCTURE = createPosStructure(2, 'P3');
         
         const QUARTET_DEMO_STRUCTURE = [
             {
@@ -789,6 +772,14 @@ const KEY_SETS = {
             }
         ];
 
+        const TABS_INFO = {
+            'pos1': { data: POS1_STRUCTURE, name: 'Pos 1', exportName: 'All code (Pos 1)' },
+            'pos2': { data: POS2_STRUCTURE, name: 'Pos 2', exportName: 'All code (Pos 2)' },
+            'pos3': { data: POS3_STRUCTURE, name: 'Pos 3', exportName: 'All code (Pos 3)' },
+            'quartets': { data: QUARTET_DEMO_STRUCTURE, name: 'Quartets', exportName: 'Quartets' },
+            'combinatorial': { data: COMBINATORIAL_DEMO_STRUCTURE, name: 'Combinatorial', exportName: 'Combinatorial' }
+        };
+
         function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
 
         // --- Модуль 37-ричной системы счисления ---
@@ -954,27 +945,21 @@ const KEY_SETS = {
             return sums;
         };
 
-        const exportEqualitiesData = (customKeys, activeGeneticCode, activeTab, scope, numeralSystem, exportScope) => {
-            const structures = [
-                { id: 'original', data: NEW_DEMO_STRUCTURE, name: "Global" },
-                { id: 'quartets', data: QUARTET_DEMO_STRUCTURE, name: "Quartets" },
-                { id: 'combinatorial', data: COMBINATORIAL_DEMO_STRUCTURE, name: "Combinatorial" }
-            ];
-
+        const exportEqualitiesData = (customKeys, activeGeneticCode, activeTab, scope, numeralSystem, exportScope, includeServiceCodons) => {
             const structuresToProcess = scope === 'tab' 
-                ? structures.filter(s => s.id === activeTab)
-                : structures;
+                ? [TABS_INFO[activeTab]]
+                : Object.values(TABS_INFO);
 
             const allFlattenedGroups = [];
             
             structuresToProcess.forEach((structObj) => {
-                const tabName = structObj.name;
+                const tabExportName = structObj.exportName;
                 structObj.data.forEach(section => {
-                    const sectionName = section.isOctetContainer ? null : (tabName === "Global" ? "All code" : tabName);
+                    const sectionName = section.isOctetContainer ? null : tabExportName;
                     const traverse = (groups, sOverride) => groups.forEach(g => g.sets.forEach(s => {
                         const finalSection = sOverride || sectionName;
-                        allFlattenedGroups.push({ ...s, _sectionName: finalSection, _level: s.getCodons().size });
-                        if(s.pair) allFlattenedGroups.push({ ...s.pair, _sectionName: finalSection, _level: s.pair.getCodons().size });
+                        allFlattenedGroups.push({ ...s, _sectionName: finalSection });
+                        if(s.pair) allFlattenedGroups.push({ ...s.pair, _sectionName: finalSection });
                     }));
                     if (section.isOctetContainer) { 
                         traverse(section.octetI.groups, "Octet I"); 
@@ -983,13 +968,16 @@ const KEY_SETS = {
                 });
             });
 
-            const groupData = allFlattenedGroups.map(set => ({
-                id: set.symmetryId || set.id,
-                name: set.label,
-                section: set._sectionName,
-                level: set._level,
-                sums: calculateSums_New(set.getCodons(), customKeys, activeGeneticCode.table, activeGeneticCode.id)
-            }));
+            const groupData = allFlattenedGroups.map(set => {
+                const codons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                return {
+                    id: set.symmetryId || set.id,
+                    name: set.label,
+                    section: set._sectionName,
+                    level: codons.size,
+                    sums: calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id)
+                };
+            });
 
             const paramMap = { fullMass: "Total_Nucleons", protons: "Protons", neutrons: "Neutrons" };
             let csvContent = "Nucleon_Value,Match_Type,Source_Section,Source_ID,Source_Name,Source_Parameter,Target_Parameter,Target_Name,Target_ID,Target_Section\n";
@@ -1042,7 +1030,7 @@ const KEY_SETS = {
             document.body.removeChild(link);
         };
         
-        const exportData = (structure, customKeys, activeGeneticCode, tabName, allDemoSetSums, selectedCodons, exportType, activeKeySet, numeralSystem, exportScope) => {
+        const exportData = (structure, customKeys, activeGeneticCode, tabExportName, allDemoSetSums, selectedCodons, exportType, activeKeySet, numeralSystem, exportScope, includeServiceCodons) => {
              const keyPart = (!activeKeySet) ? 'custom-key' : activeKeySet.toLowerCase();
              
              let baseName = activeGeneticCode.name;
@@ -1091,11 +1079,11 @@ const KEY_SETS = {
              structure.forEach(section => {
                  const traverse = (groups, sectionOverride) => groups.forEach(g => g.sets.forEach(s => {
                      const mainTwinId = s.pair ? (s.pair.symmetryId || s.pair.id) : null;
-                     const mainWrapper = { ...s, _twinRef: mainTwinId, _sectionName: sectionOverride || (tabName === 'original' ? "All code" : tabName === 'quartets' ? "Quartets" : "Combinatorial") };
+                     const mainWrapper = { ...s, _twinRef: mainTwinId, _sectionName: sectionOverride || tabExportName };
                      flattenedSets.push(mainWrapper);
                      if(s.pair) {
                          const pairTwinId = s.symmetryId || s.id;
-                         const pairWrapper = { ...s.pair, _twinRef: pairTwinId, _sectionName: sectionOverride || (tabName === 'original' ? "All code" : tabName === 'quartets' ? "Quartets" : "Combinatorial") };
+                         const pairWrapper = { ...s.pair, _twinRef: pairTwinId, _sectionName: sectionOverride || tabExportName };
                          flattenedSets.push(pairWrapper);
                      }
                  }));
@@ -1205,16 +1193,17 @@ const KEY_SETS = {
              }
 
              flattenedSets.forEach(set => {
-                 const sum = calculateSums_New(set.getCodons(), customKeys, activeGeneticCode.table, activeGeneticCode.id);
+                 const codons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                 const sum = calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id);
                  const symmetryId = set.symmetryId || set.id;
                  const twinId = set._twinRef || "";
-                 const sectionName = set._sectionName || "All code";
+                 const sectionName = set._sectionName || tabExportName;
                  if (exportType === 'pure') {
-                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${set.getCodons().size},${buildPureLine(sum)}\n`;
+                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${codons.size},${buildPureLine(sum)}\n`;
                  } else if (exportType === 'analysis') {
-                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${set.getCodons().size},${buildAnalysisLine(sum)}\n`;
+                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${codons.size},${buildAnalysisLine(sum)}\n`;
                  } else if (exportType === 'ratios') {
-                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${set.getCodons().size},${buildRatioLine(sum)}\n`;
+                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${codons.size},${buildRatioLine(sum)}\n`;
                  }
              });
              const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1406,7 +1395,7 @@ const KEY_SETS = {
             );
         };
 
-        const SubRowItem = ({ codon, aminoAcid, style, isSelected, onCodonSelect, customKeys, numeralSystem }) => {
+        const SubRowItem = ({ codon, aminoAcid, style, isSelected, onCodonSelect, customKeys, numeralSystem, includeServiceCodons }) => {
             const { displayMass, protons, neutrons } = useMemo(() => {
                 if (!aminoAcid) return { displayMass: 0, protons: 0, neutrons: 0 };
                 let sc = 0, bb = 0, p = 0, n = 0;
@@ -1434,9 +1423,18 @@ const KEY_SETS = {
                 }
                 return { displayMass: sc + bb, protons: p, neutrons: n };
             }, [codon, aminoAcid, customKeys]);
+            
+            const isExcluded = !includeServiceCodons && SERVICE_CODONS.includes(codon);
             let itemStyle = { backgroundColor: style.bg, color: style.text };
+            
+            if (isExcluded) {
+                itemStyle.opacity = 0.35;
+                itemStyle.cursor = 'not-allowed';
+                itemStyle.filter = 'grayscale(100%)';
+            }
+            
             return ( 
-                <div className={`sub-row-item ${isSelected ? 'selected-for-summing' : ''}`} style={itemStyle} onClick={() => onCodonSelect(codon)}>
+                <div className={`sub-row-item ${isSelected ? 'selected-for-summing' : ''}`} style={itemStyle} onClick={() => { if(!isExcluded) onCodonSelect(codon); }}>
                     <div className="sub-row-codon-part">{codon}</div>
                     <div className="sub-row-info-part">
                         <div className="info-col-center">
@@ -1452,7 +1450,7 @@ const KEY_SETS = {
             );
         };
 
-        const MatrixCell = ({ firstInternal, secondInternal, thirdPosOrder, selectedCodons, onCodonSelect, customKeys, activeGeneticCode, hoveredPair, setHoveredPair, symmetryMode, numeralSystem }) => {
+        const MatrixCell = ({ firstInternal, secondInternal, thirdPosOrder, selectedCodons, onCodonSelect, customKeys, activeGeneticCode, hoveredPair, setHoveredPair, symmetryMode, numeralSystem, includeServiceCodons }) => {
             const myPair = firstInternal + secondInternal;
             const cellStyle = useMemo(() => {
                 const baseStyle = STANDARD_OCTET_I_XY_PAIRS_INTERNAL.has(myPair) ? RUMER_OCTET_COLORS.octetI : RUMER_OCTET_COLORS.octetII;
@@ -1476,19 +1474,19 @@ const KEY_SETS = {
                         {thirdPosOrder.map(thirdInternal => { 
                             const codon = `${firstInternal}${secondInternal}${thirdInternal}`; 
                             const aminoAcid = activeGeneticCode.table[codon] || '?'; 
-                            return ( <SubRowItem key={thirdInternal} codon={codon} aminoAcid={aminoAcid} style={cellStyle} isSelected={selectedCodons.has(codon)} onCodonSelect={onCodonSelect} customKeys={customKeys} numeralSystem={numeralSystem} /> ); 
+                            return ( <SubRowItem key={thirdInternal} codon={codon} aminoAcid={aminoAcid} style={cellStyle} isSelected={selectedCodons.has(codon)} onCodonSelect={onCodonSelect} customKeys={customKeys} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} /> ); 
                         })}
                     </div>
                 </td> 
             );
         };
 
-        const MatrixTable = ({ axisOrder, thirdPosOrder, selectedCodons, onCodonSelect, customKeys, activeGeneticCode, hoveredPair, setHoveredPair, activeRefLabel, symmetryMode, numeralSystem }) => {
+        const MatrixTable = ({ axisOrder, thirdPosOrder, selectedCodons, onCodonSelect, customKeys, activeGeneticCode, hoveredPair, setHoveredPair, activeRefLabel, symmetryMode, numeralSystem, includeServiceCodons }) => {
             const headerSize = '3rem'; const cellSize = '8.5rem';
             return ( 
                 <div className="matrix-table-wrapper flex-col items-center">
                     <div className="inline-block border-2 border-gray-600">
-                        <table className="border-collapse"><thead><tr><th className="border border-gray-400 matrix-header-cell" style={{ width: headerSize, height: headerSize }}></th>{axisOrder.map(nuc => <th key={nuc} className="border border-gray-400 matrix-header-cell font-mono text-2xl" style={{ width: cellSize }}>{nuc}</th>)}</tr></thead><tbody>{axisOrder.map(firstInternal => ( <tr key={firstInternal}><th className="border border-gray-400 matrix-header-cell font-mono text-2xl" style={{ height: cellSize }}>{firstInternal}</th>{axisOrder.map(secondInternal => ( <MatrixCell key={secondInternal} firstInternal={firstInternal} secondInternal={secondInternal} thirdPosOrder={thirdPosOrder} selectedCodons={selectedCodons} onCodonSelect={onCodonSelect} customKeys={customKeys} activeGeneticCode={activeGeneticCode} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} symmetryMode={symmetryMode} numeralSystem={numeralSystem} /> ))}</tr> ))}</tbody></table>
+                        <table className="border-collapse"><thead><tr><th className="border border-gray-400 matrix-header-cell" style={{ width: headerSize, height: headerSize }}></th>{axisOrder.map(nuc => <th key={nuc} className="border border-gray-400 matrix-header-cell font-mono text-2xl" style={{ width: cellSize }}>{nuc}</th>)}</tr></thead><tbody>{axisOrder.map(firstInternal => ( <tr key={firstInternal}><th className="border border-gray-400 matrix-header-cell font-mono text-2xl" style={{ height: cellSize }}>{firstInternal}</th>{axisOrder.map(secondInternal => ( <MatrixCell key={secondInternal} firstInternal={firstInternal} secondInternal={secondInternal} thirdPosOrder={thirdPosOrder} selectedCodons={selectedCodons} onCodonSelect={onCodonSelect} customKeys={customKeys} activeGeneticCode={activeGeneticCode} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} symmetryMode={symmetryMode} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} /> ))}</tr> ))}</tbody></table>
                     </div>
                 </div> 
             );
@@ -1498,7 +1496,7 @@ const KEY_SETS = {
             return ( <div className="control-panel-section">{orbitsData.map((orbit, index) => ( <div key={index} className="orbit-box"><div className="text-xs text-center text-gray-500 mb-1 font-mono uppercase tracking-wide">Orbit {index + 1}</div><div className="grid grid-cols-2 gap-1">{Object.entries(orbit.orders).map(([transformKey, orderStr]) => ( <div key={transformKey} className={`order-part p-1 text-center font-mono text-xs rounded ${currentOrder === orderStr ? 'active' : ''}`} onClick={() => onOrderSelect(orderStr.split(''))}>{`${transformKey}: ${orderStr}`}</div> ))}</div></div> ))}</div> );
         };
         
-        const DemonstrationPanel = ({ onSelectSet, demoSetSums, demoStructure, activeGeneticCode, customKeys, activeRightPanelTab, numeralSystem }) => {
+        const DemonstrationPanel = ({ onSelectSet, demoSetSums, demoStructure, activeGeneticCode, customKeys, activeRightPanelTab, numeralSystem, includeServiceCodons }) => {
             const valueMap = useMemo(() => {
                 const map = new Map();
                 const addValue = (val, id, level, type) => {
@@ -1508,7 +1506,8 @@ const KEY_SETS = {
                 const processSet = (set) => {
                     const sum = demoSetSums[set.id];
                     if (!sum) return;
-                    const level = set.getCodons().size;
+                    const filteredCodons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                    const level = filteredCodons.size;
                     addValue(sum.fullMass, set.id, level, 'fullMass');
                     addValue(sum.sideChainMass, set.id, level, 'sideChainMass');
                     addValue(sum.protons, set.id, level, 'protons');
@@ -1532,7 +1531,7 @@ const KEY_SETS = {
                     }
                 });
                 return map;
-            }, [demoSetSums, demoStructure]);
+            }, [demoSetSums, demoStructure, includeServiceCodons]);
 
             const getHighlightClass = (val, currentLevel, currentId, currentType) => {
                 if (['sideChainMass', 'backboneMass', 'delta'].includes(currentType)) return "sum-value";
@@ -1549,14 +1548,21 @@ const KEY_SETS = {
                 const finalSymmetryId = set.pair && set.pair.symmetryId ? `${set.symmetryId}, ${set.pair.symmetryId}` : set.symmetryId;
                 const hasRef = !!set.refLabel;
                 const labelColorClass = hasRef ? "text-gray-700 font-bold" : "text-[#adb5bd] font-medium";
-                const currentLevel = set.getCodons().size;
-                const displayLevel = (set.level || set.groupLevel || '').replace(/^L/, '');
+                
+                const filteredCodons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                const currentLevel = filteredCodons.size;
+                const displayLevel = currentLevel;
                 const currentDelta = sum ? sum.protons - sum.neutrons : 0;
+                
                 return ( 
-                    <button key={set.id} className={`demo-set-btn ${set.layoutProps || ''}`} title={set.id} onClick={() => onSelectSet(set.getCodons(), set.refLabel)}>
+                    <button key={set.id} className={`demo-set-btn ${set.layoutProps || ''}`} title={set.id} onClick={() => onSelectSet(filteredCodons, set.refLabel)}>
                         <span className={`btn-label ${labelColorClass}`}>{set.label}</span>
                         <span className="level-label">{displayLevel}</span>
-                        {set.pair && ( <span className="paired-alias" onClick={(e) => { e.stopPropagation(); onSelectSet(set.pair.getCodons(), set.refLabel); }}>
+                        {set.pair && ( <span className="paired-alias" onClick={(e) => { 
+                            e.stopPropagation(); 
+                            const pairedFiltered = includeServiceCodons ? set.pair.getCodons() : new Set([...set.pair.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                            onSelectSet(pairedFiltered, set.refLabel); 
+                        }}>
                             {set.pair.label}
                         </span> )}
                         {sum != null && (
@@ -1622,16 +1628,13 @@ const KEY_SETS = {
             );
         };
         
-        const CrossSetEqualityFinder = ({ currentSums, currentCodonCount, allDemoSetSums, scope, activeTab, numeralSystem }) => {
-            const structuresMap = {
-                'original': NEW_DEMO_STRUCTURE,
-                'quartets': QUARTET_DEMO_STRUCTURE,
-                'combinatorial': COMBINATORIAL_DEMO_STRUCTURE
-            };
-
+        const CrossSetEqualityFinder = ({ currentSums, currentCodonCount, allDemoSetSums, scope, activeTab, numeralSystem, includeServiceCodons }) => {
             const setIdToLabelMap = useMemo(() => {
                 const map = {};
-                const structuresToSearch = scope === 'tab' ? [structuresMap[activeTab]] : Object.values(structuresMap);
+                const structuresToSearch = scope === 'tab' ? [TABS_INFO[activeTab].data] : Object.values(TABS_INFO).map(t => t.data);
+                
+                const getFilteredSize = (codons) => includeServiceCodons ? codons.size : [...codons].filter(c => !SERVICE_CODONS.includes(c)).length;
+
                 structuresToSearch.forEach(structure => {
                     if (!structure) return;
                     structure.forEach(section => {
@@ -1639,23 +1642,23 @@ const KEY_SETS = {
                             [section.octetI, section.octetII].forEach(sub => {
                                  sub.groups.forEach(group => {
                                     group.sets.forEach(set => {
-                                        map[set.id] = `${set.label} (L=${set.getCodons().size})`;
-                                        if (set.pair) map[set.pair.id] = `${set.pair.label} (L=${set.pair.getCodons().size})`;
+                                        map[set.id] = `${set.label} (L=${getFilteredSize(set.getCodons())})`;
+                                        if (set.pair) map[set.pair.id] = `${set.pair.label} (L=${getFilteredSize(set.pair.getCodons())})`;
                                     });
                                 });
                             });
                         } else {
                             section.groups.forEach(group => {
                                 group.sets.forEach(set => {
-                                    map[set.id] = `${set.label} (L=${set.getCodons().size})`;
-                                    if (set.pair) map[set.pair.id] = `${set.pair.label} (L=${set.pair.getCodons().size})`;
+                                    map[set.id] = `${set.label} (L=${getFilteredSize(set.getCodons())})`;
+                                    if (set.pair) map[set.pair.id] = `${set.pair.label} (L=${getFilteredSize(set.pair.getCodons())})`;
                                 });
                             });
                         }
                     });
                 });
                 return map;
-            }, [scope, activeTab]);
+            }, [scope, activeTab, includeServiceCodons]);
 
             const propLabels = { fullMass: "Total Nucleons (T)", protons: "Protons (P)", neutrons: "Neutrons (N)" };
 
@@ -1702,10 +1705,10 @@ const KEY_SETS = {
             );
         };
         
-        const AdjacentSetDeltaAnalyzer = ({ allDemoSetSums, numeralSystem }) => {
+        const AdjacentSetDeltaAnalyzer = ({ allDemoSetSums, numeralSystem, activeTab }) => {
              const deltas = useMemo(() => {
-                const results = { khafizov: [], quartets: [], other: [] };
-                const processStructure = (structure, targetArray) => {
+                const results = [];
+                const processStructure = (structure, targetArray, prefixLabel) => {
                     structure.forEach(section => {
                         section.groups.forEach(group => {
                             for (let i = 0; i < group.sets.length - 1; i++) {
@@ -1733,62 +1736,77 @@ const KEY_SETS = {
                         });
                     });
                 };
-                processStructure(NEW_DEMO_STRUCTURE.filter(s => !s.isOctetContainer), results.khafizov);
-                processStructure([NEW_DEMO_STRUCTURE.find(s => s.isOctetContainer)?.octetI].filter(Boolean), results.khafizov);
-                processStructure([NEW_DEMO_STRUCTURE.find(s => s.isOctetContainer)?.octetII].filter(Boolean), results.khafizov);
-                processStructure(QUARTET_DEMO_STRUCTURE, results.quartets);
-                processStructure(COMBINATORIAL_DEMO_STRUCTURE, results.other);
+                
+                const currentStructure = TABS_INFO[activeTab]?.data || POS3_STRUCTURE;
+                if (currentStructure[1] && currentStructure[1].isOctetContainer) {
+                    processStructure(currentStructure.filter(s => !s.isOctetContainer), results, "");
+                    if(currentStructure[1].octetI) processStructure([currentStructure[1].octetI], results, "");
+                    if(currentStructure[1].octetII) processStructure([currentStructure[1].octetII], results, "");
+                } else {
+                    processStructure(currentStructure, results, "");
+                }
                 return results;
-            }, [allDemoSetSums]);
-            const renderDeltas = (deltaArray) => (
-                deltaArray.map(d => (
-                    <div key={d.key} className="text-xs mb-2 border-t pt-1">
-                        <p className="font-bold">{d.label} ({d.level})</p>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                            <div>T: <strong className="ml-1">{formatValue(d.delta.fullMass, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.fullMass} showResult={true} /></div>
-                            <div>S: <strong className="ml-1">{formatValue(d.delta.sideChainMass, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.sideChainMass} showResult={true} /></div>
-                            <div>P: <strong className="ml-1">{formatValue(d.delta.protons, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.protons} showResult={true} /></div>
-                            <div>N: <strong className="ml-1">{formatValue(d.delta.neutrons, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.neutrons} showResult={true} /></div>
-                        </div>
-                    </div>
-                ))
-            );
+            }, [allDemoSetSums, activeTab]);
+
+            if (deltas.length === 0) return null;
+
             return (
                 <div className="mt-2 p-1 bg-gray-100 rounded">
                     <h5 className="text-center text-gray-500 text-xs font-semibold mb-1">Adjacent Set Deltas</h5>
-                    {deltas.khafizov.length > 0 && (
-                        <div>
-                            <h6 className="text-center font-semibold text-gray-600 text-xs mt-2">Global</h6>
-                            {renderDeltas(deltas.khafizov)}
+                    {deltas.map(d => (
+                        <div key={d.key} className="text-xs mb-2 border-t pt-1">
+                            <p className="font-bold">{d.label} ({d.level})</p>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                                <div>T: <strong className="ml-1">{formatValue(d.delta.fullMass, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.fullMass} showResult={true} /></div>
+                                <div>S: <strong className="ml-1">{formatValue(d.delta.sideChainMass, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.sideChainMass} showResult={true} /></div>
+                                <div>P: <strong className="ml-1">{formatValue(d.delta.protons, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.protons} showResult={true} /></div>
+                                <div>N: <strong className="ml-1">{formatValue(d.delta.neutrons, numeralSystem)}</strong><DivisibilityAnalysis value={d.delta.neutrons} showResult={true} /></div>
+                            </div>
                         </div>
-                    )}
-                    {deltas.quartets.length > 0 && (
-                        <div>
-                            <h6 className="text-center font-semibold text-gray-600 text-xs mt-2">Quartets</h6>
-                            {renderDeltas(deltas.quartets)}
-                        </div>
-                    )}
-                    {deltas.other.length > 0 && (
-                        <div>
-                             <h6 className="text-center font-semibold text-gray-600 text-xs mt-2">Combinatorial</h6>
-                            {renderDeltas(deltas.other)}
-                        </div>
-                    )}
+                    ))}
                 </div>
             );
         };
         
-        const Calculator = ({ selectedCodons, onResetSelection, customKeys, activeGeneticCode, allDemoSetSums, activeRefLabel, equalityScope, activeTab, numeralSystem }) => {
+        const renderAcademicRefs = (label) => {
+            if (!label) return null;
+            const parts = label.split(' | ');
+            return parts.map((part, index) => {
+                let text = '';
+                let url = '';
+                if (part.startsWith('PF')) {
+                    const sig = part.replace('PF', '').trim();
+                    text = `Panov & Filatov (2024), Sig. ${sig}`;
+                    url = 'https://doi.org/10.30884/978-5-7057-6399-3_03';
+                } else if (part.startsWith('SM')) {
+                    const fig = part.replace('SM', '').trim().replace(/Fig\.(\d)/, "Fig. $1");
+                    text = `Shcherbak & Makukov (2013), ${fig}`;
+                    url = 'https://doi.org/10.1016/j.icarus.2013.02.017';
+                } else {
+                    text = part;
+                }
+                
+                return (
+                    <span key={index}>
+                        {index > 0 && <span className="mx-2 text-blue-300">|</span>}
+                        {url ? (
+                            <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                                {text}
+                            </a>
+                        ) : (
+                            <span>{text}</span>
+                        )}
+                    </span>
+                );
+            });
+        };
+
+        const Calculator = ({ selectedCodons, onResetSelection, customKeys, activeGeneticCode, allDemoSetSums, activeRefLabel, equalityScope, activeTab, numeralSystem, includeServiceCodons }) => {
             const [isAdvancedAnalysisOpen, setIsAdvancedAnalysisOpen] = useState(false);
             const sums = useMemo(() => calculateSums_New(selectedCodons, customKeys, activeGeneticCode.table, activeGeneticCode.id), [selectedCodons, customKeys, activeGeneticCode]);
             const decompositionSums = useMemo(() => calculateDecompositionSums(selectedCodons, customKeys, activeGeneticCode.table, activeGeneticCode.id), [selectedCodons, customKeys, activeGeneticCode]);
             const { codonString, aaString } = useMemo(() => { if (selectedCodons.size === 0) return { codonString: '', aaString: '' }; const codonsArray = Array.from(selectedCodons).sort(); const codonStr = codonsArray.join(' '); const aaStr = codonsArray.map(codon => threeToOneLetterAA[activeGeneticCode.table[codon]] || '?').join(''); return { codonString: codonStr, aaString: aaStr }; }, [selectedCodons, activeGeneticCode]);
             
-            const formatRefLabel = (label) => {
-                if (!label) return '';
-                return label.replace(/PF/g, "Panov A., and Filatov F. Sig.").replace(/SM/g, "Shcherbak V., and Makukov M.").replace(/Fig\.(\d)/g, "Fig. $1");
-            };
-
             if (selectedCodons.size === 0) return null;
             
             const deltaPN = sums.protons - sums.neutrons; const L = selectedCodons.size;
@@ -1845,13 +1863,14 @@ const KEY_SETS = {
                                 scope={equalityScope}
                                 activeTab={activeTab}
                                 numeralSystem={numeralSystem}
+                                includeServiceCodons={includeServiceCodons}
                              />
                         </div>
                     </div>
                     <div className="p-2 bg-gray-50 rounded text-xs mt-2 font-mono" style={{wordBreak: 'break-all'}}><div><strong>Codons:</strong> {codonString}</div><div><strong>Amino Acids:</strong> {aaString}</div></div>
                     {activeRefLabel && (
-                        <div className="mt-2 p-2 bg-blue-50 text-gray-700 text-xs rounded border border-blue-100 text-center font-medium">
-                            {formatRefLabel(activeRefLabel)}
+                        <div className="mt-2 p-2 bg-blue-50 text-gray-800 text-xs rounded border border-blue-200 text-center font-medium shadow-sm">
+                            {renderAcademicRefs(activeRefLabel)}
                         </div>
                     )}
                      <div className="border-t pt-2 mt-2 border-gray-300">
@@ -1897,7 +1916,7 @@ const KEY_SETS = {
                                         </tfoot>
                                     </table>
                                 </div>
-                                <AdjacentSetDeltaAnalyzer allDemoSetSums={allDemoSetSums} numeralSystem={numeralSystem} />
+                                <AdjacentSetDeltaAnalyzer allDemoSetSums={allDemoSetSums} numeralSystem={numeralSystem} activeTab={activeTab} />
                             </Fragment>
                         )}
                     </div>
@@ -1910,79 +1929,115 @@ const KEY_SETS = {
         };
 
         const GeneticCodeMatrixApp = () => {
-            const [axisOrder, setAxisOrder] = useState(['C', 'G', 'T', 'A']); const [activeCodeId, setActiveCodeId] = useState('transl_table_1'); const activeGeneticCode = useMemo(() => geneticCodesForRumerExplorer[activeCodeId], [activeCodeId]);
+            const [axisOrder, setAxisOrder] = useState(['C', 'G', 'T', 'A']); const [activeCodeId, setActiveCodeId] = useState('transl_table_1_pro73'); const activeGeneticCode = useMemo(() => geneticCodesForRumerExplorer[activeCodeId], [activeCodeId]);
             const orbitsData = useMemo(() => generateRumerOrbitsData(), []); const [selectedCodons, setSelectedCodons] = useState(new Set()); const [activeKeySet, setActiveKeySet] = useState('Key0');
             const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
             const [isAAEditorOpen, setIsAAEditorOpen] = useState(false);
             const [customKeys, setCustomKeys] = useState(JSON.parse(JSON.stringify(KEY_SETS.Key0))); 
             const [activeRefLabel, setActiveRefLabel] = useState('');
-            const [activeRightPanelTab, setActiveRightPanelTab] = useState('original');
+            const [activeRightPanelTab, setActiveRightPanelTab] = useState('pos3');
+            const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
             const [equalityScope, setEqualityScope] = useState('tab'); 
             const [numeralSystem, setNumeralSystem] = useState('decimal');
             const [exportScope, setExportScope] = useState('strict');
+            const [includeServiceCodons, setIncludeServiceCodons] = useState(true);
             const [hoveredPair, setHoveredPair] = useState(null);
             const [symmetryMode, setSymmetryMode] = useState('rumer');
             
-            const { sortedAndGroupedCodes, categoryOrder } = useMemo(() => { const categoryOrder = ['standard', 'artificial', 'nuclear', 'mitochondrial', 'bacterial_plastid', 'unofficial']; const sorted = Object.values(geneticCodesForRumerExplorer).sort((a, b) => { const catA = categoryOrder.indexOf(a.type); const catB = categoryOrder.indexOf(b.type); if (catA !== catB) return catA - catB; let idA = a.id.split('_')[2]; let idB = b.id.split('_')[2]; if (idA === '1_pro73') idA = '1.1'; if (idB === '1_pro73') idB = '1.1'; idA = parseFloat(idA.replace('artificial', '0')) || 0; idB = parseFloat(idB.replace('artificial', '0')) || 0; return idA - idB; }); const grouped = {}; sorted.forEach(code => { if (!grouped[code.type]) grouped[code.type] = []; grouped[code.type].push(code); }); return { sortedAndGroupedCodes: grouped, categoryOrder }; }, []);
+            const { sortedAndGroupedCodes, categoryOrder } = useMemo(() => { 
+                const categoryOrder = ['standard', 'nuclear', 'mitochondrial', 'bacterial_plastid', 'unofficial']; 
+                const sorted = Object.values(geneticCodesForRumerExplorer).sort((a, b) => { 
+                    const catA = categoryOrder.indexOf(a.type); 
+                    const catB = categoryOrder.indexOf(b.type); 
+                    if (catA !== catB) return catA - catB; 
+                    let idA = a.id.split('_')[2]; 
+                    let idB = b.id.split('_')[2]; 
+                    if (idA === '1_pro73') idA = '0.1'; 
+                    if (idB === '1_pro73') idB = '0.1'; 
+                    if (idA === '1_gly_alt') idA = '1.2'; 
+                    if (idB === '1_gly_alt') idB = '1.2'; 
+                    return parseFloat(idA) - parseFloat(idB); 
+                }); 
+                const grouped = {}; 
+                sorted.forEach(code => { 
+                    if (!grouped[code.type]) grouped[code.type] = []; 
+                    grouped[code.type].push(code); 
+                }); 
+                return { sortedAndGroupedCodes: grouped, categoryOrder }; 
+            }, []);
             
             const allDemoSetSums = useMemo(() => { 
                 const sums = {};
-                const allStructures = [...NEW_DEMO_STRUCTURE, ...QUARTET_DEMO_STRUCTURE, ...COMBINATORIAL_DEMO_STRUCTURE];
+                const allStructures = Object.values(TABS_INFO).map(t => t.data).flat();
+                
+                const getFiltered = (set) => {
+                    if (includeServiceCodons) return set.getCodons();
+                    return new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                };
+
                  allStructures.forEach(structure => {
                     if (structure.isOctetContainer) {
                         [structure.octetI, structure.octetII].forEach(section => {
                              section.groups.forEach(group => {
                                 group.sets.forEach(set => {
-                                    sums[set.id] = calculateSums_New(set.getCodons(), customKeys, activeGeneticCode.table, activeCodeId);
-                                    if (set.pair) sums[set.pair.id] = calculateSums_New(set.pair.getCodons(), customKeys, activeGeneticCode.table, activeCodeId);
+                                    sums[set.id] = calculateSums_New(getFiltered(set), customKeys, activeGeneticCode.table, activeCodeId);
+                                    if (set.pair) sums[set.pair.id] = calculateSums_New(getFiltered(set.pair), customKeys, activeGeneticCode.table, activeCodeId);
                                 });
                             });
                         });
                     } else {
                          structure.groups.forEach(group => {
                             group.sets.forEach(set => {
-                                sums[set.id] = calculateSums_New(set.getCodons(), customKeys, activeGeneticCode.table, activeCodeId); 
-                                if (set.pair) sums[set.pair.id] = calculateSums_New(set.pair.getCodons(), customKeys, activeGeneticCode.table, activeCodeId);
+                                sums[set.id] = calculateSums_New(getFiltered(set), customKeys, activeGeneticCode.table, activeCodeId); 
+                                if (set.pair) sums[set.pair.id] = calculateSums_New(getFiltered(set.pair), customKeys, activeGeneticCode.table, activeCodeId);
                             });
                         });
                     }
                 });
                 return sums; 
-            }, [customKeys, activeGeneticCode, activeCodeId]);
+            }, [customKeys, activeGeneticCode, activeCodeId, includeServiceCodons]);
 
             useEffect(() => {
-                if (activeGeneticCode.defaultParams) {
-                    setCustomKeys(prev => {
-                        const newKeys = JSON.parse(JSON.stringify(prev));
-                        newKeys.AMINO_ACIDS = JSON.parse(JSON.stringify(STANDARD_AMINO_ACIDS));
+                setCustomKeys(prev => {
+                    const newKeys = JSON.parse(JSON.stringify(prev));
+                    newKeys.AMINO_ACIDS = JSON.parse(JSON.stringify(STANDARD_AMINO_ACIDS));
+                    if (activeGeneticCode.defaultParams) {
                         Object.keys(activeGeneticCode.defaultParams).forEach(aa => {
                             Object.assign(newKeys.AMINO_ACIDS[aa], activeGeneticCode.defaultParams[aa]);
                         });
-                        return newKeys;
-                    });
-                    setActiveKeySet(null); 
-                } else {
-                    if (activeGeneticCode.id === 'transl_table_1') {
-                         setCustomKeys(prev => {
-                            const newKeys = JSON.parse(JSON.stringify(prev));
-                            newKeys.AMINO_ACIDS = JSON.parse(JSON.stringify(STANDARD_AMINO_ACIDS));
-                            return newKeys;
-                        });
-                        setActiveKeySet('Key0');
                     }
-                }
+                    return newKeys;
+                });
             }, [activeGeneticCode]);
 
             const handleCodonSelect = (codon) => { 
+                if (!includeServiceCodons && SERVICE_CODONS.includes(codon)) return;
                 setSelectedCodons(prev => { const newSet = new Set(prev); if (newSet.has(codon)) newSet.delete(codon); else newSet.add(codon); return newSet; }); 
                 setActiveRefLabel('');
             };
             const handleResetSelection = () => { setSelectedCodons(new Set()); setActiveRefLabel(''); };
-            const handleDemoSetSelect = (codonSet, refLabel) => { setSelectedCodons(codonSet); setActiveRefLabel(refLabel || ''); };
+            const handleDemoSetSelect = (codonSet, refLabel) => { 
+                setSelectedCodons(codonSet); 
+                setActiveRefLabel(refLabel || ''); 
+            };
             const handleSetKeySet = (keySetId) => { 
                 if(!keySetId) return;
                 setActiveKeySet(keySetId); 
-                setCustomKeys(JSON.parse(JSON.stringify(KEY_SETS[keySetId]))); 
+                setCustomKeys(prev => {
+                    const newKeys = JSON.parse(JSON.stringify(KEY_SETS[keySetId]));
+                    newKeys.AMINO_ACIDS = JSON.parse(JSON.stringify(prev.AMINO_ACIDS));
+                    return newKeys;
+                });
+            };
+            const handleToggleServiceCodons = (include) => {
+                setIncludeServiceCodons(include);
+                if (!include) {
+                    setSelectedCodons(prev => {
+                        const newSet = new Set(prev);
+                        SERVICE_CODONS.forEach(c => newSet.delete(c));
+                        return newSet;
+                    });
+                }
             };
             const handleCustomKeyChange = (codonType, codon, param, value) => { 
                 setActiveKeySet(null); 
@@ -2014,7 +2069,6 @@ const KEY_SETS = {
                 }); 
             };
             const handleAAUpdate = (aa, field, value) => {
-                setActiveKeySet(null);
                 setCustomKeys(prev => {
                     const newKeys = JSON.parse(JSON.stringify(prev));
                     if(newKeys.AMINO_ACIDS[aa]) {
@@ -2048,6 +2102,27 @@ const KEY_SETS = {
                             </select>
                         </div>
                         <CustomKeysPanel keys={customKeys} onKeyChange={handleCustomKeyChange} activeKeySet={activeKeySet} onOpenAAEditor={() => setIsAAEditorOpen(true)}/>
+                        
+                        <div className="control-panel-section">
+                            <h3>Codon Pool</h3>
+                            <div className="scope-toggle-container">
+                                <div 
+                                    className={`scope-toggle-btn ${includeServiceCodons ? 'active' : ''}`}
+                                    onClick={() => handleToggleServiceCodons(true)}
+                                    title="Include standard service codons (ATG, TAA, TAG, TGA)"
+                                >
+                                    ALL CODE
+                                </div>
+                                <div 
+                                    className={`scope-toggle-btn ${!includeServiceCodons ? 'active' : ''}`}
+                                    onClick={() => handleToggleServiceCodons(false)}
+                                    title="Exclude standard service codons (ATG, TAA, TAG, TGA)"
+                                >
+                                    SENSE CODE
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="control-panel-section">
                             <h3>Symmetry Highlight</h3>
                             <div className="flex flex-col gap-1">
@@ -2116,7 +2191,7 @@ const KEY_SETS = {
                         <OrbitSelector orbitsData={orbitsData} currentOrder={axisOrder.join('')} onOrderSelect={setAxisOrder} />
                     </div>
                     <div className="flex-1 p-4 flex flex-col items-center overflow-auto relative">
-                        <MatrixTable axisOrder={axisOrder} thirdPosOrder={axisOrder} selectedCodons={selectedCodons} onCodonSelect={handleCodonSelect} customKeys={customKeys} activeGeneticCode={activeGeneticCode} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} activeRefLabel={activeRefLabel} symmetryMode={symmetryMode} numeralSystem={numeralSystem} />
+                        <MatrixTable axisOrder={axisOrder} thirdPosOrder={axisOrder} selectedCodons={selectedCodons} onCodonSelect={handleCodonSelect} customKeys={customKeys} activeGeneticCode={activeGeneticCode} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} activeRefLabel={activeRefLabel} symmetryMode={symmetryMode} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} />
                         <Calculator 
                             selectedCodons={selectedCodons} 
                             onResetSelection={handleResetSelection} 
@@ -2127,22 +2202,37 @@ const KEY_SETS = {
                             equalityScope={equalityScope}
                             activeTab={activeRightPanelTab}
                             numeralSystem={numeralSystem}
+                            includeServiceCodons={includeServiceCodons}
                         />
                     </div>
                     <div className="matrix-instance-properties-panel">
                         <div className="flex border-b-2 border-gray-300 mb-0 items-center justify-between bg-gray-50 rounded-t-lg">
-                            <div className="flex">
-                                <button className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg ${activeRightPanelTab === 'original' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`} onClick={() => setActiveRightPanelTab('original')}>Global</button>
-                                <button className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg ${activeRightPanelTab === 'quartets' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`} onClick={() => setActiveRightPanelTab('quartets')}>Quartets</button>
-                                <button className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg ${activeRightPanelTab === 'combinatorial' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`} onClick={() => setActiveRightPanelTab('combinatorial')}>Combinatorial</button>
+                            <div className="flex relative">
+                                <button className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg ${activeRightPanelTab === 'pos3' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`} onClick={() => setActiveRightPanelTab('pos3')}>Pos 3</button>
+                                <button className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg ${activeRightPanelTab === 'pos2' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`} onClick={() => setActiveRightPanelTab('pos2')}>Pos 2</button>
+                                <button className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg ${activeRightPanelTab === 'pos1' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`} onClick={() => setActiveRightPanelTab('pos1')}>Pos 1</button>
+                                
+                                <div onMouseLeave={() => setIsMoreMenuOpen(false)}>
+                                    <button 
+                                        className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg flex items-center ${['quartets', 'combinatorial'].includes(activeRightPanelTab) ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`}
+                                        onMouseEnter={() => setIsMoreMenuOpen(true)}
+                                    >
+                                        More ▾
+                                    </button>
+                                    {isMoreMenuOpen && (
+                                        <div className="absolute top-full right-0 w-32 bg-white border border-gray-200 shadow-xl rounded-b-lg z-50 overflow-hidden">
+                                            <button className={`block w-full text-left px-3 py-2 text-[0.75rem] ${activeRightPanelTab === 'quartets' ? 'bg-blue-50 text-blue-700 font-bold' : 'text-gray-700 hover:bg-gray-100'}`} onClick={() => { setActiveRightPanelTab('quartets'); setIsMoreMenuOpen(false); }}>Quartets</button>
+                                            <button className={`block w-full text-left px-3 py-2 text-[0.75rem] ${activeRightPanelTab === 'combinatorial' ? 'bg-blue-50 text-blue-700 font-bold' : 'text-gray-700 hover:bg-gray-100'}`} onClick={() => { setActiveRightPanelTab('combinatorial'); setIsMoreMenuOpen(false); }}>Combinatorial</button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             
                             <div className="pr-1 flex gap-1 items-center">
                                 <button 
                                     onClick={() => exportData(
-                                        activeRightPanelTab === 'original' ? NEW_DEMO_STRUCTURE : 
-                                        activeRightPanelTab === 'quartets' ? QUARTET_DEMO_STRUCTURE : COMBINATORIAL_DEMO_STRUCTURE, 
-                                        customKeys, activeGeneticCode, activeRightPanelTab, allDemoSetSums, selectedCodons, 'pure', activeKeySet, numeralSystem, exportScope
+                                        TABS_INFO[activeRightPanelTab].data, 
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, allDemoSetSums, selectedCodons, 'pure', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
@@ -2150,9 +2240,8 @@ const KEY_SETS = {
                                 </button>
                                 <button 
                                     onClick={() => exportData(
-                                        activeRightPanelTab === 'original' ? NEW_DEMO_STRUCTURE : 
-                                        activeRightPanelTab === 'quartets' ? QUARTET_DEMO_STRUCTURE : COMBINATORIAL_DEMO_STRUCTURE, 
-                                        customKeys, activeGeneticCode, activeRightPanelTab, allDemoSetSums, selectedCodons, 'analysis', activeKeySet, numeralSystem, exportScope
+                                        TABS_INFO[activeRightPanelTab].data, 
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, allDemoSetSums, selectedCodons, 'analysis', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
@@ -2160,25 +2249,22 @@ const KEY_SETS = {
                                 </button>
                                 <button 
                                     onClick={() => exportData(
-                                        activeRightPanelTab === 'original' ? NEW_DEMO_STRUCTURE : 
-                                        activeRightPanelTab === 'quartets' ? QUARTET_DEMO_STRUCTURE : COMBINATORIAL_DEMO_STRUCTURE, 
-                                        customKeys, activeGeneticCode, activeRightPanelTab, allDemoSetSums, selectedCodons, 'ratios', activeKeySet, numeralSystem, exportScope
+                                        TABS_INFO[activeRightPanelTab].data, 
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, allDemoSetSums, selectedCodons, 'ratios', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
                                     <span>📥</span> Ratios
                                 </button>
                                 <button 
-                                    onClick={() => exportEqualitiesData(customKeys, activeGeneticCode, activeRightPanelTab, equalityScope, numeralSystem, exportScope)}
+                                    onClick={() => exportEqualitiesData(customKeys, activeGeneticCode, activeRightPanelTab, equalityScope, numeralSystem, exportScope, includeServiceCodons)}
                                     className="export-btn"
                                 >
                                     <span>📥</span> Equalities
                                 </button>
                             </div>
                         </div>
-                        {activeRightPanelTab === 'original' && <DemonstrationPanel onSelectSet={handleDemoSetSelect} demoSetSums={allDemoSetSums} demoStructure={NEW_DEMO_STRUCTURE} activeGeneticCode={activeGeneticCode} customKeys={customKeys} activeRightPanelTab={activeRightPanelTab} numeralSystem={numeralSystem}/>}
-                        {activeRightPanelTab === 'quartets' && <DemonstrationPanel onSelectSet={handleDemoSetSelect} demoSetSums={allDemoSetSums} demoStructure={QUARTET_DEMO_STRUCTURE} activeGeneticCode={activeGeneticCode} customKeys={customKeys} activeRightPanelTab={activeRightPanelTab} numeralSystem={numeralSystem}/>}
-                        {activeRightPanelTab === 'combinatorial' && <DemonstrationPanel onSelectSet={handleDemoSetSelect} demoSetSums={allDemoSetSums} demoStructure={COMBINATORIAL_DEMO_STRUCTURE} activeGeneticCode={activeGeneticCode} customKeys={customKeys} activeRightPanelTab={activeRightPanelTab} numeralSystem={numeralSystem}/>}
+                        <DemonstrationPanel onSelectSet={handleDemoSetSelect} demoSetSums={allDemoSetSums} demoStructure={TABS_INFO[activeRightPanelTab].data} activeGeneticCode={activeGeneticCode} customKeys={customKeys} activeRightPanelTab={activeRightPanelTab} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} />
                     </div>
                     <InfoModal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} />
                     <AminoAcidEditorModal isOpen={isAAEditorOpen} onClose={() => setIsAAEditorOpen(false)} aminoAcids={customKeys.AMINO_ACIDS} onUpdate={handleAAUpdate} />

@@ -221,6 +221,21 @@ def reduced(num, den):
     return f"{num // g}/{den // g}"
 
 
+def odd_core(value):
+    """The odd part of a positive integer (all factors of two removed).
+
+    The nested group hierarchy (Octet I and its 16- and 8-codon subgroups)
+    mechanically produces, for any quantity V, the multiples 2V and 4V as
+    well. A prime that divides V then scores up to three times over the same
+    underlying fact. Reducing each divisible value to its odd core collapses
+    those induced duplicates, so the number of DISTINCT odd cores measures how
+    many genuinely independent quantities a prime divides, free of the
+    doubling the hierarchy imposes."""
+    while value % 2 == 0:
+        value //= 2
+    return value
+
+
 def build_modulus_scan():
     # Recompute the 33 group quantities under both keys from codon_groups.csv,
     # using the same counting rule as reproduce.py. A group is
@@ -250,7 +265,8 @@ def build_modulus_scan():
     # (no float numerics). The excess factor over chance is read off as
     # Divisible_Distinct relative to Expected_Distinct.
     header = ["Value_Set", "Prime", "Divisible_All", "Total_All",
-              "Divisible_Distinct", "Total_Distinct", "Expected_Distinct"]
+              "Divisible_Distinct", "Total_Distinct", "Expected_Distinct",
+              "Divisible_Distinct_OddCores"]
     # The scan ranges over primes only: divisibility by a composite is the
     # conjunction of its prime-power factors (no new modulus), and a higher
     # prime power merely re-scores the same values against a smaller chance
@@ -263,9 +279,11 @@ def build_modulus_scan():
         nd = len(distinct)
         for p in primes:
             d_all = sum(1 for v in values if v != 0 and v % p == 0)
-            d_dist = sum(1 for v in distinct if v % p == 0)
+            divisible = [v for v in distinct if v % p == 0]
+            d_dist = len(divisible)
+            d_cores = len({odd_core(v) for v in divisible})
             rows.append([set_name, p, d_all, len(values),
-                         d_dist, nd, reduced(nd, p)])
+                         d_dist, nd, reduced(nd, p), d_cores])
     return header, rows
 
 

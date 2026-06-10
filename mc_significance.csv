@@ -1,0 +1,5 @@
+"Statistic","Description","Observed","Null_Mean","P_Value","N_Trials","Seed"
+"S1","N(All sense) and T(Octet I) both divisible by 37","both divisible",0.000799,0.000799,1000000,0
+"S2","count of T/P/N/Delta divisible by 37 over 9 headline sense-pool groups (of 36)",13,1.0299,3.9e-05,1000000,0
+"S3","count of T/P/N/Delta divisible by 37 over parametrization-independent groups (of 68)",4,1.9439,0.150505,1000000,0
+"S4","mean distance to nearest multiple of 37 over T/P/N/Delta of all 33 groups under both keys (lower = more concentrated)",5.0985,9.0749,0.000778,1000000,0

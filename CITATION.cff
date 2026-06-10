@@ -19,8 +19,7 @@ abstract: >
   of Shcherbak-Makukov (2013) and Panov-Filatov (2024).
   The repository contains the preprint (LaTeX source and
   PDF), input and computed datasets, a reproducibility
-  script, supplementary control and significance-test scripts
-  and datasets, and an interactive HTML visualizer.
+  script, and an interactive HTML visualizer.
 keywords:
   - genetic code
   - amino acids
@@ -29,8 +28,8 @@ keywords:
   - arithmetic regularities
   - divisibility by 37
 license: CC-BY-4.0
-version: "1.4.0"
-date-released: "2026-06-08"
+version: "1.4.1"
+date-released: "2026-06-09"
 repository-code: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 preferred-citation:
