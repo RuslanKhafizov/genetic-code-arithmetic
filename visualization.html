@@ -970,39 +970,91 @@
 
             const groupData = allFlattenedGroups.map(set => {
                 const codons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                const sums = calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id);
+                sums.deltaPN = sums.protons - sums.neutrons; // Добавлено вычисление дельты
                 return {
                     id: set.symmetryId || set.id,
                     name: set.label,
                     section: set._sectionName,
                     level: codons.size,
-                    sums: calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id)
+                    sums: sums
                 };
             });
 
-            const paramMap = { fullMass: "Total_Nucleons", protons: "Protons", neutrons: "Neutrons" };
-            let csvContent = "Nucleon_Value,Match_Type,Source_Section,Source_ID,Source_Name,Source_Parameter,Target_Parameter,Target_Name,Target_ID,Target_Section\n";
+            const paramMap = { fullMass: "Total_Nucleons", protons: "Protons", neutrons: "Neutrons", deltaPN: "Delta_P_N" }; // Дельта в конце списка параметров
+            const paramKeys = Object.keys(paramMap);
+            
+            const equalitiesList = [];
             
             for (let i = 0; i < groupData.length; i++) {
                 const source = groupData[i];
                 for (let j = i; j < groupData.length; j++) {
                     const target = groupData[j];
-                    Object.entries(paramMap).forEach(([srcKey, srcLabel]) => {
+                    
+                    for (let pi = 0; pi < paramKeys.length; pi++) {
+                        const srcKey = paramKeys[pi];
+                        const srcLabel = paramMap[srcKey];
                         const srcVal = source.sums[srcKey];
-                        if (srcVal === 0) return;
+                        if (srcVal === 0) continue;
                         
-                        Object.entries(paramMap).forEach(([trgKey, trgLabel]) => {
-                            if (i === j && srcKey === trgKey) return; 
+                        for (let pj = 0; pj < paramKeys.length; pj++) {
+                            const trgKey = paramKeys[pj];
+                            const trgLabel = paramMap[trgKey];
+                            
+                            if (i === j && pi >= pj) continue; // Исправленное условие предотвращения дубликатов (Баг 2)
+                            
                             if (srcVal === target.sums[trgKey]) {
                                 let matchType = "SAME_PARAM"; 
                                 if (srcKey !== trgKey) {
                                     matchType = (source.level === target.level) ? "CROSS_PARAM" : "DIFF_PARAM";
                                 }
-                                csvContent += `${formatValue(srcVal, numeralSystem, true)},${matchType},"${source.section}",${source.id},"${source.name}",${srcLabel},${trgLabel},"${target.name}",${target.id},"${target.section}"\n`;
+                                equalitiesList.push({
+                                    rawVal: srcVal,
+                                    formattedVal: formatValue(srcVal, numeralSystem, true),
+                                    matchType,
+                                    sSec: source.section,
+                                    sId: source.id,
+                                    sName: source.name,
+                                    sParam: srcLabel,
+                                    tParam: trgLabel,
+                                    tName: target.name,
+                                    tId: target.id,
+                                    tSec: target.section,
+                                    pi, pj
+                                });
                             }
-                        });
-                    });
+                        }
+                    }
                 }
             }
+
+            // Точная сортировка в соответствии с логикой скрипта
+            equalitiesList.sort((a, b) => {
+                if (a.rawVal !== b.rawVal) return a.rawVal - b.rawVal;
+                const typeOrder = { 'DIFF_PARAM': 1, 'CROSS_PARAM': 2, 'SAME_PARAM': 3 };
+                if (typeOrder[a.matchType] !== typeOrder[b.matchType]) return typeOrder[a.matchType] - typeOrder[b.matchType];
+                
+                const sidA = isNaN(a.sId) ? a.sId : Number(a.sId);
+                const sidB = isNaN(b.sId) ? b.sId : Number(b.sId);
+                if (sidA !== sidB) return sidA > sidB ? 1 : -1;
+                
+                const tidA = isNaN(a.tId) ? a.tId : Number(a.tId);
+                const tidB = isNaN(b.tId) ? b.tId : Number(b.tId);
+                if (tidA !== tidB) return tidA > tidB ? 1 : -1;
+                
+                if (a.pi !== b.pi) return a.pi - b.pi;
+                return a.pj - b.pj;
+            });
+
+            const formatId = (id) => (id === "" || id === null || id === undefined) ? '""' : (!isNaN(id) ? id : `"${id}"`);
+            const formatStr = (str) => `"${str}"`;
+
+            let csvContent = '"Nucleon_Value","Match_Type","Source_Section","Source_ID","Source_Name","Source_Parameter","Target_Parameter","Target_Name","Target_ID","Target_Section"\n';
+            
+            equalitiesList.forEach(eq => {
+                const valStr = isNaN(eq.formattedVal) ? formatStr(eq.formattedVal) : eq.formattedVal;
+                csvContent += `${valStr},${formatStr(eq.matchType)},${formatStr(eq.sSec)},${formatId(eq.sId)},${formatStr(eq.sName)},${formatStr(eq.sParam)},${formatStr(eq.tParam)},${formatStr(eq.tName)},${formatId(eq.tId)},${formatStr(eq.tSec)}\n`;
+            });
 
             const keyPart = (!customKeys.id || customKeys.id.includes('custom')) ? 'custom-key' : customKeys.id.toLowerCase();
             
@@ -1049,19 +1101,21 @@
              const fileNameRaw = `${keyPart}_${sanitizedCodeName}_${suffixMap[exportType]}.csv`;
              const fileName = fileNameRaw.replace(/_+/g, '_').replace(/-_/g, '_');
 
+             const formatId = (id) => (id === "" || id === null || id === undefined) ? '""' : (!isNaN(id) ? id : `"${id}"`);
+
              let csvContent = "";
              
              if (exportType === 'pure') {
                 if (exportScope === 'full') {
-                    csvContent += "Group_Name,Group_ID,Twin_Group_ID,Code_Section,Group_Size,Total_Nucleons,Protons,Neutrons,Delta_P_N,Side_Chain_Nucleons,Backbone_Nucleons\n";
+                    csvContent += '"Group_Name","Group_ID","Twin_Group_ID","Code_Section","Group_Size","Total_Nucleons","Protons","Neutrons","Delta_P_N","Side_Chain_Nucleons","Backbone_Nucleons"\n';
                 } else {
-                    csvContent += "Group_Name,Group_ID,Twin_Group_ID,Code_Section,Group_Size,Total_Nucleons,Protons,Neutrons,Delta_P_N\n";
+                    csvContent += '"Group_Name","Group_ID","Twin_Group_ID","Code_Section","Group_Size","Total_Nucleons","Protons","Neutrons","Delta_P_N"\n';
                 }
              } else if (exportType === 'analysis') {
                 if (exportScope === 'full') {
-                    csvContent += "Group_Name,Group_ID,Twin_Group_ID,Code_Section,Group_Size,Total_mod37,Protons_mod37,Neutrons_mod37,Delta_mod37,Side_Chain_mod37,Backbone_mod37\n";
+                    csvContent += '"Group_Name","Group_ID","Twin_Group_ID","Code_Section","Group_Size","Total_mod37","Protons_mod37","Neutrons_mod37","Delta_mod37","Side_Chain_mod37","Backbone_mod37"\n';
                 } else {
-                    csvContent += "Group_Name,Group_ID,Twin_Group_ID,Code_Section,Group_Size,Total_mod37,Protons_mod37,Neutrons_mod37,Delta_mod37\n";
+                    csvContent += '"Group_Name","Group_ID","Twin_Group_ID","Code_Section","Group_Size","Total_mod37","Protons_mod37","Neutrons_mod37","Delta_mod37"\n';
                 }
              } else if (exportType === 'ratios') {
                 let ratioNames = [];
@@ -1070,15 +1124,15 @@
                 } else {
                     ratioNames = ['P_T', 'N_T', 'Delta_T', 'P_N', 'Delta_P', 'Delta_N'];
                 }
-                const ratioHeadersFrac = ratioNames.map(name => `${name}_Rational`).join(",");
-                const ratioHeadersDec = ratioNames.map(name => `${name}_Ratio`).join(",");
-                csvContent += `Group_Name,Group_ID,Twin_Group_ID,Code_Section,Group_Size,${ratioHeadersFrac},${ratioHeadersDec}\n`;
+                const ratioHeadersFrac = ratioNames.map(name => `"${name}_Rational"`).join(",");
+                const ratioHeadersDec = ratioNames.map(name => `"${name}_Ratio"`).join(",");
+                csvContent += `"Group_Name","Group_ID","Twin_Group_ID","Code_Section","Group_Size",${ratioHeadersFrac},${ratioHeadersDec}\n`;
              }
              
              const flattenedSets = [];
              structure.forEach(section => {
                  const traverse = (groups, sectionOverride) => groups.forEach(g => g.sets.forEach(s => {
-                     const mainTwinId = s.pair ? (s.pair.symmetryId || s.pair.id) : null;
+                     const mainTwinId = s.pair ? (s.pair.symmetryId || s.pair.id) : "";
                      const mainWrapper = { ...s, _twinRef: mainTwinId, _sectionName: sectionOverride || tabExportName };
                      flattenedSets.push(mainWrapper);
                      if(s.pair) {
@@ -1097,8 +1151,8 @@
                  if (val < 37) return val.toString();
                  const q = Math.floor(val / 37);
                  const r = val % 37;
-                 if (r === 0) return `${q}*37`;
-                 return `${q}*37+${r}`;
+                 if (r === 0) return `"${q}*37"`;
+                 return `"${q}*37+${r}"`;
              };
 
              const buildRatioLine = (sums) => {
@@ -1139,29 +1193,34 @@
                     const common = gcd(Math.abs(pair.n), Math.abs(pair.d));
                     const simpN = Math.round(pair.n/common);
                     const simpD = Math.round(pair.d/common);
-                    if (numeralSystem === 'base37') return `="${toBase37(simpN)}/${toBase37(simpD)}"`;
-                    return `="${simpN}/${simpD}"`;
+                    if (numeralSystem === 'base37') return `"${toBase37(simpN)}/${toBase37(simpD)}"`;
+                    return `"${simpN}/${simpD}"`;
                  });
                  
                  const ratios = pairs.map((pair) => {
-                    if (pair.d === 0) return "N/A";
-                    if (numeralSystem === 'base37') return floatToBase37(pair.n / pair.d, 4);
-                    return (pair.n / pair.d).toFixed(4);
+                    if (pair.d === 0) return '"N/A"';
+                    let val = (pair.n / pair.d).toFixed(4);
+                    if (numeralSystem === 'base37') val = floatToBase37(pair.n / pair.d, 4);
+                    return numeralSystem === 'base37' ? `"${val}"` : val;
                  });
                  
                  return [...fractions, ...ratios].join(",");
              };
 
              const buildPureLine = (sum) => {
+                 const formatNum = (v) => {
+                    const f = formatValue(v, numeralSystem, true);
+                    return isNaN(f) ? `"${f}"` : f;
+                 };
                  let arr = [
-                     formatValue(sum.fullMass, numeralSystem, true),
-                     formatValue(sum.protons, numeralSystem, true),
-                     formatValue(sum.neutrons, numeralSystem, true),
-                     formatValue(sum.protons - sum.neutrons, numeralSystem, true)
+                     formatNum(sum.fullMass),
+                     formatNum(sum.protons),
+                     formatNum(sum.neutrons),
+                     formatNum(sum.protons - sum.neutrons)
                  ];
                  if (exportScope === 'full') {
-                     arr.push(formatValue(sum.sideChainMass, numeralSystem, true));
-                     arr.push(formatValue(sum.backboneMass, numeralSystem, true));
+                     arr.push(formatNum(sum.sideChainMass));
+                     arr.push(formatNum(sum.backboneMass));
                  }
                  return arr.join(",");
              };
@@ -1182,13 +1241,13 @@
 
              if (selectedCodons && selectedCodons.size > 0) {
                  const sum = calculateSums_New(selectedCodons, customKeys, activeGeneticCode.table, activeGeneticCode.id);
-                 const codonList = Array.from(selectedCodons).sort().join(" ");
+                 const codonList = Array.from(selectedCodons).sort().join(";");
                  if (exportType === 'pure') {
-                     csvContent += `"${codonList}",Custom,,Custom,${selectedCodons.size},${buildPureLine(sum)}\n`;
+                     csvContent += `"${codonList}","Custom","","Custom",${selectedCodons.size},${buildPureLine(sum)}\n`;
                  } else if (exportType === 'analysis') {
-                     csvContent += `"${codonList}",Custom,,Custom,${selectedCodons.size},${buildAnalysisLine(sum)}\n`;
+                     csvContent += `"${codonList}","Custom","","Custom",${selectedCodons.size},${buildAnalysisLine(sum)}\n`;
                  } else if (exportType === 'ratios') {
-                     csvContent += `"${codonList}",Custom,,Custom,${selectedCodons.size},${buildRatioLine(sum)}\n`;
+                     csvContent += `"${codonList}","Custom","","Custom",${selectedCodons.size},${buildRatioLine(sum)}\n`;
                  }
              }
 
@@ -1199,11 +1258,11 @@
                  const twinId = set._twinRef || "";
                  const sectionName = set._sectionName || tabExportName;
                  if (exportType === 'pure') {
-                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${codons.size},${buildPureLine(sum)}\n`;
+                    csvContent += `"${set.label}",${formatId(symmetryId)},${formatId(twinId)},"${sectionName}",${codons.size},${buildPureLine(sum)}\n`;
                  } else if (exportType === 'analysis') {
-                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${codons.size},${buildAnalysisLine(sum)}\n`;
+                    csvContent += `"${set.label}",${formatId(symmetryId)},${formatId(twinId)},"${sectionName}",${codons.size},${buildAnalysisLine(sum)}\n`;
                  } else if (exportType === 'ratios') {
-                    csvContent += `"${set.label}",${symmetryId},${twinId},${sectionName},${codons.size},${buildRatioLine(sum)}\n`;
+                    csvContent += `"${set.label}",${formatId(symmetryId)},${formatId(twinId)},"${sectionName}",${codons.size},${buildRatioLine(sum)}\n`;
                  }
              });
              const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

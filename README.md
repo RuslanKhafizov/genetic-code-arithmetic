@@ -21,11 +21,16 @@ It provides:
    codons into analytical groups, and the parametric keys
    used to handle start and stop codons.
 
-4. A single Python script, `reproduce.py`, that consumes
-   the five input datasets and generates thirteen
-   computed datasets. The script uses only the Python
-   standard library and produces deterministic,
-   bit-for-bit identical output across runs.
+4. The core analysis is reproduced by one self-contained
+   Python script, `reproduce.py`, that consumes the five
+   input datasets and generates thirteen computed
+   datasets. The script uses only the Python standard
+   library and produces deterministic, bit-for-bit
+   identical output across runs. Three further scripts —
+   `controls.py`, `mc_significance.py`, and `verify_mc.py`
+   — add supplementary specificity controls and a
+   significance test (described in their own section
+   below) and are not part of the core pipeline.
 
 5. The thirteen **computed datasets** themselves,
    provided in the repository so that readers who do not
@@ -152,7 +157,7 @@ Comparative dataset across NCBI codes:
 
 ### Reproducibility script
 
-- `reproduce.py` — a single Python script that generates all
+- `reproduce.py` — the Python script that generates all
   thirteen computed datasets from the five input datasets. See the
   dedicated section below for usage and details.
 
@@ -179,7 +184,16 @@ external dependencies.
 
 - **Translation table selector.** Switching between all 27 NCBI
   translation tables (numbered 1–33, with gaps) and several
-  additional artificial translation models.
+  additional unofficial codes.
+
+- **Codon pool toggle.** A switch between the full 64-codon
+  table ("ALL CODE") and the sense-codon elongation pool
+  ("SENSE CODE"). When "SENSE CODE" is selected, the service
+  codons (ATG, TAA, TAG, TGA) are visually muted in the matrix
+  and excluded from the calculations, the predefined groups,
+  and the CSV export; under "ALL CODE" they are included. The
+  exported `Code_Section` field records which mode produced the
+  file.
 
 - **Parametric keys.** Quick switching between the zero
   parametrization (Key 0), the symmetrization (Key 1), and
@@ -200,13 +214,16 @@ external dependencies.
   selected by clicking, allowing custom codon groups to be
   constructed and analyzed without writing any code.
 
-- **Live calculator.** For any selected group of codons, the
-  calculator instantly computes the four nucleon quantities
-  $P$, $N$, $T$ and $\Delta$, checks divisibility by 37, 111
-  and 999, displays all pairwise ratios of these quantities in
-  both exact-fraction and decimal form, and presents the values
-  in the form $q \cdot 37 + r$ for direct visual inspection of
-  divisibility.
+- **Live calculator and advanced analysis.** For any selected
+  group of codons, the calculator computes the four nucleon
+  quantities $P$, $N$, $T$ and $\Delta$, checks divisibility by
+  37, 111 and 999, displays all pairwise ratios of these
+  quantities in both exact-fraction and decimal form, and
+  presents the values in the form $q \cdot 37 + r$ for direct
+  visual inspection of divisibility. An expandable "Advanced
+  Analysis" section breaks the $\Delta$ down per 8-codon block
+  and reports the structural deltas between adjacent codon
+  subsets.
 
 - **Cross-set equality finder.** As the selection changes, the
   calculator scans all predefined codon groups in the
@@ -217,20 +234,23 @@ external dependencies.
   demonstration tab or to the full set of predefined groups.
 
 - **Demonstration panel.** A collection of preset codon groups
-  organized into three tabs. The "Global" tab corresponds to
-  the codon-group partitioning used in this study, including
-  the macro-groups defined by the chemical type of the third
-  nucleotide and the Octet I / Octet II partition. The "Combinatorial" tab includes several groupings, some
-  introduced in earlier work on genetic code symmetries
-  (Shcherbak and Makukov 2013, Panov and Filatov 2024) and
-  others examined during the preparation of the present
-  work. It allows their arithmetic properties to be
-  reproduced and explored under any chosen parametric key. The "Quartets" tab contains
-  experimental finer subdivisions of the code that are not
-  discussed in the present preprint. Each preset button acts
-  as a live scoreboard, displaying the nucleon quantities of
-  the corresponding group and updating as parametric keys or
-  amino acid values are modified.
+  organized into positional tabs (Pos 3, Pos 2, Pos 1), each
+  representing the structural partition based on the chemical
+  type of the nucleotide at the corresponding codon position.
+  The Pos 3 tab corresponds to the codon-group partitioning
+  used in this study, including the macro-groups defined by the
+  third nucleotide and the Octet I / Octet II partition.
+  Additional experimental groupings (Quartets, Combinatorial)
+  are reached through a dropdown; some of these were introduced
+  in earlier work on genetic code symmetries (Shcherbak and
+  Makukov 2013, Panov and Filatov 2024) and others examined
+  during the preparation of the present work, and the Quartets
+  finer subdivisions are not discussed in the preprint. Each
+  preset button displays the nucleon quantities of the
+  corresponding group and updates as the parametric keys, amino
+  acid values, or codon pool toggle are changed. Academic
+  references shown on the buttons are clickable and link to the
+  original publications via DOI.
 
 - **Symmetry highlighting.** Three predefined nucleotide
   permutations can be applied to highlight related codons on
@@ -275,6 +295,48 @@ used as a substitute for the script-generated outputs when exact
 reproducibility is required. The visualization export is
 provided as a convenience for interactive exploratory work only.
 
+### Supplementary controls
+
+Three additional datasets probe the *specificity* of the arithmetic
+regularities and are produced by a separate script, `controls.py`. Like
+`reproduce.py` it uses only the Python standard library, exact integer
+arithmetic, and no randomization, and its outputs follow the same file format
+conventions. It is **not** part of the core reproducibility pipeline: it
+consumes the same input datasets but does not generate, and is not required
+for, any of the thirteen computed datasets above. See the dedicated section
+below for usage and details.
+
+- `controls.py` — the supplementary control script.
+- `position_axis_analysis.csv` — the three chemical axes applied to the first,
+  second, and third codon position (under the sense pool, Key 0, and Key 1; the sense pool is reported because, carrying no service codons, it is independent of the parametric key).
+  Of the axis-group quantities divisible by 37, the third position carries
+  eleven, the first two, and the second none.
+- `prime_divisibility_scan.csv` — for every prime up to 97 and for three value
+  sets, how many group quantities it divides, establishing that, after the
+  small primes 2 (proton parity) and 5 (a trace of the round-number
+  regularity — divisibility by 10 and 100, the same Criterion-2 structure noted
+  in the preprint), only 37 divides a non-chance share of the quantities,
+  including in the value sets where 37 is not imposed.
+- `position_asymmetry_ncbi.csv` — the Keto/Amino asymmetry, computed on the sense pool (so that tables with different stop-codon sets remain comparable), at all
+  three codon positions across the 27 NCBI translation tables. The asymmetry
+  is divisible by 37 at all three positions for the standard code and its
+  exact codon-to-amino-acid equivalent (Table 11), and at no more than one
+  position for any other table.
+
+A further script, `mc_significance.py`, assesses the *statistical significance*
+of the structure under a random-code null (a random reassignment of the twenty
+amino acids to the synonymous blocks). Unlike `controls.py` it is randomized,
+though seeded for reproducibility. See its dedicated section below.
+
+- `mc_significance.py` — the Monte Carlo significance test.
+- `mc_significance.csv` — its summary table: the four pre-specified test
+  statistics, their observed values, null means, and p-values.
+- `verify_mc.py` — an independent re-implementation of the Monte Carlo (a
+  different construction of the codon groups and a different random-number
+  generator, sharing no code with `mc_significance.py`) that reproduces its
+  figures, as a guard against coding error.
+
+
 ### Metadata and auxiliary files
 
 - `README.md` — this file.
@@ -283,8 +345,8 @@ provided as a convenience for interactive exploratory work only.
   preprint, figures, datasets, and documentation. Attribution is
   required for reuse.
 - `LICENSE-CODE` — MIT License, copyright © 2025–2026 Ruslan
-  Khafizov. Covers the source code (`reproduce.py`,
-  `visualization.html`).
+  Khafizov. Covers the source code (`reproduce.py`, `controls.py`,
+  `mc_significance.py`, `verify_mc.py`, `visualization.html`).
 - `CITATION.cff` — machine-readable citation metadata in Citation
   File Format, used by GitHub, Zenodo and reference managers to
   generate citations for this repository.
@@ -445,6 +507,180 @@ deterministic and uses a fixed CSV dialect, any difference between
 a freshly generated file and a reference copy would indicate
 either a modification to the script, a modification to one of the
 input datasets, or a bug, and should be investigated.
+
+## The supplementary control script `controls.py`
+
+`controls.py` is a standalone companion to `reproduce.py` that generates the
+three supplementary control datasets. It is not part of the core
+reproducibility pipeline and is not required to reproduce any numerical result
+reported in the preprint; it exists to test how *specific* those results are to
+the standard code, to the third codon position, and to the modulus 37. The third
+of these controls also documents a regularity that is non-trivial in itself — the
+Keto/Amino asymmetry is divisible by 37 at all three codon positions — and shows
+that this is unique to the standard code (and its twin, NCBI Table 11).
+
+### Requirements
+
+Python 3, standard library only. No third-party packages and no network access
+are required.
+
+### Usage
+
+```
+python3 controls.py
+```
+
+The script reads the input datasets `amino_acids_nucleons.csv`,
+`genetic_code_codons.csv`, `codon_groups.csv`, `key_parameters.csv` and
+`ncbi_genetic_code_registry.csv` from its own directory and writes the three
+control datasets to the same directory.
+
+### Determinism
+
+As with `reproduce.py`, all arithmetic is exact integer arithmetic, there is no
+randomization, and the output is byte-for-byte reproducible across runs. All
+counts and residues are integers; the one expected (chance) value in
+`prime_divisibility_scan.csv` is stored as an exact reduced fraction rather than
+a decimal, so that no floating-point numerics enter the output.
+
+### The three controls
+
+1. **Codon position** (`position_axis_analysis.csv`). The three chemical axes,
+   which the preprint applies at the third codon position, are applied instead
+   to the first, second, and third position in turn, under the sense pool,
+   Key 0, and Key 1. The divisibility structure modulo 37 appears predominantly
+   at the third position; the first position shows only an isolated Keto/Amino
+   neutron divisibility, and the second none.
+
+2. **Choice of modulus** (`prime_divisibility_scan.csv`). For every prime up to
+   97 and for three value sets — the parametrization-independent groups (on
+   which 37 cannot be imposed), Key 0, and Key 1 — the script counts how many
+   group quantities the prime divides, over all instances and over distinct
+   values. After the small primes 2 (proton parity) and 5 (the round-number
+   regularity, which the scan thus corroborates), 37 is the only modulus that
+   divides a non-chance share which is both stable across the three value sets
+   and irreducible to the group-doubling hierarchy, and it does so even in the
+   value sets where 37 is not imposed. The
+   scan ranges over primes rather than all integers because divisibility by a
+   composite is the conjunction of its prime factors (no new modulus), and a
+   higher prime power only re-scores the same values against a smaller chance
+   rate. 37 is distinguished from 2 and 5 on base-independent grounds: it is a
+   larger prime (rarer per hit), has no parity-type cause, and occurs at a
+   single power — no quantity is divisible by 37², so its excess does not grow
+   with the modulus, unlike 5, whose multiples here are almost all multiples
+   of 25. Reducing each divisible value to its odd part — the number left after
+   dividing out all factors of two, e.g. 296 = 8·37 has odd part 37 — collapses
+   the doubling that the nested groups introduce (a group of size 2k has twice
+   the nucleon sums of its size-k refinement), so that counting distinct odd
+   parts (column `Divisible_Distinct_OddCores`) measures how many genuinely
+   independent quantities a prime divides. This makes the picture sharp: 37 keeps ten distinct
+   odd cores under Key 0 (and more than one in every value set), whereas the
+   apparent higher-prime excesses collapse to a single
+   core each — 73 = 2·37−1, an echo of the modulus itself, and 61 a lone
+   factorization of the pyrimidine proton pool, unrelated to 37.
+
+3. **Position asymmetry across NCBI codes** (`position_asymmetry_ncbi.csv`).
+   For each of the 27 NCBI translation tables, the Keto/Amino sense-pool
+   asymmetry is computed for all four nucleon quantities at each codon
+   position. The asymmetry is divisible by 37 at all three positions only for
+   the standard code and its exact codon-to-amino-acid equivalent (Table 11).
+   Because the NCBI tables are evolutionarily related rather than independent
+   samples, this is evidence of specificity among natural codes, not a
+   probability statement.
+
+### Consistency check
+
+On startup the script verifies that the third-position axis groups it builds
+reproduce the corresponding full-code groups in `codon_groups.csv`, so the
+groups it generates cannot silently diverge from the published registry. The
+first and second codon positions have no counterpart in `codon_groups.csv`
+(which defines third-position groups only) and are therefore built directly
+from the 64 codons.
+
+
+## The Monte Carlo significance test `mc_significance.py`
+
+`mc_significance.py` asks how *improbable* the arithmetic structure is under an
+explicit null, complementing the deterministic specificity controls above.
+Unlike the deterministic `reproduce.py` and `controls.py`, it is randomized
+(though seeded).
+
+### Requirements
+
+Python 3, standard library only. No third-party packages are required.
+
+### Usage
+
+```
+python3 mc_significance.py
+```
+
+The script reads the same input datasets as `controls.py` and writes a summary
+table `mc_significance.csv`.
+
+### Null model
+
+A "random code" of the kind used in studies of genetic-code optimality. The
+architecture of the standard code is held fixed — the 64 codons, the synonymous
+blocks with their sizes, the three stop codons, the Rumer Octet I/II partition,
+and the third-position chemical axes — and the only thing randomized is which
+amino acid, carrying its fixed proton and neutron counts, occupies each of the
+twenty blocks. A trial is a uniformly random permutation of the twenty amino
+acids over the twenty blocks. The modulus 37 is taken a priori from the prior
+literature and the statistics are fixed before running.
+
+### Reproducibility
+
+The script is randomized but seeded (default seed 0, 1,000,000 trials), so the
+reported figures are reproducible run to run.
+
+### The four pre-specified statistics
+
+1. **Two independent 37-anchors** — `N(All sense) = 3589 = 97·37` and
+   `T(Octet I) = 3700 = 100·37` both divisible by 37. Reached by ≈0.0008 of
+   random codes (independent reference (1/37)² ≈ 0.00073).
+2. **37-saturation of the headline partition** — among the four nucleon
+   quantities of the nine Rumer/axis groups (All, the six axis half-pools, the
+   two octets), the number divisible by 37. The standard code scores 13 of 36
+   against a null mean of ≈1.0; ≈4×10⁻⁵ of random codes reach 13 or more.
+3. **The same count over the parametrization-independent groups only** (on
+   which 37 can never be imposed). The standard code scores 4 against a null
+   mean of ≈1.9; ≈0.15 of random codes reach it — the conservative,
+   non-significant variant.
+4. **Concentration of the whole value set near the 37-lattice** — not how many
+   quantities are exact multiples of 37, but how close all of them lie. For each
+   of the 33 groups under both keys, the distance of every nonzero T/P/N/Δ to
+   the nearest multiple of 37 is averaged (264 values). The standard code gives
+   mean distance ≈5.10 against a null mean of ≈9.07; ≈8×10⁻⁴ of random codes lie
+   this close or closer. Excluding the exact multiples, the rest still average
+   ≈6.8 against ≈9.5 for a uniform residue, so this is not a restatement of
+   statistic 2. It is stronger under Key 1 (≈4.6) than Key 0 (≈5.6) — the
+   derivation pulls the entire set toward the lattice — and is the aggregate
+   form of the ±1/±2 cascade documented group by group in the preprint.
+
+The first, second, and fourth statistics place the standard code far in the
+tail; the third does not, locating the effect in the full sense-pool partition
+rather than in the parametrization-independent subgroups alone. The p-value is improbability
+under this particular null (which fixes the code's degeneracy architecture and
+the amino-acid nucleon counts); it is a different question from specificity
+among the 27 natural codes, and speaks to no biological mechanism.
+
+### Independent cross-check
+
+Because this is the only randomized result in the repository, it ships with an
+independent re-implementation, `verify_mc.py`, that shares no code with
+`mc_significance.py`: it reads the input CSVs directly, builds the codon groups
+from the third-position and four-fold-degeneracy rules (not from
+`codon_groups.csv`), and uses a different random seed, then prints its results
+side by side with `mc_significance.csv`. The two scripts agree on all four statistics
+(the S2 tail probability is a few ×10⁻⁵ in both, and the S4 mean distance is
+5.10 by both routes with p ≈ 8×10⁻⁴), which is evidence against a coding error
+in either. The cross-check rebuilds all 33 groups — including the Octet I and
+Octet II single-base subgroups — from the partition rules, so it would catch a
+missing or duplicated group in either implementation. The observed values it
+prints (N(All sense)=3589, T(Octet I)=3700, the counts 13 and 4, the mean
+distance 5.10) can also be checked by hand against the tables in the preprint.
+
 
 # amino_acids_nucleons.csv
 
@@ -1517,3 +1753,119 @@ fraction, rounded to four decimal places.
 - `P_N_Rational`, `P_N_Ratio` — Protons / Neutrons
 - `Delta_P_Rational`, `Delta_P_Ratio` — Delta_P_N / Protons
 - `Delta_N_Rational`, `Delta_N_Ratio` — Delta_P_N / Neutrons
+
+
+# position_axis_analysis.csv
+
+Output of `controls.py` (not part of the `reproduce.py` pipeline). The three
+chemical axes (Keto/Amino, Strong/Weak, Purine/Pyrimidine) are applied to the
+first, second, and third codon position in turn, under the sense pool, Key 0,
+and Key 1, giving 3 positions × 6 axis groups × 3 counting modes = 54 rows. The
+four `*_mod37` columns give each nucleon quantity reduced modulo 37, so that a
+value of 0 marks divisibility by 37.
+
+## Columns
+
+- `Position` — codon position at which the axis is applied (1, 2, or 3)
+- `Axis` — name of the axis group: Keto, Amino, Strong, Weak, Purine, or
+  Pyrimidine
+- `Members` — the two nucleotides defining the group at that position
+  (e.g. `{G, T}`)
+- `Pool` — counting mode: `sense` (service codons excluded), `key0` (service
+  codons at their Key 0 values: stops 0, ATG as Met), or `key1` (service codons
+  at their Key 1 values)
+- `Group_Size` — number of codons counted in the group under that mode
+- `Total_Nucleons`, `Protons`, `Neutrons`, `Delta_P_N` — the four nucleon
+  quantities summed over the group
+- `Total_mod37`, `Protons_mod37`, `Neutrons_mod37`, `Delta_mod37` — the same
+  quantities reduced modulo 37 (0 means divisible by 37)
+
+# prime_divisibility_scan.csv
+
+Output of `controls.py` (not part of the `reproduce.py` pipeline). For every
+prime up to 97 and for three value sets, the file records how many of the
+codon-group nucleon quantities the prime divides, counted both over all
+instances and over distinct nonzero values. The three value sets are the
+parametrization-independent groups (those with no service codon, on which 37
+cannot be imposed), all groups under Key 0, and all groups under Key 1; this
+makes it visible that 37 dominates even where it is not imposed by the
+parametrization. 25 primes × 3 value sets = 75 rows. Only primes are scanned:
+divisibility by a composite reduces to its prime factors, and a higher prime
+power only re-scores the same values against a smaller chance rate, so the prime
+is the irreducible unit of comparison.
+
+## Columns
+
+- `Value_Set` — `param_independent`, `key0`, or `key1`
+- `Prime` — the prime tested
+- `Divisible_All` — number of group quantities (counting every group instance)
+  divisible by the prime
+- `Total_All` — total number of group quantities in the value set
+- `Divisible_Distinct` — number of distinct nonzero quantity values divisible by
+  the prime
+- `Total_Distinct` — total number of distinct nonzero quantity values
+- `Expected_Distinct` — chance expectation `Total_Distinct / Prime` of divisible
+  distinct values under a uniform-residue model, given as an exact reduced
+  fraction; the excess over chance is read off as `Divisible_Distinct` relative
+  to this value
+- `Divisible_Distinct_OddCores` — number of distinct *odd cores* among the
+  divisible distinct values: each value is reduced to its odd part (its
+  factors of two removed) before counting. The nested group hierarchy
+  (Octet I and its 16- and 8-codon subgroups) mechanically produces 2V and
+  4V alongside any quantity V, so a prime dividing V scores up to three times
+  over one underlying fact; this column collapses that duplication, counting
+  only genuinely independent quantities. 37 retains ten distinct cores under
+  Key 0 (more than one in every value set), whereas the higher primes that
+  exceed chance (e.g. 73, 61) collapse to a single core each — 73 = 2·37−1 an
+  echo of 37, and 61 the lone factorization of the pyrimidine proton pool.
+
+# position_asymmetry_ncbi.csv
+
+Output of `controls.py` (not part of the `reproduce.py` pipeline). For each of
+the 27 NCBI translation tables, the Keto/Amino functional-group axis
+(`{G, T}` versus `{A, C}`) sense-pool asymmetry — the value on the Keto side
+minus the value on the Amino side — is computed for all four nucleon quantities
+at each of the three codon positions. The sense pool follows Model 1: the stop
+codons of that table and the universal initiator ATG are excluded, and every
+other codon contributes its amino acid's proton and neutron counts. 27 tables ×
+3 positions = 81 rows. The standard code (table 1) is the only table, together
+with its exact codon-to-amino-acid equivalent (table 11), whose asymmetry is
+divisible by 37 at all three positions. Since the NCBI tables are
+evolutionarily related rather than independent samples, this documents
+specificity among natural codes rather than improbability under a null model.
+
+## Columns
+
+- `Transl_Table` — NCBI translation table number
+- `Code_Name` — NCBI name of the translation table
+- `Position` — codon position (1, 2, or 3)
+- `Keto_minus_Amino_T`, `Keto_minus_Amino_P`, `Keto_minus_Amino_N`,
+  `Keto_minus_Amino_Delta` — the Keto-minus-Amino asymmetry for the total
+  nucleon, proton, neutron, and proton–neutron-difference quantities
+- `T_mod37`, `P_mod37`, `N_mod37`, `Delta_mod37` — the same asymmetries reduced
+  modulo 37 (0 means divisible by 37)
+- `Position_Has_Div37` — 1 if at least one of the four asymmetries at this
+  position is divisible by 37, else 0
+- `Positions_With_Div37` — for this table, the number of codon positions (0–3)
+  at which at least one asymmetry is divisible by 37; filtering on the value 3
+  selects exactly tables 1 and 11
+
+
+# mc_significance.csv
+
+Output of `mc_significance.py` (a seeded Monte Carlo, not part of the
+`reproduce.py` pipeline). One row per pre-specified test statistic (S1, S2, S3, S4),
+recording the standard code's observed value, the null mean, and the empirical
+p-value from the random-code permutation null. 4 rows.
+
+## Columns
+
+- `Statistic` — `S1`, `S2`, `S3`, or `S4`
+- `Description` — what the statistic counts
+- `Observed` — the standard code's value (a count, or "both divisible" for S1)
+- `Null_Mean` — mean of the statistic over the random codes (for S1, the
+  divisible fraction)
+- `P_Value` — empirical probability that a random code matches or exceeds the
+  standard code (for S1, the probability both anchors are divisible by 37)
+- `N_Trials` — number of random codes drawn
+- `Seed` — random seed used (fixed, for reproducibility)
