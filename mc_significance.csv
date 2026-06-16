@@ -3,3 +3,5 @@
 "S2","count of T/P/N/Delta divisible by 37 over 9 headline sense-pool groups (of 36)",13,1.0299,3.9e-05,1000000,0
 "S3","count of T/P/N/Delta divisible by 37 over parametrization-independent groups (of 68)",4,1.9439,0.150505,1000000,0
 "S4","mean distance to nearest multiple of 37 over T/P/N/Delta of all 33 groups under both keys (lower = more concentrated)",5.0985,9.0749,0.000778,1000000,0
+"S4a","S4 restricted to Key 0 only (no divisibility by 37 imposed); shows the concentration is present before any service-codon parametrization",5.5606,9.0188,0.002695,1000000,0
+"S4b","S4 restricted to Key 1 only (the key derived under the balance and divisibility conditions); sharpens but does not create the concentration",4.6364,9.1309,0.000192,1000000,0

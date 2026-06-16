@@ -332,7 +332,7 @@ amino acids to the synonymous blocks). Unlike `controls.py` it is randomized,
 though seeded for reproducibility. See its dedicated section below.
 
 - `mc_significance.py` — the Monte Carlo significance test.
-- `mc_significance.csv` — its summary table: the four pre-specified test
+- `mc_significance.csv` — its summary table: the pre-specified test
   statistics, their observed values, null means, and p-values.
 - `verify_mc.py` — an independent re-implementation of the Monte Carlo (a
   different construction of the codon groups and a different random-number
@@ -659,9 +659,18 @@ reported figures are reproducible run to run.
    mean distance ≈5.10 against a null mean of ≈9.07; ≈8×10⁻⁴ of random codes lie
    this close or closer. Excluding the exact multiples, the rest still average
    ≈6.8 against ≈9.5 for a uniform residue, so this is not a restatement of
-   statistic 2. It is stronger under Key 1 (≈4.6) than Key 0 (≈5.6) — the
-   derivation pulls the entire set toward the lattice — and is the aggregate
-   form of the ±1/±2 cascade documented group by group in the preprint.
+   statistic 2. It is stronger under Key 1 (≈4.64) than Key 0 (≈5.56), but this
+   comparison is not symmetric under the null — the standard code is scored
+   under the Key 1 derived for it, while random codes use the same fixed
+   service values — so the Key 1 gain is not parametrization-free. Under Key 0
+   alone, where no divisibility by 37 is imposed, the standard code still gives
+   mean distance ≈5.56 against a null mean of ≈9.02, reached by ≈2.7×10⁻³ of
+   random codes: the concentration is present before any parametrization, and
+   Key 1 sharpens but does not create it. This statistic is the aggregate
+   form of the ±1/±2 cascade documented group by group in the preprint. The
+   summary table records S4 split by key as S4a (Key 0 only) and S4b (Key 1
+   only) alongside the combined S4, so the ≈2.7×10⁻³ figure is reproducible
+   from the script.
 
 The first, second, and fourth statistics place the standard code far in the
 tail; the third does not, locating the effect in the full sense-pool partition
@@ -677,9 +686,10 @@ independent re-implementation, `verify_mc.py`, that shares no code with
 `mc_significance.py`: it reads the input CSVs directly, builds the codon groups
 from the third-position and four-fold-degeneracy rules (not from
 `codon_groups.csv`), and uses a different random seed, then prints its results
-side by side with `mc_significance.csv`. The two scripts agree on all four statistics
-(the S2 tail probability is a few ×10⁻⁵ in both, and the S4 mean distance is
-5.10 by both routes with p ≈ 8×10⁻⁴), which is evidence against a coding error
+side by side with `mc_significance.csv`. The two scripts agree on every statistic
+(the S2 tail probability is a few ×10⁻⁵ in both, the S4 mean distance is
+5.10 by both routes with p ≈ 8×10⁻⁴, and the Key-0-only S4a gives ≈5.56 with
+p ≈ 2.7×10⁻³ in both), which is evidence against a coding error
 in either. The cross-check rebuilds all 33 groups — including the Octet I and
 Octet II single-base subgroups — from the partition rules, so it would catch a
 missing or duplicated group in either implementation. The observed values it
@@ -1859,13 +1869,14 @@ specificity among natural codes rather than improbability under a null model.
 # mc_significance.csv
 
 Output of `mc_significance.py` (a seeded Monte Carlo, not part of the
-`reproduce.py` pipeline). One row per pre-specified test statistic (S1, S2, S3, S4),
+`reproduce.py` pipeline). One row per pre-specified test statistic (S1, S2, S3,
+S4, plus S4a and S4b, the Key-0-only and Key-1-only halves of S4),
 recording the standard code's observed value, the null mean, and the empirical
-p-value from the random-code permutation null. 4 rows.
+p-value from the random-code permutation null. 6 rows.
 
 ## Columns
 
-- `Statistic` — `S1`, `S2`, `S3`, or `S4`
+- `Statistic` — `S1`, `S2`, `S3`, `S4`, `S4a`, or `S4b`
 - `Description` — what the statistic counts
 - `Observed` — the standard code's value (a count, or "both divisible" for S1)
 - `Null_Mean` — mean of the statistic over the random codes (for S1, the

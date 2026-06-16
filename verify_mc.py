@@ -150,6 +150,35 @@ for _ in range(M4):
 p4v = le / M4
 print(f"  S4 independent MC ({M4:,}, seed 98765): P(<= {obs4:.4f}) = {p4v:.6f}")
 
+# --- S4a independent check: lattice concentration under Key 0 ONLY ---
+# Independent counterpart to the script's S4a, on the same 33-group rebuild.
+def latt_dist_key_v(assign_pn, which):
+    ds = []
+    for cods in S4_GROUPS_V:
+        P = Nn = 0
+        for c in cods:
+            if c in SERVICE:
+                p, n = SVC_PN[which][c]
+            else:
+                p, n = assign_pn[codon2aa[c]]
+            P += p; Nn += n
+        for v in (P, Nn, P + Nn, P - Nn):
+            if v != 0:
+                r = v % 37
+                ds.append(r if r <= 37 - r else 37 - r)
+    return statistics.fmean(ds)
+
+obs4a = latt_dist_key_v(ident, "key0")
+print(f"  S4a (Key 0 only, independent rebuild): observed = {obs4a:.4f}")
+rng4a = random.Random(54321)
+le_a = 0
+for _ in range(M4):
+    perm = pn[:]; rng4a.shuffle(perm)
+    if latt_dist_key_v(dict(zip(aas, perm)), "key0") <= obs4a:
+        le_a += 1
+p4av = le_a / M4
+print(f"  S4a independent MC ({M4:,}, seed 54321): P(<= {obs4a:.4f}) = {p4av:.6f}")
+
 # --- compare against mc_significance.csv (the result of record) ---
 csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         "mc_significance.csv")
@@ -170,6 +199,8 @@ else:
     print(f"  {'S2 P(>= 13)':16s}{p2:>20.6f}{ref['S2']:>28.6f}")
     if "S4" in ref:
         print(f"  {'S4 P(<=dist)':16s}{p4v:>20.6f}{ref['S4']:>28.6f}")
+    if "S4a" in ref:
+        print(f"  {'S4a P(<=,K0)':16s}{p4av:>20.6f}{ref['S4a']:>28.6f}")
     print("  Two independent implementations; the small differences are"
           " Monte-Carlo error")
     print("  (different seeds and code paths). The agreement is the check.")

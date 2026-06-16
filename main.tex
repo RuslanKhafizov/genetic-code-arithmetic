@@ -2729,12 +2729,13 @@ to $N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$
 (Section~\ref{sec:results-key1-neutrons}), and divisibility of
 one half forces divisibility of the other. At the second
 position no nucleon quantity of any axis is divisible by $37$.
-The third position is the degenerate (wobble) position, so a
-concentration of structure there is expected from the
-organization of the code; the value of the control is that it
-excludes the generic alternative in which any equal-size split
-of the sense pool into chemical halves would meet the
-$37$-lattice. The full values for all three positions are
+The control thus shows that divisibility by $37$ along the
+chemical axes is confined to the third codon position: the same
+axes applied to the first and second positions do not meet the
+$37$-lattice, the single first-position exception being the
+dependent one noted above. This excludes the alternative in
+which any equal-size split of the sense pool into chemical halves
+would align with the $37$-lattice irrespective of position. The full values for all three positions are
 tabulated in \texttt{position\_axis\_analysis.csv}.
 
 \paragraph{Choice of modulus.}
@@ -2763,10 +2764,18 @@ Section~\ref{sec:results-synthesis}, which the scan thus
 corroborates. Against this background $37$ divides five of the
 twenty-eight distinct parametrization-independent quantities,
 thirteen of the seventy distinct Key~0 quantities, and ten of
-the forty-seven under Key~1 --- roughly seven times the chance
-expectation in each. Because the effect is already present in
-the value sets where $37$ is not imposed, it is not an artifact
-of the Key~1 derivation.
+the forty-seven under Key~1 --- in each case several times the
+naive rate $1/37$. This excess ratio is descriptive, not a
+$p$-value: the scan is deterministic and has no null model, and
+the nested group hierarchy makes the quantities non-independent,
+so the ratio alone cannot be read as a significance. The load of
+the argument rests instead on a structural property the ratio
+does not capture, developed below: that the excess for $37$ rests
+on more than one independent odd core, whereas the comparable
+factors $73$ and $61$ each reduce to a single core. Because the
+effect is already present in the value sets where $37$ is not
+imposed, it is in any case not an artifact of the Key~1
+derivation.
 
 Three features set $37$ apart from the two small primes, all
 independent of the number base. It is a larger prime, so each
@@ -2799,14 +2808,17 @@ odd-core counts are tabulated in the corresponding column of
 \texttt{prime\_divisibility\_scan.csv}.
 
 \paragraph{The functional-group asymmetry across positions.}
-One feature of the Keto/Amino axis does reach beyond the third
+One observation on the Keto/Amino axis reaches beyond the third
 position. The asymmetry $N(\mathrm{Keto}) - N(\mathrm{Amino})$
 that localizes to the Trp--Ile pair at the third position
 (Section~\ref{sec:discussion-trpile-robustness}) equals $37$
 there; the same Keto/Amino axis --- the $\{G,T\}$ versus
 $\{A,C\}$ split --- yields a quantity divisible by $37$ at the
 first position as well ($N$-asymmetry $-333 = -9 \cdot 37$) and
-at the second ($T$-asymmetry $185 = 5 \cdot 37$). The three are
+at the second ($T$-asymmetry $185 = 5 \cdot 37$). The divisible
+quantity is $N$, $T$, $N$ by position, fixed after inspection
+rather than in advance, so this is a single observation along
+one axis rather than a control of the kind above. The three are
 arithmetically independent: each is a sum over a different
 partition of the same sixty codons, and the divisibility at one
 position neither follows from nor implies it at another; what
@@ -2816,8 +2828,8 @@ to the standard code and its exact codon-to-amino-acid
 equivalent (Table~11):
 no other table reaches more than one position, and the tables
 that preserve the Trp--Ile localization (Tables~6, 29 and 30)
-reproduce only the third-position value. Three caveats temper
-this. Unlike the third-position case, the first- and
+reproduce only the third-position value. Three caveats further
+qualify it. Unlike the third-position case, the first- and
 second-position asymmetries do not localize to a single
 amino-acid pair --- each receives contributions from nineteen
 of the twenty amino acids, because the cancellation that
@@ -2888,12 +2900,23 @@ bettered by $8 \times 10^{-4}$ of random codes. This is not a
 restatement of the divisibility counts: excluding the exact
 multiples, the remaining quantities still lie at mean distance
 $6.8$ from the lattice against $9.5$ for a uniform residue. The
-concentration is stronger under Key~$1$ (mean distance $4.6$)
-than under Key~$0$ ($5.6$), so the derivation of Key~$1$ draws
-the entire set of quantities toward the lattice, not merely a
-chosen subset; it is the aggregate form of the cascade of
-$\pm 1$ and $\pm 2$ deviations described group by group in
-Section~\ref{sec:results-key0}.
+concentration is stronger under Key~$1$ (mean distance $4.64$)
+than under Key~$0$ ($5.56$); it is the aggregate form of the
+cascade of $\pm 1$ and $\pm 2$ deviations described group by
+group in Section~\ref{sec:results-key0}. The comparison between
+the two keys is, however, not symmetric under the null: the
+standard code is evaluated under the Key~$1$ derived for it,
+whereas each random code is evaluated under the same fixed
+service-codon values $(37,37)$ and $(1,0)$ rather than under a
+key re-derived from its own balance and divisibility conditions.
+The Key~$1$ contribution therefore cannot be read as a
+parametrization-free gain. Restricting the statistic to Key~$0$
+alone --- where no divisibility by $37$ is imposed --- the
+standard code still attains a mean distance of $5.56$ against a
+null mean of $9.02$, reached or bettered by a fraction
+$2.7 \times 10^{-3}$ of random codes; the concentration is thus
+already present before any service-codon parametrization, and
+the Key~$1$ evaluation sharpens but does not create it.
 
 The weight of the test rests on the second and fourth statistics
 rather than on the two anchors of the first, which are
@@ -2904,7 +2927,13 @@ second nor the fourth selects favourable numbers, the one
 counting divisibility across the entire a-priori Rumer/axis
 partition and the other averaging over all $264$ quantities
 without exclusion. The first, second, and fourth statistics place the standard code
-far in the tail of the null; the third does not. The effect therefore resides in
+far in the tail of the null; the third does not. These tail
+probabilities are not independent of one another, and in
+particular the second and the fourth are two views of the same
+concentration --- S4 assigns distance zero to precisely the
+quantities S2 counts as divisible --- so their $p$-values should
+not be combined multiplicatively; the joint evidence is closer
+to the stronger of the two than to their product. The effect therefore resides in
 the full sense-pool partition --- in particular the divisibility
 by $37$ of both the proton and the neutron count of the Amino
 and Weak groups (and hence of their totals and differences),
@@ -2920,7 +2949,12 @@ numbers. The groups counted in the second statistic are the a
 priori Rumer and third-position chemical partition and $37$ is
 fixed in advance, so neither was selected to fit, but the count
 is one of several reasonable global statistics, and its
-constituents are not independent. And improbability under this
+constituents are not independent. For this reason we treat the
+fourth statistic, which averages over all $264$ quantities with
+no choice of which to count, as the primary measure, and the
+second as a corroborating illustration rather than as an
+independent $p$-value; the discrete count is the more exposed of
+the two to the residual freedom in choosing a global statistic. And improbability under this
 null concerns combinatorial codes, a different question from the
 specificity among the $27$ natural codes of
 Section~\ref{sec:discussion-trpile-robustness}; it speaks to

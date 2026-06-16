@@ -133,6 +133,22 @@ def lattice_mean_distance(Pv, Nv):
                     dcount += 1
     return dsum / dcount
 
+def lattice_mean_distance_key(Pv, Nv, which):
+    """S4 restricted to a single key ('key0' or 'key1'): mean distance to the
+    nearest multiple of 37 over the nonzero T,P,N,Delta of the 33 groups under
+    that key alone. S4a = key0 (no divisibility by 37 imposed), S4b = key1."""
+    dsum = 0; dcount = 0
+    for nz, svc in S4_GROUPS:
+        base_p = dot(nz, Pv); base_n = dot(nz, Nv)
+        sp, sn = svc[which]
+        p = base_p + sp; n = base_n + sn
+        for v in (p, n, p + n, p - n):
+            if v != 0:
+                r = v % 37
+                dsum += r if r <= 37 - r else 37 - r
+                dcount += 1
+    return dsum / dcount
+
 def dot(nz, vec):
     s = 0
     for i, w in nz:
@@ -154,6 +170,8 @@ obs_Nall = dot(ALL, N); obs_TocI = dot(OCT1, P) + dot(OCT1, N)
 obs_S2 = div37_count(W_head, P, N)
 obs_S3 = div37_count(W_indep, P, N)
 obs_S4 = lattice_mean_distance(P, N)
+obs_S4a = lattice_mean_distance_key(P, N, "key0")
+obs_S4b = lattice_mean_distance_key(P, N, "key1")
 print("=== Standard code (observed) ===")
 print(f"N(All sense) = {obs_Nall}  = {obs_Nall//37}*37 + {obs_Nall%37}")
 print(f"T(Octet I)   = {obs_TocI}  = {obs_TocI//37}*37 + {obs_TocI%37}")
@@ -161,6 +179,8 @@ print(f"S1 both anchors divisible by 37: {obs_Nall%37==0 and obs_TocI%37==0}")
 print(f"S2 headline /37 count    = {obs_S2}  of {len(W_head)*4}")
 print(f"S3 param-indep /37 count = {obs_S3}  of {len(W_indep)*4}")
 print(f"S4 mean distance to 37-lattice (33 groups x 2 keys) = {obs_S4:.4f}")
+print(f"S4a mean distance, Key 0 only = {obs_S4a:.4f}")
+print(f"S4b mean distance, Key 1 only = {obs_S4b:.4f}")
 
 # --- Monte Carlo (standard library random) ---
 M = 1_000_000
@@ -171,6 +191,8 @@ s1 = 0
 s2_sum = 0; s2_ge = 0; s2_hist = collections.Counter()
 s3_sum = 0; s3_ge = 0
 s4_sum = 0.0; s4_le = 0
+s4a_sum = 0.0; s4a_le = 0
+s4b_sum = 0.0; s4b_le = 0
 for _ in range(M):
     perm = order[:]; rng.shuffle(perm)
     Pp = [P[i] for i in perm]; Np = [N[i] for i in perm]
@@ -182,8 +204,13 @@ for _ in range(M):
     if c3 >= obs_S3: s3_ge += 1
     d4 = lattice_mean_distance(Pp, Np); s4_sum += d4
     if d4 <= obs_S4: s4_le += 1
+    d4a = lattice_mean_distance_key(Pp, Np, "key0"); s4a_sum += d4a
+    if d4a <= obs_S4a: s4a_le += 1
+    d4b = lattice_mean_distance_key(Pp, Np, "key1"); s4b_sum += d4b
+    if d4b <= obs_S4b: s4b_le += 1
 
 p1 = s1 / M; p2 = s2_ge / M; p3 = s3_ge / M; p4 = s4_le / M
+p4a = s4a_le / M; p4b = s4b_le / M
 print(f"\n=== Monte Carlo, {M:,} random codes (stdlib random, seed {SEED}) ===")
 print(f"S1  P(both anchors /37) = {p1:.6f}   "
       f"[independent reference (1/37)^2 = {1/37**2:.6f}]")
@@ -191,6 +218,10 @@ print(f"S2  observed {obs_S2}; null mean {s2_sum/M:.4f}; P(>= {obs_S2}) = {p2:.6
 print(f"S3  observed {obs_S3}; null mean {s3_sum/M:.4f}; P(>= {obs_S3}) = {p3:.6f}")
 print(f"S4  observed {obs_S4:.4f}; null mean {s4_sum/M:.4f}; "
       f"P(<= {obs_S4:.4f}) = {p4:.6f}")
+print(f"S4a observed {obs_S4a:.4f}; null mean {s4a_sum/M:.4f}; "
+      f"P(<= {obs_S4a:.4f}) = {p4a:.6f}  [Key 0 only]")
+print(f"S4b observed {obs_S4b:.4f}; null mean {s4b_sum/M:.4f}; "
+      f"P(<= {obs_S4b:.4f}) = {p4b:.6f}  [Key 1 only]")
 
 mx = max(s2_hist)
 print("\nS2 null distribution (count : frequency):")
@@ -217,4 +248,14 @@ with open(os.path.join(SCRIPT_DIR, "mc_significance.csv"),
                 "mean distance to nearest multiple of 37 over T/P/N/Delta "
                 "of all 33 groups under both keys (lower = more concentrated)",
                 round(obs_S4, 4), round(s4_sum / M, 4), round(p4, 6), M, SEED])
+    w.writerow(["S4a",
+                "S4 restricted to Key 0 only (no divisibility by 37 imposed); "
+                "shows the concentration is present before any service-codon "
+                "parametrization",
+                round(obs_S4a, 4), round(s4a_sum / M, 4), round(p4a, 6), M, SEED])
+    w.writerow(["S4b",
+                "S4 restricted to Key 1 only (the key derived under the "
+                "balance and divisibility conditions); sharpens but does not "
+                "create the concentration",
+                round(obs_S4b, 4), round(s4b_sum / M, 4), round(p4b, 6), M, SEED])
 print("\nWrote mc_significance.csv")
