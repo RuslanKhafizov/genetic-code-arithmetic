@@ -312,11 +312,14 @@ below for usage and details.
   Of the axis-group quantities divisible by 37, the third position carries
   eleven, the first two, and the second none.
 - `prime_divisibility_scan.csv` — for every prime up to 97 and for three value
-  sets, how many group quantities it divides, establishing that, after the
-  small primes 2 (proton parity) and 5 (a trace of the round-number
-  regularity — divisibility by 10 and 100, the same Criterion-2 structure noted
-  in the preprint), only 37 divides a non-chance share of the quantities,
-  including in the value sets where 37 is not imposed.
+  sets, how many group quantities it divides, counted over all instances, over
+  distinct values, and over distinct odd cores. Apart from 2 (proton parity)
+  and 5 (a trace of the round-number regularity — divisibility by 10, 100, and
+  1000, the Criterion-2 structure of the preprint), 37 carries the largest
+  excess, and its excess rests on more than one independent odd core; those on
+  73 = 2·37−1 and on 61 reduce each to a single odd core and are satellites of
+  an individual quantity. This persists even in the value set where 37 is not
+  imposed.
 - `position_asymmetry_ncbi.csv` — the Keto/Amino asymmetry, computed on the sense pool (so that tables with different stop-codon sets remain comparable), at all
   three codon positions across the 27 NCBI translation tables. The asymmetry
   is divisible by 37 at all three positions for the standard code and its
@@ -347,6 +350,8 @@ though seeded for reproducibility. See its dedicated section below.
 - `LICENSE-CODE` — MIT License, copyright © 2025–2026 Ruslan
   Khafizov. Covers the source code (`reproduce.py`, `controls.py`,
   `mc_significance.py`, `verify_mc.py`, `visualization.html`).
+- `index.html` — a redirect stub so that GitHub Pages serves
+  `visualization.html` at the site root; it is not used by the analysis.
 - `CITATION.cff` — machine-readable citation metadata in Citation
   File Format, used by GitHub, Zenodo and reference managers to
   generate citations for this repository.

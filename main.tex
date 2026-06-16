@@ -544,19 +544,22 @@ and \texttt{key1\_divisibility-37.csv}.
 
 \paragraph{Criterion 2: Roundness in the decimal system.}
 In parallel with Criterion~1, we record whether nucleon
-quantities are round numbers in the decimal system (that is,
-exact multiples of a power of ten). This criterion is
-motivated by the empirical observation that several nucleon
-quantities of the standard code take values that are exact
-multiples of $100$ --- notably the parametrization-independent
-totals over Octet~I. Where roundness holds, we additionally
-record whether it holds in a stricter form, with a larger
-number of trailing zeros.
-
+quantities are round numbers in the decimal system, that is,
+exact multiples of a power of ten. This criterion is motivated
+by the empirical observation that several nucleon quantities of
+the standard code are multiples of $100$ and $1000$ --- in
+particular, the parametrization-independent totals over
+Octet~I. Although roundness is stated in decimal notation, it
+reflects divisibility by the prime factors $2$ and $5$, which
+exist independently of the choice of notation; the systematic
+analysis of divisibility by these and the other primes,
+together with its relation to the modulus $37$, is given in
+Section~\ref{sec:discussion-controls}. Where roundness holds,
+we additionally record whether it holds in a stricter form, as
+a multiple of a higher power of ten.
+ 
 Roundness in the decimal system and divisibility by $37$ are
-logically independent criteria, and a value that satisfies
-both simultaneously is recorded as satisfying each criterion
-separately at its respective strength level.
+arithmetically independent conditions, since $\gcd(10, 37) = 1$.
 
 \paragraph{Criterion 3: Equalities between codon groups.}
 For each pair of nucleon quantities taken over two codon groups
@@ -816,11 +819,50 @@ Key~1 that appears in the main text can be verified against
 the corresponding cell of the computed datasets. An interactive version of the visualizer is available
 online at \url{https://ruslankhafizov.github.io/genetic-code-arithmetic/}.
 
+\paragraph{Supplementary control datasets.}
+Three further datasets probe the specificity of the arithmetic
+structure and are produced by a separate script
+\texttt{controls.py}, which consumes the same input datasets
+but is not part of the core pipeline described above. Like that
+pipeline it uses standard-library Python only, exact integer
+arithmetic, and no randomization. The dataset
+\texttt{position\_axis\_analysis.csv} records the four nucleon
+quantities of six groups --- the two sides of each of the three
+chemical axes --- applied independently to the first, second,
+and third codon position, under the sense pool, Key~0, and
+Key~1; it is used in Section~\ref{sec:discussion-controls} to
+show that divisibility modulo $37$ is concentrated at the third
+position. The dataset \texttt{prime\_divisibility\_scan.csv}
+records, for every prime up to $97$ and for three value sets
+--- the parametrization-independent groups, Key~0, and Key~1
+--- how many of the group quantities it divides, over all
+instances, over distinct values, and over distinct odd cores
+(the odd part of a number after removing factors of $2$); it is
+used in the same section to show that, apart from $2$ (proton
+parity) and $5$ (a trace of the round-number regularity ---
+divisibility by $10$, $100$, and $1000$, the Criterion-2
+structure of Section~\ref{sec:criteria}), $37$ carries the
+largest excess, and its excess rests on more than one
+independent odd core; those on $73 = 2 \cdot 37 - 1$ and on
+$61$ reduce each to a single odd core and are satellites of an
+individual quantity. This persists even in the value set in
+which $37$ is not imposed. The dataset
+\texttt{position\_asymmetry\_ncbi.csv} records, for each of the
+$27$ NCBI translation tables, the Keto/Amino sense-pool
+asymmetry for the four nucleon quantities at each codon
+position, with residues modulo $37$; it is used in
+Section~\ref{sec:discussion-controls} to show that this
+asymmetry is divisible by $37$ at all three positions only for
+the standard code and its exact codon-to-amino-acid equivalent.
+
 \paragraph{Data and code availability.}
 The complete package supporting this work --- the LaTeX
 source of the present preprint, the five input datasets,
 the thirteen computed datasets, the reproduction script
-\texttt{reproduce.py}, and the interactive visualizer ---
+\texttt{reproduce.py}, the supplementary control script
+\texttt{controls.py} with its three control datasets, the Monte Carlo script \texttt{mc\_significance.py} with its
+summary table and independent re-check \texttt{verify\_mc.py},
+and the interactive visualizer ---
 is archived at Zenodo:
 \href{https://doi.org/10.5281/zenodo.20360037}
      {DOI:~10.5281/zenodo.20360037}.
@@ -2662,6 +2704,228 @@ which the only divergence from the standard code is a
 symmetric reassignment of $\mathrm{TAA}$ and
 $\mathrm{TAG}$ (Tables~$6$, $27$, $29$, $30$).
 
+\subsection{Specificity of the third codon position and of the modulus~$37$}
+\label{sec:discussion-controls}
+
+Two features are built into the framework of this work rather
+than derived from the data: the three chemical axes are read
+off the third codon position
+(Section~\ref{sec:partitioning}), and divisibility by $37$ is
+the primary criterion (Section~\ref{sec:criteria}). Two
+deterministic controls test whether the observed structure is
+specific to these two choices or would arise generically.
+
+\paragraph{Codon position.}
+Applying the same three chemical axes to the first and second
+codon position, instead of the third, removes the structure
+almost entirely. At the third position the Amino and Weak
+groups have all four nucleon quantities divisible by $37$, the
+Keto and Strong groups have their neutron pool divisible, and
+the Pyrimidine group has $\Delta$ divisible. At the first
+position the only divisibility is the neutron pool of the
+Keto/Amino axis, and this is not an independent fact: Keto and
+Amino are complementary, so their sense-pool neutron counts sum
+to $N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$
+(Section~\ref{sec:results-key1-neutrons}), and divisibility of
+one half forces divisibility of the other. At the second
+position no nucleon quantity of any axis is divisible by $37$.
+The third position is the degenerate (wobble) position, so a
+concentration of structure there is expected from the
+organization of the code; the value of the control is that it
+excludes the generic alternative in which any equal-size split
+of the sense pool into chemical halves would meet the
+$37$-lattice. The full values for all three positions are
+tabulated in \texttt{position\_axis\_analysis.csv}.
+
+\paragraph{Choice of modulus.}
+For every prime up to $97$ we count how many of the four
+nucleon quantities of the codon groups it divides, over three
+value sets: the parametrization-independent groups (those with
+no service codon, on which $37$ cannot be imposed), the groups
+under Key~0 (which does not impose $37$), and the groups under
+Key~1 (whose derivation does). The scan ranges over primes
+rather than all integers because divisibility by a composite is
+the conjunction of divisibilities by its prime-power factors and
+introduces no new modulus, and because raising a prime to a
+higher power lowers the chance rate $1/m$ and thereby inflates
+the excess over the same quantities without adding information;
+the prime is the appropriate unit. The informative statistic is
+accordingly the excess over the chance rate $1/p$, computed over
+distinct values so that quantities forced to coincide by the
+structure of the code are not counted more than once.
+
+Three primes divide their share at essentially the chance rate
+($3$, $7$ and $13$). Two exceed it modestly, below a factor of
+three: $2$, because every canonical amino acid has an even
+proton count (Section~\ref{sec:results-key1-trpile}), and $5$,
+reflecting the round-number regularity already reported in
+Section~\ref{sec:results-synthesis}, which the scan thus
+corroborates. Against this background $37$ divides five of the
+twenty-eight distinct parametrization-independent quantities,
+thirteen of the seventy distinct Key~0 quantities, and ten of
+the forty-seven under Key~1 --- roughly seven times the chance
+expectation in each. Because the effect is already present in
+the value sets where $37$ is not imposed, it is not an artifact
+of the Key~1 derivation.
+
+Three features set $37$ apart from the two small primes, all
+independent of the number base. It is a larger prime, so each
+divisible quantity is rarer under the null. It has no structural
+counterpart to proton parity. And, unlike $5$ --- whose
+multiples in these value sets are almost all multiples of $25$,
+so that the larger excess one would attribute to $25$, $50$ or
+$100$ only re-scores the same quantities against a smaller chance
+rate --- the modulus $37$ occurs at a single power: no quantity
+is divisible by $37^2$, so its excess does not grow when the
+modulus is enlarged. Reducing each quantity to its odd part ---
+dividing out the powers of two that the nested group hierarchy
+(Octet~I and its sixteen- and eight-codon subgroups) introduces
+mechanically, since a group of size $2k$ has twice the nucleon
+counts of its size-$k$ refinement --- sharpens this. Among the
+Key~$0$ quantities, $37$ divides ten distinct odd cores; the
+multiples of $73 = 2 \cdot 37 - 1$ (the value of $\Delta$ for
+the Octet~II eight-codon groups) collapse to that single core,
+and the multiples of $61$ to the single core $549 = 9 \cdot 61$,
+to which the pyrimidine proton pool
+$P(\mathrm{Pyrimidine}) = 2196 = 2^2 \cdot 3^2 \cdot 61 = 4 \cdot 549$
+and the proton count of each pyrimidine letter
+$1098 = 2 \cdot 549$ both reduce. The factor $73$ is thus an echo of the modulus
+itself; the factor $61$ is an isolated factorization unrelated
+to $37$ (its quantities deviate from the nearest multiples of
+$37$ by $+13$ and $-12$, not by $\pm1$ or $\pm2$); and the
+factor $5$ reduces entirely to $10$ and $25$, every quantity
+here divisible by $5$ being divisible by $10$ or by $25$. The
+odd-core counts are tabulated in the corresponding column of
+\texttt{prime\_divisibility\_scan.csv}.
+
+\paragraph{The functional-group asymmetry across positions.}
+One feature of the Keto/Amino axis does reach beyond the third
+position. The asymmetry $N(\mathrm{Keto}) - N(\mathrm{Amino})$
+that localizes to the Trp--Ile pair at the third position
+(Section~\ref{sec:discussion-trpile-robustness}) equals $37$
+there; the same Keto/Amino axis --- the $\{G,T\}$ versus
+$\{A,C\}$ split --- yields a quantity divisible by $37$ at the
+first position as well ($N$-asymmetry $-333 = -9 \cdot 37$) and
+at the second ($T$-asymmetry $185 = 5 \cdot 37$). The three are
+arithmetically independent: each is a sum over a different
+partition of the same sixty codons, and the divisibility at one
+position neither follows from nor implies it at another; what
+they share is only the choice of axis. Across the $27$ NCBI
+translation tables this three-position coincidence is specific
+to the standard code and its exact codon-to-amino-acid
+equivalent (Table~11):
+no other table reaches more than one position, and the tables
+that preserve the Trp--Ile localization (Tables~6, 29 and 30)
+reproduce only the third-position value. Three caveats temper
+this. Unlike the third-position case, the first- and
+second-position asymmetries do not localize to a single
+amino-acid pair --- each receives contributions from nineteen
+of the twenty amino acids, because the cancellation that
+isolates Trp and Ile relies on third-position synonymy, which
+the other positions lack. Their non-divisible components carry
+no analogue of the parity-induced residue $-1$ that
+accompanies the third-position value. And, as in
+Section~\ref{sec:discussion-trpile-robustness}, the $27$ tables
+are not statistically independent, so this is evidence of
+specificity among natural codes rather than of improbability
+under a null model. The per-table values are tabulated in
+\texttt{position\_asymmetry\_ncbi.csv}.
+
+All three controls are deterministic and exact-integer, and are
+regenerated by \texttt{controls.py}
+(Section~\ref{sec:datasets}).
+
+\subsection{Significance under a random-code null}
+\label{sec:discussion-montecarlo}
+
+The controls of Section~\ref{sec:discussion-controls} and the
+comparison of Section~\ref{sec:discussion-trpile-robustness}
+establish that the structure is specific --- to the third codon
+position, to the modulus $37$, and, among the $27$ natural
+codes, to the standard code --- but specificity among realized
+codes is not improbability under an explicit null. We therefore
+test the standard code against a random-code null of the kind
+used in studies of genetic-code optimality
+\citep{freeland1998}: the architecture of
+the code is held fixed (the $64$ codons, the synonymous blocks
+with their sizes, the three stop codons, the Rumer partition,
+and the third-position axes), and the only thing randomized is
+which amino acid, carrying its fixed proton and neutron counts,
+occupies each of the twenty blocks. A trial is a uniformly
+random permutation of the twenty amino acids over the twenty
+blocks; the modulus $37$ is taken a priori from the prior
+literature, and the test statistics are fixed in advance. The
+computation is reported in \texttt{mc\_significance.py} and
+summarized in \texttt{mc\_significance.csv}; the figures below
+are from $10^{6}$ trials at a fixed seed. An independent
+re-implementation that shares no code with
+\texttt{mc\_significance.py} ---  using a different construction
+of the codon groups and a different random-number generator ---
+reproduces these figures (\texttt{verify\_mc.py}).
+
+Four statistics were pre-specified. First, two independent
+$37$-anchors --- the whole-pool neutron count
+$N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$ and the Octet~I
+total $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$ --- are both
+divisible by $37$ in a fraction $0.0008$ of random codes,
+against an independent reference $(1/37)^2 = 0.00073$. Second,
+among the four nucleon quantities of the nine groups of the
+Rumer/axis partition --- the full pool, the six chemical-axis
+half-pools, and the two octets --- the standard code has
+$13$ divisible by $37$, against a null mean of $1.0$; a random
+code reaches $13$ or more with frequency $4 \times 10^{-5}$.
+Third, restricted to the parametrization-independent groups
+alone, on which $37$ can never be imposed, the standard code has
+$4$ such quantities against a null mean of $1.9$, a value
+reached or exceeded by $0.15$ of random codes. Fourth, a
+statistic measuring not how many quantities fall exactly on the
+lattice of step $37$ but how close the whole set lies to it: for
+each of the $33$ groups under both keys the distance of every
+nonzero $T$, $P$, $N$, $\Delta$ to the nearest multiple of $37$
+is averaged ($264$ values). The standard code gives mean
+distance $5.10$ against a null mean of $9.07$, a value reached or
+bettered by $8 \times 10^{-4}$ of random codes. This is not a
+restatement of the divisibility counts: excluding the exact
+multiples, the remaining quantities still lie at mean distance
+$6.8$ from the lattice against $9.5$ for a uniform residue. The
+concentration is stronger under Key~$1$ (mean distance $4.6$)
+than under Key~$0$ ($5.6$), so the derivation of Key~$1$ draws
+the entire set of quantities toward the lattice, not merely a
+chosen subset; it is the aggregate form of the cascade of
+$\pm 1$ and $\pm 2$ deviations described group by group in
+Section~\ref{sec:results-key0}.
+
+The weight of the test rests on the second and fourth statistics
+rather than on the two anchors of the first, which are
+individually weak; of these, $T(\mathrm{Octet~I}) = 3700$ is
+the quantity emphasised in the prior literature, while
+$N(\mathrm{All~sense}) = 3589$ is established here. Neither the
+second nor the fourth selects favourable numbers, the one
+counting divisibility across the entire a-priori Rumer/axis
+partition and the other averaging over all $264$ quantities
+without exclusion. The first, second, and fourth statistics place the standard code
+far in the tail of the null; the third does not. The effect therefore resides in
+the full sense-pool partition --- in particular the divisibility
+by $37$ of both the proton and the neutron count of the Amino
+and Weak groups (and hence of their totals and differences),
+together with the neutron counts of the full pool and of the
+Keto and Strong groups, the Pyrimidine $\Delta$, and the
+Octet~I total --- rather than in the parametrization-independent
+subgroups by themselves. Three qualifications attach to these
+figures. The null fixes the standard code's degeneracy
+architecture and the amino-acid nucleon counts and randomizes
+only the assignment; a different generative model --- randomizing
+the block sizes, or the nucleon counts --- would give different
+numbers. The groups counted in the second statistic are the a
+priori Rumer and third-position chemical partition and $37$ is
+fixed in advance, so neither was selected to fit, but the count
+is one of several reasonable global statistics, and its
+constituents are not independent. And improbability under this
+null concerns combinatorial codes, a different question from the
+specificity among the $27$ natural codes of
+Section~\ref{sec:discussion-trpile-robustness}; it speaks to
+no biological mechanism.
+
 \subsection{Relation to prior work}
 \label{sec:discussion-prior-work}
 
@@ -2802,16 +3066,18 @@ addressed in the present work.
 \label{sec:discussion-limitations}
 
 The statistical significance of the observed arithmetic
-patterns has not been assessed formally. The comparative
-analysis across the $27$ NCBI translation tables
-(Sections~\ref{sec:results-key1-ncbi},
-\ref{sec:discussion-trpile-robustness}) plays the role
-of an empirical robustness check, not of a probability
-estimate. A formal statistical test would require the
-specification of a null hypothesis on the distribution
-of amino acids across codon families and of a
-corresponding generative model, neither of which is
-trivial to formulate, and is left to future work.
+regularities is assessed in
+Section~\ref{sec:discussion-montecarlo} under one explicit null
+--- the random-code permutation, which fixes the code's
+degeneracy architecture and the amino-acid nucleon counts and
+randomizes only the assignment of amino acids to codon families.
+Under that null the full Rumer/axis structure is highly atypical,
+while the parametrization-independent subgroups alone are not.
+The choice of null is not unique: alternative generative models,
+for example randomizing the block sizes themselves or the
+nucleon counts, would probe different aspects of the regularity
+and are left for future work, as is any account of a mechanism
+that could produce it.
 
 The parametrization of service codons in the present
 work is restricted to Key~$0$ and Key~$1$; additional
