@@ -310,7 +310,8 @@ below for usage and details.
 - `position_axis_analysis.csv` — the three chemical axes applied to the first,
   second, and third codon position (under the sense pool, Key 0, and Key 1; the sense pool is reported because, carrying no service codons, it is independent of the parametric key).
   Of the axis-group quantities divisible by 37, the third position carries
-  eleven, the first two, and the second none.
+  eleven, the first two (the two complementary halves of a single axis, hence
+  one independent fact), and the second none.
 - `prime_divisibility_scan.csv` — for every prime up to 97 and for three value
   sets, how many group quantities it divides, counted over all instances, over
   distinct values, and over distinct odd cores. Apart from 2 (proton parity)
@@ -697,21 +698,44 @@ prints (N(All sense)=3589, T(Octet I)=3700, the counts 13 and 4, the mean
 distance 5.10) can also be checked by hand against the tables in the preprint.
 
 
-# amino_acids_nucleons.csv
+## Detailed dataset descriptions
+
+The per-file descriptions below document every column and computation rule.
+
+- [amino_acids_nucleons.csv](#amino_acids_nucleonscsv)
+- [genetic_code_codons.csv](#genetic_code_codonscsv)
+- [amino_acids_neutron_differences.csv](#amino_acids_neutron_differencescsv)
+- [amino_acids_proton_differences.csv](#amino_acids_proton_differencescsv)
+- [amino_acids_nucleon_differences.csv](#amino_acids_nucleon_differencescsv)
+- [codon_groups.csv](#codon_groupscsv)
+- [key_parameters.csv](#key_parameterscsv)
+- [ncbi_genetic_code_registry.csv](#ncbi_genetic_code_registrycsv)
+- [deficit_models_analysis.csv](#deficit_models_analysiscsv)
+- [keto_amino_balance_models.csv](#keto_amino_balance_modelscsv)
+- [key0_nucleon-data.csv and key1_nucleon-data.csv](#key0_nucleon-datacsv-and-key1_nucleon-datacsv)
+- [key0_divisibility-37.csv and key1_divisibility-37.csv](#key0_divisibility-37csv-and-key1_divisibility-37csv)
+- [key0_equalities.csv and key1_equalities.csv](#key0_equalitiescsv-and-key1_equalitiescsv)
+- [key0_ratios.csv and key1_ratios.csv](#key0_ratioscsv-and-key1_ratioscsv)
+- [position_axis_analysis.csv](#position_axis_analysiscsv)
+- [prime_divisibility_scan.csv](#prime_divisibility_scancsv)
+- [position_asymmetry_ncbi.csv](#position_asymmetry_ncbicsv)
+- [mc_significance.csv](#mc_significancecsv)
+
+### amino_acids_nucleons.csv
 
 This dataset reports the integer nucleon composition of the 20 canonical amino acids.
 
 The values are not measured molecular masses.
 They are derived integer quantities computed from atomic composition using standard physical principles.
 
-## Molecular representation
+#### Molecular representation
 
 Each amino acid is represented as a neutral free amino acid molecule
 (not as a residue in a peptide chain).
 
 The molecular formula for each amino acid follows standard biochemical references.
 
-## Proton count
+#### Proton count
 
 The number of protons is computed as the sum of atomic numbers of all atoms
 in the molecular formula:
@@ -727,7 +751,7 @@ Atomic numbers used:
 - Oxygen (O): Z = 8
 - Sulfur (S): Z = 16
 
-## Neutron count
+#### Neutron count
 
 The number of neutrons is computed assuming the most abundant stable isotope
 of each element.
@@ -751,7 +775,7 @@ Isotopes used:
 - O-16
 - S-32
 
-## Total nucleon count
+#### Total nucleon count
 
 The total nucleon count is defined as:
 
@@ -760,7 +784,7 @@ T = P + N
 This quantity is an integer by construction and reflects the total number of
 nucleons in the molecular composition.
 
-## Proton–neutron imbalance
+#### Proton–neutron imbalance
 
 The column `Delta_P_N` is defined as:
 
@@ -772,7 +796,7 @@ Under the isotope assumptions used here, proton–neutron imbalance arises exclu
 
 Delta_P_N = number_of_hydrogen_atoms
 
-## Columns
+#### Columns
 
 - `Amino_Acid` — amino acid name
 - `Total_Nucleons` — total nucleon count (P + N)
@@ -780,7 +804,7 @@ Delta_P_N = number_of_hydrogen_atoms
 - `Neutrons` — total number of neutrons
 - `Delta_P_N` — proton–neutron difference
 
-# genetic_code_codons.csv
+### genetic_code_codons.csv
 
 This dataset represents the standard genetic code as a mapping from codons, given in DNA notation (A, T, G, C), to translation products.
 - ATG (Methionine) serves as the canonical start codon for translation initiation
@@ -790,7 +814,7 @@ The codon-to-amino acid mapping follows the Standard Genetic Code as
 defined by NCBI (transl_table 1):
 https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 
-## Columns
+#### Columns
 
 - `Product` — amino acid name or STOP
 - `Three_Letter` — standard three-letter amino acid code or `Stop`
@@ -798,7 +822,7 @@ https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 - `Degeneracy` — number of codons encoding this amino acid (1-6)
 - `Codons` — semicolon-separated list of DNA codons encoding the product
 
-# amino_acids_neutron_differences.csv
+### amino_acids_neutron_differences.csv
 
 This dataset reports the distribution of absolute differences in neutron count
 between all unordered pairs of the 20 canonical amino acids.
@@ -806,7 +830,7 @@ between all unordered pairs of the 20 canonical amino acids.
 The neutron counts used for each amino acid are taken directly from
 `amino_acids_nucleons.csv` and are computed under the same isotope assumptions.
 
-## Pair construction
+#### Pair construction
 
 The dataset includes all possible unordered pairwise comparisons of distinct
 amino acids.
@@ -821,7 +845,7 @@ C(20, 2) = 20 × 19 / 2 = 190
 
 All pair counts reported in this table sum to 190.
 
-## Neutron difference
+#### Neutron difference
 
 For each unordered pair of amino acids (i, j), the neutron difference is defined as:
 
@@ -831,7 +855,7 @@ where Nᵢ and Nⱼ are the total neutron counts of the two amino acids.
 
 Only non-negative integer differences are possible by construction.
 
-## Parity constraint
+#### Parity constraint
 
 The parity of the neutron count of an amino acid is determined by the parity
 of its hydrogen and nitrogen atom counts, which always coincide
@@ -851,7 +875,7 @@ A consequence of this partition is that neutron differences between two amino
 acids from the same group are always even, while neutron differences between
 amino acids from different groups are always odd.
 
-## Coverage
+#### Coverage
 
 The table includes all integer values of ΔN from 0 to the observed maximum of 61.
 Integer values for which no amino acid pair exists are explicitly listed with
@@ -863,7 +887,7 @@ not uniformly distributed: their pattern is consistent with the parity partition
 described above, as cross-group differences (always odd) and within-group
 differences (always even) together constrain which values are achievable.
 
-## Degenerate cases
+#### Degenerate cases
 
 Pairs with ΔN = 0 correspond to amino acids that have exactly the same total
 neutron count despite differing molecular composition.
@@ -871,7 +895,7 @@ neutron count despite differing molecular composition.
 Such degeneracies arise naturally within the canonical amino acid set and are
 explicitly included in the dataset as a separate table entry.
 
-## Columns
+#### Columns
 
 - `Neutron_Difference` — absolute difference in total neutron count (ΔN)
 - `Number_Of_Pairs` — number of unordered amino acid pairs exhibiting this difference
@@ -880,7 +904,7 @@ explicitly included in the dataset as a separate table entry.
 
 Each amino acid pair appears exactly once in the entire table.
 
-# amino_acids_proton_differences.csv
+### amino_acids_proton_differences.csv
 
 This dataset reports the distribution of absolute differences in proton count
 between all unordered pairs of the 20 canonical amino acids.
@@ -888,7 +912,7 @@ between all unordered pairs of the 20 canonical amino acids.
 The proton counts used for each amino acid are taken directly from
 `amino_acids_nucleons.csv` and are computed under the same isotope assumptions.
 
-## Pair construction
+#### Pair construction
 
 The dataset includes all possible unordered pairwise comparisons of distinct
 amino acids.
@@ -903,7 +927,7 @@ C(20, 2) = 20 × 19 / 2 = 190
 
 All pair counts reported in this table sum to 190.
 
-## Proton difference
+#### Proton difference
 
 For each unordered pair of amino acids (i, j), the proton difference is defined as:
 
@@ -913,7 +937,7 @@ where Pᵢ and Pⱼ are the total proton counts of the two amino acids.
 
 Only non-negative integer differences are possible by construction.
 
-## Parity constraint
+#### Parity constraint
 
 All observed proton differences are even; no unordered amino acid pair exhibits
 an odd proton difference.
@@ -926,7 +950,7 @@ standard side chain always yields an even proton sum.
 A direct consequence is that ΔP = 37 is structurally forbidden for any pair
 of canonical amino acids, since 37 is odd. 
 
-## Coverage
+#### Coverage
 
 The table includes all integer values of ΔP from 0 to the observed maximum of 68.
 Integer values for which no amino acid pair exists are explicitly listed with
@@ -936,7 +960,7 @@ Of the 69 possible integer values in this range, 30 correspond to at least one
 amino acid pair, and 39 are not realized by any pair. All 39 unrealized values
 are odd integers, consistent with the parity constraint described above.
 
-## Degenerate cases
+#### Degenerate cases
 
 Pairs with ΔP = 0 correspond to amino acids that have exactly the same total
 proton count despite differing molecular composition.
@@ -944,7 +968,7 @@ proton count despite differing molecular composition.
 Such degeneracies arise naturally within the canonical amino acid set and are
 explicitly included in the dataset as a separate table entry.
 
-## Columns
+#### Columns
 
 - `Proton_Difference` — absolute difference in total proton count (ΔP)
 - `Number_Of_Pairs` — number of unordered amino acid pairs exhibiting this difference
@@ -953,7 +977,7 @@ explicitly included in the dataset as a separate table entry.
 
 Each amino acid pair appears exactly once in the entire table.
 
-# amino_acids_nucleon_differences.csv
+### amino_acids_nucleon_differences.csv
 
 This dataset reports the distribution of absolute differences in total nucleon count
 between all unordered pairs of the 20 canonical amino acids.
@@ -961,7 +985,7 @@ between all unordered pairs of the 20 canonical amino acids.
 The total nucleon counts used for each amino acid are taken directly from
 `amino_acids_nucleons.csv` and are computed under the same isotope assumptions.
 
-## Pair construction
+#### Pair construction
 
 The dataset includes all possible unordered pairwise comparisons of distinct
 amino acids.
@@ -976,7 +1000,7 @@ C(20, 2) = 20 × 19 / 2 = 190
 
 All pair counts reported in this table sum to 190.
 
-## Nucleon difference
+#### Nucleon difference
 
 For each unordered pair of amino acids (i, j), the nucleon difference is defined as:
 
@@ -986,7 +1010,7 @@ where Tᵢ and Tⱼ are the total nucleon counts of the two amino acids, and T =
 
 Only non-negative integer differences are possible by construction.
 
-## Coverage
+#### Coverage
 
 The table includes all integer values of ΔT from 0 to the observed maximum of 129.
 Integer values for which no amino acid pair exists are explicitly listed with
@@ -995,7 +1019,7 @@ Number_of_Pairs = 0 and Amino_Acid_Pairs = "No pairs found".
 Of the 130 possible integer values in this range, 72 correspond to at least one
 amino acid pair, and 58 are not realized by any pair.
 
-## Degenerate cases
+#### Degenerate cases
 
 Pairs with ΔT = 0 correspond to amino acids that have exactly the same total
 nucleon count despite differing molecular composition.
@@ -1003,7 +1027,7 @@ nucleon count despite differing molecular composition.
 Such degeneracies arise naturally within the canonical amino acid set and are
 explicitly included in the dataset as a separate table entry.
 
-## Columns
+#### Columns
 
 - `Nucleon_Difference` — absolute difference in total nucleon count (ΔT)
 - `Number_Of_Pairs` — number of unordered amino acid pairs exhibiting this difference
@@ -1012,14 +1036,14 @@ explicitly included in the dataset as a separate table entry.
 
 Each amino acid pair appears exactly once in the entire table.
 
-# codon_groups.csv
+### codon_groups.csv
 
 This dataset contains 33 codon groups used in the analysis of genetic code symmetries.
 
 Each group represents a subset of the 64 codons of the standard genetic code,
 selected according to specific structural criteria.
 
-## Group name notation
+#### Group name notation
 
 Group names use set notation to specify the nucleotides present in the third
 (wobble) position of codons within the group.
@@ -1039,7 +1063,7 @@ Third position groups:
 - Strong {C, G} vs Weak {A, T} — hydrogen bonding strength (3 vs 2 bonds)
 - Purine {A, G} vs Pyrimidine {C, T} — base structure (double vs single ring)
 
-## Twin groups
+#### Twin groups
 
 Certain codon groups share identical amino acid composition but are represented
 by different codon sets. Such groups are termed "twin groups" and are cross-referenced
@@ -1062,7 +1086,7 @@ Twin group pairs in this dataset:
 - Groups 24 ↔ 25: {G,T} ↔ {C,G} (Octet II)
 - Groups 26 ↔ 27: {A,C} ↔ {A,T} (Octet II)
 
-## Single-nucleotide groups {C} and {T}
+#### Single-nucleotide groups {C} and {T}
 
 The single-nucleotide groups {C} (Group_ID 8, 19, 30) and
 {T} (Group_ID 10, 21, 32) encode identical amino acid
@@ -1084,7 +1108,7 @@ a chemical opposition between two-nucleotide subsets.
 The identity of {C} and {T} is documented here for
 completeness.
 
-## Octet I degeneracy property
+#### Octet I degeneracy property
 
 Octet I (groups 12–22) consists entirely of 4-fold degenerate codon families,
 where the third (wobble) position does not affect amino acid identity. 
@@ -1112,7 +1136,7 @@ codon families with varying degeneracy.
 Note: Octet groups follow the same partitioning patterns as 
 the All code section, restricted to codons within their respective octets.
 
-## Columns
+#### Columns
 
 - `Group_Name` — descriptive name of the group
 - `Group_ID` — unique integer identifier for the codon group
@@ -1123,7 +1147,7 @@ the All code section, restricted to codons within their respective octets.
 - `Codon_List` — semicolon-separated list of DNA codons in the group
 - `Amino_Acid_List` — amino acid sequence encoded by the codon group, using single-letter IUPAC notation; asterisks (*) denote stop codons.
 
-# key_parameters.csv
+### key_parameters.csv
 
 This dataset defines ten parametric keys (key0–key9), each of
 which specifies nucleon values assigned to the four service
@@ -1137,7 +1161,7 @@ and ATG are assigned values derived analytically from symmetry
 constraints. The remaining keys key2–key9 are included for
 reference and are not discussed in the preprint.
 
-## Purpose
+#### Purpose
 
 Each parameter set represents a different configuration of nucleon counts assigned to:
 - The start codon (ATG, encoding Methionine)
@@ -1145,7 +1169,7 @@ Each parameter set represents a different configuration of nucleon counts assign
 
 By varying these parameters, the analysis tests whether observed nucleon patterns persist across different boundary conditions of the genetic code.
 
-## Key sets
+#### Key sets
 
 key0 — **zero parametrization**. Start codon ATG is assigned the
 standard methionine nucleon values; the three stop codons are
@@ -1164,7 +1188,7 @@ key2–key9 — additional parametric keys not analyzed in the main
 text of the preprint. Included in the dataset for reference and
 for readers who wish to explore alternative configurations.
 
-## Standard nucleon values
+#### Standard nucleon values
 
 Methionine (product of start codon ATG):
 - Side-chain: 75 nucleons
@@ -1172,7 +1196,7 @@ Methionine (product of start codon ATG):
 - Protons: 80
 - Neutrons: 69
 
-## Column structure
+#### Column structure
 
 Modification columns (Mod_*):
 
@@ -1192,7 +1216,7 @@ Final columns (Final_*):
 
 Resultant nucleon counts used in symmetry calculations.
 
-## Data structure
+#### Data structure
 
 Each parameter set (key0–key9) contains 4 rows:
 - 1 row for start codon (ATG)
@@ -1200,7 +1224,7 @@ Each parameter set (key0–key9) contains 4 rows:
 
 Total: 40 data rows (10 keys × 4 codons)
 
-## Columns
+#### Columns
 
 - `Key_ID` — unique identifier (key0–key9)
 - `Codon` — DNA codon (ATG, TAA, TAG, or TGA)
@@ -1213,7 +1237,7 @@ Total: 40 data rows (10 keys × 4 codons)
 - `Final_Protons` — resultant proton count
 - `Final_Neutrons` — resultant neutron count
 
-# ncbi_genetic_code_registry.csv
+### ncbi_genetic_code_registry.csv
 
 This dataset lists all genetic code variants currently recognized by the
 National Center for Biotechnology Information (NCBI), including the
@@ -1226,14 +1250,14 @@ Each genetic code is identified by its translation table number
 (transl_table), as used in GenBank feature annotations and
 bioinformatics tools.
 
-## Translation table numbering
+#### Translation table numbering
 
 Translation table numbers are assigned by NCBI and are not contiguous.
 Numbers 7, 8, 17, 18, 19, and 20 are absent from the current registry:
 these entries were either never assigned or were subsequently withdrawn
 and merged with other codes.
 
-## Amino acid string format
+#### Amino acid string format
 
 The column `Amino_Acids` contains the ncbieaa string as defined by NCBI.
 This is a 64-character string in which each character represents the
@@ -1243,7 +1267,7 @@ codons in T→C→A→G order at each position). An asterisk (*) denotes a
 stop codon, except in context-dependent codes (transl_table 27, 28, 31)
 where amino acid letters are used instead (see below).
 
-## The Bacterial, Archaeal and Plant Plastid Code (transl_table=11)
+#### The Bacterial, Archaeal and Plant Plastid Code (transl_table=11)
 
 This code is identical to the Standard Code (transl_table=1) in its
 amino acid assignments and stop codons. It is listed as a separate entry
@@ -1251,7 +1275,7 @@ because bacteria, archaea, and plant plastids use an extended set of
 start codons: in addition to ATG, the codons GTG, TTG, ATT, and CTG can
 initiate translation in these organisms.
 
-## Context-dependent stop codons (transl_table=27, 28, 31)
+#### Context-dependent stop codons (transl_table=27, 28, 31)
 
 Three codes in this dataset — Karyorelict Nuclear (27), Condylostoma
 Nuclear (28), and Blastocrithidia Nuclear (31) — contain no asterisk (*)
@@ -1269,7 +1293,7 @@ The actual stop codons for these organisms are listed in the
 positions corresponding to these codons are marked with an asterisk (*)
 in the Starts line.
 
-## Columns
+#### Columns
 
 - `Transl_Table` — NCBI translation table number
 - `Code_Name` — full name of the genetic code as given by NCBI
@@ -1284,7 +1308,7 @@ in the Starts line.
   uses context-dependent stop codon decoding; True for transl_table
   27, 28, and 31, False for all other codes
   
-# deficit_models_analysis.csv
+### deficit_models_analysis.csv
 
 This dataset provides a comparative arithmetic analysis of
 the sense-pool of the standard code across all genetic
@@ -1317,7 +1341,7 @@ together with the other eleven computed datasets in this
 repository. See the "The reproducibility script `reproduce.py`"
 section above for details on how to regenerate it.
 
-## Sense codons excluding the ATG initiator
+#### Sense codons excluding the ATG initiator
 
 The columns `N_Pure` and `Pure_Codons_Count` are computed over the set
 of sense codons excluding the ATG initiator. ATG encodes Methionine and
@@ -1356,7 +1380,7 @@ section of this README.
 Neutron counts for each amino acid are taken from
 `amino_acids_nucleons.csv`.
 
-### Identical N_Pure values in codes 1, 11, and 28
+#### Identical N_Pure values in codes 1, 11, and 28
 
 Three translation tables yield the same N_Pure value (3589) and the same
 deficit (111). This follows directly from the methodology above.
@@ -1370,7 +1394,7 @@ Code 28 (Condylostoma Nuclear) has three context-dependent stop codons
 set of included codons becomes identical to the set used in the Standard
 Code analysis.
 
-## Treatment of context-dependent stop codons (transl_table 27, 28, 31)
+#### Treatment of context-dependent stop codons (transl_table 27, 28, 31)
 
 Three genetic codes use context-dependent decoding, where certain codons
 function as amino acids in mid-sequence and as stop signals at the end
@@ -1387,7 +1411,7 @@ other codes, `N_Pure_Alt` is identical to `N_Pure`.
 
 The same convention applies to the proton-side columns `P_Pure` and `P_Pure_Alt`.
 
-## Octet I models
+#### Octet I models
 
 In the Standard Code, Octet I consists of 8 fully 4-fold degenerate
 codon families (32 codons) with a total nucleon count (protons + neutrons)
@@ -1407,7 +1431,7 @@ of the four codons obtained by varying the third nucleotide (e.g. GCT,
 GCC, GCA, GCG). A family is considered 4-fold degenerate if all four of
 its codons encode the same amino acid and none is a stop codon.
 
-## Deficit calculations
+#### Deficit calculations
 
 Three deficit values are computed to evaluate the stability of the
 relationship Octet_T − N_Pure = X across all codes, where Octet_T is
@@ -1428,7 +1452,7 @@ The same three deficits are also provided for Model 2 as
 `Deficit_vs_3700_Alt`, `Deficit_vs_Struct_Alt`, and
 `Deficit_vs_Func_Alt`.
 
-## Proton residue calculations
+#### Proton residue calculations
 
 Unlike the neutron deficit test described above, the proton
 residue test makes no reference to Octet I. It records the
@@ -1451,7 +1475,7 @@ identifies which alternative codes preserve this −1 mod 37
 alignment and which do not. As with the neutron deficit test,
 results under Model 2 are recorded in `P_Pure_Alt_mod37`.
 
-## Columns
+#### Columns
 
 - `Transl_Table` — NCBI translation table number
 - `Code_Name` — full name of the genetic code as given by NCBI
@@ -1512,7 +1536,7 @@ results under Model 2 are recorded in `P_Pure_Alt_mod37`.
   identical to `P_Pure_mod37` for all codes except transl_table 27, 28,
   and 31
 
-# keto_amino_balance_models.csv
+### keto_amino_balance_models.csv
 
 This dataset reports the keto/amino partition of the sense pool across all genetic code variants recognized by NCBI (27 translation tables, numbered 1–33, with gaps), in both neutron and proton quantities, under the same two sense-pool models as `deficit_models_analysis.csv`.
 
@@ -1532,7 +1556,7 @@ For the standard code, the sense-pool keto/amino differences are
 N_Keto − N_Amino = 37 and P_Keto − P_Amino = 36. Across the NCBI tables, this signature partitions the codes into those that preserve
 the (37, 36) signature and those that perturb it.
 
-## Columns
+#### Columns
 
 - `Transl_Table` — NCBI translation table identifier (1..33, with gaps)
 - `Code_Name` — full name of the genetic code variant
@@ -1551,7 +1575,7 @@ the (37, 36) signature and those that perturb it.
   corresponding quantities under Model 2; identical to the Model 1
   versions for all codes except transl_table 27, 28, and 31
 
-# key0_nucleon-data.csv and key1_nucleon-data.csv
+### key0_nucleon-data.csv and key1_nucleon-data.csv
 
 This description applies to both files. Both files share an identical
 column structure; nucleon values differ across files due to different
@@ -1561,7 +1585,7 @@ This dataset reports the fundamental nucleon composition of the 33 codon
 groups defined in `codon_groups.csv`, computed under the parameter
 configuration of the corresponding key.
 
-## Computation
+#### Computation
 
 Each row corresponds to one codon group. Nucleon values are computed by
 iterating over all codons in the group, retrieving the strictly defined
@@ -1574,7 +1598,7 @@ stop codons contribute zero to all nucleon quantities. Alternative keys
 (e.g., key1) assign specific non-zero parameter values to start and/or
 stop codons; these configurations are explicitly defined in the study.
 
-## Nucleon quantities
+#### Nucleon quantities
 
 Four strict, structurally independent nucleon quantities are reported
 for each group:
@@ -1595,7 +1619,7 @@ This value is numerically equal to the number of hydrogen atoms in the
 molecular composition, as hydrogen is the only element in amino acid
 molecules for which the neutron count is zero.
 
-## Columns
+#### Columns
 
 - `Group_Name` — descriptive name of the codon group
 - `Group_ID` — unique integer identifier of the codon group
@@ -1610,7 +1634,7 @@ molecules for which the neutron count is zero.
 - `Neutrons` — total neutron count (N)
 - `Delta_P_N` — proton–neutron difference (P − N)
 
-# key0_divisibility-37.csv and key1_divisibility-37.csv
+### key0_divisibility-37.csv and key1_divisibility-37.csv
 
 This description applies to both files. Both files share an identical
 column structure; values differ across files due to different start and
@@ -1621,7 +1645,7 @@ nucleon quantities for each of the 33 codon groups. The source values
 are taken directly from the corresponding `_nucleon-data.csv` file for
 the same key.
 
-## Purpose
+#### Purpose
 
 The dataset makes the divisibility structure of nucleon quantities
 immediately visible without requiring additional arithmetic. Rather than
@@ -1630,7 +1654,7 @@ storing raw integer values (which are already present in the
 division by 37, allowing the reader to identify exact divisibility and
 remainder at a glance.
 
-## Expression format
+#### Expression format
 
 Each cell contains a string expression of one of the following forms:
 
@@ -1649,7 +1673,7 @@ Exceptions to this format:
 The original nucleon value can be recovered from any expression by
 evaluating it arithmetically.
 
-## Columns
+#### Columns
 
 - `Group_Name` — descriptive name of the codon group
 - `Group_ID` — unique integer identifier of the codon group
@@ -1664,7 +1688,7 @@ evaluating it arithmetically.
 - `Neutrons_mod37` — divisibility expression for neutron count
 - `Delta_mod37` — divisibility expression for proton–neutron difference
 
-# key0_equalities.csv and key1_equalities.csv
+### key0_equalities.csv and key1_equalities.csv
 
 This description applies to both files. Both files share an identical
 column structure; the set of recorded equalities differs across files
@@ -1678,7 +1702,7 @@ value shared by a source quantity and a target quantity belonging to two
 target in the same row when a quantity of a group equals a different
 quantity of the same group.
 
-## Match types
+#### Match types
 
 The column `Match_Type` classifies each equality by the relationship
 between the compared parameters:
@@ -1696,14 +1720,14 @@ between the compared parameters:
   size, and both sides involve the same nucleon quantity
   (e.g., Protons of group A equals Protons of group B).
 
-## Directionality
+#### Directionality
 
 Source and target reflect the algorithmic traversal order used by the
 program when scanning group pairs. This ordering is not based on
 Group_ID magnitude and does not imply a directional or causal
 relationship between source and target.
 
-## Columns
+#### Columns
 
 - `Nucleon_Value` — the shared numerical value of the equality
 - `Match_Type` — classification of the equality: `SAME_PARAM`,
@@ -1717,7 +1741,7 @@ relationship between source and target.
 - `Target_ID` — integer identifier of the target group
 - `Target_Section` — code section of the target group
 
-# key0_ratios.csv and key1_ratios.csv
+### key0_ratios.csv and key1_ratios.csv
 
 This description applies to both files. Both files share an identical
 column structure; values differ across files due to different start and
@@ -1727,7 +1751,7 @@ This dataset reports pairwise ratios of the four fundamental nucleon
 quantities for each of the 33 codon groups. The source values are taken
 directly from the corresponding `_nucleon-data.csv` file for the same key.
 
-## Quantities and notation
+#### Quantities and notation
 
 The four nucleon quantities are abbreviated as follows throughout the
 column names:
@@ -1741,7 +1765,7 @@ The dataset reports 6 ratios, covering every unordered pair of the four
 quantities exactly once. For each pair, the direction of division is
 fixed by the definitions above (e.g., P/T is reported, not T/P).
 
-## Dual representation
+#### Dual representation
 
 For each ratio, two representations are provided in adjacent columns:
 
@@ -1752,7 +1776,7 @@ representation is exact and lossless.
 `_Ratio` columns contain the decimal approximation of the corresponding
 fraction, rounded to four decimal places.
 
-## Columns
+#### Columns
 
 - `Group_Name` — descriptive name of the codon group
 - `Group_ID` — unique integer identifier of the codon group
@@ -1770,7 +1794,7 @@ fraction, rounded to four decimal places.
 - `Delta_N_Rational`, `Delta_N_Ratio` — Delta_P_N / Neutrons
 
 
-# position_axis_analysis.csv
+### position_axis_analysis.csv
 
 Output of `controls.py` (not part of the `reproduce.py` pipeline). The three
 chemical axes (Keto/Amino, Strong/Weak, Purine/Pyrimidine) are applied to the
@@ -1779,7 +1803,7 @@ and Key 1, giving 3 positions × 6 axis groups × 3 counting modes = 54 rows. Th
 four `*_mod37` columns give each nucleon quantity reduced modulo 37, so that a
 value of 0 marks divisibility by 37.
 
-## Columns
+#### Columns
 
 - `Position` — codon position at which the axis is applied (1, 2, or 3)
 - `Axis` — name of the axis group: Keto, Amino, Strong, Weak, Purine, or
@@ -1795,7 +1819,7 @@ value of 0 marks divisibility by 37.
 - `Total_mod37`, `Protons_mod37`, `Neutrons_mod37`, `Delta_mod37` — the same
   quantities reduced modulo 37 (0 means divisible by 37)
 
-# prime_divisibility_scan.csv
+### prime_divisibility_scan.csv
 
 Output of `controls.py` (not part of the `reproduce.py` pipeline). For every
 prime up to 97 and for three value sets, the file records how many of the
@@ -1809,7 +1833,7 @@ divisibility by a composite reduces to its prime factors, and a higher prime
 power only re-scores the same values against a smaller chance rate, so the prime
 is the irreducible unit of comparison.
 
-## Columns
+#### Columns
 
 - `Value_Set` — `param_independent`, `key0`, or `key1`
 - `Prime` — the prime tested
@@ -1834,7 +1858,7 @@ is the irreducible unit of comparison.
   exceed chance (e.g. 73, 61) collapse to a single core each — 73 = 2·37−1 an
   echo of 37, and 61 the lone factorization of the pyrimidine proton pool.
 
-# position_asymmetry_ncbi.csv
+### position_asymmetry_ncbi.csv
 
 Output of `controls.py` (not part of the `reproduce.py` pipeline). For each of
 the 27 NCBI translation tables, the Keto/Amino functional-group axis
@@ -1849,7 +1873,7 @@ divisible by 37 at all three positions. Since the NCBI tables are
 evolutionarily related rather than independent samples, this documents
 specificity among natural codes rather than improbability under a null model.
 
-## Columns
+#### Columns
 
 - `Transl_Table` — NCBI translation table number
 - `Code_Name` — NCBI name of the translation table
@@ -1866,7 +1890,7 @@ specificity among natural codes rather than improbability under a null model.
   selects exactly tables 1 and 11
 
 
-# mc_significance.csv
+### mc_significance.csv
 
 Output of `mc_significance.py` (a seeded Monte Carlo, not part of the
 `reproduce.py` pipeline). One row per pre-specified test statistic (S1, S2, S3,
@@ -1874,7 +1898,7 @@ S4, plus S4a and S4b, the Key-0-only and Key-1-only halves of S4),
 recording the standard code's observed value, the null mean, and the empirical
 p-value from the random-code permutation null. 6 rows.
 
-## Columns
+#### Columns
 
 - `Statistic` — `S1`, `S2`, `S3`, `S4`, `S4a`, or `S4b`
 - `Description` — what the statistic counts
