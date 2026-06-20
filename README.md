@@ -50,8 +50,11 @@ It provides:
 ## Citation
 
 A machine-readable citation record is provided in
-`CITATION.cff`. The complete package supporting this work
-is archived at Zenodo:
+`CITATION.cff`. The preprint is deposited as a separate
+publication record at Zenodo:
+[DOI:10.5281/zenodo.20751290](https://doi.org/10.5281/zenodo.20751290).
+The complete package of data and code supporting this work
+is archived as a separate record at Zenodo:
 [DOI:10.5281/zenodo.20360037](https://doi.org/10.5281/zenodo.20360037).
 The development repository is available on GitHub at
 [github.com/RuslanKhafizov/genetic-code-arithmetic](https://github.com/RuslanKhafizov/genetic-code-arithmetic),
@@ -418,7 +421,7 @@ for convenience but can be regenerated at any time.
 
 Run the script from the repository directory:
 
-    python reproduce.py
+    python3 reproduce.py
 
 The script reads the five input CSV files from the current
 directory and writes the thirteen computed CSV files to the same
@@ -659,7 +662,7 @@ reported figures are reproducible run to run.
    the nearest multiple of 37 is averaged (264 values). The standard code gives
    mean distance ≈5.10 against a null mean of ≈9.07; ≈8×10⁻⁴ of random codes lie
    this close or closer. Excluding the exact multiples, the rest still average
-   ≈6.8 against ≈9.5 for a uniform residue, so this is not a restatement of
+   ≈7.0 against ≈9.5 for a uniform residue, so this is not a restatement of
    statistic 2. It is stronger under Key 1 (≈4.64) than Key 0 (≈5.56), but this
    comparison is not symmetric under the null — the standard code is scored
    under the Key 1 derived for it, while random codes use the same fixed

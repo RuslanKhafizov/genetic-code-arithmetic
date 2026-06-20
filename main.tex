@@ -37,7 +37,8 @@
 % Title
 \title{Arithmetic structure of the standard genetic code}
 \author{Ruslan Khafizov}
-\date{\today}
+\date{\today\\[1ex]
+\small Preprint DOI:~\href{https://doi.org/10.5281/zenodo.20751290}{10.5281/zenodo.20751290}}
 
 \begin{document}
 
@@ -1729,8 +1730,8 @@ p_{\text{stop}} = n_{\text{stop}} = 37.
 Each stop codon under Key~1 carries the same number of
 protons and neutrons, both equal to the organizing
 multiplier~$37$. This equality was not imposed; it
-emerges as a consequence of the minimal non-negative
-integer solutions to two independent systems --- one in
+follows from the minimal non-negative
+integer solutions to two formally independent systems --- one in
 neutrons, one in protons --- each constrained by
 Keto/Amino balance and global divisibility by~$37$.
 
@@ -1842,9 +1843,9 @@ with step~$37$ in each direction.
 
 The minimal element is distinguished from all other
 solutions by three structural features that the
-constraints alone do not require: the equality
-$p_{\text{stop}} = n_{\text{stop}} = 37$ matching the
-organizing multiplier of the code; the value
+constraints alone do not require: the value
+$p_{\text{stop}} = n_{\text{stop}} = 37$, equal to the
+organizing multiplier of the code and attained only at the minimal element; the value
 $p_{\text{start}} = 1$ closing exactly the
 parity-induced deficit
 $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$
@@ -2316,7 +2317,7 @@ P(\mathrm{Pyr~sense}) - P(\mathrm{Pur~sense}) = 212,
 N(\mathrm{Pyr~sense}) - N(\mathrm{Pur~sense}) = 211,
 \]
 with a residual proton-neutron asymmetry of one in
-favour of $P$. Under Key~1, the service codons add
+favor of $P$. Under Key~1, the service codons add
 $112$ protons and $111$ neutrons to the
 $\mathrm{Purine}$ branch: one $\mathrm{ATG}$ with
 $p_{\text{start}} = 1$, $n_{\text{start}} = 0$, plus
@@ -2459,7 +2460,7 @@ a unique minimal solution rather than multiple small
 residues. The neutron and proton systems are formally
 independent, yet their minimal solutions coincide at
 the value $p_{\text{stop}} = n_{\text{stop}} = 37$. The
-comparative test against the $27$ alternative NCBI
+comparative test against the $26$ alternative NCBI
 translation tables
 (Section~\ref{sec:results-key1-ncbi}) shows that the
 arithmetic match between the deficit and the lattice of
@@ -2485,17 +2486,17 @@ by~$37$.
 
 \paragraph{Independent observations under Key~1.}
 The remaining identities hold under the parametrization
-without following from the imposed conditions. The global neutron pool reaches $N(\mathrm{All}) = 3700$,
-which coincides with the parametrization-independent
+without following from the balance conditions. The global neutron pool reaches $N(\mathrm{All}) = 3700$,
+the minimal admissible multiple of $37$, which coincides with the parametrization-independent
 constant $T(\mathrm{Octet~I})$; the equivalent statement
 at the level of individual octets is
-$N(\mathrm{Octet~II}) = P(\mathrm{Octet~I}) = 2000$, an
-emergent cross-parameter equality between a parametric
+$N(\mathrm{Octet~II}) = P(\mathrm{Octet~I}) = 2000$, a
+cross-parameter equality between a parametric
 quantity and a chemical constant. The analogous proton
 identity $P(\mathrm{All}) = T(\mathrm{Octet~II}) = 4292$
 holds under the same parametrization, completing the
 dual pairing between the global nucleon pools and the
-two octets
+two octets, and follows from the neutron identity together with $T = P + N$
 (Section~\ref{sec:results-key1-macroidentities}). The
 total nucleon pool satisfies $T(\mathrm{All}) =
 8 \cdot 999$, a divisibility by the higher modulus
@@ -2704,7 +2705,7 @@ which the only divergence from the standard code is a
 symmetric reassignment of $\mathrm{TAA}$ and
 $\mathrm{TAG}$ (Tables~$6$, $27$, $29$, $30$).
 
-\subsection{Specificity of the third codon position and of the modulus~$37$}
+\subsection{Specificity of the third codon position and of the modulus~\texorpdfstring{$37$}{37}}
 \label{sec:discussion-controls}
 
 Two features are built into the framework of this work rather
@@ -2898,7 +2899,7 @@ distance $5.10$ against a null mean of $9.07$, a value reached or
 bettered by $8 \times 10^{-4}$ of random codes. This is not a
 restatement of the divisibility counts: excluding the exact
 multiples, the remaining quantities still lie at mean distance
-$6.8$ from the lattice against $9.5$ for a uniform residue. The
+$7.0$ from the lattice against $9.5$ for a uniform residue. The
 concentration is stronger under Key~$1$ (mean distance $4.64$)
 than under Key~$0$ ($5.56$); it is the aggregate form of the
 cascade of $\pm 1$ and $\pm 2$ deviations described group by
@@ -2920,9 +2921,9 @@ the Key~$1$ evaluation sharpens but does not create it.
 The weight of the test rests on the second and fourth statistics
 rather than on the two anchors of the first, which are
 individually weak; of these, $T(\mathrm{Octet~I}) = 3700$ is
-the quantity emphasised in the prior literature, while
+the quantity emphasized in the prior literature, while
 $N(\mathrm{All~sense}) = 3589$ is established here. Neither the
-second nor the fourth selects favourable numbers, the one
+second nor the fourth selects favorable numbers, the one
 counting divisibility across the entire a-priori Rumer/axis
 partition and the other averaging over all $264$ quantities
 without exclusion. The first, second, and fourth statistics place the standard code

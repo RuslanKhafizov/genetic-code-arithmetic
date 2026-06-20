@@ -28,8 +28,8 @@ keywords:
   - arithmetic regularities
   - divisibility by 37
 license: CC-BY-4.0
-version: "1.5.2"
-date-released: "2026-06-17"
+version: "1.5.3"
+date-released: "2026-06-19"
 repository-code: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 preferred-citation:
@@ -40,4 +40,5 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0004-0498-1229"
   title: "Arithmetic structure of the standard genetic code"
   year: 2026
-  url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic/blob/main/main.pdf"
+  doi: 10.5281/zenodo.20751290
+  url: "https://doi.org/10.5281/zenodo.20751290"
