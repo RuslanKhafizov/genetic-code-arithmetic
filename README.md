@@ -174,7 +174,7 @@ in the repository as a supplementary tool for readers who wish
 to inspect the structure of the code interactively. It is not
 required for reproducing any numerical result reported in the
 preprint, and its CSV export functionality is independent of the
-reproducibility pipeline (see "Note on CSV export" below).
+reproducibility pipeline (see "CSV export" below).
 
 A hosted version of the visualizer is available at
 [https://ruslankhafizov.github.io/genetic-code-arithmetic/](https://ruslankhafizov.github.io/genetic-code-arithmetic/)
@@ -186,8 +186,11 @@ external dependencies.
 #### Main features
 
 - **Translation table selector.** Switching between all 27 NCBI
-  translation tables (numbered 1–33, with gaps) and several
-  additional unofficial codes.
+  translation tables (numbered 1–33, with gaps), four additional
+  unofficial codes (tables 34–37), and two alternative
+  parametrizations of the standard code that use different proton,
+  neutron, and mass conventions for proline and glycine. The
+  selector opens on the standard code by default.
 
 - **Codon pool toggle.** A switch between the full 64-codon
   table ("ALL CODE") and the sense-codon elongation pool
@@ -262,7 +265,10 @@ external dependencies.
   C,\, A \leftrightarrow G)$, and the transversion
   $(T \leftrightarrow A,\, G \leftrightarrow C)$. The Rumer
   transformation discussed in the preprint can be visually
-  verified through this feature.
+  verified through this feature. Independently of the selected preset, hovering over any codon
+  block in the matrix outlines that block together with its image
+  under the currently active transformation, allowing the action
+  of each permutation to be inspected interactively.
 
 - **Alternative representations of the code table.** The order
   of nucleotides on the matrix axes can be reordered, generating
@@ -285,17 +291,32 @@ external dependencies.
   Shcherbak and Makukov, and reports the result when such a
   decomposition exists.
 
-#### Note on CSV export
+#### CSV export
 
-The visualization page includes a CSV export feature that
-predates the reproducibility script `reproduce.py` and uses an
-older formatting convention. The CSV files distributed in this
-repository are produced by `reproduce.py` and follow the unified
-format conventions described above. CSV files exported from the
-visualization page may differ from the repository copies in
-quoting, sorting, line endings, or content, and should not be
-used as a substitute for the script-generated outputs when exact
-reproducibility is required. The visualization export is
+For the active demonstration tab the page offers four independent
+CSV exports: **Nucleons** (the quantities P, N, T and Δ for each
+group), **Divisibility** (the same quantities with their
+divisibility-by-37 analysis), **Ratios** (the pairwise ratios of
+the four quantities), and **Equalities** (the cross-set numerical
+coincidences listed by the equality finder). A separate **export
+scope** toggle controls the column set: "Strict" exports only the
+invariant quantities (T, P, N, Δ), while "Full" additionally
+exports the side-chain and backbone mass components.
+
+These export features predate the reproducibility script
+`reproduce.py` and use an older formatting convention. The CSV
+files distributed in this repository are produced by `reproduce.py`
+and follow the unified format conventions described above. CSV
+files exported from the visualization page may differ from the
+repository copies in quoting, sorting, line endings, or content,
+and should not be used as a substitute for the script-generated outputs when exact
+reproducibility is required. Note also that the export always
+reflects the current state of the page: the selected position tab
+(Pos 1, Pos 2, Pos 3, Quartets, Combinatorial), the nucleotide
+axis ordering, the active key, the codon-pool toggle, and the
+export scope. The repository CSV files correspond to the Pos 3 tab
+with the default axis ordering; reproducing them from the page
+requires the same configuration. The visualization export is
 provided as a convenience for interactive exploratory work only.
 
 ### Supplementary controls

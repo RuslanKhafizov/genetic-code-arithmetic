@@ -16,7 +16,7 @@
             background-color: #f9fafb;
             flex-shrink: 0; overflow-y: auto;
         }
-        
+      
         .control-panel-section { 
             margin-bottom: 1rem; 
             padding-bottom: 1rem; 
@@ -773,11 +773,11 @@
         ];
 
         const TABS_INFO = {
-            'pos1': { data: POS1_STRUCTURE, name: 'Pos 1', exportName: 'All code (Pos 1)' },
-            'pos2': { data: POS2_STRUCTURE, name: 'Pos 2', exportName: 'All code (Pos 2)' },
-            'pos3': { data: POS3_STRUCTURE, name: 'Pos 3', exportName: 'All code (Pos 3)' },
-            'quartets': { data: QUARTET_DEMO_STRUCTURE, name: 'Quartets', exportName: 'Quartets' },
-            'combinatorial': { data: COMBINATORIAL_DEMO_STRUCTURE, name: 'Combinatorial', exportName: 'Combinatorial' }
+            'pos1': { data: POS1_STRUCTURE, name: 'Pos 1', exportName: 'All code', fileTag: 'pos1' },
+        'pos2': { data: POS2_STRUCTURE, name: 'Pos 2', exportName: 'All code', fileTag: 'pos2' },
+        'pos3': { data: POS3_STRUCTURE, name: 'Pos 3', exportName: 'All code', fileTag: 'pos3' },
+        'quartets': { data: QUARTET_DEMO_STRUCTURE, name: 'Quartets', exportName: 'Quartets', fileTag: 'quartets' },
+        'combinatorial': { data: COMBINATORIAL_DEMO_STRUCTURE, name: 'Combinatorial', exportName: 'Combinatorial', fileTag: 'combinatorial' }
         };
 
         function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
@@ -1098,7 +1098,8 @@
                 .replace(/-+$/, '');
 
              const suffixMap = { analysis: 'divisibility-37', ratios: 'ratios', pure: 'nucleon-data' };
-             const fileNameRaw = `${keyPart}_${sanitizedCodeName}_${suffixMap[exportType]}.csv`;
+             const posTag = (typeof tabFileTag === 'string' && tabFileTag && tabFileTag !== 'pos3') ? `_${tabFileTag}` : '';
+         const fileNameRaw = `${keyPart}_${sanitizedCodeName}${posTag}_${suffixMap[exportType]}.csv`;
              const fileName = fileNameRaw.replace(/_+/g, '_').replace(/-_/g, '_');
 
              const formatId = (id) => (id === "" || id === null || id === undefined) ? '""' : (!isNaN(id) ? id : `"${id}"`);
@@ -1198,11 +1199,11 @@
                  });
                  
                  const ratios = pairs.map((pair) => {
-                    if (pair.d === 0) return '"N/A"';
-                    let val = (pair.n / pair.d).toFixed(4);
-                    if (numeralSystem === 'base37') val = floatToBase37(pair.n / pair.d, 4);
-                    return numeralSystem === 'base37' ? `"${val}"` : val;
-                 });
+                if (pair.d === 0) return '"N/A"';
+                let val = (pair.n / pair.d).toFixed(4);
+                if (numeralSystem === 'base37') val = floatToBase37(pair.n / pair.d, 4);
+                return `"${val}"`;
+             });
                  
                  return [...fractions, ...ratios].join(",");
              };
@@ -1371,35 +1372,37 @@
             <h2 className="text-xl font-bold mb-3">
                 Arithmetic structure of the standard genetic code
             </h2>
-
+<h3 className="text-base font-semibold mt-3 mb-1">
+                About this tool
+            </h3>
+            <p className="text-sm mb-3">
+                An interactive environment for inspecting the genetic
+                code table and the arithmetic structure of its codon
+                groups.
+            </p>
             <h3 className="text-base font-semibold mt-3 mb-1">
                 Citation
             </h3>
             <p className="text-sm mb-3">
                 Khafizov, R. (2026). <em>Arithmetic structure of
                 the standard genetic code.</em><br/>
+                Preprint: Zenodo.
+                <a href="https://doi.org/10.5281/zenodo.20751290"
+                   target="_blank" rel="noopener noreferrer"
+                   className="text-blue-600 hover:underline">
+                   {' '}https://doi.org/10.5281/zenodo.20751290
+                </a><br/>
                 Code and data: Zenodo.
                 <a href="https://doi.org/10.5281/zenodo.20360037"
                    target="_blank" rel="noopener noreferrer"
                    className="text-blue-600 hover:underline">
                    {' '}https://doi.org/10.5281/zenodo.20360037
-                </a>
-            </p>
-
-            <h3 className="text-base font-semibold mt-3 mb-1">
-                Resources
-            </h3>
-            <p className="text-sm mb-3">
+                </a><br/>
+                Repository:
                 <a href="https://github.com/RuslanKhafizov/genetic-code-arithmetic"
                    target="_blank" rel="noopener noreferrer"
                    className="text-blue-600 hover:underline">
-                   GitHub repository
-                </a>
-                <span className="mx-2 text-gray-400">|</span>
-                <a href="https://github.com/RuslanKhafizov/genetic-code-arithmetic/blob/main/main.pdf"
-                   target="_blank" rel="noopener noreferrer"
-                   className="text-blue-600 hover:underline">
-                   Preprint (PDF)
+                   {' '}github.com/RuslanKhafizov/genetic-code-arithmetic
                 </a>
             </p>
 
