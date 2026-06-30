@@ -57,8 +57,8 @@ properties that jointly determine an arithmetic
 structure governed by divisibility modulo~$37$. Among
 them, the Keto/Amino asymmetry localizes in a single
 amino-acid pair, tryptophan and isoleucine, with neutron
-difference~$37$ and proton difference~$36$, the minimal
-deviation from~$37$ allowed by proton parity. The same
+difference~$37$ and proton difference~$36$, one below the
+$37$ forbidden by proton parity. The same
 shift-by-one pattern holds globally: the total neutron
 count is divisible by~$37$, the total proton count has
 residue $-1 \pmod{37}$. Balance constraints between the
@@ -938,7 +938,10 @@ themselves contain service codons. More broadly, once the
 four service codons are excluded, every group becomes
 parametrization-independent over its remaining sense codons;
 Figure~\ref{fig:sense-pool} shows the resulting sums for the
-sense pool as a whole, across all three levels of partitioning.
+sense pool as a whole, across all three levels of partitioning
+(the graphical layout of the grid is identical across
+Figures~\ref{fig:sense-pool}, \ref{fig:groups-key0}, and \ref{fig:groups-key1},
+and its conventions are detailed in the caption of Figure~\ref{fig:groups-key0}).
 
 \begin{figure}[p]
 \centering
@@ -950,7 +953,7 @@ parametrization-independent. ($\mathrm{ATG}$ is set aside only in its
 role as the initiation signal, not because it lacks a translation
 product.) For each group the four quantities are the total nucleon
 count~$T$, the proton sum~$P$, the neutron sum~$N$, and the hydrogen
-count $\Delta = P - N$; highlights mark divisibility by~$37$. A single
+count $\Delta = P - N$; green highlights mark divisibility by~$37$. A single
 deviation pattern is visible at three nested levels. At the level of
 the full code the hydrogen count is $\Delta = 296 = 8 \cdot 37$ on the
 $\mathrm{Amino}$, $\mathrm{Weak}$ and $\mathrm{Pyrimidine}$ axes but
@@ -967,12 +970,12 @@ holding the $\mathrm{ATG}$ position. The neutron side is aligned with
 the lattice: $N$ is a multiple of~$37$ on $\mathrm{Keto}$,
 $\mathrm{Amino}$, $\mathrm{Strong}$ and $\mathrm{Weak}$
 ($N = 1813 = 49 \cdot 37$ and $N = 1776 = 48 \cdot 37$), and
-consequently over the whole sense pool $N = 3589 = 97 \cdot 37$. The
-proton sum $P = N + \Delta$ then reproduces the single-unit shift on
-the axes where $N$ is aligned: on $\mathrm{Amino}$ and $\mathrm{Weak}$
-both $N$ and $\Delta$ lie on the lattice, so $P$ does too, whereas on
-$\mathrm{Keto}$ and $\mathrm{Strong}$ the aligned $N$ leaves $P$ one
-unit short, $P \equiv -1 \pmod{37}$.}
+consequently over the whole sense pool $N = 3589 = 97 \cdot 37$. Since $N$ is
+aligned on all four of these axes, the proton sum $P = N + \Delta$
+follows $\Delta$: on $\mathrm{Amino}$ and $\mathrm{Weak}$, where
+$\Delta$ lies on the lattice, $P$ does too, whereas on
+$\mathrm{Keto}$ and $\mathrm{Strong}$, where $\Delta$ is one unit
+short, $P$ inherits the same shift, $P \equiv -1 \pmod{37}$.}
 \label{fig:sense-pool}
 \end{figure}
 
@@ -1033,8 +1036,9 @@ denominator of $37$:
 \qquad
 \frac{\Delta}{T} = \frac{3}{37},
 \]
-and the same ratios hold identically for every sub-group
-of Octet~I.
+and, since every sub-group of Octet~I consists of the same
+four-fold degenerate families in equal proportion, these ratios
+hold identically at every level of the hierarchy.
 
 \subsubsection{Pyrimidine synonymy and twin-group identities}
 \label{sec:results-pyrimidine-synonymy}
