@@ -1325,46 +1325,35 @@ the pattern at this level; this group contains both the
 start codon $\mathrm{ATG}$ and the stop codon
 $\mathrm{TAG}$.
 
-\paragraph{Two classes of groups.}
-The picture above falls into two classes. Amino and Weak
-(Section~\ref{sec:results-key0-aminoweak}) are aligned
-with the lattice of step $37$: all four of their nucleon
-quantities are divisible by $37$ under Key~0, and the
-reduced ratios $P/T$, $N/T$, $\Delta/T$ have an anomalously
-simple form. These groups contain two stop codons
-($\mathrm{TAA}$ and $\mathrm{TGA}$) and do not contain
-$\mathrm{ATG}$. Within Keto and Strong, which are not
-aligned at the upper level, the sub-group without
-$\mathrm{ATG}$ also exhibits alignment:
-$\Delta(\{\mathrm{A}\}) = 148 = 4 \cdot 37$ (id~11). The
-sub-groups containing $\mathrm{ATG}$ give deviations:
-$\Delta(\{\mathrm{G}\} \cap \mathrm{Octet~II}) = 83$
-(id~31) and $\Delta(\{\mathrm{G}\}) = 158$ (id~9). In every
-case, the deviation is associated with the contribution of
-$\mathrm{ATG}$, treated under Key~0 as methionine with
-nucleon values $(80, 69)$ that are not aligned with the
-lattice of step $37$.
-
 \subsection{Analytical derivation of Key~1}
 \label{sec:results-key1-derivation}
 
-The picture presented in Section~\ref{sec:results-key0}
-reveals a systematic feature: under Key~0, the codon
-groups of the standard code fall into three tiers
-according to the criteria of Section~\ref{sec:criteria}.
+The picture presented in Sections~\ref{sec:results-independent}
+and~\ref{sec:results-key0} reveals a systematic feature: under
+Key~0, the codon groups of the standard code fall into three
+tiers according to the criteria of Section~\ref{sec:criteria}.
 Parametrization-independent groups (Octet~I and the
 pyrimidine-restricted groups) exhibit a high degree of
-order (Section~\ref{sec:results-independent}); groups
+order; groups
 containing only stop codons (Amino, Weak) align with the
 lattice of step $37$ across all four nucleon quantities;
 groups containing the start codon $\mathrm{ATG}$ deviate
-from the pattern. The degree of alignment depends on
-which service codons, if any, a given group contains.
-This points to the possibility of a different
-parametrization, under which the codon groups exhibit a
-higher degree of symmetry. In this section we derive
-such a parametrization analytically from a system of
-symmetry conditions.
+from the pattern. The deviations track $\mathrm{ATG}$ specifically: within the
+unaligned Keto and Strong, the $\mathrm{ATG}$-free sub-group
+is itself aligned in its proton-neutron difference
+($\Delta(\{\mathrm{A}\}) = 148 = 4 \cdot 37$, id~11), whereas
+the sub-groups containing $\mathrm{ATG}$ deviate
+($\Delta(\{\mathrm{G}\} \cap \mathrm{Octet~II}) = 83$, id~31,
+and $\Delta(\{\mathrm{G}\}) = 158$, id~9). In each
+case the deviation traces to $\mathrm{ATG}$, treated under
+Key~0 as methionine with nucleon values $(80, 69)$ that do
+not lie on the lattice of step~$37$. The degree of
+alignment thus depends on which service codons, if any, a
+given group contains. This points to the possibility of a
+different parametrization, under which the codon groups
+exhibit a higher degree of symmetry. In this section we
+derive such a parametrization analytically from a system
+of symmetry conditions.
 
 The presentation is divided into five subsections.
 Section~\ref{sec:results-key1-trpile} traces the
@@ -1439,26 +1428,26 @@ T(\mathrm{Trp}) + T(\mathrm{Met}) - T(\mathrm{Ile})
 The start codon $\mathrm{ATG}$ enters the asymmetry above
 through its translation product $\mathrm{Met}$ under
 Key~0, and is the only service codon contributing to the
-difference under that parametrization. Excluding the
-service codons from the balance --- that is, comparing
-the sense pools of Keto and Amino directly ---
-yields the following, where for any codon group $G$ we
-write $X(G~\mathrm{sense})$ for the quantity $X \in
-\{T, P, N, \Delta\}$ summed over the sense codons of $G$
-(equivalently, $G$ with its service codons removed):
+difference under that parametrization. Excluding the service codons
+from the balance, so that the sense pools of Keto and Amino
+are compared directly, gives:
 \begin{align*}
 T(\mathrm{Keto~sense}) - T(\mathrm{Amino~sense}) &= 3921 - 3848 = 73, \\
 P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense}) &= 2108 - 2072 = 36, \\
 N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense}) &= 1813 - 1776 = 37, \\
 \Delta(\mathrm{Keto~sense}) - \Delta(\mathrm{Amino~sense}) &= 295 - 296 = -1.
 \end{align*}
+Here $X(G~\mathrm{sense})$ denotes the sum of the quantity
+$X \in \{T, P, N, \Delta\}$ over the sense codons of $G$, that is,
+after removing all service codons from $G$.
 Since the source of the asymmetry is now a single pair
 of canonical amino acids, $\mathrm{Trp}$ and
 $\mathrm{Ile}$, the differences of the sense pools are
 exactly the nucleon differences
 $T(\mathrm{Trp}) - T(\mathrm{Ile})$,
-$P(\mathrm{Trp}) - P(\mathrm{Ile})$ and
-$N(\mathrm{Trp}) - N(\mathrm{Ile})$ of this pair.
+$P(\mathrm{Trp}) - P(\mathrm{Ile})$,
+$N(\mathrm{Trp}) - N(\mathrm{Ile})$ and
+$\Delta(\mathrm{Trp}) - \Delta(\mathrm{Ile})$ of this pair.
 
 \paragraph{Arithmetic uniqueness of the Trp--Ile pair.}
 Although the nucleon differences of
@@ -1472,9 +1461,7 @@ the standard code:
 $|\delta N(\mathrm{Trp}, \mathrm{Ile})| = 37$ coincides
 with this number exactly,
 $|\delta P(\mathrm{Trp}, \mathrm{Ile})| = 36$ is offset
-from it by one. These are two independent arithmetic
-properties of two distinct physical observables of the
-same pair of molecules: neither follows from the other.
+from it by one. These are two independent arithmetic properties of two distinct physical quantities associated with the same pair of molecules; neither follows from the other.
 
 \emph{The value $|\delta N| = 37$.} Among the $190$
 pairs of canonical amino acids, the value $|\delta N| =
@@ -1495,7 +1482,7 @@ $|\delta P| = 36$ is realized only by the same two
 pairs --- $\mathrm{Trp}$--$\mathrm{Ile}$ and
 $\mathrm{Trp}$--$\mathrm{Leu}$. The full distribution of
 $|\delta P|$ over the $190$ pairs is given in
-\texttt{amino\_acids\_proton\_differences.csv}. This offset by exactly one unit is not coincidental: it follows from the parity property of the canonical amino acids discussed below.
+\texttt{amino\_acids\_proton\_differences.csv}. This offset by exactly one unit is not coincidental: proton parity forbids the odd value $37$ for any pair, as shown below, leaving $36$ and $38$ as the nearest realizable values, of which the standard code realizes the lower, $36$.
 
 \emph{The induced value $|\delta T| = 73$.} The total
 nucleon difference of the pair satisfies
@@ -1520,7 +1507,7 @@ $|\delta P| = 37$ is impossible for any pair. The nearest even values to $37$ ar
 the pair realized in the standard code,
 $\mathrm{Trp}$--$\mathrm{Ile}$, gives $|\delta P| = 36$:
 a deficit of one relative to $37$, rather than an excess.
-This is not merely an empirical coincidence but a physical consequence of molecular stability: as neutral closed-shell molecules, canonical amino acids contain an even number of electrons. Since neutrality requires the numbers of electrons and protons to be equal, their total proton count must also be even.
+This parity is a consequence of the electronic structure of the canonical amino acids. In their neutral ground states, they are closed-shell molecules and therefore contain an even number of electrons. Since a neutral molecule has equal numbers of electrons and protons, the total proton count is even as well.
 
 \subsubsection{Determination of neutron parameters}
 \label{sec:results-key1-neutrons}
@@ -1566,7 +1553,7 @@ N(\mathrm{Keto}) &=
 N(\mathrm{Amino}) &=
 1776 + 2\, n_{\text{stop}}.
 \end{align*}
-The condition $N(\mathrm{Keto}) = N(\mathrm{Amino})$
+Imposing the symmetry condition $N(\mathrm{Keto}) = N(\mathrm{Amino})$
 yields
 \[
 n_{\text{stop}} - n_{\text{start}} = 37.
@@ -1669,11 +1656,6 @@ each is independent of the other two:
         $n_{\text{start}} \equiv 0 \pmod{37}$ rather than
         to a constraint admitting multiple small residues.
 \end{enumerate}
-Had $N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense})$
-been $36$ or $38$ rather than $37$, or had
-$N(\mathrm{All~sense})$ failed to be a multiple
-of~$37$, the system would have had no non-negative
-integer solution with small parameters.
 
 \paragraph{Macroscopic consequences.}
 Under the values $n_{\text{stop}} = 37$,
@@ -1703,10 +1685,7 @@ Section~\ref{sec:results-key1-neutrons}, we now apply
 the same approach to determine the proton components
 $p_{\text{stop}}$ and $p_{\text{start}}$. The
 convention that the three stop codons share the same
-parameters is preserved. The distribution of service
-codons across the chemical-axis branches and the octets,
-established in Section~\ref{sec:results-key1-neutrons},
-also applies here without modification.
+parameters is preserved.
 
 \paragraph{Balance equation for Keto and Amino.}
 The proton pools of Keto and Amino, expressed through
@@ -1719,24 +1698,20 @@ P(\mathrm{Keto}) &=
 P(\mathrm{Amino}) &=
 2072 + 2\, p_{\text{stop}}.
 \end{align*}
-The condition $P(\mathrm{Keto}) = P(\mathrm{Amino})$
+Imposing the symmetry condition $P(\mathrm{Keto}) = P(\mathrm{Amino})$
 yields
 \[
 p_{\text{stop}} - p_{\text{start}} = 36.
 \]
 The right-hand side is the difference
 $P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense})$
-established in Section~\ref{sec:results-key1-trpile};
-its value is $36$ rather than $37$ as a direct consequence
-of the parity theorem of
-Section~\ref{sec:results-key1-trpile}: every canonical
-amino acid has an even proton count, hence
-$|\delta P(\mathrm{Trp}, \mathrm{Ile})|$ cannot equal
-the odd number~$37$, and the closest realizable value
-below~$37$ is~$36$. The condition is a one-parameter
-family of solutions in two unknowns; a second
-independent constraint is required to fix the
-parameters individually.
+established in Section~\ref{sec:results-key1-trpile}; its
+value is $36$ rather than $37$, the parity-constrained
+value of $|\delta P(\mathrm{Trp}, \mathrm{Ile})|$
+(Section~\ref{sec:results-key1-trpile}). The condition is a
+one-parameter family of solutions in two unknowns; a second
+independent constraint is required to fix the parameters
+individually.
 
 \paragraph{Divisibility of the global proton pool by~$37$.}
 The sense pool of all $60$ sense codons of the
@@ -1747,15 +1722,11 @@ P(\mathrm{Octet~I}) + P(\mathrm{Octet~II~sense}) =
 2000 + 2180 = 4180 = 113 \cdot 37 - 1.
 \]
 Unlike the neutron pool, the global proton pool of the
-sense codons is not divisible by~$37$; it lies one
-proton below the nearest multiple. This deficit of one
-is the same parity-induced shift that displaces
-$|\delta P(\mathrm{Trp}, \mathrm{Ile})|$ from~$37$
-to~$36$: a single proton missing because parity forbids
-the value~$37$ for any pair of canonical amino acids.
-We require the analytical parametrization of the service
-codons to close this deficit and bring the global proton
-pool onto the lattice of step~$37$:
+sense codons is not divisible by~$37$; it lies one proton
+below the nearest multiple, $P(\mathrm{All~sense}) \equiv
+-1 \pmod{37}$. We require the analytical parametrization of
+the service codons to close this deficit and bring the
+global proton pool onto the lattice of step~$37$:
 \[
 P(\mathrm{All}) =
 4180 + p_{\text{start}} + 3\, p_{\text{stop}}
@@ -1821,11 +1792,10 @@ each is independent of the other two:
         $|\delta P(\mathrm{Trp}, \mathrm{Ile})|$
         (Section~\ref{sec:results-key1-trpile});
   \item the residue
-        $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$,
-        the parity-induced deficit of one proton on the
-        $37$-lattice, also a chemical property of the
-        standard code independent of any service-codon
-        parametrization;
+        $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$, a
+        deficit of one proton on the $37$-lattice and a
+        chemical property of the standard code independent
+        of any service-codon parametrization;
   \item the existence of a minimal non-negative integer
         solution with both parameters small. The relative
         primality $\gcd(4, 37) = 1$, where $4$ is the
@@ -1836,13 +1806,15 @@ each is independent of the other two:
         than to a constraint admitting multiple small
         residues.
 \end{enumerate}
-Both facts (1) and (2) are manifestations of the same
-parity property of the canonical amino acids: the
-forbidden value~$37$ for $|\delta P|$ produces the
-shifted value~$36$ in the Keto/Amino balance and the
-shifted residue $-1$ in the global divisibility by~$37$.
-The minimal solution $p_{\text{start}} = 1$ closes
-exactly this single-proton deficit at the global scale.
+Facts (1) and (2) share a common origin in the proton
+parity of the canonical amino acids: parity excludes odd
+values on the $37$-lattice --- both the value~$37$ for
+$|\delta P|$ and an odd multiple for $P(\mathrm{All~sense})$
+--- forcing a one-unit deviation in each case. The particular
+values that this deviation takes ($36$ and $-1$) are fixed
+by the nucleon composition of the code. The minimal solution
+$p_{\text{start}} = 1$ closes exactly this single-proton
+deficit at the global scale.
 
 \paragraph{Macroscopic consequences.}
 Under the values $p_{\text{stop}} = 37$,
@@ -1879,21 +1851,21 @@ in Section~\ref{sec:results-key1-consequences}.
 
 The derivation in
 Sections~\ref{sec:results-key1-neutrons}
-and~\ref{sec:results-key1-protons} imposed three
-constraints on the service-codon parameters:
-Keto/Amino balance for both nucleon quantities, and
-divisibility of the global proton and neutron pools
-by~$37$. Each constraint reduces the dimension of the
+and~\ref{sec:results-key1-protons} imposed two kinds of
+constraint on the service-codon parameters, each applied
+to neutrons and to protons: Keto/Amino balance and
+divisibility of the global pool by~$37$. Each constraint reduces the dimension of the
 solution space, and the family of admissible
 parametrizations narrows in three steps:
 \begin{enumerate}
   \item
     Keto/Amino balance alone, applied separately to
-    neutrons and protons, gives a four-parameter family
-    constrained by $n_{\text{stop}} - n_{\text{start}} =
-    37$ and $p_{\text{stop}} - p_{\text{start}} = 36$.
-    The four service-codon parameters reduce to two
-    independent ones (one for each nucleon quantity).
+    neutrons and protons, gives a two-parameter family of
+    solutions: the conditions $n_{\text{stop}} -
+    n_{\text{start}} = 37$ and $p_{\text{stop}} -
+    p_{\text{start}} = 36$ reduce the four service-codon
+    parameters to two independent degrees of freedom, one
+    for each nucleon quantity.
     All elements of this family align the four
     $32$-codon groups along the chemical axes
     Keto~/~Amino~/~Strong~/~Weak.
@@ -1929,7 +1901,7 @@ $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$
 $n_{\text{start}} = 0$, the only element of the family
 in which the start codon contributes no neutrons. Higher
 elements of the lattice satisfy the same constraints but
-lack these features. We adopt Key~1 as the
+lack these structural features. We adopt Key~1 as the
 parametrization of the standard genetic code throughout
 the remainder of the paper.
 
