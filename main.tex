@@ -1783,8 +1783,7 @@ neutrons, one in protons --- each constrained by
 Keto/Amino balance and global divisibility by~$37$.
 
 \paragraph{Non-triviality of the integer solution.}
-Three arithmetic facts combine in the derivation, and
-each is independent of the other two:
+Three arithmetic facts combine in the derivation:
 \begin{enumerate}
   \item the difference
         $P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense})
@@ -1810,7 +1809,7 @@ Facts (1) and (2) share a common origin in the proton
 parity of the canonical amino acids: parity excludes odd
 values on the $37$-lattice --- both the value~$37$ for
 $|\delta P|$ and an odd multiple for $P(\mathrm{All~sense})$
---- forcing a one-unit deviation in each case. The particular
+--- forcing an unavoidable deviation from these target values. The particular
 values that this deviation takes ($36$ and $-1$) are fixed
 by the nucleon composition of the code. The minimal solution
 $p_{\text{start}} = 1$ closes exactly this single-proton
@@ -2008,9 +2007,7 @@ tables:
 In the remaining $24$ tables, neither property holds
 under any model combination: $\Delta_N$ is not divisible
 by~$37$, and $P(\mathrm{sense~pool}) \bmod 37$ takes
-values different from~$-1$. The two tests, applied
-independently to the neutron and proton pools, identify
-exactly the same set of compatible tables.
+values different from~$-1$. The two tests identify the same set of tables, but this reflects a single underlying sense pool rather than independent agreement between the two conditions: Tables~$1$, $11$, and (under Model~1) $28$ all share the standard code's sense-codon assignments.
 
 \paragraph{Interpretation.}
 The Key~1 parametrization is not a generic feature of
@@ -2371,8 +2368,8 @@ $\mathrm{Purine}$ branch: one $\mathrm{ATG}$ with
 $p_{\text{start}} = 1$, $n_{\text{start}} = 0$, plus
 three stop codons each with $p_{\text{stop}} =
 n_{\text{stop}} = 37$. The proton-neutron asymmetry of the service increments
-matches that of the sense pool. Subtracting these
-increments from the $\mathrm{Purine}$ branch reduces the
+matches that of the sense pool. Adding these increments to the
+$\mathrm{Purine}$ branch reduces the
 $\mathrm{Pyr}$--$\mathrm{Pur}$ proton difference from
 $212$ to $100$ and the neutron difference from $211$ to
 $100$, equalizing the two macroscopic shifts.
@@ -2494,8 +2491,10 @@ absent under Key~0
 (Section~\ref{sec:results-key1-neutrons}). The four
 service codons of the standard code distribute across
 the chemical axes as one stop and one start in Keto,
-two stops in Amino, producing a balance equation whose
-coefficient at the start parameter is~$4$. The
+two stops in Amino, producing the balance conditions;
+in the global pool the same four codons---one start and
+three stops---make the divisibility condition a residue
+equation whose coefficient at the start parameter is~$4$. The
 divisibility deficits then close arithmetically: the
 neutron deficit
 $T(\mathrm{Octet~I}) - N(\mathrm{All~sense}) =
@@ -2573,6 +2572,27 @@ the sense pool coincides exactly with the proton mass
 of the localizing pair, an identity that does not hold
 for neutrons.
 
+\paragraph{A proton-side offset of one unit.}
+In the parametrization-independent arithmetic, two
+neutron quantities meet the $37$-lattice exactly while
+the corresponding proton quantities fall one unit short.
+The sense pool carries $N(\mathrm{All~sense}) = 97 \cdot
+37$ against $P(\mathrm{All~sense}) = 113 \cdot 37 - 1$;
+the single pair $\mathrm{Trp}$--$\mathrm{Ile}$ that
+localizes the Keto/Amino asymmetry has $|\delta N| = 37$
+against $|\delta P| = 36$. The derived parametrization
+then closes the offset with one extra proton on the
+start codon, $p_{\text{start}} = 1$, where the neutron
+side requires none, $n_{\text{start}} = 0$. The common
+cause is the even-proton property of the canonical amino
+acids (Section~\ref{sec:results-key1-trpile}): a sum or
+difference of even proton counts is even and cannot equal
+an odd multiple of $37$, so both $37$ itself and
+$113 \cdot 37$ are unreachable on the proton side. That
+the miss is exactly one unit in each case, rather than a
+larger even amount, is a property of the specific nucleon
+counts and is not fixed by parity alone.
+
 \paragraph{Two recurrent integers: $37$ and the
 round-number scale.}
 The integer~$37$ appears at both levels of the
@@ -2625,6 +2645,22 @@ regularity of the standard code under Key~1.
 
 \section{Discussion}
 \label{sec:discussion}
+
+This section examines how far the regularities reported
+above are specific to the standard code and its structure,
+rather than artifacts of the analysis.
+Section~\ref{sec:discussion-trpile-robustness} tests the
+robustness of the $\mathrm{Trp}$--$\mathrm{Ile}$
+localization across the alternative NCBI codes;
+Section~\ref{sec:discussion-controls} asks whether the
+third codon position and the modulus~$37$ are
+distinguished from other positions and divisors; and
+Section~\ref{sec:discussion-montecarlo} assesses the
+concentration on the $37$-lattice against a random-code
+null. Section~\ref{sec:discussion-prior-work} situates the
+results relative to prior work, and
+Section~\ref{sec:discussion-limitations} states the
+limitations and outlook.
 
 \subsection{Robustness of the Trp--Ile localization across alternative genetic codes}
 \label{sec:discussion-trpile-robustness}
