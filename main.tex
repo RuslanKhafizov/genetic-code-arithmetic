@@ -55,13 +55,13 @@ the three chemical axes of the third codon position
 aside the three stop codons and the ATG initiator leaves $60$ codons over which we isolate
 properties that jointly determine an arithmetic
 structure governed by divisibility modulo~$37$. Among
-them, the Keto/Amino asymmetry localizes in a single
-amino-acid pair, tryptophan and isoleucine, with neutron
-difference~$37$ and proton difference~$36$, one below the
-$37$ forbidden by proton parity. The same
-shift-by-one pattern holds globally: the total neutron
-count is divisible by~$37$, the total proton count has
-residue $-1 \pmod{37}$. Balance constraints between the
+them, neutron and proton counts sit differently against
+the $37$-lattice: neutrons reach it, while protons---necessarily
+even---fall one below its odd multiples. This holds
+globally (neutron count divisible by~$37$, proton count
+residue $-1 \pmod{37}$) and in the single pair tryptophan/isoleucine
+carrying the Keto/Amino asymmetry, with differences $37$
+and $36$. Balance constraints between the
 Keto and Amino branches and this global divisibility
 yield a residue equation with constant term
 $111 = 3 \cdot 37$; with $\gcd(4, 37) = 1$, this fixes a
@@ -1461,7 +1461,7 @@ the standard code:
 $|\delta N(\mathrm{Trp}, \mathrm{Ile})| = 37$ coincides
 with this number exactly,
 $|\delta P(\mathrm{Trp}, \mathrm{Ile})| = 36$ is offset
-from it by one. These are two independent arithmetic properties of two distinct physical quantities associated with the same pair of molecules; neither follows from the other.
+from it by one. The two are related by $\delta P = \delta N - (\Delta_{\mathrm{Ile}} - \Delta_{\mathrm{Trp}}) = 37 - 1 = 36$: the proton difference lies one unit below the neutron difference because isoleucine carries one more hydrogen than tryptophan. Parity forces the proton difference to be even, so $\delta P$ cannot reach $37$. Parity dictates only that it is even; that it is exactly $36$ rather than $34$ or $38$ is a specific chemical property of these two molecules, and it is this exact value that later lets the service parameters resolve to $p_{\text{stop}} = n_{\text{stop}} = 37$ (Section~\ref{sec:results-key1-uniqueness}).
 
 \emph{The value $|\delta N| = 37$.} Among the $190$
 pairs of canonical amino acids, the value $|\delta N| =
@@ -1554,7 +1554,9 @@ N(\mathrm{Amino}) &=
 1776 + 2\, n_{\text{stop}}.
 \end{align*}
 Imposing the symmetry condition $N(\mathrm{Keto}) = N(\mathrm{Amino})$
-yields
+(the Purine/Pyrimidine axis cannot serve here, as its balance is
+incompatible with divisibility by~$37$; see
+Section~\ref{sec:results-key1-uniqueness}) yields
 \[
 n_{\text{stop}} - n_{\text{start}} = 37.
 \]
@@ -1698,8 +1700,8 @@ P(\mathrm{Keto}) &=
 P(\mathrm{Amino}) &=
 2072 + 2\, p_{\text{stop}}.
 \end{align*}
-Imposing the symmetry condition $P(\mathrm{Keto}) = P(\mathrm{Amino})$
-yields
+Imposing the corresponding condition $P(\mathrm{Keto}) = P(\mathrm{Amino})$
+(again on the Keto/Amino axis, for the reason noted above) yields
 \[
 p_{\text{stop}} - p_{\text{start}} = 36.
 \]
@@ -1889,20 +1891,98 @@ with step~$37$ in each direction.
 \end{enumerate}
 
 The minimal element is distinguished from all other
-solutions by three structural features that the
+solutions by a combination of structural features that the
 constraints alone do not require: the value
 $p_{\text{stop}} = n_{\text{stop}} = 37$, equal to the
-organizing multiplier of the code and attained only at the minimal element; the value
-$p_{\text{start}} = 1$ closing exactly the
+organizing multiplier of the code and attained only at
+the minimal element; the value
+$p_{\text{start}} = 1$, closing exactly the
 parity-induced deficit
 $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$
 (Section~\ref{sec:results-key1-protons}); and the value
-$n_{\text{start}} = 0$, the only element of the family
-in which the start codon contributes no neutrons. Higher
-elements of the lattice satisfy the same constraints but
-lack these structural features. We adopt Key~1 as the
-parametrization of the standard genetic code throughout
-the remainder of the paper.
+$n_{\text{start}} = 0$, at which the start codon
+contributes no neutrons. Of these, only
+$p_{\text{stop}} = n_{\text{stop}} = 37$ singles out the
+minimal element on its own: $n_{\text{start}} = 0$ holds
+for every element with $k = 0$ and $p_{\text{start}} = 1$
+for every element with $m = 0$, and the two coincide with
+$p_{\text{stop}} = n_{\text{stop}} = 37$ only at
+$k = m = 0$. Higher elements of the lattice satisfy the
+same constraints but lack this combination. We adopt
+Key~1 as the parametrization of the standard genetic code
+throughout the remainder of the paper.
+
+\paragraph{The stop-parameter equality as a two-axis condition.}
+The equality $p_{\text{stop}} = n_{\text{stop}}$ and the offset
+$p_{\text{start}} - n_{\text{start}} = 1$, obtained in
+Section~\ref{sec:results-key1-uniqueness} from the minimal
+solution of the two modulo-$37$ systems, also follow from the two
+chemical-axis balances alone, with no reference to $37$. Writing
+$\Delta = P - N$, the Keto/Amino balance
+($n_{\text{stop}} - n_{\text{start}} = 37$,
+$p_{\text{stop}} - p_{\text{start}} = 36$) gives
+$\Delta_{\text{start}} = \Delta_{\text{stop}} + 1$. Since all four
+service codons lie in the Purine branch, equalizing the
+$\Delta$-invariant across the Purine/Pyrimidine axis requires the
+service increment to close the sense-pool deficit
+$\Delta(\mathrm{Pyr~sense}) - \Delta(\mathrm{Pur~sense}) = 1$, that
+is $\Delta_{\text{start}} + 3\,\Delta_{\text{stop}} = 1$. The same
+purine localization of the service codons is also what forces the
+balance in $P$ and $N$ to be imposed on the Keto/Amino axis rather than
+on Purine/Pyrimidine: with all increments confined to the Purine branch,
+a $\mathrm{Purine} = \mathrm{Pyrimidine}$ balance would require
+$p_{\text{start}} + 3\,p_{\text{stop}} = 212$ and
+$n_{\text{start}} + 3\,n_{\text{stop}} = 211$, whereas global
+divisibility requires these same sums to be $\equiv 1$ and $\equiv 0
+\pmod{37}$; since $212 \equiv 27$ and $211 \equiv 26$, the two
+demands are incompatible, and among the third-position axes only a balance on Keto/Amino
+(equivalently, by the twin identity of
+Section~\ref{sec:results-pyrimidine-synonymy}, on Strong/Weak) is
+compatible with the $37$-lattice. The obstruction is specific to $P$ and $N$, whose service sums are
+large ($212$ and $211$) and land at the wrong residues. For
+$\Delta = P - N$ the situation differs: the Purine/Pyrimidine
+$\Delta$-deficit is only $\Delta(\mathrm{Pyr~sense}) -
+\Delta(\mathrm{Pur~sense}) = 1$, small enough to be closed by the
+service increment, and it coincides with the offset
+$\Delta_{\text{start}} - \Delta_{\text{stop}} = 1$ left by the
+Keto/Amino balance. The Keto/Amino $P$/$N$ balance and the
+Purine/Pyrimidine $\Delta$-balance are therefore mutually
+compatible, which is what makes the two-axis condition available.
+
+This fixes only the proton--neutron differences of the service
+codons, not their absolute values: the modulus $37$ and the
+minimality condition remain necessary to obtain $(37, 37)$ and
+$(1, 0)$. Its content is that the equality of the stop parameters
+is not tied to the modulus---it holds whenever the Keto/Amino and
+Purine/Pyrimidine $\Delta$-balances hold---and that it reduces to
+the agreement of two sense-pool unit offsets: the proton--neutron
+difference $\delta P - \delta N = -1$ of the localizing pair
+(Section~\ref{sec:results-key1-trpile}) and the branch deficit
+$\Delta(\mathrm{Pyr~sense}) - \Delta(\mathrm{Pur~sense}) = +1$. The
+coincidence is thus relocated rather than removed, but it is shown
+to be a joint property of two chemical axes rather than an artifact
+of the parametrization.
+
+\paragraph{Convergence of independent routes.}
+The values of Key~1 are not tied to a single derivation. Three
+routes, resting on different structural inputs, reach the same
+assignment. The first is the modulo-$37$ system used above: the
+Keto/Amino balance together with divisibility of the global
+neutron and proton pools, whose minimal nonnegative solution is
+$(p_{\text{stop}}, n_{\text{stop}}) = (37, 37)$,
+$(p_{\text{start}}, n_{\text{start}}) = (1, 0)$. The second is the
+two-axis condition of
+Section~\ref{sec:results-key1-uniqueness}: the Keto/Amino balance
+together with the $\Delta$-balance across the Purine/Pyrimidine
+axis forces $p_{\text{stop}} = n_{\text{stop}}$ and
+$p_{\text{start}} = n_{\text{start}} + 1$ with no reference to the
+modulus. The third fixes the neutron parameters directly from the
+parametrization-independent half-octet target
+$N(\mathrm{Amino}) = N(\mathrm{Keto}) = \tfrac{1}{2}\,T(\mathrm{Octet~I}) = 1850$:
+the sense-pool deficits $1850 - 1776 = 74 = 2 \cdot 37$
+(closed by the two stop codons of the Amino branch) and
+$1850 - 1813 = 37$ (closed by the stop and start of the Keto
+branch) give $n_{\text{stop}} = 37$ and $n_{\text{start}} = 0$.
 
 \subsubsection{Comparative test against alternative NCBI translation tables}
 \label{sec:results-key1-ncbi}
