@@ -331,7 +331,7 @@ provided as a convenience for interactive exploratory work only.
 
 ### Supplementary controls
 
-Three additional datasets probe the *specificity* of the arithmetic
+Four additional datasets probe the *specificity* of the arithmetic
 regularities and are produced by a separate script, `controls.py`. Like
 `reproduce.py` it uses only the Python standard library, exact integer
 arithmetic, and no randomization, and its outputs follow the same file format
@@ -360,6 +360,12 @@ below for usage and details.
   is divisible by 37 at all three positions for the standard code and its
   exact codon-to-amino-acid equivalent (Table 11), and at no more than one
   position for any other table.
+- `representation_sensitivity.csv` — the load-bearing sense-pool
+  quantities recomputed under alternative molecular representations of
+  the encoded amino acid (free amino acid, peptide residue,
+  zwitterion); the relational regularities (the Trp/Ile and axis
+  differences) are invariant across representations, while the absolute
+  lattice alignments hold only for the free amino acid.
 
 A further script, `mc_significance.py`, assesses the *statistical significance*
 of the structure under a random-code null (a random reassignment of the twenty
@@ -551,10 +557,11 @@ input datasets, or a bug, and should be investigated.
 ## The supplementary control script `controls.py`
 
 `controls.py` is a standalone companion to `reproduce.py` that generates the
-three supplementary control datasets. It is not part of the core
+four supplementary control datasets. It is not part of the core
 reproducibility pipeline and is not required to reproduce any numerical result
 reported in the preprint; it exists to test how *specific* those results are to
-the standard code, to the third codon position, and to the modulus 37. The third
+the standard code, to the third codon position, to the modulus 37, and to the
+free-amino-acid representation. The third
 of these controls also documents a regularity that is non-trivial in itself — the
 Keto/Amino asymmetry is divisible by 37 at all three codon positions — and shows
 that this is unique to the standard code (and its twin, NCBI Table 11).
@@ -572,8 +579,7 @@ python3 controls.py
 
 The script reads the input datasets `amino_acids_nucleons.csv`,
 `genetic_code_codons.csv`, `codon_groups.csv`, `key_parameters.csv` and
-`ncbi_genetic_code_registry.csv` from its own directory and writes the three
-control datasets to the same directory.
+`ncbi_genetic_code_registry.csv` from its own directory and writes the four control datasets to the same directory.
 
 ### Determinism
 
@@ -583,7 +589,7 @@ counts and residues are integers; the one expected (chance) value in
 `prime_divisibility_scan.csv` is stored as an exact reduced fraction rather than
 a decimal, so that no floating-point numerics enter the output.
 
-### The three controls
+### The four controls
 
 1. **Codon position** (`position_axis_analysis.csv`). The three chemical axes,
    which the preprint applies at the third codon position, are applied instead
@@ -627,6 +633,19 @@ a decimal, so that no floating-point numerics enter the output.
    Because the NCBI tables are evolutionarily related rather than independent
    samples, this is evidence of specificity among natural codes, not a
    probability statement.
+4. **Counting convention** (`representation_sensitivity.csv`). The
+   load-bearing sense-pool quantities are recomputed under three
+   molecular representations of the encoded amino acid — the neutral
+   free amino acid (baseline), the peptide residue (free minus one
+   water, as in a chain), and the zwitterion — each a fixed per-residue
+   nucleon offset from the free amino acid. Every relational quantity
+   (the Trp/Ile difference and the Keto/Amino and Strong/Weak axis
+   differences) is invariant across all three, whereas the absolute
+   alignments (N(All sense) = 97·37, the deficit, the axis half-pools)
+   hold only for the free amino acid: a uniform offset (ΔP, ΔN)
+   preserves neutron divisibility by 37 only when ΔN is a multiple of
+   37. The free amino acid is fixed a priori as the canonical identity
+   of the encoded species, not chosen to produce the divisibility.
 
 ### Consistency check
 
@@ -1922,7 +1941,36 @@ specificity among natural codes rather than improbability under a null model.
 - `Positions_With_Div37` — for this table, the number of codon positions (0–3)
   at which at least one asymmetry is divisible by 37; filtering on the value 3
   selects exactly tables 1 and 11
+  
+### representation_sensitivity.csv
 
+Output of `controls.py` (not part of the `reproduce.py` pipeline). The
+load-bearing sense-pool quantities recomputed under three molecular
+representations of the amino acid a codon encodes: the neutral free amino acid
+(the baseline used throughout), the peptide residue (the free amino acid minus
+one water, H2O = 10 protons and 8 neutrons, as an internal residue in a chain),
+and the zwitterion (the same atoms as the neutral form, hence identical nucleon
+counts). Each representation is a fixed per-residue nucleon offset (ΔP, ΔN) from
+the free amino acid. Every relational quantity — the Trp/Ile neutron and proton
+differences and the Keto/Amino and Strong/Weak axis differences — is a difference
+between codon sets of equal cardinality and is therefore invariant across all
+three representations, whereas every absolute quantity (the sense-pool sums, the
+deficit, the axis half-pools) is divisible by 37 only for the free amino acid: a
+uniform offset preserves neutron divisibility by 37 only when ΔN is a multiple of
+37 (60·ΔN ≡ 0 mod 37, gcd(60, 37) = 1). Under the peptide residue
+N(All sense) = 3109 ≡ 1 and P(All sense) = 3580 ≡ 28 (mod 37). A build-time check
+refuses to write the file unless the free-amino-acid row reproduces the preprint
+values (N = 3589, P = 4180, deficit = 111, δN(Trp,Ile) = 37, δP = 36).
+
+#### Columns
+
+- `Representation` — the molecular representation (`free`, `peptide_residue`, `zwitterion`)
+- `Delta_P`, `Delta_N` — the per-residue proton and neutron offset from the free amino acid
+- `Anchor` — the quantity computed (e.g. `N_sense`, `dN_Trp_Ile`, `KetoAmino_dN`)
+- `Class` — `absolute` (a sum, representation-dependent) or `relational` (a difference between equal-size codon sets, representation-invariant)
+- `Value` — the integer value of the anchor under this representation
+- `Value_mod37` — the value reduced modulo 37 (0 means divisible by 37)
+- `Matches_Free` — whether this equals the free-amino-acid value; True for every relational anchor and every zwitterion anchor, False for the absolute peptide-residue anchors
 
 ### mc_significance.csv
 

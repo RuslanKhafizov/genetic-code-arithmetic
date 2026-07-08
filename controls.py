@@ -43,6 +43,19 @@ input datasets and writes three supplementary control datasets:
         codon-to-amino-acid equivalent (Table 11); no other table reaches more
         than one position.
 
+  * representation_sensitivity.csv
+        The load-bearing sense-pool quantities recomputed under alternative
+        molecular representations of the encoded amino acid: the neutral free
+        amino acid (baseline), the peptide residue (free minus one water), and
+        the zwitterion, each a fixed per-residue nucleon offset from the free
+        amino acid. Establishes which regularities are properties of the
+        representation and which are not: every relational quantity (the
+        Trp/Ile and the Keto/Amino, Strong/Weak axis differences) is invariant
+        across representations, whereas the absolute lattice alignments
+        (N(All sense) = 97*37, the deficit, the axis half-pools) hold only for
+        the free amino acid, since an offset (dP, dN) preserves neutron
+        divisibility by 37 only when dN is itself a multiple of 37.
+
 Output rules match reproduce.py:
   - Encoding UTF-8, LF line endings, trailing newline.
   - Quoting: csv.QUOTE_NONNUMERIC (string fields quoted, numbers bare).
@@ -343,6 +356,102 @@ def build_position_asymmetry_ncbi():
     return header, rows
 
 
+# -- Control 4: representation (counting-convention) sensitivity ------------
+
+# Alternative molecular representations of the amino acid a codon encodes, each
+# a fixed per-residue nucleon offset from the neutral free amino acid (the
+# baseline used throughout). The free amino acid is the canonical molecular
+# identity of the encoded species; a peptide residue is that molecule minus one
+# water lost on peptide-bond formation (H2O = 10 protons, 8 neutrons); the
+# zwitterion has the same atoms as the neutral form. All are UNIFORM offsets, so
+# every difference between codon sets of equal cardinality is invariant across
+# them, while an absolute sum's divisibility by 37 survives an offset (dP, dN)
+# only when 60*dN is a multiple of 37, i.e. dN is a multiple of 37 (gcd(60,37)=1)
+# -- which among chemically meaningful representations selects the free amino
+# acid alone.
+REPRESENTATIONS = [
+    ("free",            0,   0),   # neutral free amino acid (baseline)
+    ("peptide_residue", -10, -8),  # free minus one H2O (10 protons, 8 neutrons)
+    ("zwitterion",      0,   0),   # same atoms as the neutral free form
+]
+
+def _octet1_codons():
+    """Octet I: the eight four-fold-degenerate boxes (32 codons), built from the
+    degeneracy rule rather than a group name, matching reproduce.py's Octet I."""
+    box = {}
+    for c in ALL_CODONS:
+        box.setdefault(c[:2], []).append(c)
+    return [c for _, cs in box.items()
+            if len({CODON_TO_AA[x] for x in cs}) == 1
+            and CODON_TO_AA[cs[0]] != "Stop"
+            for c in cs]
+
+def _shifted_sense(codons, dP, dN):
+    """(T, P, N, Delta) over the SENSE codons of a list, each amino acid shifted
+    by a per-residue offset (dP, dN); service codons excluded."""
+    p = n = 0
+    for c in codons:
+        if c in SERVICE_CODONS:
+            continue
+        aa = AA_BY_NAME[CODON_TO_AA[c]]
+        p += aa["P"] + dP
+        n += aa["N"] + dN
+    return (p + n, p, n, p - n)
+
+def _representation_anchors(dP, dN):
+    """Every anchor quantity under a representation offset, as (name, class, value)."""
+    sense = [c for c in ALL_CODONS if c not in SERVICE_CODONS]
+    third = lambda members: [c for c in sense if c[2] in members]
+    keto, amino = third(frozenset("GT")), third(frozenset("AC"))
+    strong, weak = third(frozenset("CG")), third(frozenset("AT"))
+    Tall, Pall, Nall, _ = _shifted_sense(sense, dP, dN)
+    TocI = _shifted_sense(_octet1_codons(), dP, dN)[0]
+    _, Pk, Nk, _ = _shifted_sense(keto,   dP, dN)
+    _, Pa, Na, _ = _shifted_sense(amino,  dP, dN)
+    _, Ps, Ns, _ = _shifted_sense(strong, dP, dN)
+    _, Pw, Nw, _ = _shifted_sense(weak,   dP, dN)
+    trp, ile = AA_BY_NAME[CODON_TO_AA["TGG"]], AA_BY_NAME[CODON_TO_AA["ATT"]]
+    return [
+        ("N_sense",                     "absolute",   Nall),
+        ("P_sense",                     "absolute",   Pall),
+        ("deficit_T_OctetI_minus_N_sense", "absolute", TocI - Nall),
+        ("N_Keto",                      "absolute",   Nk),
+        ("N_Amino",                     "absolute",   Na),
+        ("N_Strong",                    "absolute",   Ns),
+        ("N_Weak",                      "absolute",   Nw),
+        ("dN_Trp_Ile",                  "relational", (trp["N"] + dN) - (ile["N"] + dN)),
+        ("dP_Trp_Ile",                  "relational", (trp["P"] + dP) - (ile["P"] + dP)),
+        ("KetoAmino_dN",                "relational", Nk - Na),
+        ("KetoAmino_dP",                "relational", Pk - Pa),
+        ("StrongWeak_dN",               "relational", Ns - Nw),
+        ("StrongWeak_dP",               "relational", Ps - Pw),
+    ]
+
+def build_representation_sensitivity():
+    header = ["Representation", "Delta_P", "Delta_N", "Anchor", "Class",
+              "Value", "Value_mod37", "Matches_Free"]
+    free_val = {name: val for name, _, val in _representation_anchors(0, 0)}
+    rows = []
+    for rep_name, dP, dN in REPRESENTATIONS:
+        for name, cls, val in _representation_anchors(dP, dN):
+            rows.append([rep_name, dP, dN, name, cls,
+                         val, val % 37, val == free_val[name]])
+    return header, rows
+
+def verify_representation_free_against_preprint():
+    # The free-amino-acid row must reproduce the preprint's sense-pool values.
+    want = {"N_sense": 3589, "P_sense": 4180,
+            "deficit_T_OctetI_minus_N_sense": 111,
+            "N_Keto": 1813, "N_Amino": 1776,
+            "dN_Trp_Ile": 37, "dP_Trp_Ile": 36}
+    got = {name: val for name, _, val in _representation_anchors(0, 0)}
+    for k, v in want.items():
+        if got.get(k) != v:
+            raise AssertionError(
+                f"representation control: free '{k}' = {got.get(k)}, "
+                f"expected preprint value {v}")
+
+
 def main():
     verify_position3_against_registry()
     h1, r1 = build_position_analysis()
@@ -351,7 +460,10 @@ def main():
     write_csv("prime_divisibility_scan.csv", h2, r2)
     h3, r3 = build_position_asymmetry_ncbi()
     write_csv("position_asymmetry_ncbi.csv", h3, r3)
-    print("Done. 3 control files written.")
+    verify_representation_free_against_preprint()
+    h4, r4 = build_representation_sensitivity()
+    write_csv("representation_sensitivity.csv", h4, r4)
+    print("Done. 4 control files written.")
 
 
 if __name__ == "__main__":
