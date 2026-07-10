@@ -633,6 +633,7 @@ a decimal, so that no floating-point numerics enter the output.
    Because the NCBI tables are evolutionarily related rather than independent
    samples, this is evidence of specificity among natural codes, not a
    probability statement.
+
 4. **Counting convention** (`representation_sensitivity.csv`). The
    load-bearing sense-pool quantities are recomputed under three
    molecular representations of the encoded amino acid — the neutral
@@ -1941,7 +1942,7 @@ specificity among natural codes rather than improbability under a null model.
 - `Positions_With_Div37` — for this table, the number of codon positions (0–3)
   at which at least one asymmetry is divisible by 37; filtering on the value 3
   selects exactly tables 1 and 11
-  
+
 ### representation_sensitivity.csv
 
 Output of `controls.py` (not part of the `reproduce.py` pipeline). The

@@ -51,31 +51,24 @@ arithmetic properties. We combine proton and neutron
 counts of the encoded amino acids with two intrinsic
 groupings: the Rumer partition by family degeneracy and
 the three chemical axes of the third codon position
-(Keto/Amino, Strong/Weak, Purine/Pyrimidine). Setting
-aside the three stop codons and the ATG initiator leaves $60$ codons over which we isolate
-properties that jointly determine an arithmetic
-structure governed by divisibility modulo~$37$. Among
-them, neutron and proton counts sit differently against
-the $37$-lattice: neutrons reach it, while protons---necessarily
-even---fall one below its odd multiples. This holds
-globally (neutron count divisible by~$37$, proton count
-residue $-1 \pmod{37}$) and in the single pair tryptophan/isoleucine
+(Keto/Amino, Strong/Weak, Purine/Pyrimidine). Excluding
+the three stop codons and the ATG initiator leaves $60$ codons over which we isolate properties determining an arithmetic structure modulo~$37$. Neutron counts reach the $37$-lattice, while proton counts---necessarily
+even, which excludes its odd multiples---fall one below them:
+globally (neutron count divisible by~$37$, proton residue
+$-1 \pmod{37}$), and in the single pair tryptophan/isoleucine
 carrying the Keto/Amino asymmetry, with differences $37$
 and $36$. Balance constraints between the
-Keto and Amino branches and this global divisibility
-yield a residue equation with constant term
+Keto and Amino branches, together with this global
+divisibility, yield a residue equation with constant term
 $111 = 3 \cdot 37$; with $\gcd(4, 37) = 1$, this fixes a
-unique minimal integer assignment for the four service
-codons, after which the regularities form a connected
+unique minimal nonnegative integer assignment for the four service codons, after which the regularities form a connected
 family of identities and divisibilities. Across the $27$
-NCBI translation tables, all of these hold simultaneously
-only in the standard code and its exact equivalent;
-deterministic controls
-localize the structure at the third codon position and at
-modulus~$37$; and against an explicit random-code null
+NCBI translation tables, all of these hold simultaneously only in the standard code and its exact codon-to-amino-acid equivalent; deterministic controls
+show that the structure is specific to the third codon position and to
+modulus~$37$; and under an explicit random-code null
 model, it is highly atypical. Throughout, the
 regularities are properties of codon-group sums, not
-individual amino acids, and reflect degeneracy alongside
+individual amino acids, and reflect codon degeneracy alongside
 nucleon composition.
 \end{abstract}
 
@@ -117,20 +110,11 @@ the arithmetic regularities of the standard genetic
 code organize into a connected family of identities
 and divisibilities. The analysis traces this
 connected structure to a small number of empirical
-properties of the standard code. The standard code is then evaluated alongside the full registry of alternative NCBI translation tables on the same arithmetic criteria, and is shown to exhibit a number of structural regularities that distinguish it from all known natural alternatives. The specificity of the structure is examined further by deterministic controls, which test its dependence on the third codon position and on the modulus, and by a Monte Carlo test against an explicit random-code null model.
+properties of the standard code. The standard code is then evaluated alongside the full registry of alternative NCBI translation tables on the same arithmetic criteria, and is shown to exhibit a number of structural regularities that, among the known natural codes, hold simultaneously only in it and in its exact codon-to-amino-acid equivalent. The specificity of the structure is examined further by deterministic controls, which test its dependence on the third codon position, on the modulus, and on the molecular representation of the amino acids, and by a Monte Carlo test against an explicit random-code null model.
 
-Two methodological points should be stated at the outset, since they determine how the results are to be read. First, the analysis is divided into three levels. The principal regularities are established in a parametrization-independent representation, in which the three stop codons and the start codon are excluded and only the remaining $60$ sense codons are summed; these are the central results of the paper, and they involve no assigned values. To obtain sums for the complete table of $64$ codons, however, the four service codons must be given some nucleon contributions. The second level is the naive reading (Key~0), in which the stop codons are assigned zero and the initiator is counted as its product methionine. Assigning zero is also a choice of value, not the absence of one. The third level is Key~1, in which the four service codons carry derived nucleon contributions. Once the choice of symmetry conditions is fixed, these contributions are uniquely determined as the unique minimal nonnegative integer solution of the corresponding system (Section~\ref{sec:results}), and the resulting regularities are consequences of that solution. The role of Key~1 is thus to reveal, on the full table, the structure already inherent in the standard genetic code.
+The analysis is divided into three levels. The principal regularities are established in a parametrization-independent representation, in which the three stop codons and the start codon are excluded and only the remaining $60$ sense codons are summed; these are the central results of the paper, and they involve no assigned values. To obtain sums for the complete table of $64$ codons, however, the four service codons must be given some nucleon contributions. The second level is the naive reading (Key~0), in which the stop codons are assigned zero and the initiator is counted as its product methionine. Assigning zero is also a choice of value, not the absence of one. The third level is Key~1, in which the four service codons carry derived nucleon contributions. Once the choice of symmetry conditions is fixed, these contributions are determined as the unique minimal nonnegative integer solution of the corresponding system (Section~\ref{sec:results}), and the resulting regularities are consequences of that solution.
 
-Second, these assigned values are a formal device. A stop signal is not
-translated into an amino acid, and the start codon is taken here in its
-punctuation role as an initiation signal rather than as an internal
-methionine; attributing $(P,N)$ values to these service codons is a
-means of rendering the arithmetic of the complete table visible as a
-single object, not a claim about any physical molecule. Sums that include service codons under such an
-assignment are formal integer quantities; the structure they make
-visible is fixed by the symmetry conditions independently of which
-particular solution is chosen, the assignment used here being the
-minimal such solution.
+With regard to these assigned values, a methodological clarification is necessary, as it determines how the results should be interpreted. The assignment of values $(P,N)$ to the service codons is a formal device intended to render the arithmetic of the complete table as a unified object, rather than a statement about any physical basis. Sums that include the service codons under such a parametrization are formal quantities introduced solely to reveal the underlying mathematical structure.
 
 \section{Methods}
 \label{sec:methods}
@@ -145,8 +129,8 @@ computed datasets supporting it.
 
 Throughout this work, each of the twenty canonical amino acids is
 represented as a neutral free amino acid molecule (not as a residue in
-a peptide chain), with its molecular formula taken from standard
-biochemical references. From this formula we compute four integer
+a peptide chain), with its molecular formula retrieved from the \textsc{PubChem}
+compound database~\cite{kim2023}. The dependence of the arithmetic on this choice---the free molecule rather than the residue---is examined in Section~\ref{sec:discussion-controls}. From this formula we compute four integer
 quantities that characterize the nucleon content of the molecule.
 
 The proton count $P$ is defined as the sum of atomic numbers over all
@@ -157,10 +141,11 @@ P = \sum_i Z_i,
 with $Z(\mathrm{H}) = 1$, $Z(\mathrm{C}) = 6$, $Z(\mathrm{N}) = 7$,
 $Z(\mathrm{O}) = 8$, $Z(\mathrm{S}) = 16$.
 
-The neutron count $N$ is computed under the assumption that every atom
-is present as its most abundant stable isotope. Under this convention
-we use $^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$,
-$^{16}\mathrm{O}$ and $^{32}\mathrm{S}$, so that for each atom the
+The neutron count $N$ is computed by assigning each atom its most
+abundant naturally occurring stable isotope, using the terrestrial
+isotopic compositions evaluated by IUPAC~\cite{berglund2011}.
+Accordingly, we use $^{1}\mathrm{H}$, $^{12}\mathrm{C}$,
+$^{14}\mathrm{N}$, $^{16}\mathrm{O}$ and $^{32}\mathrm{S}$, so that for each atom the
 neutron contribution is $A_i - Z_i$, where $A_i$ is the mass number of
 the chosen isotope. The total neutron count of the molecule is
 \[
@@ -2793,7 +2778,7 @@ holding elsewhere only in tables that are arithmetically equivalent
 to it or differ from it by a symmetric reassignment of
 $\mathrm{TAA}$ and $\mathrm{TAG}$.
 
-\subsection{Specificity of the third codon position and of the modulus~\texorpdfstring{$37$}{37}}
+\subsection{Specificity of the third codon position, the modulus~\texorpdfstring{$37$}{37}, and the molecular representation}
 \label{sec:discussion-controls}
 
 Two features are built into the framework of this work rather
