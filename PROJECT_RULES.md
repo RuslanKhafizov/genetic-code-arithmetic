@@ -90,6 +90,11 @@ biological interpretation of an arithmetic result.
   externally visible, or publication-triggering steps.
 - Introduce new tools and workflow complexity gradually. Recommend a simpler
   process when it provides the same scientific traceability and safety.
+- Claude Cowork sessions connected to the live Windows working folder must not
+  run Git commands or access the `.git` directory. Even nominally read-only Git
+  inspection can leave an `index.lock` from Cowork's isolated environment.
+  Cowork must request branch and working-tree information from the owner or
+  Codex; GitHub Desktop and Codex are responsible for Git operations.
 
 ## Verification commands
 
