@@ -90,6 +90,9 @@ biological interpretation of an arithmetic result.
   externally visible, or publication-triggering steps.
 - Introduce new tools and workflow complexity gradually. Recommend a simpler
   process when it provides the same scientific traceability and safety.
+- When proposing English branch names, commit messages, pull-request titles,
+  or release titles, also provide a concise Russian translation or explanation
+  for the owner. A full Russian duplication of long English bodies is optional.
 - Claude Cowork sessions connected to the live Windows working folder must not
   run Git commands or access the `.git` directory. Even nominally read-only Git
   inspection can leave an `index.lock` from Cowork's isolated environment.
