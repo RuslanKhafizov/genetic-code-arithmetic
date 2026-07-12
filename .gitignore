@@ -1,0 +1,30 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# LaTeX build artifacts (tracked manuscript PDFs are intentionally not ignored)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Editor and operating-system files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
