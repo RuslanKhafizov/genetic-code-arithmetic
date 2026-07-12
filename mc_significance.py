@@ -17,6 +17,12 @@ SENSE POOL: the 60 codons excluding the three stops and the initiator ATG,
 matching the preprint's definition (so N(All sense)=3589=97*37 for the
 standard code).
 
+SERVICE CODONS: S1-S3 use the 60-codon sense pool, so the amino acid a
+permutation places at the ATG block does not contribute. The lattice rows S4a
+and S4b hold the service-codon contributions fixed at the Key 0 and Key 1
+values in every trial -- they are fixed-key conditional diagnostics, not full
+relabellings at the service positions.
+
 PRE-SPECIFIED STATISTICS (decided before running; all reported, none selected
 post hoc):
   S1  two independent 37-anchors: N(All sense) and T(Octet I) BOTH divisible
@@ -86,9 +92,15 @@ HEAD = ["ALL: {C, G, A, T}", "Keto: {G, T}", "Amino: {A, C}", "Strong: {C, G}",
         "Octet I: {C, G, A, T}", "Octet II: {C, G, A, T}"]
 W_head = [wrow_nz(groups[g]) for g in HEAD]
 
-indep_names = [g["Group_Name"] for g in group_rows
-               if not (set(c.strip() for c in g["Codon_List"].split(";")) & SERVICE)]
-W_indep = [wrow_nz(groups[g]) for g in indep_names]
+# Parametrization-independent groups: those with no service codon. Build each
+# weight row from the row's OWN Codon_List, iterating group_rows directly --
+# NOT via the `groups` dict, whose keys (Group_Name) are non-unique across code
+# sections ({C}, {G}, {T}, {A} and the two-letter axis names each recur at the
+# All / Octet I / Octet II levels). A name lookup would silently collapse those
+# to the last (Octet II) occurrence and compute S3 over the wrong groups.
+W_indep = [wrow_nz([c.strip() for c in g["Codon_List"].split(";")])
+           for g in group_rows
+           if not (set(c.strip() for c in g["Codon_List"].split(";")) & SERVICE)]
 
 # --- S4 setup: lattice concentration over all 33 groups under BOTH keys ---
 # Each group contributes its sense-codon block counts (as a sparse weight row)
@@ -250,8 +262,8 @@ with open(os.path.join(SCRIPT_DIR, "mc_significance.csv"),
                 round(obs_S4, 4), round(s4_sum / M, 4), round(p4, 6), M, SEED])
     w.writerow(["S4a",
                 "S4 restricted to Key 0 only (no divisibility by 37 imposed); "
-                "shows the concentration is present before any service-codon "
-                "parametrization",
+                "shows the concentration is present before the derived Key 1 "
+                "symmetrization (Key 0 is itself an assignment)",
                 round(obs_S4a, 4), round(s4a_sum / M, 4), round(p4a, 6), M, SEED])
     w.writerow(["S4b",
                 "S4 restricted to Key 1 only (the key derived under the "

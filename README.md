@@ -376,8 +376,8 @@ though seeded for reproducibility. See its dedicated section below.
 - `mc_significance.csv` — its summary table: the pre-specified test
   statistics, their observed values, null means, and p-values.
 - `verify_mc.py` — an independent re-implementation of the Monte Carlo (a
-  different construction of the codon groups and a different random-number
-  generator, sharing no code with `mc_significance.py`) that reproduces its
+  different construction of the codon groups and different fixed random
+  seeds, sharing no code with `mc_significance.py`) that reproduces its
   figures, as a guard against coding error.
 
 
@@ -704,9 +704,12 @@ reported figures are reproducible run to run.
    two octets), the number divisible by 37. The standard code scores 13 of 36
    against a null mean of ≈1.0; ≈4×10⁻⁵ of random codes reach 13 or more.
 3. **The same count over the parametrization-independent groups only** (on
-   which 37 can never be imposed). The standard code scores 4 against a null
-   mean of ≈1.9; ≈0.15 of random codes reach it — the conservative,
-   non-significant variant.
+   which 37 can never be imposed). The standard code scores 14 against a null
+   mean of ≈2.1; ≈0.025 of random codes reach it. These 14 are highly
+   non-independent — eleven are copies of T(Octet I) = 100·37 across the octet
+   and its 16- and 8-codon sub-groups, and three are the pyrimidine Δ-cascade —
+   so the count reduces to ≈2 independent facts and its p-value is carried by
+   the divisibility of T(Octet I). The conservative variant.
 4. **Concentration of the whole value set near the 37-lattice** — not how many
    quantities are exact multiples of 37, but how close all of them lie. For each
    of the 33 groups under both keys, the distance of every nonzero T/P/N/Δ to
@@ -720,16 +723,20 @@ reported figures are reproducible run to run.
    service values — so the Key 1 gain is not parametrization-free. Under Key 0
    alone, where no divisibility by 37 is imposed, the standard code still gives
    mean distance ≈5.56 against a null mean of ≈9.02, reached by ≈2.7×10⁻³ of
-   random codes: the concentration is present before any parametrization, and
-   Key 1 sharpens but does not create it. This statistic is the aggregate
+   random codes: the concentration is present before the derived Key 1
+   symmetrization, which sharpens but does not create it (Key 0 is itself an
+   assignment; the genuinely assignment-free level is the sense pool). This statistic is the aggregate
    form of the ±1/±2 cascade documented group by group in the preprint. The
    summary table records S4 split by key as S4a (Key 0 only) and S4b (Key 1
-   only) alongside the combined S4, so the ≈2.7×10⁻³ figure is reproducible
-   from the script.
+   only) alongside the combined S4; these two rows hold the service-codon values
+   fixed in every trial (fixed-key conditional diagnostics, not full relabellings
+   at the service positions), and the ≈2.7×10⁻³ figure is reproducible from the
+   script.
 
 The first, second, and fourth statistics place the standard code far in the
-tail; the third does not, locating the effect in the full sense-pool partition
-rather than in the parametrization-independent subgroups alone. The p-value is improbability
+tail; the third does so only weakly (p ≈ 0.025, a count dominated by the
+divisibility of T(Octet I)), so the weight of the effect is in the full
+sense-pool partition rather than the parametrization-independent subgroups alone. The p-value is improbability
 under this particular null (which fixes the code's degeneracy architecture and
 the amino-acid nucleon counts); it is a different question from specificity
 among the 27 natural codes, and speaks to no biological mechanism.
@@ -740,16 +747,20 @@ Because this is the only randomized result in the repository, it ships with an
 independent re-implementation, `verify_mc.py`, that shares no code with
 `mc_significance.py`: it reads the input CSVs directly, builds the codon groups
 from the third-position and four-fold-degeneracy rules (not from
-`codon_groups.csv`), and uses a different random seed, then prints its results
-side by side with `mc_significance.csv`. The two scripts agree on every statistic
-(the S2 tail probability is a few ×10⁻⁵ in both, the S4 mean distance is
-5.10 by both routes with p ≈ 8×10⁻⁴, and the Key-0-only S4a gives ≈5.56 with
-p ≈ 2.7×10⁻³ in both), which is evidence against a coding error
-in either. The cross-check rebuilds all 33 groups — including the Octet I and
-Octet II single-base subgroups — from the partition rules, so it would catch a
-missing or duplicated group in either implementation. The observed values it
-prints (N(All sense)=3589, T(Octet I)=3700, the counts 13 and 4, the mean
-distance 5.10) can also be checked by hand against the tables in the preprint.
+`codon_groups.csv`), and uses different fixed random seeds, then prints its results
+side by side with `mc_significance.csv`. The two scripts agree on every statistic:
+the S2 tail probability is a few ×10⁻⁵ in both; the S3 count over the
+parametrization-independent groups is 14 by both routes with p ≈ 0.025; the
+S4 mean distance is 5.10 by both routes with p ≈ 8×10⁻⁴; the Key-0-only S4a
+gives ≈5.56 with p ≈ 2.7×10⁻³ in both; and S4b is cross-checked the same way —
+which is evidence against a coding error in either. Because the independent
+route builds all 33 groups directly from the third-position and octet rules —
+including the Octet I and Octet II single-base subgroups, and never keyed by a
+non-unique group name — it computes S3 without the group-lookup mistake an
+earlier version of `mc_significance.py` made in that one statistic, and would
+catch a missing or duplicated group in either implementation. The observed
+values it prints (N(All sense)=3589, T(Octet I)=3700, the counts 13 and 14, the
+mean distance 5.10) can also be checked by hand against the tables in the preprint.
 
 
 ## Detailed dataset descriptions
