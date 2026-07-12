@@ -75,6 +75,22 @@ biological interpretation of an arithmetic result.
   may review the diff read-only. Finish or commit a task before handing editing
   control to another assistant.
 
+## Guidance for the project owner
+
+- Assume the project owner is a scientific author without a programming or
+  command-line background. Use plain language and prefer GitHub Desktop or
+  another visible interface when it supports the task safely.
+- When giving operational instructions, briefly explain why the step is being
+  taken, what state it changes, where the result is stored, and whether the
+  action is local, synchronized to GitHub, or publicly released.
+- Teach the distinction among editing a file, committing, pushing a branch,
+  merging a pull request, creating a GitHub Release, and publishing a Zenodo
+  version instead of asking the owner to repeat unexplained clicks.
+- State whether an action is reversible and pause before destructive,
+  externally visible, or publication-triggering steps.
+- Introduce new tools and workflow complexity gradually. Recommend a simpler
+  process when it provides the same scientific traceability and safety.
+
 ## Verification commands
 
 Run commands from the repository root with an available Python 3.8+ interpreter.
