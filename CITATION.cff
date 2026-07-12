@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this work, please cite it as below."
-type: dataset
+type: software
 title: "Arithmetic structure of the standard genetic code: preprint, data, and code"
 authors:
   - family-names: "Khafizov"
