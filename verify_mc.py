@@ -179,6 +179,50 @@ for _ in range(M4):
 p4av = le_a / M4
 print(f"  S4a independent MC ({M4:,}, seed 54321): P(<= {obs4a:.4f}) = {p4av:.6f}")
 
+# --- S3 independent check: divisibility count over the parametrization-
+# independent groups (those with no service codon), on the same from-scratch
+# 33-group rebuild. This is the statistic that carried the group-lookup bug in
+# an earlier version of mc_significance.py; here the groups are built directly
+# from the third-position and octet rules (never keyed by a non-unique group
+# name), so this route independently pins the observed count and its tail.
+INDEP_V = [cods for cods in S4_GROUPS_V if not (set(cods) & SERVICE)]
+
+def s3_count_v(assign_pn):
+    k = 0
+    for cods in INDEP_V:                 # these groups contain no service codon
+        P = Nn = 0
+        for c in cods:
+            p, n = assign_pn[codon2aa[c]]; P += p; Nn += n
+        for v in (P, Nn, P + Nn, P - Nn):
+            if v % 37 == 0: k += 1
+    return k
+
+obs3 = s3_count_v(ident)
+print(f"\n  S3 (param-independent groups, independent rebuild): observed = {obs3}"
+      f"  over {len(INDEP_V)} groups x 4 = {len(INDEP_V) * 4}")
+rng3 = random.Random(24680)
+s3_ge_v = 0; s3_sum_v = 0
+for _ in range(M4):
+    perm = pn[:]; rng3.shuffle(perm)
+    v3 = s3_count_v(dict(zip(aas, perm)))
+    s3_sum_v += v3
+    if v3 >= obs3: s3_ge_v += 1
+p3v = s3_ge_v / M4
+print(f"  S3 independent MC ({M4:,}, seed 24680): null mean {s3_sum_v / M4:.4f};"
+      f" P(>= {obs3}) = {p3v:.6f}")
+
+# --- S4b independent check: lattice concentration under Key 1 ONLY ---
+obs4b = latt_dist_key_v(ident, "key1")
+print(f"  S4b (Key 1 only, independent rebuild): observed = {obs4b:.4f}")
+rng4b = random.Random(13579)
+le_b = 0
+for _ in range(M4):
+    perm = pn[:]; rng4b.shuffle(perm)
+    if latt_dist_key_v(dict(zip(aas, perm)), "key1") <= obs4b:
+        le_b += 1
+p4bv = le_b / M4
+print(f"  S4b independent MC ({M4:,}, seed 13579): P(<= {obs4b:.4f}) = {p4bv:.6f}")
+
 # --- compare against mc_significance.csv (the result of record) ---
 csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         "mc_significance.csv")
@@ -197,10 +241,14 @@ else:
     print(f"  {'':16s}{'this (seed 12345)':>20s}{'mc_significance (seed 0)':>28s}")
     print(f"  {'S1 P(both /37)':16s}{p1:>20.6f}{ref['S1']:>28.6f}")
     print(f"  {'S2 P(>= 13)':16s}{p2:>20.6f}{ref['S2']:>28.6f}")
+    if "S3" in ref:
+        print(f"  {f'S3 P(>= {obs3})':16s}{p3v:>20.6f}{ref['S3']:>28.6f}")
     if "S4" in ref:
         print(f"  {'S4 P(<=dist)':16s}{p4v:>20.6f}{ref['S4']:>28.6f}")
     if "S4a" in ref:
         print(f"  {'S4a P(<=,K0)':16s}{p4av:>20.6f}{ref['S4a']:>28.6f}")
+    if "S4b" in ref:
+        print(f"  {'S4b P(<=,K1)':16s}{p4bv:>20.6f}{ref['S4b']:>28.6f}")
     print("  Two independent implementations; the small differences are"
           " Monte-Carlo error")
     print("  (different seeds and code paths). The agreement is the check.")

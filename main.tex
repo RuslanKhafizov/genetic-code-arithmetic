@@ -2942,13 +2942,22 @@ which amino acid, carrying its fixed proton and neutron counts,
 occupies each of the twenty blocks. A trial is a uniformly
 random permutation of the twenty amino acids over the twenty
 blocks; the modulus $37$ is taken a priori from the prior
-literature, and the test statistics are fixed in advance. The
+literature, and the test statistics are fixed in advance.
+Service codons are handled as follows: the
+parametrization-independent statistics (S1--S3) are evaluated over
+the sixty sense codons alone, so the amino acid that a permutation
+places at the $\mathrm{ATG}$ block does not contribute; the two
+lattice-distance rows S4a and S4b combine the same randomized sense
+background with the service-codon contributions held fixed at their
+Key~0 and Key~1 values in every trial, and are therefore fixed-key
+conditional diagnostics rather than full relabellings at the service
+positions. The
 computation is reported in \texttt{mc\_significance.py} and
 summarized in \texttt{mc\_significance.csv}; the figures below
 are from $10^{6}$ trials at a fixed seed. An independent
 re-implementation that shares no code with
 \texttt{mc\_significance.py} ---  using a different construction
-of the codon groups and a different random-number generator ---
+of the codon groups and different fixed random seeds ---
 reproduces these figures (\texttt{verify\_mc.py}).
 
 Four statistics were pre-specified. First, two independent
@@ -2964,8 +2973,17 @@ $13$ divisible by $37$, against a null mean of $1.0$; a random
 code reaches $13$ or more with frequency $4 \times 10^{-5}$.
 Third, restricted to the parametrization-independent groups
 alone, on which $37$ can never be imposed, the standard code has
-$4$ such quantities against a null mean of $1.9$, a value
-reached or exceeded by $0.15$ of random codes. Fourth, a
+$14$ such quantities against a null mean of $2.1$, a value
+reached or exceeded by $0.025$ of random codes; these $14$ are
+highly non-independent---eleven are copies of the single
+divisibility $T(\mathrm{Octet~I}) = 100 \cdot 37$ propagated
+across the octet and its $16$- and $8$-codon sub-groups, and the
+remaining three are the pyrimidine $\Delta$-cascade
+($\Delta(\mathrm{Pyrimidine}) = 8 \cdot 37$ and
+$\Delta(\{\mathrm{C}\}) = \Delta(\{\mathrm{T}\}) = 4 \cdot 37$),
+so the count reduces to essentially two independent facts and its
+$p$-value is carried by the divisibility of $T(\mathrm{Octet~I})$.
+Fourth, a
 statistic measuring not how many quantities fall exactly on the
 lattice of step $37$ but how close the whole set lies to it: for
 each of the $33$ groups under both keys the distance of every
@@ -2991,8 +3009,10 @@ alone --- where no divisibility by $37$ is imposed --- the
 standard code still attains a mean distance of $5.56$ against a
 null mean of $9.02$, reached or bettered by a fraction
 $2.7 \times 10^{-3}$ of random codes; the concentration is thus
-already present before any service-codon parametrization, and
-the Key~1 evaluation sharpens but does not create it.
+already present before the derived Key~1 symmetrization, and
+the Key~1 evaluation sharpens but does not create it. (Key~0 is
+itself an assignment, not the absence of one; the genuinely
+assignment-free level is the sense pool.)
 
 The weight of the test rests on the second and fourth statistics
 rather than on the two anchors of the first, which are
@@ -3003,7 +3023,9 @@ second nor the fourth selects favorable numbers, the one
 counting divisibility across the entire a-priori Rumer/axis
 partition and the other averaging over all $264$ quantities
 without exclusion. The first, second, and fourth statistics place the standard code
-far in the tail of the null; the third does not. These tail
+far in the tail of the null; the third does so only weakly
+($p \approx 0.025$), through a count dominated by the divisibility
+of $T(\mathrm{Octet~I})$. These tail
 probabilities are not independent of one another, and in
 particular the second and the fourth are two views of the same
 concentration --- S4 assigns distance zero to precisely the
@@ -3182,7 +3204,8 @@ Section~\ref{sec:discussion-montecarlo} under one explicit null
 degeneracy architecture and the amino-acid nucleon counts and
 randomizes only the assignment of amino acids to codon families.
 Under that null the full Rumer/axis structure is highly atypical,
-while the parametrization-independent subgroups alone are not.
+while the parametrization-independent subgroups alone are only
+weakly so ($p \approx 0.025$, and dominated by the Octet~I total).
 The choice of null is not unique: alternative generative models,
 for example randomizing the block sizes themselves or the
 nucleon counts, would probe different aspects of the regularity
@@ -3357,7 +3380,8 @@ assignment of amino acids to codon families, the full
 Rumer/axis structure yields empirical $p$-values on
 the order of $10^{-4}$ to $10^{-3}$, while the
 parametrization-independent
-subgroups alone are not atypical. This is improbability
+subgroups alone are only weakly atypical ($p \approx 0.025$,
+dominated by the divisibility of $T(\mathrm{Octet~I})$). This is improbability
 under one combinatorial null, distinct from the
 specificity among the $27$ natural codes, and it speaks
 to no biological mechanism; alternative null models are
