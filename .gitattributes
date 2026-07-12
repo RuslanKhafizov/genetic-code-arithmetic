@@ -1,0 +1,26 @@
+# Store repository text consistently as LF across Windows and Linux tools.
+* text=auto
+
+# Scientific sources, data, metadata, and documentation
+*.py text eol=lf
+*.csv text eol=lf
+*.tex text eol=lf
+*.bib text eol=lf
+*.md text eol=lf
+*.cff text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+LICENSE* text eol=lf
+
+# Binary release and figure assets must never be line-ending converted.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary
