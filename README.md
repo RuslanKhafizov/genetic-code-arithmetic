@@ -47,6 +47,11 @@ It provides:
    `CITATION.cff`) supporting citation and reuse of the
    repository.
 
+8. **Russian-language companion materials** under
+   `russian/`: the Russian manuscript source (`main_ru.tex`),
+   its compiled PDF (`main_ru.pdf`), and a
+   Russian-language repository guide (`README_ru.md`).
+
 ## Citation
 
 A machine-readable citation record is provided in
@@ -68,6 +73,12 @@ and the interactive visualizer is hosted at
 - `main.tex` — LaTeX source of the preprint.
 - `references.bib` — BibTeX bibliography.
 - `main.pdf` — compiled preprint.
+- `russian/` — Russian-language companion materials:
+  - `russian/main_ru.tex` — source of the Russian manuscript;
+  - `russian/main_ru.pdf` — compiled Russian version of the
+    manuscript;
+  - `russian/README_ru.md` — Russian-language repository
+    guide.
 - `figures/` — figures embedded in the preprint:
   - `codon_table_key0.png` — the standard genetic code
     table with nucleon parameters of the encoded amino
@@ -384,6 +395,14 @@ though seeded for reproducibility. See its dedicated section below.
 ### Metadata and auxiliary files
 
 - `README.md` — this file.
+- `russian/README_ru.md` — Russian-language repository guide.
+- `.gitattributes` — rules that store text files with LF line
+  endings and protect binary files from line-ending
+  conversion; it does not affect the scientific data or
+  computations.
+- `.gitignore` — local caches, LaTeX build artifacts, and
+  editor- and operating-system files that Git should not add
+  to the repository.
 - `LICENSE` — Creative Commons Attribution 4.0 International
   (CC BY 4.0), copyright © 2025–2026 Ruslan Khafizov. Covers the
   preprint, figures, datasets, and documentation. Attribution is
