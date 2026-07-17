@@ -241,9 +241,9 @@ def odd_core(value):
     mechanically produces, for any quantity V, the multiples 2V and 4V as
     well. A prime that divides V then scores up to three times over the same
     underlying fact. Reducing each divisible value to its odd core collapses
-    those induced duplicates, so the number of DISTINCT odd cores measures how
-    many genuinely independent quantities a prime divides, free of the
-    doubling the hierarchy imposes."""
+    those power-of-two duplicates. The resulting count records distinct odd
+    cores after this structural deduplication; it does not establish
+    statistical independence among the remaining quantities."""
     while value % 2 == 0:
         value //= 2
     return value
