@@ -1,273 +1,323 @@
 #!/usr/bin/env python3
+"""Simple Monte Carlo test for the genetic-code arithmetic statistics.
+
+One trial uniformly relabels the 20 amino-acid blocks with the 20 real
+amino-acid (P, N) profiles.  The code architecture stays fixed.
+
+S1--S3 are the original sense-pool count statistics.  S4sense measures the
+mean distance to the 37-lattice without assigning service codons.  S4a counts
+the relabelled product at ATG and zero at stops.  S4b rederives the minimal
+Key 1 for every random code by the same balance and divisibility rules.
 """
-mc_significance.py -- Simple, pre-specified Monte Carlo significance test.
 
-NULL MODEL (one model, stated once): the "random genetic code" of the
-Freeland-Hurst type (Freeland & Hurst 1998), restricted to relabelling. The
-architecture of the standard code is held fixed -- the 64 codons, which codons
-are synonyms (the 20 amino-acid blocks with their sizes), the three stop
-codons, the Rumer Octet I/II partition and the third-position chemical axes --
-and the ONLY thing randomized is which amino acid (carrying its fixed
-proton/neutron counts P,N) occupies each of the 20 blocks. A trial is thus a
-uniformly random permutation of the 20 amino acids over the 20 blocks. Nothing
-is "constructed": the amino-acid P,N values are the real ones, 37 is taken a
-priori from the prior literature, and the test statistics are fixed in advance.
+import argparse
+import csv
+import math
+import random
+from collections import defaultdict
+from pathlib import Path
 
-SENSE POOL: the 60 codons excluding the three stops and the initiator ATG,
-matching the preprint's definition (so N(All sense)=3589=97*37 for the
-standard code).
 
-SERVICE CODONS: S1-S3 use the 60-codon sense pool, so the amino acid a
-permutation places at the ATG block does not contribute. The lattice rows S4a
-and S4b hold the service-codon contributions fixed at the Key 0 and Key 1
-values in every trial -- they are fixed-key conditional diagnostics, not full
-relabellings at the service positions.
+MODULUS = 37
+STOPS = {"TAA", "TAG", "TGA"}
+SERVICE = STOPS | {"ATG"}
 
-PRE-SPECIFIED STATISTICS (decided before running; all reported, none selected
-post hoc):
-  S1  two independent 37-anchors: N(All sense) and T(Octet I) BOTH divisible
-      by 37.
-  S2  37-saturation of the headline partition: among the four nucleon
-      quantities (T,P,N,Delta) of the nine headline sense-pool groups
-      {All, Keto, Amino, Strong, Weak, Purine, Pyrimidine, Octet I, Octet II},
-      the number divisible by 37. p = P(random code reaches >= the standard
-      code's count).
-  S3  same count, but over the parametrization-independent groups only (those
-      containing no service codon, on which 37 can never be imposed) -- the
-      most conservative, fully non-circular variant.
 
-REPRODUCIBILITY AND DEPENDENCIES: standard library only (no third-party
-packages). The test is randomized rather than exact, but seeded (default seed
-0, 1,000,000 trials), so the figures it reports are reproducible run to run. A
-full run of 1,000,000 trials takes about two minutes in pure Python (the S4
-lattice statistic dominates the runtime). It writes a summary table
-mc_significance.csv. An independent
-re-implementation, verify_mc.py, reproduces these figures by a different route.
-"""
-import csv, os, random, statistics, collections
+def read_csv(path):
+    with path.open(newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def read_csv(filename):
-    with open(os.path.join(SCRIPT_DIR, filename), newline="",
-              encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+def dot(row, values):
+    return sum(weight * values[index] for index, weight in row)
 
-# --- data ---
-aa_rows = read_csv("amino_acids_nucleons.csv")
-codon_rows = read_csv("genetic_code_codons.csv")
-group_rows = read_csv("codon_groups.csv")
 
-PN = {r["Amino_Acid"]: (int(r["Protons"]), int(r["Neutrons"])) for r in aa_rows}
-aas = sorted(PN)
-idx = {a: i for i, a in enumerate(aas)}
-P = [PN[a][0] for a in aas]
-N = [PN[a][1] for a in aas]
+def distance_to_37(value):
+    residue = value % MODULUS
+    return min(residue, MODULUS - residue)
 
-codon2aa = {}
-for r in codon_rows:
-    for c in r["Codons"].split(";"):
-        codon2aa[c.strip()] = r["Product"]
 
-SERVICE = {"TAA", "TAG", "TGA", "ATG"}
-cluster_of = {c: idx[a] for c, a in codon2aa.items()
-              if a in idx and c not in SERVICE}     # sense-pool-60 codons only
+def wilson_interval(hits, trials):
+    """95% interval for the Monte Carlo tail probability."""
+    z = 1.959963984540054
+    rate = hits / trials
+    denominator = 1.0 + z * z / trials
+    centre = (rate + z * z / (2.0 * trials)) / denominator
+    half_width = (
+        z
+        * math.sqrt(rate * (1.0 - rate) / trials + z * z / (4.0 * trials * trials))
+        / denominator
+    )
+    lower = 0.0 if hits == 0 else max(0.0, centre - half_width)
+    upper = 1.0 if hits == trials else min(1.0, centre + half_width)
+    return lower, upper
 
-groups = {g["Group_Name"]: [c.strip() for c in g["Codon_List"].split(";")]
-          for g in group_rows}
 
-def wrow_nz(codons):
-    """Sparse weight row: [(block_index, count), ...] over sense-pool codons."""
-    v = [0] * 20
-    for c in codons:
-        if c in cluster_of:
-            v[cluster_of[c]] += 1
-    return [(i, w) for i, w in enumerate(v) if w]
+def parse_args():
+    script_dir = Path(__file__).resolve().parent
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data-dir", type=Path, default=script_dir)
+    parser.add_argument("--output", type=Path, default=script_dir / "mc_significance.csv")
+    parser.add_argument("--trials", type=int, default=1_000_000)
+    parser.add_argument("--seed", type=int, default=0)
+    return parser.parse_args()
 
-ALL  = wrow_nz(groups["ALL: {C, G, A, T}"])
-OCT1 = wrow_nz(groups["Octet I: {C, G, A, T}"])
 
-HEAD = ["ALL: {C, G, A, T}", "Keto: {G, T}", "Amino: {A, C}", "Strong: {C, G}",
-        "Weak: {A, T}", "Purine: {A, G}", "Pyrimidine: {C, T}",
-        "Octet I: {C, G, A, T}", "Octet II: {C, G, A, T}"]
-W_head = [wrow_nz(groups[g]) for g in HEAD]
+def main():
+    args = parse_args()
+    if args.trials <= 0:
+        raise ValueError("--trials must be positive")
 
-# Parametrization-independent groups: those with no service codon. Build each
-# weight row from the row's OWN Codon_List, iterating group_rows directly --
-# NOT via the `groups` dict, whose keys (Group_Name) are non-unique across code
-# sections ({C}, {G}, {T}, {A} and the two-letter axis names each recur at the
-# All / Octet I / Octet II levels). A name lookup would silently collapse those
-# to the last (Octet II) occurrence and compute S3 over the wrong groups.
-W_indep = [wrow_nz([c.strip() for c in g["Codon_List"].split(";")])
-           for g in group_rows
-           if not (set(c.strip() for c in g["Codon_List"].split(";")) & SERVICE)]
+    amino_rows = read_csv(args.data_dir / "amino_acids_nucleons.csv")
+    codon_rows = read_csv(args.data_dir / "genetic_code_codons.csv")
+    group_rows = read_csv(args.data_dir / "codon_groups.csv")
 
-# --- S4 setup: lattice concentration over all 33 groups under BOTH keys ---
-# Each group contributes its sense-codon block counts (as a sparse weight row)
-# plus a fixed service-codon contribution that depends on the key. Service
-# codons (3 stops + ATG) carry (0,0) under Key 0's stops / (80,69) for ATG, and
-# (37,37) per stop / (1,0) for ATG under Key 1.
-SERVICE_PN = {
-    "key0": {"TAA": (0, 0), "TAG": (0, 0), "TGA": (0, 0), "ATG": (80, 69)},
-    "key1": {"TAA": (37, 37), "TAG": (37, 37), "TGA": (37, 37), "ATG": (1, 0)},
-}
-# Iterate group_rows directly: groups with the same name but different
-# Code_Section (e.g. {C} over the full code vs within Octet I vs Octet II) have
-# DIFFERENT codon lists, so keying by name alone would silently drop them. Each
-# of the 33 rows is taken as a distinct group.
-S4_GROUPS = []
-for grow in group_rows:
-    codons_g = [c.strip() for c in grow["Codon_List"].split(";")]
-    nz = wrow_nz(codons_g)
-    svc = {}
-    for key in ("key0", "key1"):
-        sp = sn = 0
-        for c in codons_g:
-            if c in SERVICE:
-                cp, cn = SERVICE_PN[key][c]
-                sp += cp; sn += cn
-        svc[key] = (sp, sn)
-    S4_GROUPS.append((nz, svc))
+    profiles = {
+        row["Amino_Acid"]: (int(row["Protons"]), int(row["Neutrons"]))
+        for row in amino_rows
+    }
+    amino_acids = sorted(profiles)
+    if len(amino_acids) != 20:
+        raise ValueError(f"Expected 20 amino acids, found {len(amino_acids)}")
 
-def lattice_mean_distance(Pv, Nv):
-    """Mean distance to the nearest multiple of 37 over the nonzero T,P,N,Delta
-    of all 33 groups under both keys (service contributions fixed per key)."""
-    dsum = 0; dcount = 0
-    for nz, svc in S4_GROUPS:
-        base_p = dot(nz, Pv); base_n = dot(nz, Nv)
-        for key in ("key0", "key1"):
-            sp, sn = svc[key]
-            p = base_p + sp; n = base_n + sn
-            for v in (p, n, p + n, p - n):
-                if v != 0:
-                    r = v % 37
-                    dsum += r if r <= 37 - r else 37 - r
-                    dcount += 1
-    return dsum / dcount
+    block_index = {amino_acid: index for index, amino_acid in enumerate(amino_acids)}
+    proton_values = [profiles[amino_acid][0] for amino_acid in amino_acids]
+    neutron_values = [profiles[amino_acid][1] for amino_acid in amino_acids]
+    met_block = block_index["Methionine"]
 
-def lattice_mean_distance_key(Pv, Nv, which):
-    """S4 restricted to a single key ('key0' or 'key1'): mean distance to the
-    nearest multiple of 37 over the nonzero T,P,N,Delta of the 33 groups under
-    that key alone. S4a = key0 (no divisibility by 37 imposed), S4b = key1."""
-    dsum = 0; dcount = 0
-    for nz, svc in S4_GROUPS:
-        base_p = dot(nz, Pv); base_n = dot(nz, Nv)
-        sp, sn = svc[which]
-        p = base_p + sp; n = base_n + sn
-        for v in (p, n, p + n, p - n):
-            if v != 0:
-                r = v % 37
-                dsum += r if r <= 37 - r else 37 - r
-                dcount += 1
-    return dsum / dcount
+    codon_to_block = {}
+    for row in codon_rows:
+        for codon in row["Codons"].split(";"):
+            codon_to_block[codon.strip()] = row["Product"]
+    if len(codon_to_block) != 64:
+        raise ValueError(f"Expected 64 codons, found {len(codon_to_block)}")
 
-def dot(nz, vec):
-    s = 0
-    for i, w in nz:
-        s += w * vec[i]
-    return s
+    def codons_of(group_row):
+        return [codon.strip() for codon in group_row["Codon_List"].split(";")]
 
-def div37_count(rows, Pv, Nv):
-    k = 0
-    for nz in rows:
-        p = dot(nz, Pv); n = dot(nz, Nv)
-        if p % 37 == 0: k += 1
-        if n % 37 == 0: k += 1
-        if (p + n) % 37 == 0: k += 1
-        if (p - n) % 37 == 0: k += 1
-    return k
+    def weight_row(codons):
+        counts = [0] * len(amino_acids)
+        for codon in codons:
+            if codon in SERVICE:
+                continue
+            counts[block_index[codon_to_block[codon]]] += 1
+        return [(index, count) for index, count in enumerate(counts) if count]
 
-# --- observed (true assignment, perm = identity) ---
-obs_Nall = dot(ALL, N); obs_TocI = dot(OCT1, P) + dot(OCT1, N)
-obs_S2 = div37_count(W_head, P, N)
-obs_S3 = div37_count(W_indep, P, N)
-obs_S4 = lattice_mean_distance(P, N)
-obs_S4a = lattice_mean_distance_key(P, N, "key0")
-obs_S4b = lattice_mean_distance_key(P, N, "key1")
-print("=== Standard code (observed) ===")
-print(f"N(All sense) = {obs_Nall}  = {obs_Nall//37}*37 + {obs_Nall%37}")
-print(f"T(Octet I)   = {obs_TocI}  = {obs_TocI//37}*37 + {obs_TocI%37}")
-print(f"S1 both anchors divisible by 37: {obs_Nall%37==0 and obs_TocI%37==0}")
-print(f"S2 headline /37 count    = {obs_S2}  of {len(W_head)*4}")
-print(f"S3 param-indep /37 count = {obs_S3}  of {len(W_indep)*4}")
-print(f"S4 mean distance to 37-lattice (33 groups x 2 keys) = {obs_S4:.4f}")
-print(f"S4a mean distance, Key 0 only = {obs_S4a:.4f}")
-print(f"S4b mean distance, Key 1 only = {obs_S4b:.4f}")
+    if len(group_rows) != 33:
+        raise ValueError(f"Expected 33 codon groups, found {len(group_rows)}")
 
-# --- Monte Carlo (standard library random) ---
-M = 1_000_000
-SEED = 0
-rng = random.Random(SEED)
-order = list(range(20))
-s1 = 0
-s2_sum = 0; s2_ge = 0; s2_hist = collections.Counter()
-s3_sum = 0; s3_ge = 0
-s4_sum = 0.0; s4_le = 0
-s4a_sum = 0.0; s4a_le = 0
-s4b_sum = 0.0; s4b_le = 0
-for _ in range(M):
-    perm = order[:]; rng.shuffle(perm)
-    Pp = [P[i] for i in perm]; Np = [N[i] for i in perm]
-    if dot(ALL, Np) % 37 == 0 and (dot(OCT1, Pp) + dot(OCT1, Np)) % 37 == 0:
-        s1 += 1
-    c2 = div37_count(W_head, Pp, Np); s2_sum += c2; s2_hist[c2] += 1
-    if c2 >= obs_S2: s2_ge += 1
-    c3 = div37_count(W_indep, Pp, Np); s3_sum += c3
-    if c3 >= obs_S3: s3_ge += 1
-    d4 = lattice_mean_distance(Pp, Np); s4_sum += d4
-    if d4 <= obs_S4: s4_le += 1
-    d4a = lattice_mean_distance_key(Pp, Np, "key0"); s4a_sum += d4a
-    if d4a <= obs_S4a: s4a_le += 1
-    d4b = lattice_mean_distance_key(Pp, Np, "key1"); s4b_sum += d4b
-    if d4b <= obs_S4b: s4b_le += 1
+    groups = []
+    rows_by_name = defaultdict(list)
+    for group_row in group_rows:
+        codons = codons_of(group_row)
+        groups.append(
+            (
+                weight_row(codons),
+                int("ATG" in codons),
+                sum(codon in STOPS for codon in codons),
+            )
+        )
+        rows_by_name[group_row["Group_Name"]].append(group_row)
 
-p1 = s1 / M; p2 = s2_ge / M; p3 = s3_ge / M; p4 = s4_le / M
-p4a = s4a_le / M; p4b = s4b_le / M
-print(f"\n=== Monte Carlo, {M:,} random codes (stdlib random, seed {SEED}) ===")
-print(f"S1  P(both anchors /37) = {p1:.6f}   "
-      f"[independent reference (1/37)^2 = {1/37**2:.6f}]")
-print(f"S2  observed {obs_S2}; null mean {s2_sum/M:.4f}; P(>= {obs_S2}) = {p2:.6f}")
-print(f"S3  observed {obs_S3}; null mean {s3_sum/M:.4f}; P(>= {obs_S3}) = {p3:.6f}")
-print(f"S4  observed {obs_S4:.4f}; null mean {s4_sum/M:.4f}; "
-      f"P(<= {obs_S4:.4f}) = {p4:.6f}")
-print(f"S4a observed {obs_S4a:.4f}; null mean {s4a_sum/M:.4f}; "
-      f"P(<= {obs_S4a:.4f}) = {p4a:.6f}  [Key 0 only]")
-print(f"S4b observed {obs_S4b:.4f}; null mean {s4b_sum/M:.4f}; "
-      f"P(<= {obs_S4b:.4f}) = {p4b:.6f}  [Key 1 only]")
+    def unique_weight(name):
+        matches = rows_by_name[name]
+        if len(matches) != 1:
+            raise ValueError(f"Expected one group named {name!r}, found {len(matches)}")
+        return weight_row(codons_of(matches[0]))
 
-mx = max(s2_hist)
-print("\nS2 null distribution (count : frequency):")
-for k in range(mx + 1):
-    print(f"  {k:>2} : {s2_hist.get(k, 0)}")
+    headline_names = [
+        "ALL: {C, G, A, T}",
+        "Keto: {G, T}",
+        "Amino: {A, C}",
+        "Strong: {C, G}",
+        "Weak: {A, T}",
+        "Purine: {A, G}",
+        "Pyrimidine: {C, T}",
+        "Octet I: {C, G, A, T}",
+        "Octet II: {C, G, A, T}",
+    ]
+    headline_rows = [unique_weight(name) for name in headline_names]
+    all_sense = headline_rows[0]
+    keto_sense = headline_rows[1]
+    amino_sense = headline_rows[2]
+    octet_i = headline_rows[7]
 
-# --- summary table ---
-with open(os.path.join(SCRIPT_DIR, "mc_significance.csv"),
-          "w", encoding="utf-8", newline="") as f:
-    w = csv.writer(f, quoting=csv.QUOTE_NONNUMERIC, lineterminator="\n")
-    w.writerow(["Statistic", "Description", "Observed", "Null_Mean",
-                "P_Value", "N_Trials", "Seed"])
-    w.writerow(["S1", "N(All sense) and T(Octet I) both divisible by 37",
-                "both divisible", round(p1, 6), round(p1, 6), M, SEED])
-    w.writerow(["S2",
-                "count of T/P/N/Delta divisible by 37 over 9 headline "
-                "sense-pool groups (of 36)",
-                obs_S2, round(s2_sum / M, 4), round(p2, 6), M, SEED])
-    w.writerow(["S3",
-                "count of T/P/N/Delta divisible by 37 over "
-                f"parametrization-independent groups (of {len(W_indep)*4})",
-                obs_S3, round(s3_sum / M, 4), round(p3, 6), M, SEED])
-    w.writerow(["S4",
-                "mean distance to nearest multiple of 37 over T/P/N/Delta "
-                "of all 33 groups under both keys (lower = more concentrated)",
-                round(obs_S4, 4), round(s4_sum / M, 4), round(p4, 6), M, SEED])
-    w.writerow(["S4a",
-                "S4 restricted to Key 0 only (no divisibility by 37 imposed); "
-                "shows the concentration is present before the derived Key 1 "
-                "symmetrization (Key 0 is itself an assignment)",
-                round(obs_S4a, 4), round(s4a_sum / M, 4), round(p4a, 6), M, SEED])
-    w.writerow(["S4b",
-                "S4 restricted to Key 1 only (the key derived under the "
-                "balance and divisibility conditions); sharpens but does not "
-                "create the concentration",
-                round(obs_S4b, 4), round(s4b_sum / M, 4), round(p4b, 6), M, SEED])
-print("\nWrote mc_significance.csv")
+    independent_rows = []
+    for group_row in group_rows:
+        codons = codons_of(group_row)
+        if not (set(codons) & SERVICE):
+            independent_rows.append(weight_row(codons))
+    if len(independent_rows) != 17:
+        raise ValueError(
+            f"Expected 17 service-free groups for S3, found {len(independent_rows)}"
+        )
+
+    def divisibility_count(rows, protons, neutrons):
+        count = 0
+        for row in rows:
+            p_total = dot(row, protons)
+            n_total = dot(row, neutrons)
+            for value in (p_total, n_total, p_total + n_total, p_total - n_total):
+                count += value % MODULUS == 0
+        return count
+
+    def key_pair(total, difference):
+        """Return the minimal nonnegative (start, stop) pair for Key 1."""
+        start = ((-total - 3 * difference) * pow(4, -1, MODULUS)) % MODULUS
+        while start + difference < 0:
+            start += MODULUS
+        return start, start + difference
+
+    def lattice_scores(protons, neutrons):
+        p_difference = dot(keto_sense, protons) - dot(amino_sense, protons)
+        n_difference = dot(keto_sense, neutrons) - dot(amino_sense, neutrons)
+        p_start, p_stop = key_pair(dot(all_sense, protons), p_difference)
+        n_start, n_stop = key_pair(dot(all_sense, neutrons), n_difference)
+
+        sense_distance = 0
+        key0_distance = 0
+        key1_distance = 0
+        for row, has_atg, stop_count in groups:
+            base_p = dot(row, protons)
+            base_n = dot(row, neutrons)
+
+            for value in (base_p, base_n, base_p + base_n, base_p - base_n):
+                sense_distance += distance_to_37(value)
+
+            key0_p = base_p + has_atg * protons[met_block]
+            key0_n = base_n + has_atg * neutrons[met_block]
+            for value in (key0_p, key0_n, key0_p + key0_n, key0_p - key0_n):
+                key0_distance += distance_to_37(value)
+
+            key1_p = base_p + has_atg * p_start + stop_count * p_stop
+            key1_n = base_n + has_atg * n_start + stop_count * n_stop
+            for value in (key1_p, key1_n, key1_p + key1_n, key1_p - key1_n):
+                key1_distance += distance_to_37(value)
+
+        denominator = len(groups) * 4
+        return (
+            sense_distance / denominator,
+            key0_distance / denominator,
+            key1_distance / denominator,
+            (p_start, p_stop, n_start, n_stop),
+        )
+
+    observed_s4sense, observed_s4a, observed_s4b, observed_key = lattice_scores(
+        proton_values, neutron_values
+    )
+    observed = {
+        "S1": int(
+            dot(all_sense, neutron_values) % MODULUS == 0
+            and (dot(octet_i, proton_values) + dot(octet_i, neutron_values))
+            % MODULUS
+            == 0
+        ),
+        "S2": divisibility_count(headline_rows, proton_values, neutron_values),
+        "S3": divisibility_count(independent_rows, proton_values, neutron_values),
+        "S4sense": observed_s4sense,
+        "S4a": observed_s4a,
+        "S4b": observed_s4b,
+    }
+
+    expected_key = (1, 37, 0, 37)
+    if observed_key != expected_key:
+        raise AssertionError(f"Expected standard Key 1 {expected_key}, found {observed_key}")
+    if observed["S1"] != 1 or observed["S2"] != 13 or observed["S3"] != 14:
+        raise AssertionError(f"Unexpected observed count statistics: {observed}")
+
+    descriptions = {
+        "S1": "both 37 anchors are divisible",
+        "S2": "divisible count over 9 headline sense-pool groups (higher is stronger)",
+        "S3": "divisible count over 17 service-free groups (higher is stronger)",
+        "S4sense": "mean distance over 33 sense-pool groups (lower is stronger)",
+        "S4a": "mean distance under Key 0 with the relabelled ATG product (lower is stronger)",
+        "S4b": "mean distance after rederiving Key 1 for each code (lower is stronger)",
+    }
+    tail_direction = {
+        "S1": "event",
+        "S2": ">=",
+        "S3": ">=",
+        "S4sense": "<=",
+        "S4a": "<=",
+        "S4b": "<=",
+    }
+
+    tail_hits = {name: 0 for name in observed}
+    null_sums = {name: 0.0 for name in observed}
+    rng = random.Random(args.seed)
+    identity = list(range(len(amino_acids)))
+    progress_step = max(1, args.trials // 10)
+
+    for trial in range(1, args.trials + 1):
+        permutation = identity[:]
+        rng.shuffle(permutation)
+        protons = [proton_values[index] for index in permutation]
+        neutrons = [neutron_values[index] for index in permutation]
+
+        values = {}
+        values["S1"] = int(
+            dot(all_sense, neutrons) % MODULUS == 0
+            and (dot(octet_i, protons) + dot(octet_i, neutrons)) % MODULUS == 0
+        )
+        values["S2"] = divisibility_count(headline_rows, protons, neutrons)
+        values["S3"] = divisibility_count(independent_rows, protons, neutrons)
+        values["S4sense"], values["S4a"], values["S4b"], _ = lattice_scores(
+            protons, neutrons
+        )
+
+        for name, value in values.items():
+            null_sums[name] += value
+        tail_hits["S1"] += values["S1"] == 1
+        tail_hits["S2"] += values["S2"] >= observed["S2"]
+        tail_hits["S3"] += values["S3"] >= observed["S3"]
+        tail_hits["S4sense"] += values["S4sense"] <= observed["S4sense"]
+        tail_hits["S4a"] += values["S4a"] <= observed["S4a"]
+        tail_hits["S4b"] += values["S4b"] <= observed["S4b"]
+
+        if trial % progress_step == 0 or trial == args.trials:
+            print(f"Completed {trial:,} / {args.trials:,} trials", flush=True)
+
+    rows = []
+    for name in observed:
+        hits = tail_hits[name]
+        p_value = (hits + 1) / (args.trials + 1)
+        ci_low, ci_high = wilson_interval(hits, args.trials)
+        rows.append(
+            {
+                "Statistic": name,
+                "Description": descriptions[name],
+                "Tail": tail_direction[name],
+                "Observed": observed[name],
+                "Null_Mean": null_sums[name] / args.trials,
+                "Tail_Count": hits,
+                "P_MC": p_value,
+                "CI_Low": ci_low,
+                "CI_High": ci_high,
+                "N_Trials": args.trials,
+                "Seed": args.seed,
+            }
+        )
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = list(rows[0])
+    with args.output.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print(f"Standard Key 1 (Pstart, Pstop, Nstart, Nstop): {observed_key}")
+    print("Statistic  Observed  Null mean  Tail count  P_MC       95% MC interval")
+    for row in rows:
+        print(
+            f"{row['Statistic']:9s} "
+            f"{float(row['Observed']):8.4f}  "
+            f"{row['Null_Mean']:9.4f}  "
+            f"{row['Tail_Count']:10d}  "
+            f"{row['P_MC']:.6g}  "
+            f"[{row['CI_Low']:.6g}, {row['CI_High']:.6g}]"
+        )
+    print(f"Wrote {args.output}")
+
+
+if __name__ == "__main__":
+    main()

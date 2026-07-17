@@ -810,11 +810,14 @@ Section~\ref{sec:results} can be traced directly to a specific
 cell of one of these datasets. Within the core pipeline, no randomization is used at any stage of
 the computation, and all arithmetic underlying the reported
 regularities is exact, carried out on integer-valued tables and, for
-ratios, on exact reduced fractions (statistical significance is
-assessed separately by a fixed-seed Monte Carlo script). The only floating-point values anywhere in the
-datasets are the rounded decimal approximations printed alongside
-these exact fractions in the \texttt{*\_ratios.csv} files, for
-readability; no result depends on them.
+ratios, on exact reduced fractions. Statistical significance is
+assessed separately by a fixed-seed Monte Carlo script; its tail
+probability estimates and uncertainty intervals are necessarily
+floating-point quantities. Within the deterministic core pipeline,
+the only floating-point values are the rounded decimal approximations
+printed alongside the exact fractions in the
+\texttt{*\_ratios.csv} files, for readability; no result depends on
+them.
 
 \paragraph{Supplementary visualization tool.}
 An interactive HTML visualization of the genetic code table
@@ -850,7 +853,7 @@ used in the same section to show that $37$ carries the largest
 excess apart from $2$ and $5$. The excess at $2$ reflects proton
 parity, and that at $5$ is a trace of the round-number regularity
 of Criterion~2 (divisibility by $10$, $100$, and $1000$). The
-excess at $37$ rests on more than one independent odd core,
+multiple distinct odd cores occur among the multiples of $37$,
 whereas the smaller excesses at $73 = 2 \cdot 37 - 1$ and at $61$
 each reduce to a single odd core and are satellites of an
 individual quantity. This separation persists even in the value
@@ -2841,11 +2844,10 @@ the forty-seven under Key~1 --- in each case several times the
 naive rate $1/37$. This excess ratio is descriptive, not a
 $p$-value: the scan is deterministic and has no null model, and
 the nested group hierarchy makes the quantities non-independent,
-so the ratio alone cannot be read as a significance. The load of
-the argument rests instead on a structural property the ratio
-does not capture, developed below: that the excess for $37$ rests
-on more than one independent odd core, whereas the comparable
-factors $73$ and $61$ each reduce to a single core. Because the
+so the ratio alone cannot be read as a significance. An additional
+descriptive distinction not captured by that ratio is that the
+multiples of $37$ contain several distinct odd cores, whereas the
+comparable factors $73$ and $61$ each reduce to a single core. Because the
 effect is already present in the value sets where $37$ is not
 imposed, it is in any case not an artifact of the Key~1
 derivation.
@@ -2939,124 +2941,137 @@ the code is held fixed (the $64$ codons, the synonymous blocks
 with their sizes, the three stop codons, the Rumer partition,
 and the third-position axes), and the only thing randomized is
 which amino acid, carrying its fixed proton and neutron counts,
-occupies each of the twenty blocks. A trial is a uniformly
-random permutation of the twenty amino acids over the twenty
-blocks; the modulus $37$ is taken a priori from the prior
-literature, and the test statistics are fixed in advance.
-Service codons are handled as follows: the
-parametrization-independent statistics (S1--S3) are evaluated over
-the sixty sense codons alone, so the amino acid that a permutation
-places at the $\mathrm{ATG}$ block does not contribute; the two
-lattice-distance rows S4a and S4b combine the same randomized sense
-background with the service-codon contributions held fixed at their
-Key~0 and Key~1 values in every trial, and are therefore fixed-key
-conditional diagnostics rather than full relabellings at the service
-positions. The
-computation is reported in \texttt{mc\_significance.py} and
-summarized in \texttt{mc\_significance.csv}; the figures below
-are from $10^{6}$ trials at a fixed seed. An independent
-re-implementation that shares no code with
-\texttt{mc\_significance.py} ---  using a different construction
-of the codon groups and different fixed random seeds ---
-reproduces these figures (\texttt{verify\_mc.py}).
+occupies each of the twenty blocks. A trial is a uniformly random
+permutation of the twenty real paired proton and neutron profiles
+over the twenty synonymous blocks. The modulus $37$ is taken a
+priori from the prior literature; the statistical summaries were
+formally defined before the final Monte Carlo run. Because the
+analysis was not preregistered before inspection of the observed
+structure, the results are interpreted as exploratory.
 
-Four statistics were pre-specified. First, two independent
-$37$-anchors --- the whole-pool neutron count
-$N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$ and the Octet~I
-total $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$ --- are both
-divisible by $37$ in a fraction $0.0008$ of random codes,
-against an independent reference $(1/37)^2 = 0.00073$. Second,
-among the four nucleon quantities of the nine groups of the
-Rumer/axis partition --- the full pool, the six chemical-axis
-half-pools, and the two octets --- the standard code has
-$13$ divisible by $37$, against a null mean of $1.0$; a random
-code reaches $13$ or more with frequency $4 \times 10^{-5}$.
-Third, restricted to the parametrization-independent groups
-alone, on which $37$ can never be imposed, the standard code has
-$14$ such quantities against a null mean of $2.1$, a value
-reached or exceeded by $0.025$ of random codes; these $14$ are
-highly non-independent---eleven are copies of the single
-divisibility $T(\mathrm{Octet~I}) = 100 \cdot 37$ propagated
-across the octet and its $16$- and $8$-codon sub-groups, and the
-remaining three are the pyrimidine $\Delta$-cascade
+S1--S3 and S4sense are evaluated over the sixty-codon sense pool
+without assigning any values to service codons. S4sense averages
+the distances to the nearest multiple of $37$ for the four
+quantities $T$, $P$, $N$, and $\Delta$ over all $33$ groups, for
+$132$ distances in total. Under S4a the stop codons contribute zero,
+while the contribution at $\mathrm{ATG}$ in each random code is the
+profile of the amino acid assigned by the permutation to the
+$\mathrm{ATG}$ block. Under S4b each random code receives its own
+minimal nonnegative Key~1, re-derived by the same Keto/Amino balance
+and global divisibility conditions used for the standard code.
+
+For every statistic the Monte Carlo tail probability is calculated
+as $p_{\mathrm{MC}}=(b+1)/(M+1)$, where $b$ is the number of random
+codes at least as extreme as the standard code and $M=10^{6}$. A
+$95\%$ Monte Carlo uncertainty interval is reported with each
+estimate. The computation is reported in
+\texttt{mc\_significance.py} and summarized in
+\texttt{mc\_significance.csv}. An independent implementation, using
+a different construction of the codon groups, a direct search for
+Key~1, and a different random seed, reproduces the observed
+statistics and tail probabilities within the expected Monte Carlo
+error (\texttt{verify\_mc.py}).
+
+Six statistical summaries are considered. S1 tests the joint
+divisibility of two anchors:
+$N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$ and
+$T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$. Both events occur in
+a fraction $0.000800$ of random codes (Monte Carlo $95\%$ interval
+$0.000746$--$0.000856$). This is the directly estimated joint
+probability; no assumption that the two events are independent is
+used in its calculation.
+
+S2 counts divisibility by $37$ among the four quantities $T$, $P$,
+$N$, and $\Delta$ for nine sense-pool groups: the full pool, the
+six chemical-axis half-pools, and the two octets. The standard code
+has $13$ divisible quantities among $36$ nominal entries, against a
+null mean of $1.0299$. A value of $13$ or greater occurred in $39$
+of $10^{6}$ trials, giving
+$p_{\mathrm{MC}} = 4.0 \times 10^{-5}$ with a $95\%$ interval of
+$2.9 \times 10^{-5}$--$5.3 \times 10^{-5}$. The components of the
+count are dependent: $T=P+N$, $\Delta=P-N$, and the Keto/Strong and
+Amino/Weak groups form exact twin pairs. These dependencies are
+reproduced in every permutation and are therefore already included
+in the null distribution of the composite statistic.
+
+S3 applies the same count to the $17$ groups that contain no
+service codon at all, giving $68$ nominal entries. The standard code
+has $14$ divisible quantities against a null mean of $2.1311$,
+$p_{\mathrm{MC}} = 0.025135$, and a $95\%$ interval of
+$0.024829$--$0.025443$. Eleven of the fourteen divisibilities are
+structural copies of $T(\mathrm{Octet~I}) = 100 \cdot 37$, while
+the remaining three form the pyrimidine $\Delta$-cascade
 ($\Delta(\mathrm{Pyrimidine}) = 8 \cdot 37$ and
-$\Delta(\{\mathrm{C}\}) = \Delta(\{\mathrm{T}\}) = 4 \cdot 37$),
-so the count reduces to essentially two independent facts and its
-$p$-value is carried by the divisibility of $T(\mathrm{Octet~I})$.
-Fourth, a
-statistic measuring not how many quantities fall exactly on the
-lattice of step $37$ but how close the whole set lies to it: for
-each of the $33$ groups under both keys the distance of every
-nonzero $T$, $P$, $N$, $\Delta$ to the nearest multiple of $37$
-is averaged ($264$ values). The standard code gives mean
-distance $5.10$ against a null mean of $9.07$, a value reached or
-bettered by $8 \times 10^{-4}$ of random codes. This is not a
-restatement of the divisibility counts: excluding the exact
-multiples, the remaining quantities still lie at mean distance
-$7.0$ from the lattice against $9.5$ for a uniform residue. The
-concentration is stronger under Key~1 (mean distance $4.64$)
-than under Key~0 ($5.56$); it is the aggregate form of the
-cascade of $\pm 1$ and $\pm 2$ deviations described group by
-group in Section~\ref{sec:results-key0}. The comparison between
-the two keys is, however, not symmetric under the null: the
-standard code is evaluated under the Key~1 derived for it,
-whereas each random code is evaluated under the same fixed
-service-codon values $(37,37)$ and $(1,0)$ rather than under a
-key re-derived from its own balance and divisibility conditions.
-The Key~1 contribution therefore cannot be read as a
-parametrization-free gain. Restricting the statistic to Key~0
-alone --- where no divisibility by $37$ is imposed --- the
-standard code still attains a mean distance of $5.56$ against a
-null mean of $9.02$, reached or bettered by a fraction
-$2.7 \times 10^{-3}$ of random codes; the concentration is thus
-already present before the derived Key~1 symmetrization, and
-the Key~1 evaluation sharpens but does not create it. (Key~0 is
-itself an assignment, not the absence of one; the genuinely
-assignment-free level is the sense pool.)
+$\Delta(\{\mathrm{C}\}) = \Delta(\{\mathrm{T}\}) = 4 \cdot 37$).
+S3 therefore records the propagation of two structural cascades
+and is treated as a secondary summary.
 
-The weight of the test rests on the second and fourth statistics
-rather than on the two anchors of the first, which are
-individually weak; of these, $T(\mathrm{Octet~I}) = 3700$ is
-the quantity emphasized in the prior literature, while
-$N(\mathrm{All~sense}) = 3589$ is established here. Neither the
-second nor the fourth selects favorable numbers, the one
-counting divisibility across the entire a-priori Rumer/axis
-partition and the other averaging over all $264$ quantities
-without exclusion. The first, second, and fourth statistics place the standard code
-far in the tail of the null; the third does so only weakly
-($p \approx 0.025$), through a count dominated by the divisibility
-of $T(\mathrm{Octet~I})$. These tail
-probabilities are not independent of one another, and in
-particular the second and the fourth are two views of the same
-concentration --- S4 assigns distance zero to precisely the
-quantities S2 counts as divisible --- so their $p$-values should
-not be combined multiplicatively; the joint evidence is closer
-to the stronger of the two than to their product. The effect therefore resides in
-the full sense-pool partition --- in particular the divisibility
-by $37$ of both the proton and the neutron count of the Amino
-and Weak groups (and hence of their totals and differences),
-together with the neutron counts of the full pool and of the
-Keto and Strong groups, the Pyrimidine $\Delta$, and the
-Octet~I total --- rather than in the parametrization-independent
-subgroups by themselves. Three qualifications attach to these
-figures. The null fixes the standard code's degeneracy
-architecture and the amino-acid nucleon counts and randomizes
-only the assignment; a different generative model --- randomizing
-the block sizes, or the nucleon counts --- would give different
-numbers. The groups counted in the second statistic are the a
-priori Rumer and third-position chemical partition and $37$ is
-fixed in advance, so neither was selected to fit, but the count
-is one of several reasonable global statistics, and its
-constituents are not independent. For this reason we treat the
-fourth statistic, which averages over all $264$ quantities with
-no choice of which to count, as the primary measure, and the
-second as a corroborating illustration rather than as an
-independent $p$-value; the discrete count is the more exposed of
-the two to the residual freedom in choosing a global statistic. And improbability under this
-null concerns combinatorial codes, a different question from the
-specificity among the $27$ natural codes of
-Section~\ref{sec:discussion-trpile-robustness}; it speaks to
-no biological mechanism.
+S4sense measures not only exact divisibility but the overall
+proximity of the sense pool to the lattice of step $37$. For each
+of the $33$ groups, the distances of $T$, $P$, $N$, and $\Delta$ to
+the nearest multiple of $37$ are averaged, with zero included as a
+distance of zero; $132$ quantities are included in total. The
+standard code has mean distance $4.8182$ against a null mean of
+$9.1495$. An equal or smaller distance occurs in a fraction
+$0.000274$ of random codes, with a $95\%$ interval of
+$0.000242$--$0.000307$. This statistic assigns no values to service
+codons. Because the summary was defined after inspection of the
+observed structure, it is treated as an exploratory continuous
+sensitivity analysis.
+
+S4a applies the same distance under Key~0. In the standard code
+$\mathrm{ATG}$ encodes methionine; in each random code its
+contribution is the amino acid actually assigned by the permutation
+to the $\mathrm{ATG}$ block, while the stop codons contribute zero.
+The standard code has mean distance $5.5606$ against a null mean of
+$9.0157$, $p_{\mathrm{MC}} = 0.002807$, and a $95\%$ interval of
+$0.002704$--$0.002912$. The concentration is therefore already
+present under the naive Key~0, although Key~0 remains a formal
+assignment of service-codon values.
+
+S4b tests the Key~1 derivation symmetrically: the standard code and
+every random code are evaluated under their own minimal
+nonnegative key, derived from the Keto/Amino balance and global
+divisibility by $37$. The fixation of this axis and the compatibility
+of the conditions are established in
+Section~\ref{sec:results-key1-uniqueness}. The standard code has
+mean distance $4.6364$ against a null mean of $7.7397$,
+$p_{\mathrm{MC}} = 0.021106$, and a $95\%$ interval of
+$0.020825$--$0.021389$. Thus the standard code's Key~1 is
+moderately atypical among keys re-derived for random codes.
+
+The two most sensitive sense-pool summaries --- the discrete S2
+and the continuous S4sense --- describe the same overall
+concentration from different directions. Their $p$-values are
+dependent and must not be multiplied or interpreted as two
+independent lines of evidence. S1 records two individual anchors
+of the structure, whereas the weaker S3 shows that restriction to
+groups with no service positions leaves mainly the Octet~I and
+pyrimidine-$\Delta$ cascades.
+
+S4a and S4b address separate questions about the two formal
+assignments to service codons. S4a shows that the concentration is
+retained under the naive Key~0. S4b evaluates the entire Key~1
+derivation rather than the fixed values of the standard key and
+gives a more moderate tail probability. The assignment-free
+sense-pool results therefore form the central statistical part of
+the analysis, while S4a and S4b are secondary tests of its extension
+to the complete table.
+
+The null model fixes the standard code's degeneracy architecture
+and the real paired proton and neutron counts of the amino acids and
+randomizes only their assignment to blocks. A different generative
+model would give different probabilities. The modulus $37$, the
+Rumer partition, and the chemical axes have substantive a priori
+origins, but the choice of global statistical summaries was not
+preregistered before inspection of the structure. The results
+therefore characterize the exploratory atypicality of the standard
+code under one explicit combinatorial model rather than confirming
+a preregistered hypothesis. Improbability under this null concerns
+combinatorial codes, a different question from specificity among the
+$27$ natural codes in
+Section~\ref{sec:discussion-trpile-robustness}; it speaks to no
+biological mechanism.
 
 \subsection{Relation to prior work}
 \label{sec:discussion-prior-work}
@@ -3203,9 +3218,12 @@ Section~\ref{sec:discussion-montecarlo} under one explicit null
 --- the random-code permutation, which fixes the code's
 degeneracy architecture and the amino-acid nucleon counts and
 randomizes only the assignment of amino acids to codon families.
-Under that null the full Rumer/axis structure is highly atypical,
-while the parametrization-independent subgroups alone are only
-weakly so ($p \approx 0.025$, and dominated by the Octet~I total).
+Under that null the headline divisibility count and the continuous
+concentration over the full sense pool are highly atypical. The
+narrower S3 test, restricted to nested groups that contain no
+service codon at all, is only weakly atypical
+($p_{\mathrm{MC}} \approx 0.025$) and mainly reflects copies of the
+Octet~I total.
 The choice of null is not unique: alternative generative models,
 for example randomizing the block sizes themselves or the
 nucleon counts, would probe different aspects of the regularity
@@ -3373,15 +3391,22 @@ natural codes is complemented by deterministic
 controls and by a statistical test. The controls show
 that the divisibility by $37$ is confined to the third
 codon position and that $37$ is set apart from the
-other small primes. Under an explicit random-code null
-that fixes the degeneracy architecture and the
-amino-acid nucleon counts and randomizes only the
-assignment of amino acids to codon families, the full
-Rumer/axis structure yields empirical $p$-values on
-the order of $10^{-4}$ to $10^{-3}$, while the
-parametrization-independent
-subgroups alone are only weakly atypical ($p \approx 0.025$,
-dominated by the divisibility of $T(\mathrm{Octet~I})$). This is improbability
+other small primes. Under an explicit random-code null that fixes
+the degeneracy architecture and permutes the twenty real paired
+proton and neutron profiles over the twenty blocks, two dependent
+sense-pool summaries place the standard code in the far tail: the
+discrete S2 count gives
+$p_{\mathrm{MC}} = 4.0 \times 10^{-5}$, and the S4sense mean
+distance gives $p_{\mathrm{MC}} = 2.74 \times 10^{-4}$. The narrower
+S3 test, restricted to groups that contain no service codon at all,
+is only weakly atypical ($p_{\mathrm{MC}} \approx 0.025$) and mainly
+reflects dependent copies of the divisibility of
+$T(\mathrm{Octet~I})$. The concentration persists under Key~0
+($p_{\mathrm{MC}} \approx 0.0028$), whereas the symmetric test of
+the Key~1 derivation gives moderate atypicality
+($p_{\mathrm{MC}} \approx 0.021$). These probabilities refer to
+different, dependent summaries and are not combined by
+multiplication. This is improbability
 under one combinatorial null, distinct from the
 specificity among the $27$ natural codes, and it speaks
 to no biological mechanism; alternative null models are

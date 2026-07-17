@@ -1,7 +1,7 @@
-"Statistic","Description","Observed","Null_Mean","P_Value","N_Trials","Seed"
-"S1","N(All sense) and T(Octet I) both divisible by 37","both divisible",0.000799,0.000799,1000000,0
-"S2","count of T/P/N/Delta divisible by 37 over 9 headline sense-pool groups (of 36)",13,1.0299,3.9e-05,1000000,0
-"S3","count of T/P/N/Delta divisible by 37 over parametrization-independent groups (of 68)",14,2.1311,0.025134,1000000,0
-"S4","mean distance to nearest multiple of 37 over T/P/N/Delta of all 33 groups under both keys (lower = more concentrated)",5.0985,9.0749,0.000778,1000000,0
-"S4a","S4 restricted to Key 0 only (no divisibility by 37 imposed); shows the concentration is present before the derived Key 1 symmetrization (Key 0 is itself an assignment)",5.5606,9.0188,0.002695,1000000,0
-"S4b","S4 restricted to Key 1 only (the key derived under the balance and divisibility conditions); sharpens but does not create the concentration",4.6364,9.1309,0.000192,1000000,0
+Statistic,Description,Tail,Observed,Null_Mean,Tail_Count,P_MC,CI_Low,CI_High,N_Trials,Seed
+S1,both 37 anchors are divisible,event,1,0.000799,799,0.0007999992000008,0.0007455052099159606,0.0008563300955203703,1000000,0
+S2,divisible count over 9 headline sense-pool groups (higher is stronger),>=,13,1.029906,39,3.999996000004e-05,2.853109792119849e-05,5.331004651010948e-05,1000000,0
+S3,divisible count over 17 service-free groups (higher is stronger),>=,14,2.131108,25134,0.025134974865025136,0.024829022160897423,0.02544262618145632,1000000,0
+S4sense,mean distance over 33 sense-pool groups (lower is stronger),<=,4.818181818181818,9.149541303030317,273,0.000273999726000274,0.0002424833807410754,0.0003073559658944106,1000000,0
+S4a,mean distance under Key 0 with the relabelled ATG product (lower is stronger),<=,5.5606060606060606,9.015655962120755,2806,0.002806997193002807,0.002704215710732012,0.0029116041751478462,1000000,0
+S4b,mean distance after rederiving Key 1 for each code (lower is stronger),<=,4.636363636363637,7.739722242424671,21105,0.021105978894021105,0.020825119927136936,0.02138855936957307,1000000,0

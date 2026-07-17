@@ -355,17 +355,17 @@ below for usage and details.
 - `position_axis_analysis.csv` — the three chemical axes applied to the first,
   second, and third codon position (under the sense pool, Key 0, and Key 1; the sense pool is reported because, carrying no service codons, it is independent of the parametric key).
   Of the axis-group quantities divisible by 37, the third position carries
-  eleven, the first two (the two complementary halves of a single axis, hence
-  one independent fact), and the second none.
+  eleven, the first two (the complementary halves of one axis, hence one
+  dependent pair rather than two separate results), and the second none.
 - `prime_divisibility_scan.csv` — for every prime up to 97 and for three value
   sets, how many group quantities it divides, counted over all instances, over
   distinct values, and over distinct odd cores. Apart from 2 (proton parity)
   and 5 (a trace of the round-number regularity — divisibility by 10, 100, and
   1000, the Criterion-2 structure of the preprint), 37 carries the largest
-  excess, and its excess rests on more than one independent odd core; those on
-  73 = 2·37−1 and on 61 reduce each to a single odd core and are satellites of
-  an individual quantity. This persists even in the value set where 37 is not
-  imposed.
+  excess. After copies differing only by powers of two are collapsed, that
+  excess remains on several distinct odd cores, whereas 73 = 2·37−1 and 61
+  each reduce to a single odd core. This is descriptive removal of structural
+  copies, not evidence of statistical independence.
 - `position_asymmetry_ncbi.csv` — the Keto/Amino asymmetry, computed on the sense pool (so that tables with different stop-codon sets remain comparable), at all
   three codon positions across the 27 NCBI translation tables. The asymmetry
   is divisible by 37 at all three positions for the standard code and its
@@ -384,12 +384,14 @@ amino acids to the synonymous blocks). Unlike `controls.py` it is randomized,
 though seeded for reproducibility. See its dedicated section below.
 
 - `mc_significance.py` — the Monte Carlo significance test.
-- `mc_significance.csv` — its summary table: the pre-specified test
-  statistics, their observed values, null means, and p-values.
+- `mc_significance.csv` — its summary table: six statistical summaries,
+  their observed values, null means, tail counts, p estimates, and Monte
+  Carlo uncertainty intervals.
 - `verify_mc.py` — an independent re-implementation of the Monte Carlo (a
-  different construction of the codon groups and different fixed random
-  seeds, sharing no code with `mc_significance.py`) that reproduces its
-  figures, as a guard against coding error.
+  different construction of the codon groups, a direct derivation of Key 1,
+  and a different fixed random seed, sharing no code with
+  `mc_significance.py`) that reproduces the results within the expected
+  Monte Carlo error, as a guard against coding error.
 
 
 ### Metadata and auxiliary files
@@ -623,7 +625,8 @@ a decimal, so that no floating-point numerics enter the output.
    group quantities the prime divides, over all instances and over distinct
    values. After the small primes 2 (proton parity) and 5 (the round-number
    regularity, which the scan thus corroborates), 37 is the only modulus that
-   divides a non-chance share which is both stable across the three value sets
+   has a descriptively elevated divisible share that is stable across the
+   three value sets
    and irreducible to the group-doubling hierarchy, and it does so even in the
    value sets where 37 is not imposed. The
    scan ranges over primes rather than all integers because divisibility by a
@@ -637,8 +640,9 @@ a decimal, so that no floating-point numerics enter the output.
    dividing out all factors of two, e.g. 296 = 8·37 has odd part 37 — collapses
    the doubling that the nested groups introduce (a group of size 2k has twice
    the nucleon sums of its size-k refinement), so that counting distinct odd
-   parts (column `Divisible_Distinct_OddCores`) measures how many genuinely
-   independent quantities a prime divides. This makes the picture sharp: 37 keeps ten distinct
+   parts (column `Divisible_Distinct_OddCores`) removes these structural
+   copies; it does not measure statistical independence among the remaining
+   quantities. After this descriptive reduction, 37 keeps ten distinct
    odd cores under Key 0 (and more than one in every value set), whereas the
    apparent higher-prime excesses collapse to a single
    core each — 73 = 2·37−1, an echo of the modulus itself, and 61 a lone
@@ -699,87 +703,90 @@ table `mc_significance.csv`.
 
 ### Null model
 
-A "random code" of the kind used in studies of genetic-code optimality. The
-architecture of the standard code is held fixed — the 64 codons, the synonymous
-blocks with their sizes, the three stop codons, the Rumer Octet I/II partition,
-and the third-position chemical axes — and the only thing randomized is which
-amino acid, carrying its fixed proton and neutron counts, occupies each of the
-twenty blocks. A trial is a uniformly random permutation of the twenty amino
-acids over the twenty blocks. The modulus 37 is taken a priori from the prior
-literature and the statistics are fixed before running.
+The model is a "random code" of the kind used in studies of genetic-code
+optimality. The architecture of the standard code is held fixed: the 64 codons,
+the synonymous blocks with their sizes, the three stop codons, the Rumer
+Octet I/II partition, and the third-position chemical axes. A trial uniformly
+permutes the twenty real paired proton and neutron profiles over the twenty
+blocks; the P and N components of an amino acid always move together. The
+modulus 37 is taken a priori from the prior literature. The statistical
+summaries were formally defined before the final run, but the analysis was not
+preregistered before inspection of the observed structure and is therefore
+interpreted as exploratory.
 
 ### Reproducibility
 
 The script is randomized but seeded (default seed 0, 1,000,000 trials), so the
 reported figures are reproducible run to run.
+For each statistic it reports the number `b` of random codes at least as
+extreme as the standard code, the estimate
+`p_MC = (b + 1) / (M + 1)`, and a 95% Monte Carlo uncertainty interval.
 
-### The four pre-specified statistics
+### Six statistical summaries
 
-1. **Two independent 37-anchors** — `N(All sense) = 3589 = 97·37` and
-   `T(Octet I) = 3700 = 100·37` both divisible by 37. Reached by ≈0.0008 of
-   random codes (independent reference (1/37)² ≈ 0.00073).
-2. **37-saturation of the headline partition** — among the four nucleon
-   quantities of the nine Rumer/axis groups (All, the six axis half-pools, the
-   two octets), the number divisible by 37. The standard code scores 13 of 36
-   against a null mean of ≈1.0; ≈4×10⁻⁵ of random codes reach 13 or more.
-3. **The same count over the parametrization-independent groups only** (on
-   which 37 can never be imposed). The standard code scores 14 against a null
-   mean of ≈2.1; ≈0.025 of random codes reach it. These 14 are highly
-   non-independent — eleven are copies of T(Octet I) = 100·37 across the octet
-   and its 16- and 8-codon sub-groups, and three are the pyrimidine Δ-cascade —
-   so the count reduces to ≈2 independent facts and its p-value is carried by
-   the divisibility of T(Octet I). The conservative variant.
-4. **Concentration of the whole value set near the 37-lattice** — not how many
-   quantities are exact multiples of 37, but how close all of them lie. For each
-   of the 33 groups under both keys, the distance of every nonzero T/P/N/Δ to
-   the nearest multiple of 37 is averaged (264 values). The standard code gives
-   mean distance ≈5.10 against a null mean of ≈9.07; ≈8×10⁻⁴ of random codes lie
-   this close or closer. Excluding the exact multiples, the rest still average
-   ≈7.0 against ≈9.5 for a uniform residue, so this is not a restatement of
-   statistic 2. It is stronger under Key 1 (≈4.64) than Key 0 (≈5.56), but this
-   comparison is not symmetric under the null — the standard code is scored
-   under the Key 1 derived for it, while random codes use the same fixed
-   service values — so the Key 1 gain is not parametrization-free. Under Key 0
-   alone, where no divisibility by 37 is imposed, the standard code still gives
-   mean distance ≈5.56 against a null mean of ≈9.02, reached by ≈2.7×10⁻³ of
-   random codes: the concentration is present before the derived Key 1
-   symmetrization, which sharpens but does not create it (Key 0 is itself an
-   assignment; the genuinely assignment-free level is the sense pool). This statistic is the aggregate
-   form of the ±1/±2 cascade documented group by group in the preprint. The
-   summary table records S4 split by key as S4a (Key 0 only) and S4b (Key 1
-   only) alongside the combined S4; these two rows hold the service-codon values
-   fixed in every trial (fixed-key conditional diagnostics, not full relabellings
-   at the service positions), and the ≈2.7×10⁻³ figure is reproducible from the
-   script.
+1. **S1 — joint divisibility of two anchors.**
+   `N(All sense) = 3589 = 97·37` and
+   `T(Octet I) = 3700 = 100·37` are both divisible by 37 in a fraction
+   0.000800 of random codes (95% interval 0.000746–0.000856).
+   This is the directly estimated joint probability; independence of the
+   anchors is not assumed.
+2. **S2 — divisibility count for the headline sense-pool partition.**
+   Across T/P/N/Δ for nine groups, the standard code has 13 divisible
+   quantities out of 36, against a null mean of 1.0299. A value of 13 or
+   greater occurs in 39 of 1,000,000 trials:
+   `p_MC = 4.0×10⁻⁵`, interval 2.9×10⁻⁵–5.3×10⁻⁵.
+3. **S3 — the same count for 17 groups containing no service codons.**
+   The standard code has 14 divisible quantities out of 68 against a null
+   mean of 2.1311, `p_MC = 0.025135`
+   (interval 0.024829–0.025443). Eleven divisibilities are structural copies
+   of `T(Octet I) = 100·37`, and three form the pyrimidine Δ-cascade, so S3
+   is treated as a secondary summary.
+4. **S4sense — mean proximity of the sense pool to the 37-lattice.**
+   For 33 groups, the distances of T/P/N/Δ to the nearest multiple of 37 are
+   averaged, including zero distances; 132 quantities are included. The
+   observed mean is 4.8182 against a null mean of 9.1495,
+   `p_MC = 0.000274` (interval 0.000242–0.000307).
+   No values are assigned to service codons.
+5. **S4a — the same distance under Key 0.**
+   In each random code the ATG contribution is the amino acid actually
+   assigned to the ATG block, while stop codons contribute zero. The observed
+   mean is 5.5606 against a null mean of 9.0157,
+   `p_MC = 0.002807` (interval 0.002704–0.002912).
+6. **S4b — a symmetric test of the Key 1 procedure.**
+   Each random code receives its own minimal nonnegative Key 1, re-derived by
+   the same balance and divisibility conditions. The observed mean is 4.6364
+   against a null mean of 7.7397,
+   `p_MC = 0.021106` (interval 0.020825–0.021389).
 
-The first, second, and fourth statistics place the standard code far in the
-tail; the third does so only weakly (p ≈ 0.025, a count dominated by the
-divisibility of T(Octet I)), so the weight of the effect is in the full
-sense-pool partition rather than the parametrization-independent subgroups alone. The p-value is improbability
-under this particular null (which fixes the code's degeneracy architecture and
-the amino-acid nucleon counts); it is a different question from specificity
-among the 27 natural codes, and speaks to no biological mechanism.
+The central statistical results are S2 and S4sense, both free of service-codon
+assignments. They describe the same overall concentration in different ways,
+are dependent, and are not combined by multiplying their p-values. The weaker
+S3 shows that restricting the analysis to nested groups without service codons
+leaves mainly two structural cascades. S4a and S4b are secondary tests of the
+extension to the complete table.
+
+These p-values express improbability under this particular null, which fixes
+the degeneracy architecture and the real amino-acid nucleon counts. This is a
+different question from specificity among the 27 natural codes and does not
+identify a biological mechanism.
 
 ### Independent cross-check
 
 Because this is the only randomized result in the repository, it ships with an
 independent re-implementation, `verify_mc.py`, that shares no code with
-`mc_significance.py`: it reads the input CSVs directly, builds the codon groups
-from the third-position and four-fold-degeneracy rules (not from
-`codon_groups.csv`), and uses different fixed random seeds, then prints its results
-side by side with `mc_significance.csv`. The two scripts agree on every statistic:
-the S2 tail probability is a few ×10⁻⁵ in both; the S3 count over the
-parametrization-independent groups is 14 by both routes with p ≈ 0.025; the
-S4 mean distance is 5.10 by both routes with p ≈ 8×10⁻⁴; the Key-0-only S4a
-gives ≈5.56 with p ≈ 2.7×10⁻³ in both; and S4b is cross-checked the same way —
-which is evidence against a coding error in either. Because the independent
-route builds all 33 groups directly from the third-position and octet rules —
-including the Octet I and Octet II single-base subgroups, and never keyed by a
-non-unique group name — it computes S3 without the group-lookup mistake an
-earlier version of `mc_significance.py` made in that one statistic, and would
-catch a missing or duplicated group in either implementation. The observed
-values it prints (N(All sense)=3589, T(Octet I)=3700, the counts 13 and 14, the
-mean distance 5.10) can also be checked by hand against the tables in the preprint.
+`mc_significance.py`. It reads the input CSVs directly, builds all 33 groups
+from the third-position and four-fold-degeneracy rules instead of
+`codon_groups.csv`, derives Key 1 by direct search, and uses a different seed
+(12345 by default):
+
+```
+python3 verify_mc.py
+```
+
+Two full runs of 1,000,000 trials give identical observed statistics, and all
+six tail probabilities agree within the expected Monte Carlo error. The script
+exits with an error if the observed values differ or if the tail estimates
+disagree beyond its tolerance.
 
 
 ## Detailed dataset descriptions
@@ -1936,8 +1943,8 @@ is the irreducible unit of comparison.
   factors of two removed) before counting. The nested group hierarchy
   (Octet I and its 16- and 8-codon subgroups) mechanically produces 2V and
   4V alongside any quantity V, so a prime dividing V scores up to three times
-  over one underlying fact; this column collapses that duplication, counting
-  only genuinely independent quantities. 37 retains ten distinct cores under
+  within that structural chain; this column collapses the duplication but
+  does not establish statistical independence. 37 retains ten distinct cores under
   Key 0 (more than one in every value set), whereas the higher primes that
   exceed chance (e.g. 73, 61) collapse to a single core each — 73 = 2·37−1 an
   echo of 37, and 61 the lone factorization of the pyrimidine proton pool.
@@ -2006,19 +2013,24 @@ values (N = 3589, P = 4180, deficit = 111, δN(Trp,Ile) = 37, δP = 36).
 ### mc_significance.csv
 
 Output of `mc_significance.py` (a seeded Monte Carlo, not part of the
-`reproduce.py` pipeline). One row per pre-specified test statistic (S1, S2, S3,
-S4, plus S4a and S4b, the Key-0-only and Key-1-only halves of S4),
-recording the standard code's observed value, the null mean, and the empirical
-p-value from the random-code permutation null. 6 rows.
+`reproduce.py` pipeline). One row for each of the six statistical summaries
+S1, S2, S3, S4sense, S4a, and S4b, recording the standard code's observed
+value, the null mean, the tail count, the p estimate, and its Monte Carlo
+uncertainty interval. 6 rows.
 
 #### Columns
 
-- `Statistic` — `S1`, `S2`, `S3`, `S4`, `S4a`, or `S4b`
+- `Statistic` — `S1`, `S2`, `S3`, `S4sense`, `S4a`, or `S4b`
 - `Description` — what the statistic counts
-- `Observed` — the standard code's value (a count, or "both divisible" for S1)
+- `Tail` — tail direction: an event for S1, `>=` for S2/S3, or `<=` for
+  the three mean-distance statistics
+- `Observed` — the standard code's numerical value
 - `Null_Mean` — mean of the statistic over the random codes (for S1, the
   divisible fraction)
-- `P_Value` — empirical probability that a random code matches or exceeds the
-  standard code (for S1, the probability both anchors are divisible by 37)
+- `Tail_Count` — number of random codes at least as extreme as the standard code
+- `P_MC` — tail-probability estimate
+  `(Tail_Count + 1) / (N_Trials + 1)`
+- `CI_Low`, `CI_High` — lower and upper bounds of the 95% Monte Carlo
+  uncertainty interval
 - `N_Trials` — number of random codes drawn
 - `Seed` — random seed used (fixed, for reproducibility)
