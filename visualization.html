@@ -780,9 +780,81 @@
         'combinatorial': { data: COMBINATORIAL_DEMO_STRUCTURE, name: 'Combinatorial', exportName: 'Combinatorial', fileTag: 'combinatorial' }
         };
 
+        const sanitizeFilePart = (value) => value
+            .replace(/->/g, '-')
+            .replace(/[:=,]/g, '')
+            .replace(/[\s\(\)]+/g, '-')
+            .replace(/-+/g, '-')
+            .toLowerCase()
+            .replace(/-+$/, '');
+
+        const usesDefaultAminoAcidValues = (customKeys, activeGeneticCode, exportScope) => {
+            const fields = exportScope === 'full'
+                ? ['sideChainMass', 'backboneMass', 'protons', 'neutrons']
+                : ['protons', 'neutrons'];
+
+            return Object.entries(STANDARD_AMINO_ACIDS).every(([aa, standardValues]) => {
+                const expected = {
+                    ...standardValues,
+                    ...((activeGeneticCode.defaultParams || {})[aa] || {})
+                };
+                const current = customKeys.AMINO_ACIDS[aa];
+                return current && fields.every(field => current[field] === expected[field]);
+            });
+        };
+
+        const buildExportFileName = ({
+            activeGeneticCode,
+            activeKeySet,
+            customKeys,
+            includeServiceCodons,
+            tabFileTag,
+            exportScope,
+            numeralSystem,
+            suffix,
+            equalityScope = 'tab',
+            hasSelection = false
+        }) => {
+            const datasetId = includeServiceCodons
+                ? (!activeKeySet ? 'custom-key' : activeKeySet.toLowerCase())
+                : 'pool60';
+            const defaultAminoAcids = usesDefaultAminoAcidValues(
+                customKeys, activeGeneticCode, exportScope
+            );
+            const canonicalKey = !includeServiceCodons ||
+                activeKeySet === 'Key0' || activeKeySet === 'Key1';
+            const canonicalExport = activeGeneticCode.type === 'standard' &&
+                canonicalKey &&
+                tabFileTag === 'pos3' &&
+                equalityScope === 'tab' &&
+                exportScope === 'strict' &&
+                numeralSystem === 'decimal' &&
+                !hasSelection &&
+                defaultAminoAcids;
+
+            if (canonicalExport) return `${datasetId}_${suffix}.csv`;
+
+            let codeName = activeGeneticCode.name;
+            if (exportScope === 'strict') {
+                codeName = codeName.replace(/\s*\((Pro|Gly)[^)]+\)/i, '');
+            }
+
+            const parts = [datasetId, sanitizeFilePart(codeName)];
+            if (tabFileTag && tabFileTag !== 'pos3') parts.push(tabFileTag);
+            if (equalityScope === 'all') parts.push('all-tabs');
+            if (exportScope === 'full') parts.push('full');
+            if (numeralSystem === 'base37') parts.push('base37');
+            if (hasSelection) parts.push('with-selection');
+            if (!defaultAminoAcids) parts.push('custom-aa');
+
+            return `${parts.join('_')}_${suffix}.csv`
+                .replace(/_+/g, '_')
+                .replace(/-_/g, '_');
+        };
+
         function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
 
-        // --- Модуль 37-ричной системы счисления ---
+        // --- Base-37 numeral system ---
         const BASE37_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@";
         
         function toBase37(num) {
@@ -798,7 +870,7 @@
             return isNegative ? "-" + result : result;
         }
 
-        // Конвертация десятичных дробей в 37-ричные дроби
+        // Convert decimal fractions to base-37 fractions.
         function floatToBase37(num, precision = 4) {
             if (num === null || num === undefined || isNaN(num)) return "N/A";
             if (num === 0) return "0." + "0".repeat(precision);
@@ -817,7 +889,7 @@
                 let digit = Math.floor(fracPart);
                 fracStr += BASE37_CHARS[digit];
                 fracPart -= digit;
-                if (fracPart < 1e-10) break; // защита от проблем с точностью float в JS
+                if (fracPart < 1e-10) break; // Guard against floating-point precision issues in JavaScript.
             }
             
             while (fracStr.length < precision) fracStr += "0";
@@ -945,7 +1017,7 @@
             return sums;
         };
 
-        const exportEqualitiesData = (customKeys, activeGeneticCode, activeTab, scope, numeralSystem, exportScope, includeServiceCodons) => {
+        const exportEqualitiesData = (customKeys, activeGeneticCode, activeTab, scope, numeralSystem, exportScope, includeServiceCodons, activeKeySet) => {
             const structuresToProcess = scope === 'tab' 
                 ? [TABS_INFO[activeTab]]
                 : Object.values(TABS_INFO);
@@ -953,13 +1025,14 @@
             const allFlattenedGroups = [];
             
             structuresToProcess.forEach((structObj) => {
+                const tabName = structObj.name;
                 const tabExportName = structObj.exportName;
                 structObj.data.forEach(section => {
                     const sectionName = section.isOctetContainer ? null : tabExportName;
                     const traverse = (groups, sOverride) => groups.forEach(g => g.sets.forEach(s => {
                         const finalSection = sOverride || sectionName;
-                        allFlattenedGroups.push({ ...s, _sectionName: finalSection });
-                        if(s.pair) allFlattenedGroups.push({ ...s.pair, _sectionName: finalSection });
+                        allFlattenedGroups.push({ ...s, _tabName: tabName, _sectionName: finalSection });
+                        if(s.pair) allFlattenedGroups.push({ ...s.pair, _tabName: tabName, _sectionName: finalSection });
                     }));
                     if (section.isOctetContainer) { 
                         traverse(section.octetI.groups, "Octet I"); 
@@ -971,17 +1044,18 @@
             const groupData = allFlattenedGroups.map(set => {
                 const codons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
                 const sums = calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id);
-                sums.deltaPN = sums.protons - sums.neutrons; // Добавлено вычисление дельты
+                sums.deltaPN = sums.protons - sums.neutrons; // Calculate the proton-neutron difference.
                 return {
                     id: set.symmetryId || set.id,
                     name: set.label,
+                    tab: set._tabName,
                     section: set._sectionName,
                     level: codons.size,
                     sums: sums
                 };
             });
 
-            const paramMap = { fullMass: "Total_Nucleons", protons: "Protons", neutrons: "Neutrons", deltaPN: "Delta_P_N" }; // Дельта в конце списка параметров
+            const paramMap = { fullMass: "Total_Nucleons", protons: "Protons", neutrons: "Neutrons", deltaPN: "Delta_P_N" }; // Keep the proton-neutron difference last.
             const paramKeys = Object.keys(paramMap);
             
             const equalitiesList = [];
@@ -1001,7 +1075,7 @@
                             const trgKey = paramKeys[pj];
                             const trgLabel = paramMap[trgKey];
                             
-                            if (i === j && pi >= pj) continue; // Исправленное условие предотвращения дубликатов (Баг 2)
+                            if (i === j && pi >= pj) continue; // Prevent duplicate comparisons within the same group.
                             
                             if (srcVal === target.sums[trgKey]) {
                                 let matchType = "SAME_PARAM"; 
@@ -1012,6 +1086,7 @@
                                     rawVal: srcVal,
                                     formattedVal: formatValue(srcVal, numeralSystem, true),
                                     matchType,
+                                    sTab: source.tab,
                                     sSec: source.section,
                                     sId: source.id,
                                     sName: source.name,
@@ -1019,6 +1094,7 @@
                                     tParam: trgLabel,
                                     tName: target.name,
                                     tId: target.id,
+                                    tTab: target.tab,
                                     tSec: target.section,
                                     pi, pj
                                 });
@@ -1028,7 +1104,7 @@
                 }
             }
 
-            // Точная сортировка в соответствии с логикой скрипта
+            // Sort exactly as in the reproduction script.
             equalitiesList.sort((a, b) => {
                 if (a.rawVal !== b.rawVal) return a.rawVal - b.rawVal;
                 const typeOrder = { 'DIFF_PARAM': 1, 'CROSS_PARAM': 2, 'SAME_PARAM': 3 };
@@ -1049,29 +1125,30 @@
             const formatId = (id) => (id === "" || id === null || id === undefined) ? '""' : (!isNaN(id) ? id : `"${id}"`);
             const formatStr = (str) => `"${str}"`;
 
-            let csvContent = '"Nucleon_Value","Match_Type","Source_Section","Source_ID","Source_Name","Source_Parameter","Target_Parameter","Target_Name","Target_ID","Target_Section"\n';
+            let csvContent = scope === 'all'
+                ? '"Nucleon_Value","Match_Type","Source_Tab","Source_Section","Source_ID","Source_Name","Source_Parameter","Target_Parameter","Target_Name","Target_ID","Target_Section","Target_Tab"\n'
+                : '"Nucleon_Value","Match_Type","Source_Section","Source_ID","Source_Name","Source_Parameter","Target_Parameter","Target_Name","Target_ID","Target_Section"\n';
             
             equalitiesList.forEach(eq => {
                 const valStr = isNaN(eq.formattedVal) ? formatStr(eq.formattedVal) : eq.formattedVal;
-                csvContent += `${valStr},${formatStr(eq.matchType)},${formatStr(eq.sSec)},${formatId(eq.sId)},${formatStr(eq.sName)},${formatStr(eq.sParam)},${formatStr(eq.tParam)},${formatStr(eq.tName)},${formatId(eq.tId)},${formatStr(eq.tSec)}\n`;
+                if (scope === 'all') {
+                    csvContent += `${valStr},${formatStr(eq.matchType)},${formatStr(eq.sTab)},${formatStr(eq.sSec)},${formatId(eq.sId)},${formatStr(eq.sName)},${formatStr(eq.sParam)},${formatStr(eq.tParam)},${formatStr(eq.tName)},${formatId(eq.tId)},${formatStr(eq.tSec)},${formatStr(eq.tTab)}\n`;
+                } else {
+                    csvContent += `${valStr},${formatStr(eq.matchType)},${formatStr(eq.sSec)},${formatId(eq.sId)},${formatStr(eq.sName)},${formatStr(eq.sParam)},${formatStr(eq.tParam)},${formatStr(eq.tName)},${formatId(eq.tId)},${formatStr(eq.tSec)}\n`;
+                }
             });
 
-            const keyPart = (!customKeys.id || customKeys.id.includes('custom')) ? 'custom-key' : customKeys.id.toLowerCase();
-            
-            let baseName = activeGeneticCode.name;
-            if (exportScope === 'strict') {
-                baseName = baseName.replace(/\s*\((Pro|Gly)[^)]+\)/i, '');
-            }
-            let sanitizedCodeName = baseName
-                .replace(/->/g, '-')
-                .replace(/[:=,]/g, '')
-                .replace(/[\s\(\)]+/g, '-')
-                .replace(/-+/g, '-')
-                .toLowerCase()
-                .replace(/-+$/, '');
-            
-            const fileNameRaw = `${keyPart}_${sanitizedCodeName}_equalities.csv`;
-            const fileName = fileNameRaw.replace(/_+/g, '_').replace(/-_/g, '_'); 
+            const fileName = buildExportFileName({
+                activeGeneticCode,
+                activeKeySet,
+                customKeys,
+                includeServiceCodons,
+                tabFileTag: scope === 'tab' ? TABS_INFO[activeTab].fileTag : null,
+                exportScope,
+                numeralSystem,
+                suffix: 'equalities',
+                equalityScope: scope
+            });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
@@ -1082,25 +1159,19 @@
             document.body.removeChild(link);
         };
         
-        const exportData = (structure, customKeys, activeGeneticCode, tabExportName, allDemoSetSums, selectedCodons, exportType, activeKeySet, numeralSystem, exportScope, includeServiceCodons) => {
-             const keyPart = (!activeKeySet) ? 'custom-key' : activeKeySet.toLowerCase();
-             
-             let baseName = activeGeneticCode.name;
-             if (exportScope === 'strict') {
-                 baseName = baseName.replace(/\s*\((Pro|Gly)[^)]+\)/i, '');
-             }
-             let sanitizedCodeName = baseName
-                .replace(/->/g, '-')
-                .replace(/[:=,]/g, '')
-                .replace(/[\s\(\)]+/g, '-')
-                .replace(/-+/g, '-')
-                .toLowerCase()
-                .replace(/-+$/, '');
-
+        const exportData = (structure, customKeys, activeGeneticCode, tabExportName, tabFileTag, allDemoSetSums, selectedCodons, exportType, activeKeySet, numeralSystem, exportScope, includeServiceCodons) => {
              const suffixMap = { analysis: 'divisibility-37', ratios: 'ratios', pure: 'nucleon-data' };
-             const posTag = (typeof tabFileTag === 'string' && tabFileTag && tabFileTag !== 'pos3') ? `_${tabFileTag}` : '';
-         const fileNameRaw = `${keyPart}_${sanitizedCodeName}${posTag}_${suffixMap[exportType]}.csv`;
-             const fileName = fileNameRaw.replace(/_+/g, '_').replace(/-_/g, '_');
+             const fileName = buildExportFileName({
+                 activeGeneticCode,
+                 activeKeySet,
+                 customKeys,
+                 includeServiceCodons,
+                 tabFileTag,
+                 exportScope,
+                 numeralSystem,
+                 suffix: suffixMap[exportType],
+                 hasSelection: Boolean(selectedCodons && selectedCodons.size > 0)
+             });
 
              const formatId = (id) => (id === "" || id === null || id === undefined) ? '""' : (!isNaN(id) ? id : `"${id}"`);
 
@@ -2131,6 +2202,7 @@
                 }); 
             };
             const handleAAUpdate = (aa, field, value) => {
+                setActiveKeySet(null);
                 setCustomKeys(prev => {
                     const newKeys = JSON.parse(JSON.stringify(prev));
                     if(newKeys.AMINO_ACIDS[aa]) {
@@ -2180,9 +2252,14 @@
                                     onClick={() => handleToggleServiceCodons(false)}
                                     title="Exclude standard service codons (ATG, TAA, TAG, TGA)"
                                 >
-                                    SENSE CODE
+                                    POOL60
                                 </div>
                             </div>
+                            {!includeServiceCodons && (
+                                <p className="mt-1 text-[0.65rem] leading-tight text-gray-500">
+                                    Excludes ATG, TAA, TAG, and TGA. Service-codon key values do not affect these sums.
+                                </p>
+                            )}
                         </div>
 
                         <div className="control-panel-section">
@@ -2278,6 +2355,9 @@
                                     <button 
                                         className={`px-2 py-2 text-[0.75rem] font-semibold rounded-t-lg flex items-center ${['quartets', 'combinatorial'].includes(activeRightPanelTab) ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}`}
                                         onMouseEnter={() => setIsMoreMenuOpen(true)}
+                                        onClick={() => setIsMoreMenuOpen(true)}
+                                        aria-haspopup="menu"
+                                        aria-expanded={isMoreMenuOpen}
                                     >
                                         More ▾
                                     </button>
@@ -2294,7 +2374,7 @@
                                 <button 
                                     onClick={() => exportData(
                                         TABS_INFO[activeRightPanelTab].data, 
-                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, allDemoSetSums, selectedCodons, 'pure', activeKeySet, numeralSystem, exportScope, includeServiceCodons
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, selectedCodons, 'pure', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
@@ -2303,7 +2383,7 @@
                                 <button 
                                     onClick={() => exportData(
                                         TABS_INFO[activeRightPanelTab].data, 
-                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, allDemoSetSums, selectedCodons, 'analysis', activeKeySet, numeralSystem, exportScope, includeServiceCodons
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, selectedCodons, 'analysis', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
@@ -2312,14 +2392,14 @@
                                 <button 
                                     onClick={() => exportData(
                                         TABS_INFO[activeRightPanelTab].data, 
-                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, allDemoSetSums, selectedCodons, 'ratios', activeKeySet, numeralSystem, exportScope, includeServiceCodons
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, selectedCodons, 'ratios', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
                                     <span>📥</span> Ratios
                                 </button>
                                 <button 
-                                    onClick={() => exportEqualitiesData(customKeys, activeGeneticCode, activeRightPanelTab, equalityScope, numeralSystem, exportScope, includeServiceCodons)}
+                                    onClick={() => exportEqualitiesData(customKeys, activeGeneticCode, activeRightPanelTab, equalityScope, numeralSystem, exportScope, includeServiceCodons, activeKeySet)}
                                     className="export-btn"
                                 >
                                     <span>📥</span> Equalities
