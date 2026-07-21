@@ -92,10 +92,10 @@ and the interactive visualizer is hosted at
     this same ordering is one of four (out of 24 possible
     permutations of the four bases) in which Octet I and Octet II
     form connected regions on the codon matrix.
-  - `sense_pool_structure.png` — nucleon sums (T, P, N, the
-    difference Delta) over the sense pool, with the three
-    stop codons and the initiator ATG excluded from the
-    sums, so that every quantity shown is
+  - `pool60_structure.png` — nucleon sums (T, P, N, the
+    difference Delta) over the 60-codon service-codon-excluded
+    pool (POOL60). The three stop codons and the initiator ATG
+    are excluded from the sums, so every quantity shown is
     parametrization-independent. The figure displays the
     two-sided regularity discussed in the preprint: on the
     third-position axes the neutron sums lie on the
@@ -203,7 +203,7 @@ Comparative dataset across NCBI codes:
 
 ### Visualization
 
-`visualization.html` is a standalone HTML page that provides an
+`visualization.html` is a single-page HTML application that provides an
 interactive working environment for inspecting the genetic code
 table and the arithmetic structure of its codon groups. It was
 used during the exploratory phase of this study and is included
@@ -216,9 +216,12 @@ reproducibility pipeline (see "CSV export" below).
 A hosted version of the visualizer is available at
 [https://ruslankhafizov.github.io/genetic-code-arithmetic/](https://ruslankhafizov.github.io/genetic-code-arithmetic/)
 
-The page uses only client-side JavaScript and can be opened in
-any modern browser without installation, network access, or
-external dependencies.
+The page requires no installation and performs all calculations
+and CSV generation locally in the browser. Its interface libraries
+(React, ReactDOM, Babel, Tailwind CSS, and tinycolor) are loaded
+from public CDNs, so a network connection is required unless those
+resources are already present in the browser cache. The application
+does not upload selected codons or calculated results.
 
 #### Main features
 
@@ -230,13 +233,16 @@ external dependencies.
   selector opens on the standard code by default.
 
 - **Codon pool toggle.** A switch between the full 64-codon
-  table ("ALL CODE") and the sense-codon elongation pool
-  ("SENSE CODE"). When "SENSE CODE" is selected, the service
-  codons (ATG, TAA, TAG, TGA) are visually muted in the matrix
-  and excluded from the calculations, the predefined groups,
-  and the CSV export; under "ALL CODE" they are included. The
-  exported `Code_Section` field records which mode produced the
-  file.
+  table ("ALL CODE") and the service-codon-excluded 60-codon
+  analytical pool ("POOL60"). In POOL60, ATG, TAA, TAG, and
+  TGA are visually muted and removed from the calculations,
+  predefined groups, and CSV exports rather than retained with
+  zero values. Service-codon key parameters therefore do not
+  affect the POOL60 sums. Under "ALL CODE" the four service
+  codons are included with the active key. The pool mode is
+  identified
+  by the export filename (`pool60_*`, `key0_*`, or `key1_*`);
+  `Code_Section` identifies the group section, not the pool mode.
 
 - **Parametric keys.** Quick switching between the zero
   parametrization (Key 0), the symmetrization (Key 1), and
@@ -336,25 +342,38 @@ group), **Divisibility** (the same quantities with their
 divisibility-by-37 analysis), **Ratios** (the pairwise ratios of
 the four quantities), and **Equalities** (the cross-set numerical
 coincidences listed by the equality finder). A separate **export
-scope** toggle controls the column set: "Strict" exports only the
-invariant quantities (T, P, N, Δ), while "Full" additionally
+scope** toggle controls the column set: "STRICT" exports only the
+invariant quantities (T, P, N, Δ), while "FULL" additionally
 exports the side-chain and backbone mass components.
 
-These export features predate the reproducibility script
-`reproduce.py` and use an older formatting convention. The CSV
-files distributed in this repository are produced by `reproduce.py`
-and follow the unified format conventions described above. CSV
-files exported from the visualization page may differ from the
-repository copies in quoting, sorting, line endings, or content,
-and should not be used as a substitute for the script-generated outputs when exact
-reproducibility is required. Note also that the export always
-reflects the current state of the page: the selected position tab
-(Pos 1, Pos 2, Pos 3, Quartets, Combinatorial), the nucleotide
-axis ordering, the active key, the codon-pool toggle, and the
-export scope. The repository CSV files correspond to the Pos 3 tab
-with the default axis ordering; reproducing them from the page
-requires the same configuration. The visualization export is
-provided as a convenience for interactive exploratory work only.
+In the canonical configuration — the standard code, the Pos 3
+tab, STRICT scope, decimal notation, no manual codon selection,
+unmodified amino-acid values, and TAB equality scope — the page
+uses the same short filenames as the reproducibility pipeline:
+`pool60_*`, `key0_*`, or `key1_*`. The four canonical POOL60
+exports have been verified to be bit-for-bit identical to the
+corresponding files generated by `reproduce.py`.
+
+Any noncanonical state receives a qualified, self-describing
+filename indicating the relevant code, tab, equality scope,
+column scope, numeral system, manual selection, or amino-acid
+modification. The exported content always reflects the active
+tab, codon-pool toggle, export scope, and any manual edits or
+selection; under ALL CODE it also reflects the active key.
+`Code_Section` records the group section (for example,
+"All code", "Octet I", or "Octet II") or the experimental tab;
+the filename records the pool mode. An Equalities export with the
+ALL search scope additionally includes `Source_Tab` and
+`Target_Tab` so that group IDs reused across tabs remain
+unambiguous.
+
+For archival reproduction of the complete set of seventeen
+computed datasets, `reproduce.py` remains the normative pipeline:
+it reads the five published input datasets, validates their
+structure, and writes all outputs deterministically in one run.
+The visualization export additionally supports exploratory and
+custom configurations that are intentionally outside that core
+pipeline.
 
 ### Supplementary controls
 
