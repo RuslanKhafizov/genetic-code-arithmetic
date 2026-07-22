@@ -116,29 +116,31 @@ computed datasets supporting it.
 \label{sec:composition}
 
 Throughout this work, each of the twenty canonical amino acids is
-represented as a neutral free amino acid molecule (not as a residue in
+represented as a free neutral amino acid molecule (not as a residue in
 a peptide chain), with its molecular formula retrieved from the \textsc{PubChem}
 compound database~\cite{kim2023}. The dependence of the arithmetic on this choice---the free molecule rather than the residue---is examined in Section~\ref{sec:discussion-controls}. From this formula we compute four integer
 quantities that characterize the nucleon content of the molecule.
 
-The proton count $P$ is defined as the sum of atomic numbers over all
-atoms in the molecular formula:
+The proton count $P$ is defined from the elemental composition of the
+molecular formula as
 \[
-P = \sum_i Z_i,
+P = \sum_E n_E Z_E,
 \]
-with $Z(\mathrm{H}) = 1$, $Z(\mathrm{C}) = 6$, $Z(\mathrm{N}) = 7$,
-$Z(\mathrm{O}) = 8$, $Z(\mathrm{S}) = 16$.
+where $n_E$ is the number of atoms of element $E$ in the formula and
+$Z_E$ is its atomic number. The atomic numbers used are
+$Z(\mathrm{H}) = 1$, $Z(\mathrm{C}) = 6$, $Z(\mathrm{N}) = 7$,
+$Z(\mathrm{O}) = 8$ and $Z(\mathrm{S}) = 16$.
 
-The neutron count $N$ is computed by assigning each atom its most
+The neutron count $N$ is computed by assigning each element its most
 abundant naturally occurring stable isotope, using the terrestrial
 isotopic compositions evaluated by IUPAC~\cite{berglund2011}.
 Accordingly, we use $^{1}\mathrm{H}$, $^{12}\mathrm{C}$,
-$^{14}\mathrm{N}$, $^{16}\mathrm{O}$ and $^{32}\mathrm{S}$, so that for each atom the
-neutron contribution is $A_i - Z_i$, where $A_i$ is the mass number of
-the chosen isotope. The total neutron count of the molecule is
+$^{14}\mathrm{N}$, $^{16}\mathrm{O}$ and $^{32}\mathrm{S}$. The total
+neutron count is
 \[
-N = \sum_i (A_i - Z_i).
+N = \sum_E n_E (A_E - Z_E),
 \]
+where $A_E$ is the mass number of the selected isotope of element $E$.
 
 The total nucleon count $T$ and the proton--neutron difference
 $\Delta$ are defined as
@@ -161,13 +163,12 @@ $i$ and $j$).
 
 We emphasize that $P$, $N$, $T$ and $\Delta$ are not measured
 molecular masses. They are exact integer quantities derived from
-atomic composition, and all arithmetic identities reported in this
-study are exact integer relations rather than approximate numerical
-coincidences.
+elemental composition, and all arithmetic identities reported in this
+study are exact integer relations rather than artifacts of rounding approximate molecular masses.
 
 The resulting nucleon values for all twenty canonical amino acids are
 provided in the dataset \texttt{amino\_acids\_nucleons.csv}, with one
-row per amino acid and columns for $P$, $N$, $T$ and $\Delta$. From this table we additionally precompute three companion
+row per amino acid and columns for $P$, $N$, $T$ and $\Delta$. From this table we additionally compute three companion
 datasets of pairwise absolute differences ---
 \texttt{amino\_acids\_proton\_differences.csv},
 \texttt{amino\_acids\_neutron\_differences.csv} and
@@ -181,130 +182,144 @@ amino acid pairs whose nucleon differences match specific target
 values, and in particular to locate pairs that are unique within
 the twenty amino acids with respect to a given difference.
 
-All nucleon computations performed on codon groups in the remainder of
-the paper reduce, by linearity, to sums of the per-amino-acid values
-tabulated in \texttt{amino\_acids\_nucleons.csv}, weighted by codon
-multiplicities and by the parametrization chosen for the service
-codons (see Section~\ref{sec:parametrization}).
+All subsequent nucleon computations for codon groups reduce, by
+linearity, to sums of the per-amino-acid values tabulated in
+\texttt{amino\_acids\_nucleons.csv}, weighted by the multiplicities of
+the corresponding codons. Where service codons are included, their
+contributions are determined by the chosen parametrization
+(Section~\ref{sec:parametrization}).
 
 \subsection{Genetic code structure}
 \label{sec:genetic-code}
 
-The standard genetic code establishes a surjective mapping from the
-$64$ codons of the four-letter nucleotide alphabet
-$\{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$ onto the twenty
+The standard genetic code defines a surjective mapping from the $64$
+codons of the four-letter nucleotide alphabet
+$\{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$ to the twenty
 canonical amino acids and a translation-termination signal. Throughout
-this paper we use DNA notation (with thymine $\mathrm{T}$ rather than
-uracil $\mathrm{U}$) and adopt the codon assignments of The Standard Code (NCBI translation table 1). Sixty of these codons encode amino acids without additional
-function; the three codons $\mathrm{TAA}$, $\mathrm{TAG}$ and
-$\mathrm{TGA}$ act as stop signals, and the codon $\mathrm{ATG}$,
-in addition to encoding methionine, serves as the canonical
-translation initiation signal. Together, these four codons ---
-one start and three stops --- are referred to as \emph{service
-codons} in the remainder of the paper.
-The full codon-to-product mapping is provided in the dataset
-\texttt{genetic\_code\_codons.csv}.
+this paper, we use DNA notation (with thymine $\mathrm{T}$ rather than
+uracil $\mathrm{U}$) and adopt the codon assignments of The Standard
+Code (NCBI translation table~1)~\cite{ncbi2024geneticcodes}. The three codons $\mathrm{TAA}$, $\mathrm{TAG}$ and $\mathrm{TGA}$
+act as stop signals, whereas $\mathrm{ATG}$ encodes methionine and
+serves as the canonical translation-initiation signal. For the purposes of the present
+arithmetic analysis, these four codons --- the three stop codons and
+$\mathrm{ATG}$ in its initiator role --- are referred to as
+\emph{service codons}. This is a study-specific analytical convention
+and does not imply that $\mathrm{ATG}$ is the only possible initiation
+codon in every biological context.
 
-A fundamental structural property of the standard code, first
-identified by Rumer~\cite{rumer1966,rumer1968}, is the partition of the $64$
-codons into two halves of $32$ codons each, distinguished by the
-degeneracy pattern of the third codon position. The first half,
-which we denote \emph{Octet~I}, consists of the eight codon families
-in which all four third-position nucleotides encode the same amino
-acid; these fully four-fold degenerate families are
+We define the \emph{service-codon-excluded 60-codon pool} as
+\[
+\mathcal{C}_{\mathrm{SE}}
+=
+\mathcal{C}_{\mathrm{standard}}
+\setminus
+\{\mathrm{ATG},\mathrm{TAA},\mathrm{TAG},\mathrm{TGA}\},
+\]
+where $\mathcal{C}_{\mathrm{standard}}$ denotes the set of all $64$
+codons of the standard code. Thus,
+$|\mathcal{C}_{\mathrm{SE}}|=60$. Every codon belonging to
+$\mathcal{C}_{\mathrm{SE}}$ is counted according to its standard
+amino-acid assignment. The full codon-to-product mapping is provided
+in the dataset \texttt{genetic\_code\_codons.csv}.
+
+By a codon family, we mean the set of four codons sharing the same
+first two bases and having an arbitrary third-position base, denoted
+by $\mathrm{N}$. A structural property of the standard code, first
+identified by Rumer~\cite{rumer1966,rumer1968}, is the partition of
+the $64$ codons into two halves of $32$ codons each, distinguished
+by the degeneracy pattern of the third codon position. The first
+half, which we denote \emph{Octet~I}, consists of the eight codon
+families in which all four third-position nucleotides encode the
+same amino acid. These fully four-fold degenerate families are
 $\mathrm{GCN}$ (Ala), $\mathrm{CGN}$ (Arg), $\mathrm{GGN}$ (Gly),
 $\mathrm{CCN}$ (Pro), $\mathrm{ACN}$ (Thr), $\mathrm{GTN}$ (Val),
-$\mathrm{CTN}$ (Leu) and $\mathrm{TCN}$ (Ser), where $\mathrm{N}$
-denotes any of the four nucleotides. The second half, denoted
-\emph{Octet~II}, consists of the remaining eight codon families,
-in which the third-position nucleotide affects the encoded product.
-Every service codon of the standard code belongs to Octet~II, and
-every service codon carries a purine ($\mathrm{A}$ or $\mathrm{G}$)
-at the third position.
+$\mathrm{CTN}$ (Leu) and $\mathrm{TCN}$ (Ser). The second half,
+denoted \emph{Octet~II}, consists of the remaining eight codon
+families, in which the third-position nucleotide affects the encoded
+product. Every service codon of the standard code belongs to
+Octet~II and carries a purine ($\mathrm{A}$ or $\mathrm{G}$) at the
+third position.
 
-The Rumer partition is not an analytical construct introduced in
-the present work but a structural feature of the code itself,
-reflecting both a qualitative asymmetry between fully degenerate
-and partially degenerate codon families and the quantitative
-fact that these two qualitatively distinct classes happen to
-have equal cardinality, eight families and thirty-two codons each.
-Because Octet~I contains no service codons, all nucleon
-quantities computed over Octet~I are independent of any
-parametrization of start and stop signals and depend only on
-the nucleon content of the encoded amino acids. The same
-property holds, for an independent reason, for any codon
-group whose third-position nucleotide is restricted to
-pyrimidines (cytosine or thymine), since all four service
-codons of the standard code carry a purine at the third
-position. These two conditions --- full four-fold degeneracy
-and purine-free third position --- are structurally
-independent, but both yield the same consequence: nucleon
-quantities over the affected groups are fixed by the amino
-acid composition alone and provide parametrization-independent
-reference values for the arithmetic identities of
-Section~\ref{sec:results}.
+The Rumer partition is not an analytical construct introduced in the
+present work but a structural feature of the code itself. It reflects
+both the qualitative distinction between fully and partially
+degenerate codon families and the quantitative fact that these two
+classes have equal cardinality: each contains eight families and
+thirty-two codons. Because Octet~I contains no service codons, all
+nucleon quantities computed over Octet~I are independent of any
+parametrization of start and stop signals and are determined solely by
+the nucleon content of the encoded amino acids. The same property
+holds, for a separate reason, for any codon group whose third-position
+nucleotide is restricted to pyrimidines (cytosine or thymine), since
+all four service codons of the standard code carry a purine at the
+third position. Full four-fold degeneracy and a purine-free third
+position are two distinct structural conditions, but both have the
+same consequence: nucleon quantities over the corresponding groups
+are fixed by their amino-acid composition and provide
+parametrization-independent reference values for the arithmetic
+identities of Section~\ref{sec:results}.
 
-A further structural property of the Rumer partition, introduced by Rumer~\cite{rumer1968}, is that the two octets are related by a simple permutation of the nucleotide alphabet.
-Under the transformation $R = (\mathrm{T} \leftrightarrow
-\mathrm{G},\; \mathrm{C} \leftrightarrow \mathrm{A})$, each
-codon family of Octet~I is mapped to a codon family of
-Octet~II, and vice versa. This transformation, known as the
-Rumer transformation, rearranges the partition but does not
-preserve the amino acids encoded by individual codons.
+A further structural property of the Rumer partition, introduced by
+Rumer~\cite{rumer1968}, is that the two octets are related by a simple
+permutation of the nucleotide alphabet. Under the transformation
+\[
+R =
+(\mathrm{T} \leftrightarrow \mathrm{G},\;
+ \mathrm{C} \leftrightarrow \mathrm{A}),
+\]
+each codon family of Octet~I is mapped to a codon family of Octet~II,
+and vice versa. This transformation, known as the Rumer
+transformation, rearranges the partition but does not preserve the
+amino acids encoded by individual codons.
 
-Taken together, the four-fold degeneracy pattern and the
-Rumer transformation identify the Octet~I / Octet~II
-partition as a natural structural division of the standard
-code, independent of any arithmetic considerations. In the
-present work we adopt this partition as one of the reference
-axes along which nucleon quantities are computed and
-compared.
+Taken together, the four-fold degeneracy pattern and the Rumer
+transformation identify the Octet~I / Octet~II partition as a natural
+structural division of the standard code, independent of the nucleon
+arithmetic. In the present work, this division is used as a reference
+partition over which nucleon quantities are computed and compared.
 
-The codon table (Figure~\ref{fig:codon-table}) is displayed with
-its axes in the base ordering $C, G, T, A$, which is also the default
-ordering of the accompanying visualizer. This ordering has two
-independent justifications. Chemically, it was
-introduced by Rumer~\cite{rumer1968} on the basis of base type
-and hydrogen-bond strength: pyrimidines and purines alternate
-($C, T$ vs $G, A$), and within each pair the stronger member
-precedes the weaker ($C$ before $T$, $G$ before $A$).
-Geometrically, as shown by Panov and
-Filatov~\cite{panov2024}, it is one of exactly four orderings
-(out of $24$ possible permutations of the four bases) in
-which $\mathrm{Octet}~\mathrm{I}$ and
-$\mathrm{Octet}~\mathrm{II}$ form connected regions on the
-codon matrix.
+The codon table (Figure~\ref{fig:codon-table}) is displayed with its
+axes in the base ordering $C,G,T,A$, which is also the default ordering
+of the accompanying visualizer. This ordering has two independent
+justifications. Chemically, it was introduced by
+Rumer~\cite{rumer1968} on the basis of base type and hydrogen-bond
+strength. The sequence $C,G,T,A$ alternates pyrimidines and purines,
+while within each of these classes the member of the Strong pair
+$\{\mathrm{C},\mathrm{G}\}$ precedes the member of the Weak pair
+$\{\mathrm{T},\mathrm{A}\}$: $\mathrm{C}$ precedes $\mathrm{T}$
+among the pyrimidines, and $\mathrm{G}$ precedes $\mathrm{A}$ among
+the purines. Geometrically, as shown by Panov and
+Filatov~\cite{panov2024}, it is one of exactly four orderings (out of
+$24$ possible permutations of the four bases) in which
+$\mathrm{Octet}~\mathrm{I}$ and $\mathrm{Octet}~\mathrm{II}$ form
+connected regions on the codon matrix.
 
 To assess the extent to which the arithmetic properties studied in
 this paper are specific to the standard genetic code, we additionally
-retrieved the full set of alternative translation tables maintained
-by NCBI (translation tables numbered 1--33, $27$ tables in total, as some
-numbers are left unused), covering nuclear, mitochondrial and plastid
-codes across a broad taxonomic range. The codon
-assignments of all these variants are collected in the dataset
+retrieved the full set of $27$ translation tables maintained by
+NCBI~\cite{ncbi2024geneticcodes}. The tables are numbered 1--33, with
+some numbers left unused, and cover nuclear, mitochondrial and plastid
+codes across a broad taxonomic range. The codon assignments of all
+these tables are collected in the dataset
 \texttt{ncbi\_genetic\_code\_registry.csv} and are used in
-Section~\ref{sec:results} for a comparative analysis of the
-standard code against its known natural alternatives.
+Section~\ref{sec:results-key1-ncbi} to compare the standard code with
+the other NCBI translation tables.
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.85\textwidth]{codon_table_key0.png}
-  \caption{Standard genetic code with nucleon
-  parameters of the encoded amino acids, displayed
-  under the Key~0 parametrization (stop codons
-  contribute zero; $\mathrm{ATG}$ is treated as
-  methionine). In each cell, the codon appears on
-  the left, the symbol of the encoded product (the
-  three-letter amino acid symbol, or $\mathrm{STOP}$
-  for the three stop codons) at the top center, the
-  total nucleon count $T$ below the product symbol,
-  the proton count $P$ at the top right, and the
-  neutron count $N$ at the bottom right. Codons of
-  $\mathrm{Octet}~\mathrm{I}$ (the eight four-fold
-  degenerate families) are shaded purple; codons of
-  $\mathrm{Octet}~\mathrm{II}$ are shaded yellow.
-  Generated by the accompanying
-  \texttt{visualization.html}.}
+\caption{Standard genetic code with nucleon parameters of the encoded
+amino acids, displayed under the naive reading (Key~0), in which stop
+codons contribute zero and $\mathrm{ATG}$ is counted as methionine.
+In each cell, the codon appears on the left; the symbol of the encoded
+product (the three-letter amino acid symbol or $\mathrm{STOP}$ for
+the three stop codons) appears at the top center; the total nucleon
+count $T$ appears below the product symbol; the proton count $P$
+appears at the top right; and the neutron count $N$ appears at the
+bottom right. Codons of $\mathrm{Octet}~\mathrm{I}$ (the eight fully
+four-fold degenerate families) are shaded purple, and codons of
+$\mathrm{Octet}~\mathrm{II}$ are shaded yellow. Generated by the
+accompanying \texttt{visualization.html}.}
   \label{fig:codon-table}
 \end{figure}
 
