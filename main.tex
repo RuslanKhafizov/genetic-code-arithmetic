@@ -117,9 +117,10 @@ computed datasets supporting it.
 
 Throughout this work, each of the twenty canonical amino acids is
 represented as a free neutral amino acid molecule (not as a residue in
-a peptide chain), with its molecular formula retrieved from the \textsc{PubChem}
-compound database~\cite{kim2023}. The dependence of the arithmetic on this choice---the free molecule rather than the residue---is examined in Section~\ref{sec:discussion-controls}. From this formula we compute four integer
-quantities that characterize the nucleon content of the molecule.
+a peptide chain), with its molecular formula retrieved from the
+\textsc{PubChem} compound database~\cite{kim2023}. From this formula,
+we compute four integer quantities that characterize the nucleon
+content of the molecule.
 
 The proton count $P$ is defined from the elemental composition of the
 molecular formula as
@@ -165,6 +166,10 @@ We emphasize that $P$, $N$, $T$ and $\Delta$ are not measured
 molecular masses. They are exact integer quantities derived from
 elemental composition, and all arithmetic identities reported in this
 study are exact integer relations rather than artifacts of rounding approximate molecular masses.
+The sensitivity of the results to the choice of molecular
+representation --- the free molecule or the amino acid residue in a
+peptide chain --- is examined in
+Section~\ref{sec:discussion-controls}.
 
 The resulting nucleon values for all twenty canonical amino acids are
 provided in the dataset \texttt{amino\_acids\_nucleons.csv}, with one
