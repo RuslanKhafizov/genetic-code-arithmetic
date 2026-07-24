@@ -37,11 +37,13 @@ input datasets and writes three supplementary control datasets:
         For each of the 27 NCBI translation tables, the Keto/Amino
         functional-group axis ({G,T} vs {A,C}) sense-pool asymmetry for T, P, N
         and Delta at each of the three codon positions, with residues modulo 37
-        (Model 1 sense pool: stops of that table and the ATG initiator
-        excluded). Establishes that the asymmetry is divisible by 37 at all
-        three codon positions only for the standard code and its exact
-        codon-to-amino-acid equivalent (Table 11); no other table reaches more
-        than one position.
+        under two parallel sense-pool models. Model 1 excludes every codon
+        listed as a stop for that table and the ATG initiator. Model 2 returns
+        context-dependent stop codons to the pool with their amino-acid
+        assignments. Under Model 1, Tables 1, 11 and 28 reach all three
+        positions; under Model 2, only Tables 1 and 11 do. In neither model
+        does a table with an analyzed codon-to-amino-acid pool nonequivalent
+        to the standard code reach all three positions.
 
   * representation_sensitivity.csv
         The load-bearing sense-pool quantities recomputed under alternative
@@ -306,53 +308,86 @@ def build_position_asymmetry_ncbi():
     # Control 3. For each of the 27 NCBI translation tables, the Keto/Amino
     # functional-group axis ({G,T} vs {A,C}) sense-pool asymmetry
     # (Keto minus Amino) for T, P, N and Delta at each of the three codon
-    # positions, with residues modulo 37. The sense pool follows Model 1: the
-    # table's stop codons and the universal initiator ATG are excluded; every
-    # other codon contributes its amino acid's (P, N). The standard code
-    # asymmetry is divisible by 37 at all three positions; this control records
-    # how many positions each table reaches, establishing that the full
-    # three-position signature is specific to the standard code and its exact
-    # codon-to-amino-acid equivalent.
-    header = ["Transl_Table", "Code_Name", "Position",
+    # positions, with residues modulo 37, under two parallel pool models.
+    #
+    # Model 1 excludes ATG and every codon listed in the table's Stop_Codons
+    # field, including context-dependent stops. Model 2 excludes ATG and only
+    # positions marked '*' in Amino_Acids, thereby returning context-dependent
+    # stops to the pool with their amino-acid assignments. The two models differ
+    # only for Tables 27, 28 and 31 in the fixed registry snapshot.
+    header = ["Transl_Table", "Code_Name", "Pool_Model", "Position",
               "Keto_minus_Amino_T", "Keto_minus_Amino_P",
               "Keto_minus_Amino_N", "Keto_minus_Amino_Delta",
               "T_mod37", "P_mod37", "N_mod37", "Delta_mod37",
               "Position_Has_Div37", "Positions_With_Div37"]
     rows = []
+    full_signature = {"Model_1": set(), "Model_2": set()}
     for tr in ncbi_rows:
         table = int(tr["Transl_Table"])
         name = tr["Code_Name"]
         aa_string = tr["Amino_Acids"]
-        # Model 1 sense pool: exclude stops ('*') and the ATG initiator.
-        sense = {}
-        for i, codon in enumerate(NCBI_CODONS):
-            aa = aa_string[i]
-            if aa == "*" or codon == "ATG":
-                continue
-            sense[codon] = ONE_LETTER_PN[aa]
-        per_position = []
-        for pos in (1, 2, 3):
-            pk = nk = pa = na = 0
-            for codon, (p, n) in sense.items():
-                base = codon[pos - 1]
-                if base in "GT":        # Keto
-                    pk += p
-                    nk += n
-                elif base in "AC":      # Amino
-                    pa += p
-                    na += n
-            T = (pk + nk) - (pa + na)
-            P = pk - pa
-            N = nk - na
-            D = (pk - nk) - (pa - na)
-            has = int(any(v % 37 == 0 for v in (T, P, N, D)))
-            per_position.append((pos, T, P, N, D, has))
-        positions_with = sum(h for *_, h in per_position)
-        for pos, T, P, N, D, has in per_position:
-            rows.append([table, name, pos, T, P, N, D,
-                         T % 37, P % 37, N % 37, D % 37,
-                         has, positions_with])
-    rows.sort(key=lambda r: (r[0], r[2]))
+        listed_stops = {
+            codon.strip()
+            for codon in tr["Stop_Codons"].split(",")
+            if codon.strip()
+        }
+        table_results = {}
+        for model in ("Model_1", "Model_2"):
+            sense = {}
+            for i, codon in enumerate(NCBI_CODONS):
+                aa = aa_string[i]
+                if model == "Model_1":
+                    is_stop = codon in listed_stops
+                else:
+                    is_stop = aa == "*"
+                if is_stop or codon == "ATG":
+                    continue
+                sense[codon] = ONE_LETTER_PN[aa]
+
+            per_position = []
+            for pos in (1, 2, 3):
+                pk = nk = pa = na = 0
+                for codon, (p, n) in sense.items():
+                    base = codon[pos - 1]
+                    if base in "GT":        # Keto
+                        pk += p
+                        nk += n
+                    elif base in "AC":      # Amino
+                        pa += p
+                        na += n
+                T = (pk + nk) - (pa + na)
+                P = pk - pa
+                N = nk - na
+                D = (pk - nk) - (pa - na)
+                has = int(any(v % 37 == 0 for v in (T, P, N, D)))
+                per_position.append((pos, T, P, N, D, has))
+
+            table_results[model] = per_position
+            positions_with = sum(h for *_, h in per_position)
+            if positions_with == 3:
+                full_signature[model].add(table)
+            for pos, T, P, N, D, has in per_position:
+                rows.append([table, name, model, pos, T, P, N, D,
+                             T % 37, P % 37, N % 37, D % 37,
+                             has, positions_with])
+
+        if (table not in {27, 28, 31}
+                and table_results["Model_1"] != table_results["Model_2"]):
+            raise AssertionError(
+                f"position asymmetry: Models 1 and 2 differ for Table {table}"
+            )
+
+    expected = {
+        "Model_1": {1, 11, 28},
+        "Model_2": {1, 11},
+    }
+    if full_signature != expected:
+        raise AssertionError(
+            "position asymmetry: unexpected full-signature tables: "
+            f"{full_signature!r}"
+        )
+
+    rows.sort(key=lambda r: (r[0], r[2], r[3]))
     return header, rows
 
 
