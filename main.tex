@@ -208,9 +208,7 @@ act as stop signals, whereas $\mathrm{ATG}$ encodes methionine and
 serves as the canonical translation-initiation signal. For the purposes of the present
 arithmetic analysis, these four codons --- the three stop codons and
 $\mathrm{ATG}$ in its initiator role --- are referred to as
-\emph{service codons}. This is a study-specific analytical convention
-and does not imply that $\mathrm{ATG}$ is the only possible initiation
-codon in every biological context.
+\emph{service codons}. Among possible initiation codons, $\mathrm{ATG}$ is predominant and is the only one whose RNA equivalent $\mathrm{AUG}$ is fully complementary to the $\mathrm{CAU}$ anticodon of the initiator methionine tRNA; the present analytical framework therefore uses $\mathrm{ATG}$ to represent the initiation function, which does not exclude initiation from other codons.
 
 We define the \emph{service-codon-excluded 60-codon pool} as
 \[
@@ -328,91 +326,112 @@ accompanying \texttt{visualization.html}.}
   \label{fig:codon-table}
 \end{figure}
 
-\subsection{Codon group partitioning}
+\subsection{Codon-group construction}
 \label{sec:partitioning}
 
 In addition to the Rumer partition introduced in
-Section~\ref{sec:genetic-code}, we employ a second, complementary
-partitioning scheme based on the chemical identity of the
-nucleotide at the third codon position. Each of the four
-nucleotides can be classified along three independent binary
-chemical axes:
+Section~\ref{sec:genetic-code}, we use a complementary overlapping
+grouping system based on the chemical identity of the nucleotide at
+the third codon position. Each of the four nucleotides belongs to
+one of two classes under each of three distinct binary chemical
+classifications:
 \begin{itemize}
-  \item base type: \emph{purine} $\{\mathrm{A}, \mathrm{G}\}$
-        versus \emph{pyrimidine} $\{\mathrm{C}, \mathrm{T}\}$;
-  \item hydrogen-bond strength: \emph{strong} (three bonds)
-        $\{\mathrm{C}, \mathrm{G}\}$ versus \emph{weak} (two
-        bonds) $\{\mathrm{A}, \mathrm{T}\}$;
-  \item functional group: \emph{amino}
-        $\{\mathrm{A}, \mathrm{C}\}$ versus \emph{keto}
-        $\{\mathrm{G}, \mathrm{T}\}$.
+  \item base type: \emph{purine}
+        $\{\mathrm{A},\mathrm{G}\}$ (R) or \emph{pyrimidine}
+        $\{\mathrm{C},\mathrm{T}\}$ (Y);
+  \item number of hydrogen bonds in the canonical base pair:
+        \emph{strong} $\{\mathrm{C},\mathrm{G}\}$ (S; three bonds)
+        or \emph{weak} $\{\mathrm{A},\mathrm{T}\}$ (W; two bonds);
+  \item functional class: \emph{amino}
+        $\{\mathrm{A},\mathrm{C}\}$ (M) or \emph{keto}
+        $\{\mathrm{G},\mathrm{T}\}$ (K).
 \end{itemize}
-Each axis splits the four nucleotides into two pairs, giving
-a total of six two-element nucleotide subsets. Each of these
-six subsets has a standard one-letter IUPAC ambiguity code
-(R, Y, S, W, M, K), reflecting that they are the accepted
-biochemical classifications of the four nucleotides into
-pairs. For each such subset $X \subset \{\mathrm{A},
-\mathrm{T}, \mathrm{G}, \mathrm{C}\}$ with $|X| = 2$, we
-define the corresponding codon group as the set of all
-codons whose third-position nucleotide belongs to $X$.
+These axes were not selected in response to the subsequent
+nucleon calculations: they are three conventional pairwise
+dichotomies of the nucleotides and are represented explicitly
+in the IUPAC--IUB ambiguity nomenclature by the complementary
+symbol pairs R/Y, S/W, and M/K. Together they exhaust the three
+possible partitions of four nucleotides into two unordered
+pairs. For each resulting subset
+$X \subset \{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$
+with $|X| = 2$, we define the corresponding codon group as the
+set of all codons whose third-position nucleotide belongs to
+$X$.
 
-The six two-nucleotide groups and the four one-nucleotide groups are overlapping rather than mutually disjoint: a given codon belongs to several of them at once. Every codon belongs to exactly three two-nucleotide groups (one per chemical axis) and to exactly one one-nucleotide group.
-
-This third-position partitioning can be applied independently at
-three levels: to all $64$ codons, to the $32$ codons of
-Octet~I, and to the $32$ codons of Octet~II. The same
-definitions produce groups of different sizes at each level:
-each two-nucleotide group contains $32$ codons at the level of
-the full code and $16$ codons within each octet, and each one-nucleotide group contains $16$ codons at the level of the
-full code and $8$ codons within each octet. Where convenient we abbreviate a codon group by its size, writing $L_{16}$ for any group of $16$ codons and $L_8$ for any group of $8$ codons, irrespective of the partition that produces it; thus $L_{16} \cap \mathrm{Octet~I}$ denotes a $16$-codon group contained in Octet~I, and similarly for the remaining size-and-octet combinations.
-
-The $33$ codon groups used in the present work therefore
-consist of: the full code as a single group of $64$ codons;
-the two octets as groups of $32$ codons each; the six
-two-nucleotide groups and four one-nucleotide groups at the
-level of the full code; and their analogues within each
-octet, obtained by intersecting the corresponding chemical
-group with $\mathrm{Octet~I}$ or $\mathrm{Octet~II}$. We
-denote such intersections in the natural way: for example,
-$\mathrm{Keto} \cap \mathrm{Octet~I}$ is the group of
-$16$ codons belonging both to the Keto group and to
-Octet~I, and $\{\mathrm{A}\} \cap \mathrm{Octet~II}$ is
-the group of $8$ codons of Octet~II with adenine at the
-third position. All $33$ groups, together with their
-sizes, codon compositions, and Rumer-octet membership, are
-listed in the dataset \texttt{codon\_groups.csv}.
-
-A direct consequence of the code's structure is the following
-\emph{twin-group property}. Because every codon family in
-Octet~I is fully four-fold degenerate
-(Section~\ref{sec:genetic-code}) and because pyrimidine synonymy holds in all eight Octet~II families as
-well --- that is, for every codon family in the standard code,
-the codons $\mathrm{NNC}$ and $\mathrm{NNT}$ (with identical
-first two positions and cytosine versus thymine at the third)
-encode the same amino acid --- the Keto group
-$\{\mathrm{G}, \mathrm{T}\}$ and the Strong group
-$\{\mathrm{C}, \mathrm{G}\}$ encode the identical multiset of
-amino acids, and so do the Amino group
-$\{\mathrm{A}, \mathrm{C}\}$ and the Weak group
-$\{\mathrm{A}, \mathrm{T}\}$. Since all four nucleon quantities
-$P$, $N$, $T$ and $\Delta$ depend only on the multiset of
-encoded products, this yields the identities
+For each of these six two-element subsets, and for each singleton
+$X\in\{\{\mathrm{A}\},\{\mathrm{C}\},\{\mathrm{G}\},
+\{\mathrm{T}\}\}$, we define the codon group
 \[
-P(\mathrm{Keto}) = P(\mathrm{Strong}), \qquad
-N(\mathrm{Keto}) = N(\mathrm{Strong}),
+G_X =
+\{(c_1,c_2,c_3)\in\mathcal{C}_{\mathrm{standard}}
+  : c_3\in X\}.
 \]
+Thus, $G_X$ consists of all codons whose third-position nucleotide
+belongs to $X$. The six two-nucleotide groups overlap: every codon
+belongs to exactly three of them, one for each chemical
+classification. At the same time, every codon belongs to exactly
+one of the four one-nucleotide groups.
+
+This grouping system is applied at three levels: to all $64$
+codons, to the $32$ codons of Octet~I, and to the $32$ codons of
+Octet~II. If $|X|=2$, then $G_X$ contains $32$ codons, while each
+of the intersections $G_X\cap\mathrm{Octet~I}$ and
+$G_X\cap\mathrm{Octet~II}$ contains $16$ codons. If $|X|=1$, the
+corresponding sizes are $16$ and $8$ codons. Group size alone does
+not identify a particular group; formulas therefore specify the
+set $X$ and, where necessary, the octet explicitly.
+
+The family of $33$ codon groups used in the present work comprises
+the full code as one group of $64$ codons; the two octets as groups
+of $32$ codons each; ten groups $G_X$ at the full-code level,
+corresponding to the six two-nucleotide and four one-nucleotide
+sets $X$; and their twenty intersections with Octet~I and
+Octet~II. Thus, the total number of analyzed groups is
 \[
-T(\mathrm{Keto}) = T(\mathrm{Strong}), \qquad
-\Delta(\mathrm{Keto}) = \Delta(\mathrm{Strong}),
+1+2+10+20=33.
 \]
-and the analogous identities between the Amino and Weak groups.
-These equalities hold under any parametrization of the service
-codons, and the same property propagates to the corresponding
-groups of $16$ and $8$ codons within each octet. We refer to
-the Keto/Strong and Amino/Weak pairs as \emph{twin groups};
-in the dataset \texttt{codon\_groups.csv} the twin relationship
-is recorded in the column \texttt{Twin\_Group\_ID}.
+For example, $G_{\{\mathrm{G},\mathrm{T}\}}\cap
+\mathrm{Octet~I}$ is the $16$-codon group
+$\mathrm{Keto}\cap\mathrm{Octet~I}$, whereas
+$G_{\{\mathrm{A}\}}\cap\mathrm{Octet~II}$ is the $8$-codon group
+of Octet~II with adenine at the third position. All $33$ groups,
+together with their sizes, codon compositions, and Rumer-octet
+membership, are listed in the dataset \texttt{codon\_groups.csv}.
+
+A direct consequence of the structure of the standard code is the
+\emph{twin-group property}. Within every codon family, the codons
+$\mathrm{NNC}$ and $\mathrm{NNT}$ with identical first two
+positions encode the same amino acid. Therefore, exchanging
+$\mathrm{C}\leftrightarrow\mathrm{T}$ at the third position does
+not change the multiset of encoded amino acids. Consequently, the
+Keto group $\{\mathrm{G},\mathrm{T}\}$ and the Strong group
+$\{\mathrm{C},\mathrm{G}\}$ have the same amino-acid composition,
+as do the Amino group $\{\mathrm{A},\mathrm{C}\}$ and the Weak
+group $\{\mathrm{A},\mathrm{T}\}$. The service codons also occur
+identically in the two groups of each pair. Hence, for any nucleon
+quantity $Q\in\{P,N,T,\Delta\}$,
+\[
+Q(\mathrm{Keto})=Q(\mathrm{Strong}),\qquad
+Q(\mathrm{Amino})=Q(\mathrm{Weak})
+\]
+under any common parametrization of the service codons. The same
+identities hold after intersecting each pair with Octet~I or
+Octet~II. We refer to these pairs of two-nucleotide groups as
+\emph{twin groups}; in the dataset \texttt{codon\_groups.csv}, the
+twin relationship is recorded in the column
+\texttt{Twin\_Group\_ID}.
+
+A separate direct consequence of the same pyrimidine synonymy is
+the equality of the one-nucleotide groups $\{\mathrm{C}\}$ and
+$\{\mathrm{T}\}$ at the full-code level and after their
+intersection with either octet. At the full-code level, each
+contains $16$ codons; within either octet, each contains $8$ codons.
+Because they do not arise by comparing two branches of a chemical
+axis, the term ``twin groups'' and the column
+\texttt{Twin\_Group\_ID} are not used for them in the present work.
+Both groups and their intersections with the octets contain no
+service codons; hence, both their values and the equalities between
+them are independent of parametrization.
 
 \subsection{Parametrization of service codons}
 \label{sec:parametrization}
