@@ -226,8 +226,7 @@ does not upload selected codons or calculated results.
 #### Main features
 
 - **Translation table selector.** Switching between all 27 NCBI
-  translation tables (numbered 1–33, with gaps), four additional
-  unofficial codes (tables 34–37), and two alternative
+  translation tables (numbered 1–33, with gaps) and two alternative
   parametrizations of the standard code that use different proton,
   neutron, and mass conventions for proline and glycine. The
   selector opens on the standard code by default.
@@ -401,11 +400,13 @@ below for usage and details.
   excess remains on several distinct odd cores, whereas 73 = 2·37−1 and 61
   each reduce to a single odd core. This is descriptive removal of structural
   copies, not evidence of statistical independence.
-- `position_asymmetry_ncbi.csv` — the Keto/Amino asymmetry, computed on the sense pool (so that tables with different stop-codon sets remain comparable), at all
-  three codon positions across the 27 NCBI translation tables. The asymmetry
-  is divisible by 37 at all three positions for the standard code and its
-  exact codon-to-amino-acid equivalent (Table 11), and at no more than one
-  position for any other table.
+- `position_asymmetry_ncbi.csv` — the Keto/Amino asymmetry at all three codon
+  positions across the 27 NCBI translation tables, computed under two parallel
+  sense-pool models. Under Model 1 the full three-position signature occurs
+  for Tables 1, 11, and 28; under Model 2 it occurs for Tables 1 and 11.
+  Table 28 has a standard-equivalent analyzed pool under Model 1, and no table
+  with a non-equivalent analyzed pool reaches all three positions in either
+  model.
 - `representation_sensitivity.csv` — the load-bearing sense-pool
   quantities recomputed under alternative molecular representations of
   the encoded amino acid (free amino acid, peptide residue,
@@ -623,10 +624,11 @@ four supplementary control datasets. It is not part of the core
 reproducibility pipeline and is not required to reproduce any numerical result
 reported in the preprint; it exists to test how *specific* those results are to
 the standard code, to the third codon position, to the modulus 37, and to the
-free-amino-acid representation. The third
-of these controls also documents a regularity that is non-trivial in itself — the
-Keto/Amino asymmetry is divisible by 37 at all three codon positions — and shows
-that this is unique to the standard code (and its twin, NCBI Table 11).
+free-amino-acid representation. The third of these controls also documents a
+regularity that is non-trivial in itself — the Keto/Amino asymmetry is divisible
+by 37 at all three codon positions — and shows that the full signature is
+confined to standard-equivalent analyzed pools: Tables 1, 11, and 28 under
+Model 1, and Tables 1 and 11 under Model 2.
 
 ### Requirements
 
@@ -692,8 +694,12 @@ a decimal, so that no floating-point numerics enter the output.
 3. **Position asymmetry across NCBI codes** (`position_asymmetry_ncbi.csv`).
    For each of the 27 NCBI translation tables, the Keto/Amino sense-pool
    asymmetry is computed for all four nucleon quantities at each codon
-   position. The asymmetry is divisible by 37 at all three positions only for
-   the standard code and its exact codon-to-amino-acid equivalent (Table 11).
+   position under two parallel pool models. Model 1 excludes ATG and every
+   codon listed in `Stop_Codons`; Model 2 returns context-dependent stop codons
+   to the pool with their amino-acid assignments. The asymmetry is divisible
+   by 37 at all three positions for Tables 1, 11, and 28 under Model 1, and for
+   Tables 1 and 11 under Model 2. Under Model 1, Table 28 has the same analyzed
+   pool as the standard code.
    Because the NCBI tables are evolutionarily related rather than independent
    samples, this is evidence of specificity among natural codes, not a
    probability statement.
@@ -2014,19 +2020,28 @@ Output of `controls.py` (not part of the `reproduce.py` pipeline). For each of
 the 27 NCBI translation tables, the Keto/Amino functional-group axis
 (`{G, T}` versus `{A, C}`) sense-pool asymmetry — the value on the Keto side
 minus the value on the Amino side — is computed for all four nucleon quantities
-at each of the three codon positions. The sense pool follows Model 1: the stop
-codons of that table and the universal initiator ATG are excluded, and every
-other codon contributes its amino acid's proton and neutron counts. 27 tables ×
-3 positions = 81 rows. The standard code (table 1) is the only table, together
-with its exact codon-to-amino-acid equivalent (table 11), whose asymmetry is
-divisible by 37 at all three positions. Since the NCBI tables are
-evolutionarily related rather than independent samples, this documents
-specificity among natural codes rather than improbability under a null model.
+at each of the three codon positions under two parallel pool models. Model 1
+excludes ATG and every codon listed in the table's `Stop_Codons` field,
+including context-dependent stops. Model 2 excludes ATG and only positions
+marked `*` in `Amino_Acids`, thereby returning context-dependent stop codons to
+the pool with their amino-acid assignments. The models differ only for Tables
+27, 28, and 31 in the fixed registry snapshot. Thus 27 tables × 2 models ×
+3 positions = 162 rows.
+
+Under Model 1, the full three-position signature occurs for Tables 1, 11, and
+28; under Model 2 it occurs for Tables 1 and 11. Table 28 is not an independent
+replication under Model 1, because exclusion of its three context-dependent
+stops makes its analyzed pool identical to that of the standard code. No table
+with a non-equivalent analyzed pool reaches all three positions in either
+model. Since the NCBI tables are evolutionarily related rather than independent
+samples, this documents specificity among natural codes rather than
+improbability under a null model.
 
 #### Columns
 
 - `Transl_Table` — NCBI translation table number
 - `Code_Name` — NCBI name of the translation table
+- `Pool_Model` — sense-pool convention (`Model_1` or `Model_2`)
 - `Position` — codon position (1, 2, or 3)
 - `Keto_minus_Amino_T`, `Keto_minus_Amino_P`, `Keto_minus_Amino_N`,
   `Keto_minus_Amino_Delta` — the Keto-minus-Amino asymmetry for the total
@@ -2035,9 +2050,10 @@ specificity among natural codes rather than improbability under a null model.
   modulo 37 (0 means divisible by 37)
 - `Position_Has_Div37` — 1 if at least one of the four asymmetries at this
   position is divisible by 37, else 0
-- `Positions_With_Div37` — for this table, the number of codon positions (0–3)
-  at which at least one asymmetry is divisible by 37; filtering on the value 3
-  selects exactly tables 1 and 11
+- `Positions_With_Div37` — for this table and pool model, the number of codon
+  positions (0–3) at which at least one asymmetry is divisible by 37; filtering
+  on the value 3 selects Tables 1, 11, and 28 under Model 1 and Tables 1 and 11
+  under Model 2
 
 ### representation_sensitivity.csv
 
