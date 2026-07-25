@@ -120,7 +120,9 @@ represented as a free neutral amino acid molecule (not as a residue in
 a peptide chain), with its molecular formula retrieved from the
 \textsc{PubChem} compound database~\cite{kim2023}. From this formula,
 we compute four integer quantities that characterize the nucleon
-content of the molecule.
+content of the molecule. The sensitivity of the results to this
+choice of molecular representation is examined in
+Section~\ref{sec:discussion-controls}.
 
 The proton count $P$ is defined from the elemental composition of the
 molecular formula as
@@ -153,7 +155,10 @@ assumptions above, hydrogen is the only element contributing to
 $\Delta$, since all other isotopes used have equal numbers of protons
 and neutrons. Consequently $\Delta$ is numerically equal to the number
 of hydrogen atoms in the molecule, and in particular $\Delta \geq 0$
-for every amino acid.
+for every amino acid. For groups summed only over the service-excluded
+pool (Section~\ref{sec:genetic-code}), $\Delta$ is therefore the total
+hydrogen-atom count by linearity; in this sense, it is referred to
+below as the \emph{hydrogen count}.
 
 To avoid notational collision, we use the uppercase symbol
 $\Delta$ exclusively for the proton--neutron imbalance of a
@@ -165,27 +170,23 @@ $i$ and $j$).
 We emphasize that $P$, $N$, $T$ and $\Delta$ are not measured
 molecular masses. They are exact integer quantities derived from
 elemental composition, and all arithmetic identities reported in this
-study are exact integer relations rather than artifacts of rounding approximate molecular masses.
-The sensitivity of the results to the choice of molecular
-representation --- the free molecule or the amino acid residue in a
-peptide chain --- is examined in
-Section~\ref{sec:discussion-controls}.
+study are exact integer relations rather than artifacts of rounding
+approximate molecular masses.
 
-The resulting nucleon values for all twenty canonical amino acids are
-provided in the dataset \texttt{amino\_acids\_nucleons.csv}, with one
-row per amino acid and columns for $P$, $N$, $T$ and $\Delta$. From this table we additionally compute three companion
-datasets of pairwise absolute differences ---
-\texttt{amino\_acids\_proton\_differences.csv},
+The nucleon values for all twenty canonical amino acids are collected
+in the input dataset \texttt{amino\_acids\_nucleons.csv}, with one
+row per amino acid and columns for $P$, $N$, $T$ and $\Delta$. From
+this table we compute three companion datasets of pairwise absolute
+differences: \texttt{amino\_acids\_proton\_differences.csv},
 \texttt{amino\_acids\_neutron\_differences.csv} and
-\texttt{amino\_acids\_nucleon\_differences.csv} --- which group
-all $\binom{20}{2} = 190$ unordered amino acid pairs by their
-values of $|\delta P|$, $|\delta N|$ and $|\delta T|$
-respectively, where for any pair of amino acids $(i, j)$ we
-write $\delta P = P_i - P_j$ and analogously for $N$ and $T$.
-These companion datasets are used in later sections to identify
-amino acid pairs whose nucleon differences match specific target
-values, and in particular to locate pairs that are unique within
-the twenty amino acids with respect to a given difference.
+\texttt{amino\_acids\_nucleon\_differences.csv}. For any pair of amino
+acids $(i, j)$ we write $\delta P = P_i - P_j$ and analogously for
+$N$ and $T$. Each file groups all $\binom{20}{2} = 190$ unordered
+pairs by the value of $|\delta P|$, $|\delta N|$ or $|\delta T|$
+respectively. These companion datasets are used in later sections to
+identify amino acid pairs whose nucleon differences match specific
+target values, and in particular to locate pairs that are unique
+within the twenty amino acids with respect to a given difference.
 
 All subsequent nucleon computations for codon groups reduce, by
 linearity, to sums of the per-amino-acid values tabulated in
@@ -194,33 +195,47 @@ the corresponding codons. Where service codons are included, their
 contributions are determined by the chosen parametrization
 (Section~\ref{sec:parametrization}).
 
-\subsection{Genetic code structure}
+subsection{Genetic code structure}
 \label{sec:genetic-code}
 
-The standard genetic code defines a surjective mapping from the $64$
-codons of the four-letter nucleotide alphabet
-$\{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$ to the twenty
-canonical amino acids and a translation-termination signal. Throughout
-this paper, we use DNA notation (with thymine $\mathrm{T}$ rather than
-uracil $\mathrm{U}$) and adopt the codon assignments of The Standard
-Code (NCBI translation table~1)~\cite{ncbi2024geneticcodes}. The three codons $\mathrm{TAA}$, $\mathrm{TAG}$ and $\mathrm{TGA}$
-act as stop signals, whereas $\mathrm{ATG}$ encodes methionine and
-serves as the canonical translation-initiation signal. For the purposes of the present
+The standard genetic code maps the $64$ codons of the four-letter
+nucleotide alphabet $\{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$
+onto the twenty canonical amino acids and a translation-termination
+signal. Throughout this paper, we use DNA notation (with thymine
+$\mathrm{T}$ rather than uracil $\mathrm{U}$) and adopt the codon
+assignments of The Standard Code (NCBI translation
+table~1)~\cite{ncbi2024geneticcodes}. The three codons $\mathrm{TAA}$,
+$\mathrm{TAG}$ and $\mathrm{TGA}$ act as stop signals, whereas
+$\mathrm{ATG}$ encodes methionine and serves as the canonical
+translation-initiation signal. For the purposes of the present
 arithmetic analysis, these four codons --- the three stop codons and
 $\mathrm{ATG}$ in its initiator role --- are referred to as
-\emph{service codons}. Among possible initiation codons, $\mathrm{ATG}$ is predominant and is the only one whose RNA equivalent $\mathrm{AUG}$ is fully complementary to the $\mathrm{CAU}$ anticodon of the initiator methionine tRNA; the present analytical framework therefore uses $\mathrm{ATG}$ to represent the initiation function, which does not exclude initiation from other codons.
+\emph{service codons}. Among possible initiation codons, $\mathrm{ATG}$
+is predominant. Its RNA equivalent $\mathrm{AUG}$ is the only one of
+them fully complementary to the $\mathrm{CAU}$ anticodon of the
+initiator methionine tRNA. In the present analysis, $\mathrm{ATG}$
+represents the initiation function; this analytical convention does not
+exclude initiation from other codons.
 
-We define the \emph{service-codon-excluded 60-codon pool} as
+Let the complete set of $64$ codons be
+\[
+\mathcal{C}_{64}
+=
+\{\mathrm{A},\mathrm{T},\mathrm{G},\mathrm{C}\}^{3},
+\]
+and let the four service codons form the set
+\[
+\mathcal{S}
+=
+\{\mathrm{ATG},\mathrm{TAA},\mathrm{TAG},\mathrm{TGA}\}.
+\]
+The \emph{service-codon-excluded 60-codon pool} is then defined as
 \[
 \mathcal{C}_{\mathrm{SE}}
 =
-\mathcal{C}_{\mathrm{standard}}
-\setminus
-\{\mathrm{ATG},\mathrm{TAA},\mathrm{TAG},\mathrm{TGA}\},
+\mathcal{C}_{64}\setminus\mathcal{S},
 \]
-where $\mathcal{C}_{\mathrm{standard}}$ denotes the set of all $64$
-codons of the standard code. Thus,
-$|\mathcal{C}_{\mathrm{SE}}|=60$. Every codon belonging to
+with $|\mathcal{C}_{\mathrm{SE}}|=60$. Every codon belonging to
 $\mathcal{C}_{\mathrm{SE}}$ is counted according to its standard
 amino-acid assignment. The full codon-to-product mapping is provided
 in the dataset \texttt{genetic\_code\_codons.csv}.
@@ -283,10 +298,11 @@ partition over which nucleon quantities are computed and compared.
 
 The codon table (Figure~\ref{fig:codon-table}) is displayed with its
 axes in the base ordering $C,G,T,A$, which is also the default ordering
-of the accompanying visualizer. This ordering has two independent
+of the accompanying visualizer. This ordering has two
 justifications. Chemically, it was introduced by
-Rumer~\cite{rumer1968} on the basis of base type and hydrogen-bond
-strength. The sequence $C,G,T,A$ alternates pyrimidines and purines,
+Rumer~\cite{rumer1968} on the basis of base type and the number
+of hydrogen bonds in the canonical base pair. The sequence $C,G,T,A$
+alternates pyrimidines and purines,
 while within each of these classes the member of the Strong pair
 $\{\mathrm{C},\mathrm{G}\}$ precedes the member of the Weak pair
 $\{\mathrm{T},\mathrm{A}\}$: $\mathrm{C}$ precedes $\mathrm{T}$
@@ -352,18 +368,15 @@ dichotomies of the nucleotides and are represented explicitly
 in the IUPAC--IUB ambiguity nomenclature by the complementary
 symbol pairs R/Y, S/W, and M/K. Together they exhaust the three
 possible partitions of four nucleotides into two unordered
-pairs. For each resulting subset
-$X \subset \{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$
-with $|X| = 2$, we define the corresponding codon group as the
-set of all codons whose third-position nucleotide belongs to
-$X$.
+pairs, thereby yielding six two-element subsets
+$X \subset \{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$.
 
 For each of these six two-element subsets, and for each singleton
 $X\in\{\{\mathrm{A}\},\{\mathrm{C}\},\{\mathrm{G}\},
 \{\mathrm{T}\}\}$, we define the codon group
 \[
 G_X =
-\{(c_1,c_2,c_3)\in\mathcal{C}_{\mathrm{standard}}
+\{(c_1,c_2,c_3)\in\mathcal{C}_{64}
   : c_3\in X\}.
 \]
 Thus, $G_X$ consists of all codons whose third-position nucleotide
@@ -436,476 +449,416 @@ them are independent of parametrization.
 \subsection{Parametrization of service codons}
 \label{sec:parametrization}
 
-The nucleon quantities $P$, $N$, $T$ and $\Delta$ of any codon
-group are obtained by summing the corresponding per-amino-acid
-values from Section~\ref{sec:composition} over all codons in
-the group. For the 60 sense codons (defined below), this summation is unambiguous: each such
-codon has a well-defined translation product with a
-well-defined molecular composition. The remaining four
-codons --- the three stop signals $\mathrm{TAA}$,
-$\mathrm{TAG}$, $\mathrm{TGA}$ and the start signal
-$\mathrm{ATG}$ --- require a separate convention, because
-stop codons do not correspond to any translation product and
-because the start codon plays a dual role as an initiation
-signal and as a methionine-encoding codon. We refer to
-these four codons collectively as \emph{service codons}.
-The remaining $60$ codons we call \emph{sense codons}.\footnote{We
-note that the term \emph{sense codon} is sometimes used in the
-literature for all $61$ non-stop codons, including the
-$\mathrm{ATG}$ initiator. Throughout this paper it denotes the $60$
-codons remaining after the three stop codons and the $\mathrm{ATG}$
-initiator are set aside; this usage is fixed in the accompanying
-datasets and visualizer.}
-The start codon $\mathrm{ATG}$ encodes methionine and is
-a fully functional sense codon at any internal position;
-it is grouped with the service codons, and excluded from
-the sense pool, solely in its role as the universal initiation signal, not because it lacks a
-translation product. Only the $\mathrm{ATG}$ initiator is
-removed on these grounds; every other codon that encodes
-an amino acid is counted as a sense codon. The sense pool
-is thus defined as the $64$ codons
-less the three stop codons and the $\mathrm{ATG}$
-initiator, and its membership does not depend on the
-choice of parametric key.
+The nucleon quantities of a codon group are obtained by summing the
+values of the amino acids encoded by its constituent codons in the
+standard genetic code. For codons counted only according to their
+amino-acid assignments, this summation is unambiguous. A separate
+convention is needed for the three stop codons, which have no
+amino-acid product, and for $\mathrm{ATG}$ in its initiator role;
+$\mathrm{ATG}$ also encodes methionine
+(Section~\ref{sec:genetic-code}).
 
-To formalize this, we introduce the notion of a
-\emph{parametric key}: a fixed assignment of nucleon values
-$(P, N)$ to each of the four service codons. A parametric key
-specifies how service codons contribute to group sums; it
-affects only the four service codons, while the nucleon
-values of the $60$ sense codons defined above are fixed by the
-amino acid composition of Section~\ref{sec:composition} and
-are unaffected by the choice of key. In the present study we
-employ two parametric keys, both of which are recorded in
-the dataset \texttt{key\_parameters.csv} under the identifiers
-\texttt{Key~0} and \texttt{Key~1}.
+The complete codon set $\mathcal{C}_{64}$, the four-codon service set
+$\mathcal{S}$, and the remaining 60-codon pool
+$\mathcal{C}_{\mathrm{SE}}$ are defined in
+Section~\ref{sec:genetic-code}. We refer to
+$\mathcal{C}_{\mathrm{SE}}$ below as the \emph{service-excluded pool};
+its technical identifier in the code and file names is
+\texttt{pool60}.
+Every codon in $\mathcal{C}_{\mathrm{SE}}$ is unambiguously assigned
+to a canonical amino acid, so that for any group $G$ the sums
+\[
+\bigl(P_{\mathrm{SE}}(G),N_{\mathrm{SE}}(G)\bigr)
+=
+\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}}
+\bigl(P(c),N(c)\bigr)
+\]
+are directly defined, where $P(c)$ and $N(c)$ are the values of the
+neutral free form of the amino acid encoded by codon $c$, as specified
+in Section~\ref{sec:composition}. Neither these sums nor the number of
+included codons $|G\cap\mathcal{C}_{\mathrm{SE}}|$ depends on
+assignments to the service codons.
+
+To analyze the complete 64-position table, we introduce a
+\emph{parametric key} $K$: a fixed assignment of a pair of numbers
+$\bigl(P_K(c),N_K(c)\bigr)$ to every service codon
+$c\in\mathcal{S}$. Under such a key, the group sums are
+\[
+\bigl(P_K(G),N_K(G)\bigr)
+=
+\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}}
+\bigl(P(c),N(c)\bigr)
++
+\sum_{c\in G\cap\mathcal{S}}
+\bigl(P_K(c),N_K(c)\bigr),
+\]
+and the remaining two quantities are derived rather than assigned
+independently:
+\[
+T_K(G)=P_K(G)+N_K(G),
+\qquad
+\Delta_K(G)=P_K(G)-N_K(G).
+\]
+Thus a parametric key changes only the formal contributions of the
+four service codons. The study considers two principal keys, recorded
+in \texttt{key\_parameters.csv}.
 
 \paragraph{The naive reading (Key~0).}
-Under the zero parametrization, each of the three stop codons
-contributes $(P, N) = (0, 0)$, reflecting the fact that a stop
-codon is not translated into any amino acid and therefore has
-no molecular product to which nucleon values could be assigned.
-The start codon $\mathrm{ATG}$ is treated as an ordinary
-methionine codon, with the nucleon values of the free
-methionine molecule, $(P, N) = (80, 69)$. This convention isolates the arithmetic contribution of the amino-acid-coding portion of the code (with the start codon treated simply as methionine) and is the natural choice when one wishes to study the nucleon structure of the translation without introducing any ad hoc values for non-translated signals.
+Each of the three stop codons is assigned the zero contribution
+$(P,N)=(0,0)$ because a termination signal has no amino acid product.
+The $\mathrm{ATG}$ codon is treated as an ordinary methionine codon
+and receives the values of the free methionine molecule,
+$(P,N)=(80,69)$. This simple convention corresponds to the ordinary
+reading of the amino-acid-coding part of the table without nonzero
+contributions from stop signals, but it remains a parametrization.
+In particular, Key~0 is not identical to the
+$\mathcal{C}_{\mathrm{SE}}$ pool: Key~0 retains all 64 positions and
+counts $\mathrm{ATG}$ as methionine, whereas
+$\mathcal{C}_{\mathrm{SE}}$ directly excludes all four service codons.
 
 \paragraph{Symmetrization (Key~1).}
-Under the symmetrization, each of the three stop codons is
-assigned $(P, N) = (37, 37)$ and the start codon $\mathrm{ATG}$
-is assigned $(P, N) = (1, 0)$, treated as an initiation marker
-distinct from methionine. Unlike the zero parametrization,
-the symmetrization is not adopted by convention but derived
-analytically as the minimal nonnegative integer solution of a
-system of symmetry constraints imposed on the four nucleon
-quantities across the codon groups of
-Section~\ref{sec:partitioning}. The full derivation, together
-with the system of constraints and its uniqueness properties,
-is presented in Section~\ref{sec:results}; in the present
-section the symmetrization is introduced purely as a named
-parametric key to be used in the datasets and the subsequent
-analysis.
+Each of the three stop codons is assigned $(P,N)=(37,37)$, while
+$\mathrm{ATG}$, treated as a formal initiation marker, is assigned
+$(P,N)=(1,0)$. These values are not interpreted as the nucleon
+composition of physical translation products. They are derived in
+Sections~\ref{sec:results-key1-derivation}--%
+\ref{sec:results-key1-uniqueness} under the assumption that the three
+stop codons share a common parameter pair and under the balance and
+divisibility-by-37 conditions specified there. Under these
+assumptions, Key~1 is the unique minimal nonnegative integer solution
+of the resulting system. Here Key~1 is introduced as the result
+of that formal construction, not as a biochemical property of
+termination signals or the initiator.
 
-A remark on terminology is in order. The methodological
-choice underlying the present work is to restrict
-attention to parameters whose definition is unambiguous
-and whose interpretation does not depend on any
-convention beyond the choice of service codon
-parametrization. The total nucleon count $T$, the
-proton count $P$, and the neutron count $N$ of each
-amino acid correspond to the actual nuclear composition
-of the free molecule, restricted to the most abundant
-stable isotopes ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$,
-$^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$).
-Once service codons are assigned non-zero contributions
-to $P$ and $N$ under a parametrization such as Key~1,
-sums formed over codon groups that include service
-codons no longer correspond to the nuclear composition
-of any physical ensemble of molecules. The values
-continue to be called proton, neutron, and total
-nucleon counts for consistency with the contributions
-of the canonical amino acids, but in such sums they are
-formal arithmetic quantities, and the question of their
-biochemical meaning does not arise.
+For groups that do not intersect $\mathcal{S}$, the values under
+Key~0 and Key~1 coincide with the direct amino acid sums. If a group
+contains service codons, the Key~1 assignments have only a formal
+arithmetic meaning: the corresponding sums do not represent the
+nucleon composition of a physical ensemble of molecules. The terms
+``proton count'', ``neutron count'' and ``total nucleon count'' are
+retained for consistency with the underlying amino acid contributions,
+but no biochemical interpretation is claimed for the formal Key~1
+contributions.
 
-The dataset \texttt{key\_parameters.csv} additionally contains
-eight reference parametric keys
-(\texttt{Key~2}--\texttt{Key~9}), which correspond to various
-alternative conventions considered during the analysis. They
-are included for completeness and do not play the role of
-Key~1, which is derived rather than adopted; they are not
-used in any of the identities reported in this paper. In the
-main text we refer to the two principal keys by the descriptive
-names \emph{zero parametrization} and \emph{symmetrization}
-respectively, with the dataset identifiers given in
-parentheses where precision is required.
+The dataset \texttt{key\_parameters.csv} additionally contains eight
+reference assignments, \texttt{Key~2}--\texttt{Key~9}, considered
+during the exploratory stage. They are not used to obtain the results
+of this study and do not have the status of the derived Key~1. The
+following analysis therefore distinguishes three levels explicitly:
+the service-excluded pool $\mathcal{C}_{\mathrm{SE}}$, the naive
+reading (Key~0), and the symmetrization (Key~1).
 
 \subsection{Analytical criteria and classification of equalities}
 \label{sec:criteria}
 
-The present study systematically examines the nucleon
-quantities $P$, $N$, $T$ and $\Delta$ across all codon groups
-defined in Section~\ref{sec:partitioning}, under each of the
-two parametric keys of Section~\ref{sec:parametrization}, and
-records the set of arithmetic properties that these quantities
-exhibit. To keep the analysis transparent, we organize the
-search around a fixed hierarchy of criteria stated below.
+For each of the 33 codon groups defined in
+Section~\ref{sec:partitioning}, we examine $P$, $N$, $T$ and
+$\Delta$ at three analytical levels: the service-excluded pool
+$\mathcal{C}_{\mathrm{SE}}$, Key~0 and Key~1. The reporting scheme
+below is applied uniformly. Divisibility by 37 is the primary
+preselected arithmetic criterion, and exact equalities are enumerated
+exhaustively; decimal roundness, exact powers, simple ratios and
+matches to amino acid differences are treated as descriptive or
+exploratory observations. This distinction does not assign
+statistical significance to an observation in the absence of a
+corresponding null model.
 
-\paragraph{Criterion 1: Divisibility by 37.}
-For each nucleon quantity $P$, $N$, $T$, $\Delta$ of each codon
-group, we record whether the value is exactly divisible by $37$.
-Divisibility by $37$ is the primary criterion of the present
-work, continuing the line of investigation opened by
-\citet{makukov2013} and developed by \citet{panov2024}. Where
-divisibility holds, we additionally record whether it holds in
-a stricter form --- that is, whether the quotient is itself
-divisible by further small factors. Divisibility by $37$
-corresponds to a residue of zero modulo $37$; in some
-observations discussed in Section~\ref{sec:results}, small
-nonzero residues across structurally related groups are
-themselves structurally informative. Divisibility expressions
-for all four nucleon quantities of all codon groups are
-provided in the datasets \texttt{key0\_divisibility-37.csv}
-and \texttt{key1\_divisibility-37.csv}.
+\paragraph{Criterion 1: divisibility by 37.}
+For every group quantity $P$, $N$, $T$ and $\Delta$, we compute the
+quotient and remainder upon division by 37. A zero remainder denotes
+exact divisibility. This criterion continues the line of investigation
+opened by \citet{makukov2013} and developed by
+\citet{panov2024}. When a value is divisible by 37, its displayed
+factorization also exposes any further factors of the quotient; these
+are not assigned separate evidential weight without an additional
+analysis. Nonzero residues are reported descriptively only where they
+enter an exact relation between predefined groups.
 
-\paragraph{Criterion 2: Roundness in the decimal system.}
-In parallel with Criterion~1, we record whether nucleon
-quantities are round numbers in the decimal system, that is,
-exact multiples of a power of ten. This criterion is motivated
-by the empirical observation that several nucleon quantities of
-the standard code are multiples of $100$ and $1000$ --- in
-particular, the parametrization-independent totals over
-Octet~I. Although roundness is stated in decimal notation, it
-reflects divisibility by the prime factors $2$ and $5$, which
-exist independently of the choice of notation; the systematic
-analysis of divisibility by these and the other primes,
-together with its relation to the modulus $37$, is given in
-Section~\ref{sec:discussion-controls}. Where roundness holds,
-we additionally record whether it holds in a stricter form, as
-a multiple of a higher power of ten.
- 
-Roundness in the decimal system and divisibility by $37$ are
-arithmetically independent conditions, since $\gcd(10, 37) = 1$.
+Complete expressions of the form $q\cdot37+r$ for all groups and all
+four quantities are provided in
+\texttt{pool60\_divisibility-37.csv},
+\texttt{key0\_divisibility-37.csv} and
+\texttt{key1\_divisibility-37.csv}.
 
-\paragraph{Criterion 3: Equalities between codon groups.}
-For each pair of nucleon quantities taken over two codon groups
-$G_1$ and $G_2$, we record whether the two quantities coincide
-numerically. Every such equality is classified according to
-the following three-tier scheme, which depends on the structural
-type of the equality:
+\paragraph{Criterion 2: roundness in the decimal system.}
+We call a positive integer quantity round in the decimal system if it
+is divisible by $10^k$ for at least one integer $k\geq1$; its degree
+of roundness is the largest such $k$. This criterion is used
+descriptively because the data contain exact multiples of 100 and
+1000, notably among the parametrization-independent Octet~I sums.
+Although roundness is tied to decimal notation, the divisibility being
+tested is a property of the integer itself: $10^k\mid x$ is equivalent
+to simultaneous divisibility by $2^k$ and $5^k$. What depends on the
+numeral base is the choice to treat this particular simultaneous
+divisibility as roundness, not the truth of the condition for a given
+integer. Since $\gcd(10,37)=1$, simultaneous divisibility by $10^k$
+and 37 is equivalent to divisibility by $37\cdot10^k$; coprimality of
+the moduli does not by itself establish statistical or structural
+independence between two observations. The systematic control across
+prime moduli is presented in Section~\ref{sec:discussion-controls}.
+
+\paragraph{Criterion 3: exact equalities.}
+For every unordered pair of group entries and every pair of quantities
+from $\{P,N,T,\Delta\}$, we test exact numerical equality. A group is
+compared with itself only when two different quantities are involved,
+for example $P$ and $N$ of the same group. The resulting equalities are
+classified in the following order:
 \begin{itemize}
-  \item \emph{Different-size equalities} --- the equality
-        relates nucleon quantities of two groups of
-        \emph{different} sizes (for example, a size-$64$ group
-        and a size-$32$ group), regardless of whether the two
-        quantities involved are of the same type or of different
-        types. This is the strongest type of equality, because
-        it reflects a coincidence between structurally
-        independent sums computed over codon sets of different
-        scale.
-  \item \emph{Cross-parameter equalities} --- the equality
-        relates two \emph{different} nucleon quantities (for
-        example, $P$ of one group and $N$ of another) belonging
-        to groups of the \emph{same} size. This is the
-        intermediate type: the coinciding sums range over codon
-        sets of equal cardinality, but the quantities being
-        compared are structurally distinct.
-  \item \emph{Same-parameter equalities} --- the equality
-        relates the \emph{same} nucleon quantity of two distinct
-        groups of the same size (for example, $P(G_1) = P(G_2)$,
-        where $G_1$ and $G_2$ have equal numbers of codons).
-        This is the weakest type, since the two sums are of the
-        same structural nature --- the same quantity over codon
-        sets of the same cardinality --- and coincidence between
-        them is the least informative form of equality. The
-        twin-group identities of
-        Section~\ref{sec:partitioning} are a special case of
-        this type; they are recorded but treated as structural
-        consequences of Section~\ref{sec:partitioning} rather
-        than as emergent coincidences.
+  \item \emph{different-size equalities}
+        (\texttt{DIFF\_PARAM} in the \texttt{Match\_Type} column):
+        the actual numbers of included codons differ between the two
+        groups, regardless of whether the same quantity or two
+        different quantities are compared. This class identifies equal
+        values obtained from different numbers of terms and is reported
+        first under the adopted classification rule;
+  \item \emph{same-size cross-quantity equalities}
+        (\texttt{CROSS\_PARAM}): group sizes are equal but two
+        different quantities are compared, for example
+        $P(G_1)=N(G_2)$;
+  \item \emph{same-size same-quantity equalities}
+        (\texttt{SAME\_PARAM}): both the group sizes and the compared
+        quantity are the same, for example $P(G_1)=P(G_2)$.
 \end{itemize}
-The classification depends only on the sizes of the compared
-groups and on the identity of the compared quantities, and
-not on the specific groups involved. All observed equalities
-for both parametric keys are tabulated in the datasets
-\texttt{key0\_equalities.csv} and \texttt{key1\_equalities.csv},
-in which the three classes are encoded in the \texttt{Match\_Type}
-column with values \texttt{DIFF\_PARAM}, \texttt{CROSS\_PARAM},
-and \texttt{SAME\_PARAM} respectively. Under Key~0 only
-same-parameter equalities occur; the stronger different-size and
-cross-parameter equalities arise only under Key~1.
+Here size means the actual group cardinality at the corresponding
+analytical level; after service codons are excluded, it may differ
+from the cardinality of the same group in the complete 64-position
+table. The ordering of the classes is a reporting convention; it does
+not rank them by statistical or evidential strength.
 
-\paragraph{Criterion 4: Additional structural observations.}
-Beyond divisibility and equalities, we record several further
-types of structural regularity that do not fit into
-Criteria~1--3 but nevertheless carry information about the
-arithmetic organization of the code. These include:
+All equalities are provided in
+\texttt{pool60\_equalities.csv},
+\texttt{key0\_equalities.csv} and
+\texttt{key1\_equalities.csv}. Twin-group identities from
+Section~\ref{sec:partitioning} are also recorded, but are treated as
+structural consequences of identical amino acid composition rather
+than as new coincidences.
+
+\paragraph{Additional exploratory observations.}
+Beyond the primary procedures, we descriptively note:
 \begin{itemize}
-  \item exact powers --- in particular, powers of two or
-        other small integers --- realized by nucleon quantities
-        of codon groups;
-  \item anomalously simple reduced fractions arising as
-        ratios $P/T$, $N/T$ or $P/N$ of nucleon quantities
-        within a single codon group, tabulated in
-        \texttt{key0\_ratios.csv} and \texttt{key1\_ratios.csv};
-  \item coincidences at the level of individual amino acid pairs, in which a nucleon difference
-        $|\delta P|$, $|\delta N|$ or $|\delta T|$ between
-        two amino acids matches a value that appears separately
-        in the group-level analysis (for example, the
-        Trp--Ile pair, for which $|\delta N| = 37$ coincides
-        exactly with the divisor of Criterion~1).
+  \item exact powers of small integers, for example
+        $4096=2^{12}$;
+  \item simple reduced ratios within a group, including $P/T$, $N/T$,
+        $\Delta/T$, $P/N$, $\Delta/P$ and $\Delta/N$, tabulated in
+        \texttt{pool60\_ratios.csv},
+        \texttt{key0\_ratios.csv} and
+        \texttt{key1\_ratios.csv};
+  \item matches between group-level quantities and the absolute
+        differences $|\delta P|$, $|\delta N|$ or $|\delta T|$ of
+        individual amino acid pairs, such as
+        $|\delta N(\mathrm{Trp},\mathrm{Ile})|=37$.
 \end{itemize}
+These observations describe the arithmetic and may motivate testable
+hypotheses. The terms ``simple'' or ``notable'' do not imply
+statistical anomalousness unless a corresponding null model is
+specified.
 
-The observations accumulated under Criteria~1--4 are presented
-in Section~\ref{sec:results}. They are grouped into
-parametrization-independent results, which hold for every
-parametric key, and parametrization-specific results, which
-depend on the choice of key.
+Finally, the four quantities are not independent:
+\[
+T=P+N,
+\qquad
+\Delta=P-N.
+\]
+Equalities, divisibility relations or ratios obtained from one another
+through these identities are therefore not counted as separate
+evidence. The same applies to copies propagated through nested groups
+or twin-group identities. Section~\ref{sec:results} distinguishes
+(i) facts computed directly on $\mathcal{C}_{\mathrm{SE}}$ without
+service-codon assignments; (ii) identities whose invariance to the
+key is established algebraically; and (iii) results specific to
+Key~0 or Key~1.
 
 \subsection{Computed datasets and reproducibility}
 \label{sec:datasets}
 
-The core results reported in the present study are produced by a
-single reproduction script, \texttt{reproduce.py}, that consumes the
-five input datasets introduced in the previous sections and writes a
-fixed set of computed output datasets. Two further scripts, the
-control script \texttt{controls.py} and the Monte Carlo script
-\texttt{mc\_significance.py} (with its independent re-check
-\texttt{verify\_mc.py}), are described separately below and produce
-the supplementary datasets. This section summarizes the
-organization of the computed datasets and the reproducibility
-of the pipeline.
+The principal deterministic results of this study are produced by
+\texttt{reproduce.py}. The script reads five input datasets and
+writes 17 computed output datasets. A separate deterministic script,
+\texttt{controls.py}, writes four control datasets, whereas the
+statistical analysis is performed by \texttt{mc\_significance.py}
+and independently re-checked by \texttt{verify\_mc.py}. By default, all
+data paths
+are resolved relative to the directory of the corresponding script.
 
 \paragraph{Input datasets.}
-The five input datasets, all of which have been introduced in
-their respective sections, are:
-\texttt{amino\_acids\_nucleons.csv}
-(Section~\ref{sec:composition}),
-\texttt{genetic\_code\_codons.csv}
-(Section~\ref{sec:genetic-code}),
-\texttt{ncbi\_genetic\_code\_registry.csv}
-(Section~\ref{sec:genetic-code}),
-\texttt{codon\_groups.csv}
-(Section~\ref{sec:partitioning}), and
-\texttt{key\_parameters.csv}
-(Section~\ref{sec:parametrization}). These five files fully
-specify the nucleon composition of the amino acids, the codon
-assignments of the standard and alternative genetic codes,
-the partitioning of the $64$ codons into groups,
-and the parametric keys used to handle service codons.
+Five input files define the numerical and structural basis of the
+analysis:
+\begin{itemize}
+  \item \texttt{amino\_acids\_nucleons.csv} contains $P$, $N$, $T$
+        and $\Delta$ for the twenty canonical amino acids
+        (Section~\ref{sec:composition});
+  \item \texttt{genetic\_code\_codons.csv} specifies the standard
+        codon-to-translation-product mapping
+        (Section~\ref{sec:genetic-code});
+  \item \texttt{ncbi\_genetic\_code\_registry.csv} records a snapshot
+        of the 27 NCBI translation tables, including the standard
+        table (Section~\ref{sec:genetic-code});
+  \item \texttt{codon\_groups.csv} defines the system of 33
+        overlapping codon groups
+        (Section~\ref{sec:partitioning});
+  \item \texttt{key\_parameters.csv} contains the service-codon
+        assignments of the parametric keys
+        (Section~\ref{sec:parametrization}).
+\end{itemize}
 
 \paragraph{Per-key computed datasets.}
-For each of the two principal parametric keys (Key~0 and
-Key~1), the pipeline produces four computed datasets with a
-uniform naming convention, where the prefix \texttt{key0\_}
-or \texttt{key1\_} indicates the active parametric key:
+For each of the two principal keys, Key~0 and Key~1,
+\texttt{reproduce.py} writes four files. The prefixes
+\texttt{key0\_} and \texttt{key1\_} identify the active key:
 \begin{itemize}
-  \item \texttt{*\_nucleon-data.csv} --- the four fundamental
-        nucleon quantities $P$, $N$, $T$, $\Delta$ computed
-        for each of the $33$ codon groups defined in
-        \texttt{codon\_groups.csv} under the active key;
-  \item \texttt{*\_divisibility-37.csv} --- a compact
-        expression of each of the above values as $q \cdot 37
-        + r$, making divisibility by $37$ and residue modulo
-        $37$ immediately visible for every group;
-  \item \texttt{*\_equalities.csv} --- the complete
-        enumeration of all numerical equalities between
-        nucleon quantities across codon groups, classified by
-        the \texttt{Match\_Type} scheme of
-        Section~\ref{sec:criteria} into \texttt{DIFF\_PARAM},
-        \texttt{CROSS\_PARAM} and \texttt{SAME\_PARAM};
-  \item \texttt{*\_ratios.csv} --- pairwise ratios of the four
-        nucleon quantities for each codon group, provided in
-        both exact fractional form (reduced to lowest terms)
-        and decimal approximation, used for locating
-        anomalously simple fractions as described in
-        Section~\ref{sec:criteria}.
+  \item \texttt{*\_nucleon-data.csv} contains the four reported
+        group quantities $P$, $N$, $T$ and $\Delta$ for all 33
+        groups; $T$ and $\Delta$ are derived from $P$ and $N$;
+  \item \texttt{*\_divisibility-37.csv} expresses every quantity
+        exactly as $q\cdot37+r$;
+  \item \texttt{*\_equalities.csv} exhaustively enumerates exact
+        numerical equalities and classifies them in the
+        \texttt{Match\_Type} column as \texttt{DIFF\_PARAM},
+        \texttt{CROSS\_PARAM} or \texttt{SAME\_PARAM}, following
+        Section~\ref{sec:criteria};
+  \item \texttt{*\_ratios.csv} contains the six ratios $P/T$, $N/T$,
+        $\Delta/T$, $P/N$, $\Delta/P$ and $\Delta/N$ both as exact
+        reduced fractions and as rounded decimal approximations.
 \end{itemize}
-Together, these eight per-key files contain every numerical
-value on which the results of Section~\ref{sec:results} are
-based.
+The two keys therefore produce eight output files.
 
-\paragraph{Key-independent computed datasets.}
-Three further computed datasets are produced once and do not
-depend on the choice of parametric key:
+\paragraph{Service-excluded-pool datasets.}
+For $\mathcal{C}_{\mathrm{SE}}$, the script writes four analogous
+files:
+\texttt{pool60\_nucleon-data.csv},
+\texttt{pool60\_divisibility-37.csv},
+\texttt{pool60\_equalities.csv} and
+\texttt{pool60\_ratios.csv}. Before summation, the codons in
+$\mathcal{S}$ are directly removed from every group $G$, so that its
+actual cardinality is $|G\cap\mathcal{C}_{\mathrm{SE}}|$. No
+parametric key is applied.
+
+\paragraph{Amino acid differences.}
+Three files written once,
 \texttt{amino\_acids\_proton\_differences.csv},
 \texttt{amino\_acids\_neutron\_differences.csv} and
-\texttt{amino\_acids\_nucleon\_differences.csv}. These
-enumerate, for all $190$ pairs of the twenty canonical amino
-acids, the absolute differences $|\delta P|$, $|\delta N|$
-and $|\delta T|$ respectively, and are used to locate coincidences at the level of individual amino acid pairs as described in Section~\ref{sec:criteria}.
+\texttt{amino\_acids\_nucleon\_differences.csv}, enumerate the
+absolute differences $|\delta P|$, $|\delta N|$ and $|\delta T|$,
+respectively, for all $\binom{20}{2}=190$ unordered pairs of
+canonical amino acids.
 
-\paragraph{Sense-pool arithmetic across NCBI codes.}
-The computed dataset \texttt{deficit\_models\_analysis.csv}
-extends the analysis beyond the standard code by applying
-the same nucleon bookkeeping to every translation table
-listed in \texttt{ncbi\_genetic\_code\_registry.csv}. The
-standard code itself appears as one row of the dataset,
-serving as the reference point against which the
-remaining $26$ tables are compared.
+\paragraph{Table-dependent NCBI pools.}
+The remaining two outputs of the core script compare the standard
+code with the other tables in
+\texttt{ncbi\_genetic\_code\_registry.csv}. Because the sets of stop
+codons differ between tables, we do not assume in advance that every
+analyzed pool contains 60 codons. Two models are used. Model~1 excludes
+$\mathrm{ATG}$ and every codon listed in the \texttt{Stop\_Codons}
+field. Model~2 excludes $\mathrm{ATG}$ and only the permanent stop
+codons marked \texttt{*} in the \texttt{Amino\_Acids} field;
+context-dependent stops are included in the analysis with the amino
+acid assignments recorded for them. The models coincide for tables
+without context-dependent stops. For the standard table, both reduce
+to the 60-codon $\mathcal{C}_{\mathrm{SE}}$. The actual number of
+codons in the analyzed pool is recorded for both models (columns
+\texttt{Pure\_Codons\_Count} and \texttt{Pure\_Codons\_Count\_Alt}).
 
-For each translation table the dataset records the global
-nucleon pools $N(\mathrm{All})$ and $P(\mathrm{All})$ and
-the sense pools $N(\mathrm{All~sense})$ and
-$P(\mathrm{All~sense})$ (total counts over the $60$ sense
-codons of Section~\ref{sec:parametrization}, that is,
-excluding the three stop codons and the $\mathrm{ATG}$
-initiator). Two
-arithmetic tests are then tabulated, each with its own
-reference structure.
+\texttt{deficit\_models\_analysis.csv} contains one row for each of
+the 27 tables. The full $P(\mathrm{All})$ and $N(\mathrm{All})$ sums
+follow the registered amino acid assignments, with positions marked
+\texttt{*} contributing zero. For both models, the file additionally
+records sums over the corresponding analyzed pool, the proton-sum
+residue modulo 37, and three neutron deficits relative to:
+\begin{enumerate}
+  \item the constant 3700 obtained for standard-code Octet~I;
+  \item structural $T(\mathrm{Octet~I})$, retaining the eight
+        families that occupy Octet~I positions in the standard table;
+  \item functional $T(\mathrm{Octet~I})$, selecting in table $t$
+        those four-codon families that have one amino acid assignment
+        and no permanent stop.
+\end{enumerate}
 
-The first test records the deficit of the sense pool
-neutron pool relative to three reference anchors derived
-from Octet~I. The total nucleon count $T(\mathrm{Octet~I})$
-serving as each anchor is evaluated under two definitions:
-a \emph{structural} definition (the eight codon families
-occupying the Octet~I positions in the standard code,
-regardless of their amino acid assignments in the
-alternative code) and a \emph{functional} definition (the
-codon families that are fully four-fold degenerate in the
-alternative code itself). The three anchors are the
-constant $3700$, the structural $T(\mathrm{Octet~I})$ and
-the functional $T(\mathrm{Octet~I})$. For the standard
-code all three definitions coincide and the deficit equals
-$111 = 3 \cdot 37$ in all three columns
-(Section~\ref{sec:results-key1-neutrons}).
+\texttt{keto\_amino\_balance\_models.csv} uses the same two models
+and, for every table, sums $P$ and $N$ separately over the
+intersections of the analyzed pool with the third-position Keto and
+Amino groups. Both sums and the directed Keto-minus-Amino difference
+are recorded.
 
-The second test records the residue of the sense pool
-proton pool $P(\mathrm{All~sense})$ modulo~$37$, without
-reference to any Octet~I-based anchor. For the standard code this residue is
-$-1 \equiv 36 \pmod{37}$, the parity-induced unit shift
-discussed in Sections~\ref{sec:results-sensepool}
-and~\ref{sec:results-key1-trpile}.
+\paragraph{Reproducibility of the core pipeline.}
+\texttt{reproduce.py} uses only the Python standard library and
+requires neither external packages nor a virtual environment. The
+computation is deterministic: outputs are written in UTF-8 with LF
+line endings and a fixed row order. The canonical repository files
+are regenerated from the five inputs without manual editing. All
+group sums and residues use integer arithmetic, while ratios are first
+reduced exactly by their greatest common divisor. The decimal columns
+in \texttt{*\_ratios.csv} are rounded representations of exact
+fractions and are not used to obtain any result. Every deterministic
+numerical claim can be traced to a specific cell or to a documented
+exact combination of cells in the output files.
 
-The alternative codes are evaluated against the same two
-criteria, and the results are used in
-Section~\ref{sec:results-key1-ncbi} to assess the extent
-to which the arithmetic structure of the standard code is
-shared with its natural variants.
+Neither \texttt{reproduce.py} nor \texttt{controls.py} uses
+randomization. Randomization is confined to the separate Monte Carlo
+analysis in \texttt{mc\_significance.py}, with a fixed seed and a
+specified number of trials. Its tail-probability estimates and
+uncertainty intervals necessarily use floating-point values.
+\texttt{verify\_mc.py} independently re-implements the same analysis;
+the statistical procedure is fully specified in
+Section~\ref{sec:discussion-montecarlo}.
 
-A secondary model, in which the context-dependent stop
-codons of the three tables $27$, $28$, and $31$
-(Karyorelict, Condylostoma, and Blastocrithidia Nuclear
-Codes) are treated as sense codons rather than as stops,
-is tabulated in parallel in the \texttt{\_Alt} columns of
-the same dataset.
-
-\paragraph{Keto/Amino balance across NCBI codes.}
-The computed dataset
-\texttt{keto\_amino\_balance\_models.csv} extends the
-Keto/Amino balance analysis of
-Section~\ref{sec:results-key1-trpile} beyond the standard
-code by applying the same nucleon bookkeeping to every
-translation table listed in
-\texttt{ncbi\_genetic\_code\_registry.csv}. The standard
-code itself appears as one row of the dataset, serving as
-the reference point against which the remaining $26$
-tables are compared.
-
-For each translation table, the dataset records the
-sense pool neutron and proton counts of the Keto and
-Amino half-codes,
-$N(\mathrm{Keto~sense})$, $N(\mathrm{Amino~sense})$,
-$P(\mathrm{Keto~sense})$, $P(\mathrm{Amino~sense})$,
-together with their pairwise differences
-$N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense})$ and
-$P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense})$. For
-the standard code these differences are $37$ and $36$
-respectively
-(Section~\ref{sec:results-key1-trpile}); the alternative
-codes are evaluated against the same pair of reference
-values, and the results are used in
-Section~\ref{sec:discussion-trpile-robustness} to
-identify codes that reproduce the Keto/Amino signature of
-the standard code.
-
-The same secondary sense-pool model as in the preceding
-paragraph --- in which the context-dependent stop codons
-of Tables~$27$, $28$, and $31$ are returned to the sense
-pool --- is tabulated in parallel in the \texttt{\_Alt}
-columns. For the standard code, which contains no
-context-dependent stop codons, the primary and
-alternative columns coincide.
-
-\paragraph{Reproducibility.}
-The complete pipeline --- input datasets, Python scripts, and
-all computed output datasets --- is provided as a single
-repository accompanying this paper. Running the script
-(standard-library Python only, no external dependencies) on
-the five input datasets regenerates every computed dataset
-bit-for-bit, and every numerical value appearing in
-Section~\ref{sec:results} can be traced directly to a specific
-cell of one of these datasets. Within the core pipeline, no randomization is used at any stage of
-the computation, and all arithmetic underlying the reported
-regularities is exact, carried out on integer-valued tables and, for
-ratios, on exact reduced fractions. Statistical significance is
-assessed separately by a fixed-seed Monte Carlo script; its tail
-probability estimates and uncertainty intervals are necessarily
-floating-point quantities. Within the deterministic core pipeline,
-the only floating-point values are the rounded decimal approximations
-printed alongside the exact fractions in the
-\texttt{*\_ratios.csv} files, for readability; no result depends on
-them.
-
-\paragraph{Supplementary visualization tool.}
-An interactive HTML visualization of the genetic code table
-and its codon-group structure, used during the exploratory
-phase of this study, is included in the accompanying
-repository as a supplementary tool. The visualization is not
-part of the reproducible pipeline described above; any
-numerical value displayed in its interface under Key~0 or
-Key~1 that appears in the main text can be verified against
-the corresponding cell of the computed datasets. An interactive version of the visualizer is available
-online at \url{https://ruslankhafizov.github.io/genetic-code-arithmetic/}.
+\paragraph{Supplementary visualizer.}
+\texttt{visualization.html} provides an interactive view of the
+translation tables and codon groups under the service-excluded pool
+(POOL60), Key~0 and Key~1, together with additional exploratory
+views. It is not part of the core reproducible pipeline and is not
+the source of published numerical results: values reported in the
+main text are checked against the deterministic CSV files. An online
+version is available at
+\url{https://ruslankhafizov.github.io/genetic-code-arithmetic/}.
 
 \paragraph{Supplementary control datasets.}
-Three further datasets probe the specificity of the arithmetic
-structure and are produced by a separate script
-\texttt{controls.py}, which consumes the same input datasets
-but is not part of the core pipeline described above. Like that
-pipeline it uses standard-library Python only, exact integer
-arithmetic, and no randomization. The dataset
-\texttt{position\_axis\_analysis.csv} records the four nucleon
-quantities of six groups --- the two sides of each of the three
-chemical axes --- applied independently to the first, second,
-and third codon position, under the sense pool, Key~0, and
-Key~1; it is used in Section~\ref{sec:discussion-controls} to
-show that divisibility modulo $37$ is concentrated at the third
-position. The dataset \texttt{prime\_divisibility\_scan.csv}
-records, for every prime up to $97$ and for three value sets ---
-the parametrization-independent groups, Key~0, and Key~1 --- how
-many of the group quantities it divides, over all instances, over
-distinct values, and over distinct odd cores (the odd part of a
-number after removing factors of $2$). It is
-used in the same section to show that $37$ carries the largest
-excess apart from $2$ and $5$. The excess at $2$ reflects proton
-parity, and that at $5$ is a trace of the round-number regularity
-of Criterion~2 (divisibility by $10$, $100$, and $1000$). The
-multiple distinct odd cores occur among the multiples of $37$,
-whereas the smaller excesses at $73 = 2 \cdot 37 - 1$ and at $61$
-each reduce to a single odd core and are satellites of an
-individual quantity. This separation persists even in the value
-set in which divisibility by $37$ is not imposed. The dataset
-\texttt{position\_asymmetry\_ncbi.csv} records, for each of the
-$27$ NCBI translation tables, the Keto/Amino sense-pool
-asymmetry for the four nucleon quantities at each codon
-position, with residues modulo $37$; it is used in
-Section~\ref{sec:discussion-controls} to show that this
-asymmetry is divisible by $37$ at all three positions only for
-the standard code and its exact codon-to-amino-acid equivalent.
+\texttt{controls.py} reads the same five input files, uses only the
+Python standard library and writes four deterministic datasets:
+\begin{itemize}
+  \item \texttt{position\_axis\_analysis.csv} separately applies
+        the three binary chemical classifications Keto/Amino,
+        Strong/Weak and Purine/Pyrimidine to the first, second and
+        third codon positions at three analytical levels:
+        $\mathcal{C}_{\mathrm{SE}}$, Key~0 and Key~1. For each side it
+        records the four nucleon quantities and their residues
+        modulo 37;
+  \item \texttt{prime\_divisibility\_scan.csv} scans every prime up
+        to 97 over three value sets: group quantities identical under
+        Key~0 and Key~1, all Key~0 quantities, and all Key~1
+        quantities. For each prime it records the numbers of
+        divisible instances, distinct nonzero values and distinct odd
+        cores, together with a reference value $n/p$ for $n$ distinct
+        values. This reference describes residue uniformity and is not
+        a statistical null model or a $p$-value;
+  \item \texttt{position\_asymmetry\_ncbi.csv} applies the
+        Keto/Amino classification to each of the three positions of
+        all 27 NCBI tables under Model~1 and Model~2. For $T$,
+        $P$, $N$ and
+        $\Delta$, it records directed Keto-minus-Amino differences,
+        their residues modulo 37 and position-level summary flags;
+  \item \texttt{representation\_sensitivity.csv} recomputes 13
+        explicitly listed absolute and difference quantities under three
+        representations of the encoded amino acid: the neutral free
+        molecule with $(\delta P,\delta N)=(0,0)$, the peptide
+        residue with $(-10,-8)$, and the zwitterion with $(0,0)$.
+        For every quantity it records the result under each
+        representation and its agreement with the free-molecule
+        baseline.
+\end{itemize}
+These four files define the positional, modular, cross-table and
+representation-specificity controls. Their results are interpreted
+in Section~\ref{sec:discussion-controls}.
 
 \paragraph{Data and code availability.}
-The complete package supporting this work --- the LaTeX
-source of the present preprint, the five input datasets,
-the thirteen computed datasets, the reproduction script
-\texttt{reproduce.py}, the supplementary control script
-\texttt{controls.py} with its three control datasets, the Monte Carlo script \texttt{mc\_significance.py} with its
-summary table and independent re-check \texttt{verify\_mc.py},
-and the interactive visualizer ---
-is available in the accompanying repository at
-\url{https://github.com/RuslanKhafizov/genetic-code-arithmetic}
-and is archived at Zenodo:
+The accompanying repository contains the manuscript sources, five
+input datasets, 17 core computed datasets, four control datasets, the
+Monte Carlo summary, four Python scripts and the interactive
+visualizer:
+\url{https://github.com/RuslanKhafizov/genetic-code-arithmetic}.
+Versions of the materials are archived at Zenodo under the concept
+DOI
 \href{https://doi.org/10.5281/zenodo.20360037}
-     {DOI:~10.5281/zenodo.20360037}.
+     {10.5281/zenodo.20360037}.
 
 \section{Results}
 \label{sec:results}
@@ -2077,13 +2030,14 @@ nucleon ratios,
 \frac{N}{T} = \frac{25}{54}, \qquad
 \frac{\Delta}{T} = \frac{2}{27},
 \]
-with $P : N = 29 : 25$. The two terms of this ratio are
-$T(L_{16} \cap \mathrm{Octet~II})/(2 \cdot 37) = 29$ and
-$T(L_{16} \cap \mathrm{Octet~I})/(2 \cdot 37) = 25$, so
-the profile carries the same pairing of $P$ with
-Octet~II and $N$ with Octet~I as the macroscopic
-identities of
-Section~\ref{sec:results-key1-macroidentities}. The ratio
+with $P : N = 29 : 25$. For each of these four
+$32$-codon groups, its $16$-codon half in Octet~II carries
+$T = 2146 = 29 \cdot 2 \cdot 37$, equal to the full proton
+sum of the group, whereas its half in Octet~I carries
+$T = 1850 = 25 \cdot 2 \cdot 37$, equal to its full neutron
+sum. The profile therefore reproduces the same pairing of $P$
+with Octet~II and $N$ with Octet~I as the macroscopic identities
+of Section~\ref{sec:results-key1-macroidentities}. The ratio
 profiles of all groups are tabulated in
 \texttt{key1\_ratios.csv}.
 
@@ -2131,21 +2085,21 @@ P(\mathrm{Strong}) = P(\mathrm{Weak}) = 2146 =
 \tfrac{1}{2}\, T(\mathrm{Octet~II}).
 \]
 Each chemical-axis half of the code carries exactly half
-of the structural total of the corresponding octet. The same two values reappear at the $L_{16}$ level
-inside the octets. Each of the six $L_{16}$ sub-groups
+of the structural total of the corresponding octet. The same two values reappear at the 16-codon level
+inside the octets. Each of the six 16-codon sub-groups
 of Octet~I carries $T = 1850$, equal across the six
 sub-groups because each $4$-fold degenerate family of
 Octet~I contributes the same amino acid nucleon to every
-$L_{16}$ partition. Inside Octet~II, the four $L_{16}$
+16-codon partition. Inside Octet~II, the four 16-codon
 sub-groups along the chemical axes Keto/Amino and
 Strong/Weak carry $T = 2146$ under Key~1; the two
-$L_{16}$ sub-groups along the Purine/Pyrimidine axis
+sub-groups along the Purine/Pyrimidine axis
 are not aligned with this value
 (Section~\ref{sec:results-key1-purpyr}). The
 cross-parameter equality $N(\mathrm{Octet~II}) =
 P(\mathrm{Octet~I}) = 2000$ similarly resolves at the
-$L_{16}$ level: each $L_{16}$ sub-group of Octet~I
-carries $P = 1000$, and each chemical-axis $L_{16}$
+16-codon level: each 16-codon sub-group of Octet~I
+carries $P = 1000$, and each chemical-axis 16-codon
 sub-group of Octet~II carries $N = 1000$ under Key~1. The
 full set of equalities arising under Key~1, classified
 by relation type, is tabulated in
@@ -2266,29 +2220,31 @@ coincide in magnitude, so that their difference $\Delta
 = P - N$ is preserved across all three axes.
 
 The common value $\Delta = 296$ resolves through a cascade joining the lower partition levels. At the
-$8$-codon level, every $L_8 \cap \mathrm{Octet~I}$
+$8$-codon level, every 8-codon sub-group of Octet~I
 carries $\Delta = 75$ as a parametrization-independent
 property of the $4$-fold-degenerate families
 (Section~\ref{sec:results-octetI}), and every
-$L_8 \cap \mathrm{Octet~II}$ carries $\Delta = 73$ under
+8-codon sub-group of Octet~II carries $\Delta = 73$ under
 Key~1 (paralleling the $\Delta$-pattern of
 Section~\ref{sec:results-pyrimidine}):
 \[
-\Delta(L_8 \cap \mathrm{Octet~I}) = 75, \qquad
-\Delta(L_8 \cap \mathrm{Octet~II}) = 73.
+\Delta(G_X \cap \mathrm{Octet~I}) = 75, \qquad
+\Delta(G_X \cap \mathrm{Octet~II}) = 73
+\qquad (|X| = 1).
 \]
 The $16$-codon level reproduces these values along two
 distinct partitions of the code. Within each octet,
-every $L_{16}$ sub-group inherits twice the
-corresponding $L_8$ value,
+every 16-codon sub-group inherits twice the
+corresponding 8-codon value,
 \[
-\Delta(L_{16} \cap \mathrm{Octet~I}) = 150, \qquad
-\Delta(L_{16} \cap \mathrm{Octet~II}) = 146.
+\Delta(G_X \cap \mathrm{Octet~I}) = 150, \qquad
+\Delta(G_X \cap \mathrm{Octet~II}) = 146
+\qquad (|X| = 2).
 \]
 Across octets,
 each single-base $16$-codon group of the full code
-joins one $L_8 \cap \mathrm{Octet~I}$ with one $L_8 \cap
-\mathrm{Octet~II}$, giving
+joins one 8-codon sub-group of Octet~I with one of
+Octet~II, giving
 \[
 \Delta(\{\mathrm{C}\}) = \Delta(\{\mathrm{G}\}) =
 \Delta(\{\mathrm{T}\}) = \Delta(\{\mathrm{A}\}) =
@@ -2303,8 +2259,8 @@ single-base groups. The two $16$-codon paths converge
 at the $32$-codon level: the common value $\Delta = 296
 = 2 \cdot 148 = 150 + 146$ obtains either as the sum of
 two single-base $16$-codon groups along any axis, or
-equivalently as the sum of an $L_{16} \cap \mathrm{Octet~I}$
-and an $L_{16} \cap \mathrm{Octet~II}$ from the same axis.
+equivalently as the sum of the 16-codon sub-groups of
+Octet~I and Octet~II along the same axis.
 
 \subsubsection{Purine/Pyrimidine asymmetry}
 \label{sec:results-key1-purpyr}
@@ -2396,7 +2352,7 @@ shifts reproduces the macroscopic Purine/Pyrimidine
 asymmetry at the $32$-codon level.
 
 \paragraph{Inside Octet~II at the $16$-codon level.}
-The $L_{16}$ sub-groups along the Purine/Pyrimidine
+The 16-codon sub-groups along the Purine/Pyrimidine
 axis carry
 \[
 N(\mathrm{Pur} \cap \mathrm{Octet~II}) = 950,
@@ -2409,7 +2365,7 @@ P(\mathrm{Pur} \cap \mathrm{Octet~II}) = 1096,
 P(\mathrm{Pyr} \cap \mathrm{Octet~II}) = 1196,
 \]
 showing a $\pm 50$ deviation from the values carried by
-the $L_{16}$ sub-groups of Octet~II along the
+the 16-codon sub-groups of Octet~II along the
 Keto/Amino and Strong/Weak axes, which under Key~1 are
 $N = 1000$ and $P = 1146$
 (Section~\ref{sec:results-key1-macroidentities}). The
@@ -2590,7 +2546,7 @@ neutron pools of the Purine and Pyrimidine groups
 satisfy $N(\mathrm{Purine}) = 1800$ and
 $N(\mathrm{Pyrimidine}) = 1900$. The Purine/Pyrimidine
 shifts in $P$ and $N$ take the value~$100$ at the
-$32$-codon level and $\pm 50$ at the $L_{16}$ level.
+$32$-codon level and $\pm 50$ at the 16-codon level.
 These round-number occurrences do not reduce to the
 multiplier~$37$ and constitute a separate arithmetic
 regularity of the standard code under Key~1.
@@ -2910,7 +2866,7 @@ odd-core counts are tabulated in the corresponding column of
 \texttt{prime\_divisibility\_scan.csv}.
 
 \paragraph{Representation dependence and the invariant relational core.}
-The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(\delta P, \delta N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathrm{All~sense}) = 97 \cdot 37$ and $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,\delta N \equiv 0 \pmod{37}$, i.e., $\delta N \equiv 0$ (since $\gcd(60, 37) = 1$), which among chemically meaningful representations selects the free amino acid alone; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
+The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(\delta P, \delta N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathrm{All~sense}) = 97 \cdot 37$ and $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,\delta N \equiv 0 \pmod{37}$, i.e., $\delta N \equiv 0$ (since $\gcd(60, 37) = 1$), which among the representations considered excludes the peptide residue, while the neutral and zwitterionic forms of the free amino acid have the same elemental composition and therefore the same nucleon counts; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
 
 \paragraph{The functional-group asymmetry across positions.}
 One observation on the Keto/Amino axis reaches beyond the third
@@ -2928,13 +2884,19 @@ arithmetically independent: each is a sum over a different
 partition of the same sixty codons, and the divisibility at one
 position neither follows from nor implies it at another; what
 they share is only the choice of axis. Across the $27$ NCBI
-translation tables this three-position coincidence is specific
-to the standard code and its exact codon-to-amino-acid
-equivalent (Table~11):
-no other table reaches more than one position, and the tables
-that preserve the Trp--Ile localization (Tables~6, 29 and 30)
-reproduce only the third-position value. Three caveats further
-qualify it. Unlike the third-position case, the first- and
+translation tables, the result depends on the sense-pool model.
+Under Model~1, the full three-position signature occurs for
+Tables~1, 11, and 28, whereas under Model~2 it occurs only for
+Tables~1 and 11. Table~28 is not an independent replication
+under Model~1: after its three context-dependent stop codons are
+excluded, its analyzed pool is identical to that of the standard
+code. Thus, in neither model is the full signature reproduced by
+a table with a non-equivalent analyzed pool. Apart from these full
+matches, no table reaches more than one position. In particular,
+Tables~6, 29, and 30 reach only the third position under both
+models, whereas Table~27 reaches only the third position and only
+under Model~1. Three caveats further qualify it. Unlike the
+third-position case, the first- and
 second-position asymmetries do not localize to a single
 amino-acid pair --- each receives contributions from nineteen
 of the twenty amino acids, because the cancellation that
@@ -2948,8 +2910,8 @@ specificity among natural codes rather than of improbability
 under a null model. The per-table values are tabulated in
 \texttt{position\_asymmetry\_ncbi.csv}.
 
-All three controls are deterministic and exact-integer, and are
-regenerated by \texttt{controls.py}
+All four controls are deterministic, use exact integer
+arithmetic, and are regenerated by \texttt{controls.py}
 (Section~\ref{sec:datasets}).
 
 \subsection{Significance under a random-code null}
