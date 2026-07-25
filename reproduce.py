@@ -270,12 +270,12 @@ def write_equalities(dataset_id, data):
                         continue
                     if src[sp] != tgt[tp]:
                         continue
-                    if sp == tp:
-                        mt = "SAME_PARAM"
-                    elif not same_size:
+                    if not same_size:
                         mt = "DIFF_PARAM"
-                    else:
+                    elif sp != tp:
                         mt = "CROSS_PARAM"
+                    else:
+                        mt = "SAME_PARAM"
                     eq_rows.append([
                         src[sp], mt, src["Code_Section"], src["Group_ID"],
                         src["Group_Name"], sp, tp, tgt["Group_Name"],
