@@ -4,11 +4,11 @@ controls.py — Supplementary specificity controls for the standard genetic code
 
 This script is NOT part of the core reproducible pipeline (reproduce.py). It is
 a standalone, deterministic, exact-integer companion that consumes the same
-input datasets and writes three supplementary control datasets:
+input datasets and writes four supplementary control datasets:
 
   * position_axis_analysis.csv
         The three chemical axes (Keto/Amino, Strong/Weak, Purine/Pyrimidine)
-        applied independently to the FIRST, SECOND and THIRD codon position,
+        applied separately to the FIRST, SECOND and THIRD codon position,
         under the sense pool, Key 0, and Key 1. Establishes that the divisibility
         structure modulo 37 is specific to the third codon position.
 
