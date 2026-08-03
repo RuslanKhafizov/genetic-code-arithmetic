@@ -104,11 +104,12 @@ regularities occurs only in the standard genetic code table and in its
 exact equivalent with respect to codon-to-amino-acid mapping. The specificity of the structure is examined further by deterministic controls, which test its dependence on the third codon position, on the modulus, and on the molecular representation of the amino acids, and by a Monte Carlo test against an explicit random-code null model.
 
 The analysis is divided into three levels. The principal regularities are established at a parametrization-independent level, at which the three stop codons and $\mathrm{ATG}$ in its initiator role are excluded and only the remaining $60$ codons are summed; these are the central results of the paper, and they involve no assigned values. To obtain sums for the complete table of $64$ codons, however, the four service codons must be given some nucleon contributions. The second level is the naive reading (Key~0), in which the stop codons are assigned zero and $\mathrm{ATG}$ is counted as methionine. Assigning zero is also a choice of value, not the absence of one. The third level is the symmetrization (Key~1), in which the four
-service codons carry derived nucleon contributions. Key~1 does not
-establish the parametrization-independent core of the structure,
-which is already present in $\mathcal{C}_{\mathrm{SE}}$; instead, it
-shows how that core extends to the complete table under the
-service-codon distribution fixed by the standard code. For the chosen
+service codons carry derived nucleon contributions. Key~1 does not establish the parametrization-independent core of the
+structure: that core is already present in sums over the $60$ codons
+remaining after the service codons are excluded. The role of Key~1 is
+to show how the structure extends to the complete table, taking into
+account the fixed distribution of the service codons across the groups
+in the standard code. For the chosen
 symmetry conditions, these contributions are determined as the unique
 minimal non-negative integer solution of the corresponding system
 (Section~\ref{sec:results}), and the resulting regularities are
@@ -365,7 +366,7 @@ accompanying \texttt{visualization.html}.}
 \label{sec:partitioning}
 
 In addition to the Rumer partition introduced in
-Section~\ref{sec:genetic-code}, we use a complementary overlapping
+Section~\ref{sec:genetic-code}, we use an additional overlapping
 grouping system based on the chemical identity of the nucleotide at
 the third codon position. Each of the four nucleotides belongs to
 one of two classes under each of three distinct binary chemical
@@ -384,8 +385,8 @@ classifications:
 These axes were not selected in response to the subsequent
 nucleon calculations: they are three conventional pairwise
 dichotomies of the nucleotides and are represented explicitly
-in the IUPAC--IUB ambiguity nomenclature by the complementary
-symbol pairs R/Y, S/W, and M/K. Together they exhaust the three
+in the IUPAC--IUB ambiguity nomenclature by the symbol pairs
+R/Y, S/W, and M/K. Together they exhaust the three
 possible partitions of four nucleotides into two unordered
 pairs, thereby yielding six two-element subsets
 $X \subset \{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$.
@@ -444,11 +445,12 @@ not change the multiset of encoded amino acids. Consequently, the
 Keto group $\{\mathrm{G},\mathrm{T}\}$ and the Strong group
 $\{\mathrm{C},\mathrm{G}\}$ have the same amino-acid composition,
 as do the Amino group $\{\mathrm{A},\mathrm{C}\}$ and the Weak
-group $\{\mathrm{A},\mathrm{T}\}$. The service codons also occur
-identically in the two groups of each pair. Hence, under any common
-parametrization $K$ of the service codons
-(Section~\ref{sec:parametrization}), for
-$Q\in\{T,P,N,\Delta\}$,
+group $\{\mathrm{A},\mathrm{T}\}$. The two groups in each pair contain exactly the same service codons:
+Keto and Strong contain $\mathrm{ATG}$ and $\mathrm{TAG}$, whereas
+Amino and Weak contain $\mathrm{TAA}$ and $\mathrm{TGA}$. Therefore,
+under any assignment $K$ that associates a pair of values $(P,N)$
+with each service codon (Section~\ref{sec:parametrization}), the
+following identities hold for $Q\in\{T,P,N,\Delta\}$:
 \[
 Q_K(\mathrm{Keto})=Q_K(\mathrm{Strong}),\qquad
 Q_K(\mathrm{Amino})=Q_K(\mathrm{Weak}).
