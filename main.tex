@@ -47,7 +47,7 @@
 \begin{abstract}
 The standard genetic code is near-universal and stable over
 evolutionary time, motivating study of its arithmetic properties. We analyze proton and neutron counts of the encoded amino acids (free neutral forms) across $33$ codon groups constructed from two natural grouping systems: the Rumer partition by family degeneracy and the three chemical axes of the third codon position (Keto/Amino, Strong/Weak, Purine/Pyrimidine). Excluding the three stop
-codons and the ATG initiator leaves $60$ codons whose group sums
+codons and the initiator $\mathrm{ATG}$ leaves $60$ codons whose group sums
 determine an arithmetic structure modulo~$37$. Neutron counts reach
 the $37$-lattice, whereas necessarily even proton counts, barred
 from odd multiples of $37$, fall one below them: globally, and in
@@ -55,7 +55,7 @@ the single tryptophan/isoleucine pair carrying the Keto/Amino
 asymmetry, with differences $37$ and $36$. The Keto/Amino balances
 and global conditions yield separate neutron and proton equations
 modulo~$37$, the former containing $111 = 3 \cdot 37$; since
-$\gcd(4, 37) = 1$, these equations fix a unique minimal nonnegative
+$\gcd(4, 37) = 1$, these equations fix a unique minimal non-negative
 integer assignment for the four service codons, after which the
 regularities form a connected family of identities and
 divisibilities. Across $27$ NCBI translation tables, this
@@ -82,7 +82,7 @@ basic structure of the standard code was already
 established at the early stages of biological
 evolution. Any organizational regularities present in its arithmetic structure therefore require precise analysis as one of the few potential sources of information about the early stages of life.
 
-The arithmetic structure of the standard genetic code has been studied since shortly after its decipherment. Yu.~B.~Rumer~\cite{rumer1966,rumer1968} introduced the partition of the $64$ codons into two classes of $32$ codons each, $\mathrm{Octet}~\mathrm{I}$ (the eight four-fold degenerate families) and $\mathrm{Octet}~\mathrm{II}$ (the remaining codons), related by the involution $R = (\mathrm{T} \leftrightarrow \mathrm{G}, \mathrm{C} \leftrightarrow \mathrm{A})$. Shcherbak and Makukov~\cite{makukov2013} observed that the number $37$ plays a recurrent role in the arithmetic of the code, appearing as a divisor of amino acid nucleon sums across various groupings of codons. Panov and Filatov~\cite{panov2024} revisited this analysis, introducing the per-codon counting rule, which forms the methodological basis of the present study.
+The arithmetic structure of the standard genetic code has been studied since shortly after its decipherment. Yu.~B.~Rumer~\cite{rumer1966,rumer1968} introduced the partition of the $64$ codons into two classes of $32$ codons each, Octet~I (the eight four-fold degenerate families) and Octet~II (the remaining codons), related by the involution $R = (\mathrm{T} \leftrightarrow \mathrm{G}, \mathrm{C} \leftrightarrow \mathrm{A})$. Shcherbak and Makukov~\cite{makukov2013} observed that the number $37$ plays a recurrent role in the arithmetic of the code, appearing as a divisor of amino acid nucleon sums across various groupings of codons. Panov and Filatov~\cite{panov2024} revisited this analysis, introducing the per-codon counting rule, which forms the methodological basis of the present study.
 
 The present analysis uses the proton and neutron counts of the twenty canonical amino acids in their free neutral forms under the most-abundant-isotope convention; once these conventions are fixed, the counts are uniquely determined. These quantities are considered together with two natural grouping systems defined independently of the nucleon arithmetic. The first is the Rumer partition. The second is
 given by the three chemical axes of the third codon
@@ -98,11 +98,26 @@ the arithmetic regularities of the standard genetic
 code organize into a connected family of identities
 and divisibilities. The analysis traces this
 connected structure to a small number of empirical
-properties of the standard code. The same arithmetic criteria are then applied across all $27$ NCBI translation tables. Among the tables analyzed, the tested combination of structural regularities occurs only in the standard table and in its exact codon-to-amino-acid equivalent. The specificity of the structure is examined further by deterministic controls, which test its dependence on the third codon position, on the modulus, and on the molecular representation of the amino acids, and by a Monte Carlo test against an explicit random-code null model.
+properties of the standard code. The same arithmetic criteria are then applied to all $27$ NCBI
+translation tables. Among them, the tested combination of structural
+regularities occurs only in the standard genetic code table and in its
+exact equivalent with respect to codon-to-amino-acid mapping. The specificity of the structure is examined further by deterministic controls, which test its dependence on the third codon position, on the modulus, and on the molecular representation of the amino acids, and by a Monte Carlo test against an explicit random-code null model.
 
-The analysis is divided into three levels. The principal regularities are established at a parametrization-independent level, at which the three stop codons and ATG in its initiator role are excluded and only the remaining $60$ codons are summed; these are the central results of the paper, and they involve no assigned values. To obtain sums for the complete table of $64$ codons, however, the four service codons must be given some nucleon contributions. The second level is the naive reading (Key~0), in which the stop codons are assigned zero and ATG is counted as methionine. Assigning zero is also a choice of value, not the absence of one. The third level is the symmetrization (Key~1), in which the four service codons carry derived nucleon contributions. Once the choice of symmetry conditions is fixed, these contributions are determined as the unique minimal nonnegative integer solution of the corresponding system (Section~\ref{sec:results}), and the resulting regularities are consequences of that solution.
+The analysis is divided into three levels. The principal regularities are established at a parametrization-independent level, at which the three stop codons and $\mathrm{ATG}$ in its initiator role are excluded and only the remaining $60$ codons are summed; these are the central results of the paper, and they involve no assigned values. To obtain sums for the complete table of $64$ codons, however, the four service codons must be given some nucleon contributions. The second level is the naive reading (Key~0), in which the stop codons are assigned zero and $\mathrm{ATG}$ is counted as methionine. Assigning zero is also a choice of value, not the absence of one. The third level is the symmetrization (Key~1), in which the four
+service codons carry derived nucleon contributions. Key~1 does not
+establish the parametrization-independent core of the structure,
+which is already present in $\mathcal{C}_{\mathrm{SE}}$; instead, it
+shows how that core extends to the complete table under the
+service-codon distribution fixed by the standard code. For the chosen
+symmetry conditions, these contributions are determined as the unique
+minimal non-negative integer solution of the corresponding system
+(Section~\ref{sec:results}), and the resulting regularities are
+consequences of that solution.
 
-With regard to these assigned values, a methodological clarification is necessary, as it determines how the results should be interpreted. The assignment of values $(P,N)$ to the service codons is a formal device intended to render the arithmetic of the complete table as a unified object, rather than a statement about any physical basis. Sums that include the service codons under such a parametrization are formal quantities introduced solely to reveal the underlying mathematical structure.
+Assigning values to the service codons is a formal device for treating
+the arithmetic of the complete table as a single object; neither the
+assigned values nor the sums that include them are given a physical
+interpretation.
 
 \section{Methods}
 \label{sec:methods}
@@ -120,8 +135,10 @@ represented as a free neutral amino acid molecule (not as a residue in
 a peptide chain), with its molecular formula retrieved from the
 \textsc{PubChem} compound database~\cite{kim2023}. From this formula,
 we compute four integer quantities that characterize the nucleon
-content of the molecule. The sensitivity of the results to this
-choice of molecular representation is examined in
+content of the molecule. Below, $Q(a)$ denotes any of the four
+quantities $T$, $P$, $N$, or $\Delta$ for one molecule of amino
+acid~$a$. The sensitivity of the results to this choice of molecular
+representation is examined in
 Section~\ref{sec:discussion-controls}.
 
 The proton count $P$ is defined from the elemental composition of the
@@ -153,19 +170,22 @@ T = P + N, \qquad \Delta = P - N.
 Both quantities are integers by construction. Under the isotope
 assumptions above, hydrogen is the only element contributing to
 $\Delta$, since all other isotopes used have equal numbers of protons
-and neutrons. Consequently $\Delta$ is numerically equal to the number
-of hydrogen atoms in the molecule, and in particular $\Delta \geq 0$
-for every amino acid. For groups summed only over the service-excluded
-pool (Section~\ref{sec:genetic-code}), $\Delta$ is therefore the total
-hydrogen-atom count by linearity; in this sense, it is referred to
-below as the \emph{hydrogen count}.
+and neutrons. Consequently, $\Delta$ is numerically equal to the number of hydrogen
+atoms in the molecule and, in particular, $\Delta \geq 0$ for each of
+the twenty canonical amino acids. By linearity, the same identity
+holds for any sum of canonical amino-acid contributions and, in
+particular, for all group sums over the service-excluded pool
+(Section~\ref{sec:genetic-code}).
 
-To avoid notational collision, we use the uppercase symbol
-$\Delta$ exclusively for the proton--neutron imbalance of a
-single molecule or codon group, and reserve the lowercase symbol
-$\delta$ for pairwise differences between two such entities
-(for example, $\delta P = P_i - P_j$ between two amino acids
-$i$ and $j$).
+To avoid a notational collision, we use uppercase $\Delta$ exclusively
+for the proton--neutron imbalance of a single molecule or codon group,
+and reserve lowercase $\delta$ for pairwise differences between two
+such objects (for example, $\delta P=P_i-P_j$ between two amino acids
+$i$ and $j$). When both amino acids are identified explicitly, their
+labels are placed in parentheses:
+\[
+\delta Q(a,b)=Q(a)-Q(b).
+\]
 
 We emphasize that $P$, $N$, $T$ and $\Delta$ are not measured
 molecular masses. They are exact integer quantities derived from
@@ -181,12 +201,9 @@ differences: \texttt{amino\_acids\_proton\_differences.csv},
 \texttt{amino\_acids\_neutron\_differences.csv} and
 \texttt{amino\_acids\_nucleon\_differences.csv}. For any pair of amino
 acids $(i, j)$ we write $\delta P = P_i - P_j$ and analogously for
-$N$ and $T$. Each file groups all $\binom{20}{2} = 190$ unordered
-pairs by the value of $|\delta P|$, $|\delta N|$ or $|\delta T|$
-respectively. These companion datasets are used in later sections to
-identify amino acid pairs whose nucleon differences match specific
-target values, and in particular to locate pairs that are unique
-within the twenty amino acids with respect to a given difference.
+$N$ and $T$. Each file groups all $\binom{20}{2} = 190$ unordered pairs $(i,j)$
+by the corresponding absolute difference $|\delta P(i,j)|$,
+$|\delta N(i,j)|$, or $|\delta T(i,j)|$.
 
 All subsequent nucleon computations for codon groups reduce, by
 linearity, to sums of the per-amino-acid values tabulated in
@@ -237,7 +254,9 @@ The \emph{service-codon-excluded 60-codon pool} is then defined as
 \]
 with $|\mathcal{C}_{\mathrm{SE}}|=60$. Every codon belonging to
 $\mathcal{C}_{\mathrm{SE}}$ is counted according to its standard
-amino-acid assignment. The full codon-to-product mapping is provided
+amino-acid assignment. Because $\mathrm{ATG}$ is the sole methionine codon,
+$\mathcal{C}_{\mathrm{SE}}$ contains codons for nineteen canonical
+amino acids; methionine is absent from this pool. The full codon-to-product mapping is provided
 in the dataset \texttt{genetic\_code\_codons.csv}.
 
 By a codon family, we mean the set of four codons sharing the same
@@ -310,7 +329,7 @@ among the pyrimidines, and $\mathrm{G}$ precedes $\mathrm{A}$ among
 the purines. Geometrically, as shown by Panov and
 Filatov~\cite{panov2024}, it is one of exactly four orderings (out of
 $24$ possible permutations of the four bases) in which
-$\mathrm{Octet}~\mathrm{I}$ and $\mathrm{Octet}~\mathrm{II}$ form
+Octet~I and Octet~II form
 connected regions on the codon matrix.
 
 To assess the extent to which the arithmetic properties studied in
@@ -335,9 +354,9 @@ product (the three-letter amino acid symbol or $\mathrm{STOP}$ for
 the three stop codons) appears at the top center; the total nucleon
 count $T$ appears below the product symbol; the proton count $P$
 appears at the top right; and the neutron count $N$ appears at the
-bottom right. Codons of $\mathrm{Octet}~\mathrm{I}$ (the eight fully
+bottom right. Codons of Octet~I (the eight fully
 four-fold degenerate families) are shaded purple, and codons of
-$\mathrm{Octet}~\mathrm{II}$ are shaded yellow. Generated by the
+Octet~II are shaded yellow. Generated by the
 accompanying \texttt{visualization.html}.}
   \label{fig:codon-table}
 \end{figure}
@@ -411,6 +430,11 @@ of Octet~II with adenine at the third position. All $33$ groups,
 together with their sizes, codon compositions, and Rumer-octet
 membership, are listed in the dataset \texttt{codon\_groups.csv}.
 
+In the group registry, the full set $\mathcal{C}_{64}$ corresponds to
+the row with id~1. In this article, that group is denoted
+$\mathrm{All}$, whereas $\mathcal{C}_{64}$ denotes the codon set
+itself.
+
 A direct consequence of the structure of the standard code is the
 \emph{twin-group property}. Within every codon family, the codons
 $\mathrm{NNC}$ and $\mathrm{NNT}$ with identical first two
@@ -421,14 +445,15 @@ Keto group $\{\mathrm{G},\mathrm{T}\}$ and the Strong group
 $\{\mathrm{C},\mathrm{G}\}$ have the same amino-acid composition,
 as do the Amino group $\{\mathrm{A},\mathrm{C}\}$ and the Weak
 group $\{\mathrm{A},\mathrm{T}\}$. The service codons also occur
-identically in the two groups of each pair. Hence, for any nucleon
-quantity $Q\in\{P,N,T,\Delta\}$,
+identically in the two groups of each pair. Hence, under any common
+parametrization $K$ of the service codons
+(Section~\ref{sec:parametrization}), for
+$Q\in\{T,P,N,\Delta\}$,
 \[
-Q(\mathrm{Keto})=Q(\mathrm{Strong}),\qquad
-Q(\mathrm{Amino})=Q(\mathrm{Weak})
+Q_K(\mathrm{Keto})=Q_K(\mathrm{Strong}),\qquad
+Q_K(\mathrm{Amino})=Q_K(\mathrm{Weak}).
 \]
-under any common parametrization of the service codons. The same
-identities hold after intersecting each pair with Octet~I or
+The same identities hold after intersecting each pair with Octet~I or
 Octet~II. We refer to these pairs of two-nucleotide groups as
 \emph{twin groups}; in the dataset \texttt{codon\_groups.csv}, the
 twin relationship is recorded in the column
@@ -466,18 +491,32 @@ $\mathcal{C}_{\mathrm{SE}}$ below as the \emph{service-excluded pool};
 its technical identifier in the code and file names is
 \texttt{pool60}.
 Every codon in $\mathcal{C}_{\mathrm{SE}}$ is unambiguously assigned
-to a canonical amino acid, so that for any group $G$ the sums
+to a canonical amino acid. For a codon group $G$ and a nucleon quantity
+$Q\in\{T,P,N,\Delta\}$, define
 \[
-\bigl(P_{\mathrm{SE}}(G),N_{\mathrm{SE}}(G)\bigr)
-=
-\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}}
-\bigl(P(c),N(c)\bigr)
+Q_{\mathrm{SE}}(G)
+:=
+\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}} Q(c).
 \]
-are directly defined, where $P(c)$ and $N(c)$ are the values of the
-neutral free form of the amino acid encoded by codon $c$, as specified
-in Section~\ref{sec:composition}. Neither these sums nor the number of
-included codons $|G\cap\mathcal{C}_{\mathrm{SE}}|$ depends on
-assignments to the service codons.
+Here $Q(c)$ is the corresponding quantity of the neutral free form of
+the amino acid encoded by codon
+$c\in\mathcal{C}_{\mathrm{SE}}$, as specified in
+Section~\ref{sec:composition}. For $c\in\mathcal{S}$, the bare form
+$Q(c)$ is not used: its formal contribution carries the subscript of
+the selected key. Since $G\cap\mathcal{C}_{\mathrm{SE}}$ contains no
+service codons, the same restricted sum may be written as
+$Q(G\cap\mathcal{C}_{\mathrm{SE}})$. The subscript $\mathrm{SE}$
+denotes a restriction of the summation domain, not a parametric key.
+Neither these sums nor the number of included codons
+$|G\cap\mathcal{C}_{\mathrm{SE}}|$ depends on assignments to the
+service codons.
+
+If $G\cap\mathcal{S}=\varnothing$, the full sum over the group is
+written as
+\[
+Q(G):=\sum_{c\in G}Q(c),
+\]
+in which case $Q(G)=Q_{\mathrm{SE}}(G)$.
 
 To analyze the complete 64-position table, we introduce a
 \emph{parametric key} $K$: a fixed assignment of a pair of numbers
@@ -486,8 +525,7 @@ $c\in\mathcal{S}$. Under such a key, the group sums are
 \[
 \bigl(P_K(G),N_K(G)\bigr)
 =
-\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}}
-\bigl(P(c),N(c)\bigr)
+\bigl(P_{\mathrm{SE}}(G),N_{\mathrm{SE}}(G)\bigr)
 +
 \sum_{c\in G\cap\mathcal{S}}
 \bigl(P_K(c),N_K(c)\bigr),
@@ -499,9 +537,19 @@ T_K(G)=P_K(G)+N_K(G),
 \qquad
 \Delta_K(G)=P_K(G)-N_K(G).
 \]
-Thus a parametric key changes only the formal contributions of the
-four service codons. The study considers two principal keys, recorded
-in \texttt{key\_parameters.csv}.
+For $Q\in\{T,P,N,\Delta\}$, $Q_0(G)$ and $Q_1(G)$ below denote the
+full group sums, including service-codon contributions, under the
+Key~0 and Key~1 assignments, respectively. The subscripts $0$ and $1$
+label these two assignments; they are not numerical values of a
+scalar parameter. Thus $Q_{\mathrm{SE}}(G)$ is independent of the key,
+whereas $Q_0(G)$ and $Q_1(G)$ can differ only through the
+contributions of codons in $G\cap\mathcal{S}$. If
+$G\cap\mathcal{S}=\varnothing$, then
+$Q_K(G)=Q(G)=Q_{\mathrm{SE}}(G)$ for every $K$. The subscript
+$\mathrm{SE}$ applies only to codon groups; the subscripts $K$, $0$,
+and $1$ apply to full group sums and to the formal contributions of
+individual service codons. The two keys considered in this study are
+recorded in \texttt{key\_parameters.csv}.
 
 \paragraph{The naive reading (Key~0).}
 Each of the three stop codons is assigned the zero contribution
@@ -523,9 +571,9 @@ $(P,N)=(1,0)$. These values are not interpreted as the nucleon
 composition of physical translation products. They are derived in
 Sections~\ref{sec:results-key1-derivation}--%
 \ref{sec:results-key1-uniqueness} under the assumption that the three
-stop codons share a common parameter pair and under the balance and
-divisibility-by-37 conditions specified there. Under these
-assumptions, Key~1 is the unique minimal nonnegative integer solution
+stop codons share a common parameter pair and under the conditions of
+balance and divisibility by~$37$ specified there. Under these
+assumptions, Key~1 is the unique minimal non-negative integer solution
 of the resulting system. Here Key~1 is introduced as the result
 of that formal construction, not as a biochemical property of
 termination signals or the initiator.
@@ -551,24 +599,24 @@ reading (Key~0), and the symmetrization (Key~1).
 \subsection{Analytical criteria and classification of equalities}
 \label{sec:criteria}
 
-For each of the 33 codon groups defined in
-Section~\ref{sec:partitioning}, we examine $P$, $N$, $T$ and
+For each of the $33$ codon groups defined in
+Section~\ref{sec:partitioning}, we examine $P$, $N$, $T$, and
 $\Delta$ at three analytical levels: the service-excluded pool
-$\mathcal{C}_{\mathrm{SE}}$, Key~0 and Key~1. The reporting scheme
-below is applied uniformly. Divisibility by 37 is the primary
-preselected arithmetic criterion, and exact equalities are enumerated
-exhaustively; decimal roundness, exact powers, simple ratios and
-matches to amino acid differences are treated as descriptive or
-exploratory observations. This distinction does not assign
-statistical significance to an observation in the absence of a
-corresponding null model.
+$\mathcal{C}_{\mathrm{SE}}$, Key~0, and Key~1. Three reporting
+procedures are described below: tests of divisibility by~$37$ and
+decimal roundness, and a search for exact equalities. Divisibility
+by~$37$ is the primary preselected arithmetic criterion. Exact powers,
+reduced ratios, and matches to amino acid differences are considered
+separately as additional descriptive observations. Statistical
+significance is assessed only where a corresponding null model is
+specified.
 
 \paragraph{Criterion 1: divisibility by 37.}
 For every group quantity $P$, $N$, $T$ and $\Delta$, we compute the
-quotient and remainder upon division by 37. A zero remainder denotes
+quotient and remainder upon division by~$37$. A zero remainder denotes
 exact divisibility. This criterion continues the line of investigation
 opened by \citet{makukov2013} and developed by
-\citet{panov2024}. When a value is divisible by 37, its displayed
+\citet{panov2024}. When a value is divisible by~$37$, its displayed
 factorization also exposes any further factors of the quotient; these
 are not assigned separate evidential weight without an additional
 analysis. Nonzero residues are reported descriptively only where they
@@ -584,61 +632,54 @@ four quantities are provided in
 We call a positive integer quantity round in the decimal system if it
 is divisible by $10^k$ for at least one integer $k\geq1$; its degree
 of roundness is the largest such $k$. This criterion is used
-descriptively because the data contain exact multiples of 100 and
-1000, notably among the parametrization-independent Octet~I sums.
+descriptively because the data contain exact multiples of $100$ and
+$1000$, notably among the parametrization-independent Octet~I sums.
 Although roundness is tied to decimal notation, the divisibility being
 tested is a property of the integer itself: $10^k\mid x$ is equivalent
-to simultaneous divisibility by $2^k$ and $5^k$. What depends on the
-numeral base is the choice to treat this particular simultaneous
-divisibility as roundness, not the truth of the condition for a given
-integer. Since $\gcd(10,37)=1$, simultaneous divisibility by $10^k$
-and 37 is equivalent to divisibility by $37\cdot10^k$; coprimality of
-the moduli does not by itself establish statistical or structural
-independence between two observations. The systematic control across
-prime moduli is presented in Section~\ref{sec:discussion-controls}.
+to simultaneous divisibility by $2^k$ and $5^k$. The systematic
+control across prime moduli is presented in
+Section~\ref{sec:discussion-controls}.
 
 \paragraph{Criterion 3: exact equalities.}
-For every unordered pair of group entries and every pair of quantities
-from $\{P,N,T,\Delta\}$, we test exact numerical equality. A group is
-compared with itself only when two different quantities are involved,
-for example $P$ and $N$ of the same group. The resulting equalities are
-classified in the following order:
+At each analytical level, we compare the $P$, $N$, $T$, and $\Delta$
+values of all $33$ groups and record every exact match. Trivial
+identities such as $P(G)=P(G)$ are not included in the results. Each
+equality is assigned to one of three classes:
 \begin{itemize}
   \item \emph{different-size equalities}
         (\texttt{DIFF\_PARAM} in the \texttt{Match\_Type} column):
-        the actual numbers of included codons differ between the two
-        groups, regardless of whether the same quantity or two
-        different quantities are compared. This class identifies equal
-        values obtained from different numbers of terms and is reported
-        first under the adopted classification rule;
+        the same numerical value is obtained by summing over different
+        numbers of codons; either the same or different nucleon
+        quantities may be compared;
   \item \emph{same-size cross-quantity equalities}
-        (\texttt{CROSS\_PARAM}): group sizes are equal but two
-        different quantities are compared, for example
+        (\texttt{CROSS\_PARAM}): the groups contain the same number of
+        codons, but different quantities are compared, for example
         $P(G_1)=N(G_2)$;
   \item \emph{same-size same-quantity equalities}
-        (\texttt{SAME\_PARAM}): both the group sizes and the compared
-        quantity are the same, for example $P(G_1)=P(G_2)$.
+        (\texttt{SAME\_PARAM}): the groups contain the same number of
+        codons and the same quantity is compared, for example
+        $P(G_1)=P(G_2)$.
 \end{itemize}
-Here size means the actual group cardinality at the corresponding
-analytical level; after service codons are excluded, it may differ
-from the cardinality of the same group in the complete 64-position
-table. The ordering of the classes is a reporting convention; it does
-not rank them by statistical or evidential strength.
 
-All equalities are provided in
+For classification, group size is the number of codons actually
+included in the sum. Under Key~0 and Key~1, this is the full size of
+the group in the $64$-codon table. In the service-excluded pool, the
+service codons are removed, so groups containing them are smaller.
+
+All identified equalities are listed in
 \texttt{pool60\_equalities.csv},
 \texttt{key0\_equalities.csv} and
 \texttt{key1\_equalities.csv}. Twin-group identities from
 Section~\ref{sec:partitioning} are also recorded, but are treated as
-structural consequences of identical amino acid composition rather
-than as new coincidences.
+consequences of identical amino acid composition rather than as new
+coincidences.
 
 \paragraph{Additional exploratory observations.}
 Beyond the primary procedures, we descriptively note:
 \begin{itemize}
   \item exact powers of small integers, for example
         $4096=2^{12}$;
-  \item simple reduced ratios within a group, including $P/T$, $N/T$,
+  \item reduced ratios within a group, including $P/T$, $N/T$,
         $\Delta/T$, $P/N$, $\Delta/P$ and $\Delta/N$, tabulated in
         \texttt{pool60\_ratios.csv},
         \texttt{key0\_ratios.csv} and
@@ -648,10 +689,8 @@ Beyond the primary procedures, we descriptively note:
         individual amino acid pairs, such as
         $|\delta N(\mathrm{Trp},\mathrm{Ile})|=37$.
 \end{itemize}
-These observations describe the arithmetic and may motivate testable
-hypotheses. The terms ``simple'' or ``notable'' do not imply
-statistical anomalousness unless a corresponding null model is
-specified.
+These observations describe the arithmetic and may provide a basis
+for testable hypotheses.
 
 Finally, the four quantities are not independent:
 \[
@@ -759,13 +798,13 @@ codons in the analyzed pool is recorded for both models (columns
 \texttt{Pure\_Codons\_Count} and \texttt{Pure\_Codons\_Count\_Alt}).
 
 \texttt{deficit\_models\_analysis.csv} contains one row for each of
-the 27 tables. The full $P(\mathrm{All})$ and $N(\mathrm{All})$ sums
-follow the registered amino acid assignments, with positions marked
+the 27 tables. The full proton and neutron sums follow the registered
+amino acid assignments, with positions marked
 \texttt{*} contributing zero. For both models, the file additionally
 records sums over the corresponding analyzed pool, the proton-sum
-residue modulo 37, and three neutron deficits relative to:
+residue modulo~$37$, and three neutron deficits relative to:
 \begin{enumerate}
-  \item the constant 3700 obtained for standard-code Octet~I;
+  \item the constant $3700$ obtained for standard-code Octet~I;
   \item structural $T(\mathrm{Octet~I})$, retaining the eight
         families that occupy Octet~I positions in the standard table;
   \item functional $T(\mathrm{Octet~I})$, selecting in table $t$
@@ -821,9 +860,9 @@ Python standard library and writes four deterministic datasets:
         third codon positions at three analytical levels:
         $\mathcal{C}_{\mathrm{SE}}$, Key~0 and Key~1. For each side it
         records the four nucleon quantities and their residues
-        modulo 37;
+        modulo~$37$;
   \item \texttt{prime\_divisibility\_scan.csv} scans every prime up
-        to 97 over three value sets: group quantities identical under
+        to~$97$ over three value sets: group quantities identical under
         Key~0 and Key~1, all Key~0 quantities, and all Key~1
         quantities. For each prime it records the numbers of
         divisible instances, distinct nonzero values and distinct odd
@@ -835,15 +874,15 @@ Python standard library and writes four deterministic datasets:
         all 27 NCBI tables under Model~1 and Model~2. For $T$,
         $P$, $N$ and
         $\Delta$, it records directed Keto-minus-Amino differences,
-        their residues modulo 37 and position-level summary flags;
+        their residues modulo~$37$ and position-level summary flags;
   \item \texttt{representation\_sensitivity.csv} recomputes 13
-        explicitly listed absolute and difference quantities under three
-        representations of the encoded amino acid: the neutral free
-        molecule with $(\delta P,\delta N)=(0,0)$, the peptide
-        residue with $(-10,-8)$, and the zwitterion with $(0,0)$.
-        For every quantity it records the result under each
-        representation and its agreement with the free-molecule
-        baseline.
+        explicitly listed absolute and difference quantities under
+        three representations of the encoded amino acid. Relative to
+        the neutral free molecule, the proton and neutron offsets are
+        $(0,0)$ for the free molecule itself, $(-10,-8)$ for the
+        peptide residue, and $(0,0)$ for the zwitterion. For every
+        quantity, the file records the result under each representation
+        and its agreement with the free-molecule baseline.
 \end{itemize}
 These four files define the positional, modular, cross-table and
 representation-specificity controls. Their results are interpreted
@@ -922,39 +961,66 @@ $\mathcal{C}_{\mathrm{SE}}$---the complete $64$-codon table excluding
 the three stop codons and the initiator $\mathrm{ATG}$---the four
 nucleon quantities are
 \[
-T = 7769, \qquad P = 4180, \qquad N = 3589, \qquad \Delta = 591.
+T(\mathcal{C}_{\mathrm{SE}}) = 7769, \qquad
+P(\mathcal{C}_{\mathrm{SE}}) = 4180,
+\]
+\[
+N(\mathcal{C}_{\mathrm{SE}}) = 3589, \qquad
+\Delta(\mathcal{C}_{\mathrm{SE}}) = 591.
 \]
 Of the four quantities, only the neutron sum is exactly divisible
 by~$37$:
 \[
-N = 97 \cdot 37.
+N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37.
 \]
 The other three lie one unit below the nearest multiple:
 \[
-T = 210 \cdot 37 - 1, \qquad
-P = 113 \cdot 37 - 1, \qquad
-\Delta = 16 \cdot 37 - 1.
+T(\mathcal{C}_{\mathrm{SE}}) = 210 \cdot 37 - 1, \qquad
+P(\mathcal{C}_{\mathrm{SE}}) = 113 \cdot 37 - 1,
+\]
+\[
+\Delta(\mathcal{C}_{\mathrm{SE}}) = 16 \cdot 37 - 1.
 \]
 The values of $T$ and $\Delta$ are determined algebraically by $P$ and
 $N$ through $T = P + N$ and $\Delta = P - N$.
 
-Partitioning the pool into the two 30-codon halves of the Keto/Amino
-axis gives
+The Rumer partition of $\mathcal{C}_{\mathrm{SE}}$ shows how this
+divisibility is distributed between the two octet contributions.
+Octet~I lies entirely within
+$\mathcal{C}_{\mathrm{SE}}$, whereas the intersection of Octet~II with
+$\mathcal{C}_{\mathrm{SE}}$ contains $28$ codons, since all four
+service codons belong to Octet~II. The neutron sums are
 \[
 \begin{aligned}
-N_{\mathrm{SE}}(\mathrm{Keto}) &= 1813 = 49 \cdot 37,
-&\qquad
+N(\mathrm{Octet~I})
+  &= 1700 = 46 \cdot 37 - 2, \\
+N_{\mathrm{SE}}(\mathrm{Octet~II})
+  &= 1889 = 51 \cdot 37 + 2.
+\end{aligned}
+\]
+Neither is a multiple of~$37$ on its own. By additivity over this
+partition, the residues $-2$ and~$+2$ cancel in the total sum:
+\[
+N(\mathcal{C}_{\mathrm{SE}}) = 1700 + 1889 = 3589 = 97 \cdot 37.
+\]
+The remaining Octet~I quantities and their scaling across its
+sub-groups are considered below.
+
+Partitioning the pool into the two 30-codon halves of the Keto/Amino
+axis gives a different pattern:
+\[
+\begin{aligned}
+N_{\mathrm{SE}}(\mathrm{Keto}) &= 1813 = 49 \cdot 37, \\
 N_{\mathrm{SE}}(\mathrm{Amino}) &= 1776 = 48 \cdot 37, \\
-P_{\mathrm{SE}}(\mathrm{Keto}) &= 2108 = 57 \cdot 37 - 1,
-&\qquad
+P_{\mathrm{SE}}(\mathrm{Keto}) &= 2108 = 57 \cdot 37 - 1, \\
 P_{\mathrm{SE}}(\mathrm{Amino}) &= 2072 = 56 \cdot 37.
 \end{aligned}
 \]
-The global divisibility of the neutron sum does not arise from the
-cancellation of nonzero residues between the two halves: both neutron
-sums are divisible by~$37$. At this level, the proton residue $-1$ is
-carried by the Keto half, whereas the proton sum of the Amino half is
-divisible by~$37$. Accordingly,
+Under the Keto/Amino partition, the divisibility is distributed
+differently: both neutron sums are divisible by~$37$ on their own, and
+no cancellation of residues is involved. At this level, the
+proton residue $-1$ is carried by the Keto half, whereas the proton sum
+of the Amino half is divisible by~$37$. Accordingly,
 \[
 \Delta_{\mathrm{SE}}(\mathrm{Keto}) = 295 = 8 \cdot 37 - 1,
 \qquad
@@ -964,24 +1030,28 @@ divisible by~$37$. Accordingly,
 The Strong/Weak axis reproduces the same values because of the
 twin-group identities
 (Section~\ref{sec:results-pyrimidine-synonymy}). On the
-Purine/Pyrimidine axis, none of the quantities $T$, $P$, and $N$ is
+Purine/Pyrimidine axis, all four service codons lie in the Purine half;
+after their exclusion, $\mathcal{C}_{\mathrm{SE}}$ is partitioned into
+a 28-codon Purine group and a 32-codon Pyrimidine group. None of the
+quantities $T$, $P$, and $N$ is
 divisible by~$37$: their residues modulo~$37$ are $(10,23,24)$ for
 Purine and $(26,13,13)$ for Pyrimidine. For~$\Delta$, a one-unit
 difference remains:
 \[
-\Delta_{\mathrm{SE}}(\mathrm{Pur}) = 295 = 8 \cdot 37 - 1,
+\Delta_{\mathrm{SE}}(\mathrm{Purine}) = 295 = 8 \cdot 37 - 1,
 \qquad
-\Delta_{\mathrm{SE}}(\mathrm{Pyr}) = 296 = 8 \cdot 37.
+\Delta_{\mathrm{SE}}(\mathrm{Pyrimidine}) = 296 = 8 \cdot 37.
 \]
 
 At the level of the one-nucleotide groups, the residue $-1$
 in~$\Delta$ occurs only in the group~$\{\mathrm{G}\}$:
 \[
-\Delta_{\mathrm{SE}}(\{\mathrm{G}\}) = 147 = 4 \cdot 37 - 1,
-\qquad
+\begin{aligned}
+\Delta_{\mathrm{SE}}(\{\mathrm{G}\}) &= 147 = 4 \cdot 37 - 1, \\
 \Delta_{\mathrm{SE}}(\{\mathrm{A}\}) =
 \Delta_{\mathrm{SE}}(\{\mathrm{C}\}) =
-\Delta_{\mathrm{SE}}(\{\mathrm{T}\}) = 148 = 4 \cdot 37.
+\Delta_{\mathrm{SE}}(\{\mathrm{T}\}) &= 148 = 4 \cdot 37.
+\end{aligned}
 \]
 At the upper level of the three chemical axes, this residue is
 inherited by Keto, Strong, and Purine---the groups that admit
@@ -1106,6 +1176,69 @@ scaling. The same scaling preserves the ratios
 \]
 at all three levels of the Octet~I hierarchy.
 
+\subsubsection{Pyrimidine synonymy and twin-group identities}
+\label{sec:results-pyrimidine-synonymy}
+
+In the standard genetic code, the codons $\mathrm{NNC}$ and
+$\mathrm{NNT}$ (where $\mathrm{C}$ and $\mathrm{T}$ are
+pyrimidine bases) encode the same amino acid.
+
+A direct algebraic consequence of pyrimidine synonymy is the
+equality of nucleon quantities between the groups
+\textbf{Keto} $\{\mathrm{G,T}\}$ (id~2) and \textbf{Strong}
+$\{\mathrm{C,G}\}$ (id~3), and between \textbf{Amino}
+$\{\mathrm{A,C}\}$ (id~4) and \textbf{Weak}
+$\{\mathrm{A,T}\}$ (id~5). Each of these four groups
+contains $32$ codons. The distribution of service codons
+across them is uneven: Keto and Strong contain the stop
+codon $\mathrm{TAG}$ and the initiator $\mathrm{ATG}$,
+while Amino and Weak contain two stop codons,
+$\mathrm{TAA}$ and $\mathrm{TGA}$, and no start codon. Each
+of the four groups therefore has an intersection of $30$
+codons with $\mathcal{C}_{\mathrm{SE}}$. Although these
+groups themselves contain service codons --- so their
+individual full-group nucleon values depend on the assignment
+to those codons --- the service codons enter both members of
+each twin pair symmetrically, and the equality of nucleon
+quantities holds under any such assignment.
+
+Analogous equalities hold between
+$\mathrm{Keto} \cap \mathrm{Octet~II}$ and
+$\mathrm{Strong} \cap \mathrm{Octet~II}$ (id~24 and id~25),
+between $\mathrm{Amino} \cap \mathrm{Octet~II}$ and
+$\mathrm{Weak} \cap \mathrm{Octet~II}$ (id~26 and id~27),
+and between the corresponding pairs within Octet~I (id~13
+and id~14, id~15 and id~16). All these twin pairs are
+recorded in the \texttt{Twin\_Group\_ID} column of
+\texttt{codon\_groups.csv}. Within Octet~I, full four-fold degeneracy forces all six
+$16$-codon sub-groups to be mathematically identical, but
+only the Keto/Strong and Amino/Weak pairs are recorded in
+\texttt{Twin\_Group\_ID}. The Purine/Pyrimidine pair is
+excluded because outside Octet~I the two groups have
+substantially different amino acid composition: Purine
+contains all four service codons, while Pyrimidine contains
+none. Their equality within Octet~I is a degeneracy-specific
+artifact, not a manifestation of pyrimidine synonymy.
+
+A separate phenomenon of the same origin is the equality
+of the single-nucleotide groups $\{\mathrm{C}\}$ (id~8) and
+$\{\mathrm{T}\}$ (id~10), together with their intersections
+with each octet. This equality is qualitatively different:
+it does not relate groups across a chemical axis of
+partitioning, but follows directly from pyrimidine
+synonymy itself --- a codon with $\mathrm{C}$ at the third
+position and the same codon with $\mathrm{T}$ encode the
+same amino acid by definition. For this reason the
+single-nucleotide pairs $\{\mathrm{C}\}/\{\mathrm{T}\}$ are
+not recorded in \texttt{Twin\_Group\_ID}, which is reserved
+for pairs whose identical amino acid composition arises
+from pyrimidine synonymy across a two-nucleotide chemical
+axis (Keto/Strong or Amino/Weak).
+$\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ form the only such
+pair in the standard code that is entirely free of service
+codons, and is therefore parametrization-independent both
+in its values and in their equality.
+
 \subsubsection{Arithmetic of pyrimidine-restricted groups}
 \label{sec:results-pyrimidine}
 
@@ -1183,13 +1316,11 @@ Over the sense pool---parametrization-independent by
 construction---the differences between the Keto and Amino nucleon
 sums are
 \begin{align*}
-T(\mathrm{Keto~sense}) - T(\mathrm{Amino~sense}) &= 3921 - 3848 = 73, \\
-P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense}) &= 2108 - 2072 = 36, \\
-N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense}) &= 1813 - 1776 = 37, \\
-\Delta(\mathrm{Keto~sense}) - \Delta(\mathrm{Amino~sense}) &= 295 - 296 = -1,
+T_{\mathrm{SE}}(\mathrm{Keto}) - T_{\mathrm{SE}}(\mathrm{Amino}) &= 3921 - 3848 = 73, \\
+P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino}) &= 2108 - 2072 = 36, \\
+N_{\mathrm{SE}}(\mathrm{Keto}) - N_{\mathrm{SE}}(\mathrm{Amino}) &= 1813 - 1776 = 37, \\
+\Delta_{\mathrm{SE}}(\mathrm{Keto}) - \Delta_{\mathrm{SE}}(\mathrm{Amino}) &= 295 - 296 = -1,
 \end{align*}
-where $X(G~\mathrm{sense})$ denotes the sum of
-$X \in \{T, P, N, \Delta\}$ over the sense codons of the group $G$.
 These differences reduce to the nucleon counts of a single pair of
 molecules, and the reduction is structural.
 
@@ -1220,8 +1351,8 @@ T(\mathrm{Trp}) + T(\mathrm{Met}) - T(\mathrm{Ile})$.)
 
 \paragraph{The pair and the modulus.}
 The two nucleon differences that matter for what follows are
-$|\delta N(\mathrm{Trp}, \mathrm{Ile})| = 37$, equal to the
-modulus, and $|\delta P(\mathrm{Trp}, \mathrm{Ile})| = 36$, one unit
+$|\delta N(\mathrm{Trp},\mathrm{Ile})| = 37$, equal to the
+modulus, and $|\delta P(\mathrm{Trp},\mathrm{Ile})| = 36$, one unit
 below it. Among the $190$ pairs of canonical amino acids,
 $|\delta N| = 37$ is realized only by
 $\mathrm{Trp}$--$\mathrm{Ile}$ and $\mathrm{Trp}$--$\mathrm{Leu}$,
@@ -1302,8 +1433,8 @@ below.
   \texttt{codon\_groups.csv} in the lower right.
   For twin-group pairs (Keto/Strong and
   Amino/Weak on the global code level, and their
-  analogues within $\mathrm{Octet}~\mathrm{I}$ and
-  $\mathrm{Octet}~\mathrm{II}$),
+  analogues within Octet~I and
+  Octet~II),
   whose values are identical by pyrimidine
   synonymy, the display is collapsed into a single
   block: the second group name appears in the
@@ -1349,7 +1480,7 @@ T(\mathrm{Weak} \cap \mathrm{Octet~II}) = 1998 = 54 \cdot 37
 Combined with $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$
 from Section~\ref{sec:results-octetI}, this gives
 divisibility by $37$ for the total nucleon count of the
-full code: $T(\mathrm{ALL}) = 7918 = 214 \cdot 37$ (id~1).
+full code: $T(\mathrm{All}) = 7918 = 214 \cdot 37$ (id~1).
 
 The divisibilities $T(\mathrm{Octet~I}) = 3700$,
 $T(\mathrm{Octet~II}) = 4218$, and
@@ -1386,7 +1517,7 @@ coincide with the sense-pool sums of the two groups, so the
 divisibility is in fact parametrization-independent, not specific
 to Key~0.
 
-These same groups give anomalously simple reduced ratios:
+For these same groups, the ratios reduce to
 \[
 \frac{P}{T} = \frac{7}{13},
 \qquad
@@ -1531,7 +1662,7 @@ Section~\ref{sec:results-key1-uniqueness}) yields
 n_{\text{stop}} - n_{\text{start}} = 37.
 \]
 The right-hand side is the difference
-$N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense})$
+$N_{\mathrm{SE}}(\mathrm{Keto}) - N_{\mathrm{SE}}(\mathrm{Amino})$
 established in Section~\ref{sec:results-key1-trpile};
 its value is determined by the nucleon difference of the
 $\mathrm{Trp}$--$\mathrm{Ile}$ pair. The condition is a
@@ -1541,8 +1672,8 @@ parameters individually.
 
 \paragraph{Divisibility of the global neutron pool by~$37$.}
 The sense pool of all $60$ sense codons carries
-$N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$
-(Sections~\ref{sec:results-sensepool} and~\ref{sec:results-octetI}),
+$N(\mathcal{C}_{\mathrm{SE}}) = 3589 = 97 \cdot 37$
+(Section~\ref{sec:results-sensepool}),
 an exact divisibility that is a property of the sense codons
 alone and independent of any service-codon parametrization.
 However, at the level of
@@ -1605,12 +1736,12 @@ Three arithmetic facts combine in the derivation, and
 each is independent of the other two:
 \begin{enumerate}
   \item the difference
-        $N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense})
+        $N_{\mathrm{SE}}(\mathrm{Keto}) - N_{\mathrm{SE}}(\mathrm{Amino})
         = 37$, a property of the
         $\mathrm{Trp}$--$\mathrm{Ile}$ pair
         (Section~\ref{sec:results-key1-trpile});
   \item the divisibility of the global sense pool
-        $N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$
+        $N(\mathcal{C}_{\mathrm{SE}}) = 3589 = 97 \cdot 37$
         by~$37$, a chemical property of the standard
         code independent of any service-codon
         parametrization;
@@ -1672,10 +1803,10 @@ Imposing the corresponding condition $P(\mathrm{Keto}) = P(\mathrm{Amino})$
 p_{\text{stop}} - p_{\text{start}} = 36.
 \]
 The right-hand side is the difference
-$P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense})$
+$P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino})$
 established in Section~\ref{sec:results-key1-trpile}; its
 value is $36$ rather than $37$, the parity-constrained
-value of $|\delta P(\mathrm{Trp}, \mathrm{Ile})|$
+value of $|\delta P(\mathrm{Trp},\mathrm{Ile})|$
 (Section~\ref{sec:results-key1-trpile}). The condition is a
 one-parameter family of solutions in two unknowns; a second
 independent constraint is required to fix the parameters
@@ -1685,13 +1816,13 @@ individually.
 The sense pool of all $60$ sense codons of the
 standard code carries
 \[
-P(\mathrm{All~sense}) =
-P(\mathrm{Octet~I}) + P(\mathrm{Octet~II~sense}) =
+P(\mathcal{C}_{\mathrm{SE}}) =
+P(\mathrm{Octet~I}) + P_{\mathrm{SE}}(\mathrm{Octet~II}) =
 2000 + 2180 = 4180 = 113 \cdot 37 - 1.
 \]
 Unlike the neutron pool, the global proton pool of the
 sense codons is not divisible by~$37$; it lies one proton
-below the nearest multiple, $P(\mathrm{All~sense}) \equiv
+below the nearest multiple, $P(\mathcal{C}_{\mathrm{SE}}) \equiv
 -1 \pmod{37}$. We require the analytical parametrization of
 the service codons to close this deficit and bring the
 global proton pool onto the lattice of step~$37$:
@@ -1754,12 +1885,12 @@ Keto/Amino balance and global divisibility by~$37$.
 Three arithmetic facts combine in the derivation:
 \begin{enumerate}
   \item the difference
-        $P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense})
+        $P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino})
         = 36$, the parity-constrained value of
-        $|\delta P(\mathrm{Trp}, \mathrm{Ile})|$
+        $|\delta P(\mathrm{Trp},\mathrm{Ile})|$
         (Section~\ref{sec:results-key1-trpile});
   \item the residue
-        $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$, a
+        $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$, a
         deficit of one proton on the $37$-lattice and a
         chemical property of the standard code independent
         of any service-codon parametrization;
@@ -1776,7 +1907,7 @@ Three arithmetic facts combine in the derivation:
 Facts (1) and (2) share a common origin in the proton
 parity of the canonical amino acids: parity excludes odd
 values on the $37$-lattice --- both the value~$37$ for
-$|\delta P|$ and an odd multiple for $P(\mathrm{All~sense})$
+$|\delta P|$ and an odd multiple for $P(\mathcal{C}_{\mathrm{SE}})$
 --- forcing an unavoidable deviation from these target values. The particular
 values that this deviation takes ($36$ and $-1$) are fixed
 by the nucleon composition of the code. The minimal solution
@@ -1864,7 +1995,7 @@ organizing multiplier of the code and attained only at
 the minimal element; the value
 $p_{\text{start}} = 1$, closing exactly the
 parity-induced deficit
-$P(\mathrm{All~sense}) \equiv -1 \pmod{37}$
+$P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$
 (Section~\ref{sec:results-key1-protons}); and the value
 $n_{\text{start}} = 0$, at which the start codon
 contributes no neutrons. Of these, only
@@ -1891,7 +2022,7 @@ $\Delta_{\text{start}} = \Delta_{\text{stop}} + 1$. Since all four
 service codons lie in the Purine branch, equalizing the
 $\Delta$-invariant across the Purine/Pyrimidine axis requires the
 service increment to close the sense-pool deficit
-$\Delta(\mathrm{Pyr~sense}) - \Delta(\mathrm{Pur~sense}) = 1$, that
+$\Delta_{\mathrm{SE}}(\mathrm{Pyrimidine}) - \Delta_{\mathrm{SE}}(\mathrm{Purine}) = 1$, that
 is $\Delta_{\text{start}} + 3\,\Delta_{\text{stop}} = 1$. The same
 purine localization of the service codons is also what forces the
 balance in $P$ and $N$ to be imposed on the Keto/Amino axis rather than
@@ -1907,8 +2038,8 @@ Section~\ref{sec:results-pyrimidine-synonymy}, on Strong/Weak) is
 compatible with the $37$-lattice. The obstruction is specific to $P$ and $N$, whose service sums are
 large ($212$ and $211$) and land at the wrong residues. For
 $\Delta = P - N$ the situation differs: the Purine/Pyrimidine
-$\Delta$-deficit is only $\Delta(\mathrm{Pyr~sense}) -
-\Delta(\mathrm{Pur~sense}) = 1$, small enough to be closed by the
+$\Delta$-deficit is only $\Delta_{\mathrm{SE}}(\mathrm{Pyrimidine}) -
+\Delta_{\mathrm{SE}}(\mathrm{Purine}) = 1$, small enough to be closed by the
 service increment, and it coincides with the offset
 $\Delta_{\text{start}} - \Delta_{\text{stop}} = 1$ left by the
 Keto/Amino balance. The Keto/Amino $P$/$N$ balance and the
@@ -1924,7 +2055,7 @@ Purine/Pyrimidine $\Delta$-balances hold---and that it reduces to
 the agreement of two sense-pool unit offsets: the proton--neutron
 difference $\delta P - \delta N = -1$ of the localizing pair
 (Section~\ref{sec:results-key1-trpile}) and the branch deficit
-$\Delta(\mathrm{Pyr~sense}) - \Delta(\mathrm{Pur~sense}) = +1$. The
+$\Delta_{\mathrm{SE}}(\mathrm{Pyrimidine}) - \Delta_{\mathrm{SE}}(\mathrm{Purine}) = +1$. The
 coincidence is thus relocated rather than removed, but it is shown
 to be a joint property of two chemical axes rather than an artifact
 of the parametrization.
@@ -1934,7 +2065,7 @@ The values of Key~1 are not tied to a single derivation. Three
 routes, resting on different structural inputs, reach the same
 assignment. The first is the modulo-$37$ system used above: the
 Keto/Amino balance together with divisibility of the global
-neutron and proton pools, whose minimal nonnegative solution is
+neutron and proton pools, whose minimal non-negative solution is
 $(p_{\text{stop}}, n_{\text{stop}}) = (37, 37)$,
 $(p_{\text{start}}, n_{\text{start}}) = (1, 0)$. The second is the
 two-axis condition of
@@ -2104,22 +2235,22 @@ identity $N(\mathrm{Octet~II}) = P(\mathrm{Octet~I}) =
 2000$ also arises elsewhere in the arithmetic of the
 code, on the proton side and without reference to any
 service-codon parametrization. The sense pool of
-Octet~II carries $P(\mathrm{Octet~II~sense}) = 2180$;
+Octet~II carries $P_{\mathrm{SE}}(\mathrm{Octet~II}) = 2180$;
 subtracting the single pair $\mathrm{Trp}$ and
 $\mathrm{Ile}$ that localizes the Keto/Amino asymmetry
 (Section~\ref{sec:results-key1-trpile}) gives
 \[
-P(\mathrm{Octet~II~sense}) - \bigl(P(\mathrm{Trp})
+P_{\mathrm{SE}}(\mathrm{Octet~II}) - \bigl(P(\mathrm{Trp})
 + P(\mathrm{Ile})\bigr) = 2180 - 180 = 2000 =
 P(\mathrm{Octet~I}).
 \]
 The proton excess of Octet~II over Octet~I at the
 sense-pool level coincides exactly with the proton count of the localizing pair: $P(\mathrm{Trp}) +
-P(\mathrm{Ile}) = 180 = P(\mathrm{Octet~II~sense}) -
+P(\mathrm{Ile}) = 180 = P_{\mathrm{SE}}(\mathrm{Octet~II}) -
 P(\mathrm{Octet~I})$. The analogous identity for neutrons
 does not hold ---
 $N(\mathrm{Trp}) + N(\mathrm{Ile}) = 155$, while
-$N(\mathrm{Octet~II~sense}) - N(\mathrm{Octet~I}) = 189$,
+$N_{\mathrm{SE}}(\mathrm{Octet~II}) - N(\mathrm{Octet~I}) = 189$,
 a residual difference of $34$ --- and the failure of the neutron analogue
 indicates that the proton equality is a numerical coincidence
 rather than a structural regularity. It is recorded as an
@@ -2285,9 +2416,9 @@ $\mathrm{Purine}$ and $\mathrm{Pyrimidine}$ groups
 level of the sense pool alone, the two shifts are not
 equal:
 \[
-P(\mathrm{Pyr~sense}) - P(\mathrm{Pur~sense}) = 212,
+P_{\mathrm{SE}}(\mathrm{Pyrimidine}) - P_{\mathrm{SE}}(\mathrm{Purine}) = 212,
 \quad
-N(\mathrm{Pyr~sense}) - N(\mathrm{Pur~sense}) = 211,
+N_{\mathrm{SE}}(\mathrm{Pyrimidine}) - N_{\mathrm{SE}}(\mathrm{Purine}) = 211,
 \]
 with a residual proton-neutron asymmetry of one in
 favor of $P$. Under Key~1, the service codons add
@@ -2298,7 +2429,7 @@ three stop codons each with $p_{\text{stop}} =
 n_{\text{stop}} = 37$. The proton-neutron asymmetry of the service increments
 matches that of the sense pool. Adding these increments to the
 $\mathrm{Purine}$ branch reduces the
-$\mathrm{Pyr}$--$\mathrm{Pur}$ proton difference from
+$\mathrm{Pyrimidine}$--$\mathrm{Purine}$ proton difference from
 $212$ to $100$ and the neutron difference from $211$ to
 $100$, equalizing the two macroscopic shifts.
 
@@ -2347,14 +2478,14 @@ asymmetry at the $32$-codon level.
 The 16-codon sub-groups along the Purine/Pyrimidine
 axis carry
 \[
-N(\mathrm{Pur} \cap \mathrm{Octet~II}) = 950,
+N(\mathrm{Purine} \cap \mathrm{Octet~II}) = 950,
 \quad
-N(\mathrm{Pyr} \cap \mathrm{Octet~II}) = 1050,
+N(\mathrm{Pyrimidine} \cap \mathrm{Octet~II}) = 1050,
 \]
 \[
-P(\mathrm{Pur} \cap \mathrm{Octet~II}) = 1096,
+P(\mathrm{Purine} \cap \mathrm{Octet~II}) = 1096,
 \quad
-P(\mathrm{Pyr} \cap \mathrm{Octet~II}) = 1196,
+P(\mathrm{Pyrimidine} \cap \mathrm{Octet~II}) = 1196,
 \]
 showing a $\pm 50$ deviation from the values carried by
 the 16-codon sub-groups of Octet~II along the
@@ -2396,13 +2527,13 @@ solvable in small non-negative integers. Three enter
 directly: the Keto/Amino asymmetry reduces to the single
 pair $\mathrm{Trp}$--$\mathrm{Ile}$ with $|\delta N| = 37$
 and $|\delta P| = 36$ (Section~\ref{sec:results-key1-trpile});
-the sense pool carries $N(\mathrm{All~sense}) = 97 \cdot 37$
-and $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$
+the sense pool carries $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37$
+and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$
 (Section~\ref{sec:results-sensepool}); and the even-proton
 property forbids $|\delta P| = 37$
 (Section~\ref{sec:results-key1-trpile}). The deficits then
 close arithmetically: the neutron deficit
-$T(\mathrm{Octet~I}) - N(\mathrm{All~sense}) = 3 \cdot 37 =
+$T(\mathrm{Octet~I}) - N(\mathcal{C}_{\mathrm{SE}}) = 3 \cdot 37 =
 111$ is a multiple both of the number of stops and of the
 modulus~$37$; the proton residue~$-1$ is the smallest
 non-zero contribution the start codon can make; and
@@ -2467,7 +2598,7 @@ single-base level, the purine equality $\{\mathrm{G}\}
 the parametrization-independent pyrimidine equality
 $\{\mathrm{C}\} \equiv \{\mathrm{T}\}$. A
 parametrization-independent counterpart on the proton
-side gives $P(\mathrm{Octet~II~sense}) - \bigl(P(\mathrm{Trp})
+side gives $P_{\mathrm{SE}}(\mathrm{Octet~II}) - \bigl(P(\mathrm{Trp})
 + P(\mathrm{Ile})\bigr) = P(\mathrm{Octet~I}) = 2000$: the proton excess of Octet~II over Octet~I on
 the sense pool coincides exactly with the proton mass
 of the localizing pair, an identity that does not hold
@@ -2477,8 +2608,8 @@ for neutrons.
 In the parametrization-independent arithmetic, two
 neutron quantities meet the $37$-lattice exactly while
 the corresponding proton quantities fall one unit short.
-The sense pool carries $N(\mathrm{All~sense}) = 97 \cdot
-37$ against $P(\mathrm{All~sense}) = 113 \cdot 37 - 1$;
+The sense pool carries $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot
+37$ against $P(\mathcal{C}_{\mathrm{SE}}) = 113 \cdot 37 - 1$;
 the single pair $\mathrm{Trp}$--$\mathrm{Ile}$ that
 localizes the Keto/Amino asymmetry has $|\delta N| = 37$
 against $|\delta P| = 36$. The derived parametrization
@@ -2499,9 +2630,9 @@ The integer~$37$ appears at all three levels of the
 structure and in roles not directly connected by the
 derivation. At the parametrization-independent level
 it is the common denominator of the Octet~I ratios, the
-divisor of the sense pool $N(\mathrm{All~sense}) =
+divisor of the sense pool $N(\mathcal{C}_{\mathrm{SE}}) =
 97 \cdot 37$, and the value of
-$|\delta N(\mathrm{Trp}, \mathrm{Ile})|$. Under Key~0
+$|\delta N(\mathrm{Trp},\mathrm{Ile})|$. Under Key~0
 it organizes the alignment of the Amino and Weak groups
 and their sub-group $\{\mathrm{A}\}$ with the
 $37$-lattice (Section~\ref{sec:results-key0}). Under
@@ -2519,7 +2650,7 @@ through the same modulus, although none of these is
 derived from the others, indicates that the regularities
 form a connected whole rather than separate
 coincidences; the identities relating them, such as
-$T(\mathrm{Octet~I}) - N(\mathrm{All~sense}) = 3 \cdot
+$T(\mathrm{Octet~I}) - N(\mathcal{C}_{\mathrm{SE}}) = 3 \cdot
 |\delta N(\mathrm{Trp},\mathrm{Ile})|$, follow once the
 shared modulus is granted and add no independent
 divisibility of their own.
@@ -2612,11 +2743,11 @@ The model conventions are documented in the datasets accompanying
 \paragraph{Global alignment of the sense pool with the lattice.}
 The first test records two quantities of the sense pool: the neutron
 deficit relative to a reference total,
-$\Delta_N = T_{\mathrm{ref}} - N(\mathrm{sense~pool})$, and the
-proton residue $P(\mathrm{sense~pool}) \bmod 37$. For the standard
+$\Delta_N = T_{\mathrm{ref}} - N(\mathcal{C}_{\mathrm{SE}})$, and the
+proton residue $P(\mathcal{C}_{\mathrm{SE}}) \bmod 37$. For the standard
 code these are
-$\Delta_N = T(\mathrm{Octet~I}) - N(\mathrm{All~sense}) = 3700 - 3589
-= 111 = 3 \cdot 37$ and $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$
+$\Delta_N = T(\mathrm{Octet~I}) - N(\mathcal{C}_{\mathrm{SE}}) = 3700 - 3589
+= 111 = 3 \cdot 37$ and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$
 (Section~\ref{sec:results-sensepool}); under Key~1 the first deficit
 is closed by the three stop codons to align $N(\mathrm{All})$ with
 the invariant $T(\mathrm{Octet~I})$, and the proton residue by the
@@ -2635,7 +2766,7 @@ The two records give parallel outcomes: in each, the arithmetic
 property holds in exactly the same three tables. Table~$1$ (the
 standard code) and Table~$11$ (the Bacterial, Archaeal and Plant
 Plastid Code) have $\Delta_N = 111 = 3 \cdot 37$ under all three
-reference models and $P(\mathrm{sense~pool}) \equiv -1 \pmod{37}$
+reference models and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$
 under both sense-pool models; their amino acid assignments are
 identical and they share the same set of stop codons, so
 arithmetically they are the same code applied in different domains.
@@ -2664,8 +2795,8 @@ alignment is therefore not a generic feature of genetic codes.
 The second test asks whether the localization of the Keto/Amino
 asymmetry in the pair $\mathrm{Trp}$--$\mathrm{Ile}$ survives in
 alternative codes. The relevant signature is the pair of sense-pool
-differences $N(\mathrm{Keto~sense}) - N(\mathrm{Amino~sense}) = 37$
-and $P(\mathrm{Keto~sense}) - P(\mathrm{Amino~sense}) = 36$, the
+differences $N_{\mathrm{SE}}(\mathrm{Keto}) - N_{\mathrm{SE}}(\mathrm{Amino}) = 37$
+and $P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino}) = 36$, the
 $(37, 36)$ signature; the values across all tables are computed in
 \texttt{keto\_amino\_balance\_models.csv}. The signature is
 reproduced exactly in seven tables. Five---Table~$1$ (Standard),
@@ -2778,7 +2909,7 @@ position the only divisibility is the neutron pool of the
 Keto/Amino axis, present in both its complementary halves, and
 this is not an independent fact: Keto and Amino are
 complementary, so their sense-pool neutron counts sum
-to $N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$
+to $N(\mathcal{C}_{\mathrm{SE}}) = 3589 = 97 \cdot 37$
 (Section~\ref{sec:results-key1-neutrons}), and divisibility of
 one half forces divisibility of the other. At the second
 position no nucleon quantity of any axis is divisible by $37$.
@@ -2838,7 +2969,7 @@ rate --- the modulus $37$ occurs at a single power: no quantity
 is divisible by $37^2$, so its excess does not grow when the
 modulus is enlarged. Reducing each quantity to its odd part ---
 dividing out the powers of two that the nested group hierarchy
-(Octet~I and its sixteen- and eight-codon subgroups) introduces
+(Octet~I and its sixteen- and eight-codon sub-groups) introduces
 mechanically, since a group of size $2k$ has twice the nucleon
 counts of its size-$k$ refinement --- sharpens this. Among the
 Key~0 quantities, $37$ divides ten distinct odd cores; the
@@ -2858,7 +2989,7 @@ odd-core counts are tabulated in the corresponding column of
 \texttt{prime\_divisibility\_scan.csv}.
 
 \paragraph{Representation dependence and the invariant relational core.}
-The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(\delta P, \delta N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathrm{All~sense}) = 97 \cdot 37$ and $P(\mathrm{All~sense}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,\delta N \equiv 0 \pmod{37}$, i.e., $\delta N \equiv 0$ (since $\gcd(60, 37) = 1$), which among the representations considered excludes the peptide residue, while the neutral and zwitterionic forms of the free amino acid have the same elemental composition and therefore the same nucleon counts; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
+The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(\delta P, \delta N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37$ and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,\delta N \equiv 0 \pmod{37}$, i.e., $\delta N \equiv 0$ (since $\gcd(60, 37) = 1$), which among the representations considered excludes the peptide residue, while the neutral and zwitterionic forms of the free amino acid have the same elemental composition and therefore the same nucleon counts; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
 
 \paragraph{The functional-group asymmetry across positions.}
 One observation on the Keto/Amino axis reaches beyond the third
@@ -2940,7 +3071,7 @@ $132$ distances in total. Under S4a the stop codons contribute zero,
 while the contribution at $\mathrm{ATG}$ in each random code is the
 profile of the amino acid assigned by the permutation to the
 $\mathrm{ATG}$ block. Under S4b each random code receives its own
-minimal nonnegative Key~1, re-derived by the same Keto/Amino balance
+minimal non-negative Key~1, re-derived by the same Keto/Amino balance
 and global divisibility conditions used for the standard code.
 
 For every statistic the Monte Carlo tail probability is calculated
@@ -2957,7 +3088,7 @@ error (\texttt{verify\_mc.py}).
 
 Six statistical summaries are considered. S1 tests the joint
 divisibility of two anchors:
-$N(\mathrm{All~sense}) = 3589 = 97 \cdot 37$ and
+$N(\mathcal{C}_{\mathrm{SE}}) = 3589 = 97 \cdot 37$ and
 $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$. Both events occur in
 a fraction $0.000800$ of random codes (Monte Carlo $95\%$ interval
 $0.000746$--$0.000856$). This is the directly estimated joint
@@ -3014,7 +3145,7 @@ assignment of service-codon values.
 
 S4b tests the Key~1 derivation symmetrically: the standard code and
 every random code are evaluated under their own minimal
-nonnegative key, derived from the Keto/Amino balance and global
+non-negative key, derived from the Keto/Amino balance and global
 divisibility by $37$. The fixation of this axis and the compatibility
 of the conditions are established in
 Section~\ref{sec:results-key1-uniqueness}. The standard code has
@@ -3067,9 +3198,9 @@ Three prior contributions are particularly relevant
 to the arithmetic structure analyzed in this work.
 Yu.~B.~Rumer~\cite{rumer1966,rumer1968} introduced the
 partition of the $64$ codons of the standard code into
-two equal classes: $\mathrm{Octet}~\mathrm{I}$
+two equal classes: Octet~I
 consisting of the eight fully degenerate families, and
-$\mathrm{Octet}~\mathrm{II}$ consisting of the eight
+Octet~II consisting of the eight
 heterogeneous families. The two classes are related by
 the involution
 $R = (\mathrm{T} \leftrightarrow \mathrm{G},
@@ -3146,38 +3277,38 @@ prior works project onto the groups defined in the
 present analysis. Shcherbak and Makukov, counting one
 molecule per distinct coding role within a family,
 observed that the sum of amino acid nucleon counts
-over $\mathrm{Octet}~\mathrm{I}$ is divisible by~$37$,
-with $T(\mathrm{Octet}~\mathrm{I}) = 925 = 25 \cdot
+over Octet~I is divisible by~$37$,
+with $T(\mathrm{Octet~I}) = 925 = 25 \cdot
 37$, and that the same holds for
-$\mathrm{Octet}~\mathrm{II}$ under the assignment of
+Octet~II under the assignment of
 zero to stop codons, with
-$T(\mathrm{Octet}~\mathrm{II}) = 2220 = 60 \cdot 37$.
+$T(\mathrm{Octet~II}) = 2220 = 60 \cdot 37$.
 Panov and Filatov, having introduced the per-codon
 counting rule, obtained the corresponding totals under
 codon-level counting:
-$T(\mathrm{Octet}~\mathrm{I}) = 3700 = 100 \cdot 37$
-and $T(\mathrm{Octet}~\mathrm{II}) = 4218 = 114 \cdot
+$T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$
+and $T(\mathrm{Octet~II}) = 4218 = 114 \cdot
 37$ (or $4440 = 120 \cdot 37$ under their alternative
 assignment of $74$ to stop codons).
 
 The relation between the per-coding-role total and the
 per-codon total is direct for
-$\mathrm{Octet}~\mathrm{I}$, which is fully four-fold
+Octet~I, which is fully four-fold
 degenerate: $3700 = 4 \cdot 925$. For
-$\mathrm{Octet}~\mathrm{II}$, whose families contain
+Octet~II, whose families contain
 different numbers of distinct coding roles, the
 per-codon total $4218$ is not a multiple of the
 per-coding-role total $2220$ and is an independent
 fact. The per-coding-role total $2220$ itself
 coincides with $T(\mathrm{Keto} \cap
-\mathrm{Octet}~\mathrm{II}) = T(\mathrm{Strong} \cap
-\mathrm{Octet}~\mathrm{II})$ in our analysis: the
+\mathrm{Octet~II}) = T(\mathrm{Strong} \cap
+\mathrm{Octet~II})$ in our analysis: the
 universal pyrimidine synonymy within
-$\mathrm{Octet}~\mathrm{II}$
+Octet~II
 (Section~\ref{sec:results-pyrimidine-synonymy})
 implies that the sixteen codons of $\mathrm{Keto}$
 (or of $\mathrm{Strong}$) intersected with
-$\mathrm{Octet}~\mathrm{II}$ contain each coding role
+Octet~II contain each coding role
 exactly once, so their per-codon total equals the
 per-coding-role total.
 
@@ -3185,13 +3316,13 @@ From these primary facts, the divisibility by~$37$ of
 several further groups in our systematics follows
 trivially. The total over the entire code is the sum
 of the two octet totals; the sixteen-codon and
-eight-codon subgroups of $\mathrm{Octet}~\mathrm{I}$
+eight-codon sub-groups of Octet~I
 are mutually identical by four-fold degeneracy; and
 the four chemical-axis groups $\mathrm{Keto}$,
 $\mathrm{Strong}$, $\mathrm{Amino}$, $\mathrm{Weak}$
-each decompose into an $\mathrm{Octet}~\mathrm{I}$
-sixteen-codon subgroup and an
-$\mathrm{Octet}~\mathrm{II}$ sixteen-codon subgroup,
+each decompose into an Octet~I
+sixteen-codon sub-group and an
+Octet~II sixteen-codon sub-group,
 of which the first is automatically divisible by~$37$
 and the second reduces to a separate question
 addressed in the present work.
@@ -3230,7 +3361,7 @@ to each of the $24$ orderings of the four bases on
 the axes of the codon matrix we associate its
 \emph{calligram}: the geometric pattern formed by
 the eight homogeneous codon families of
-$\mathrm{Octet}~\mathrm{I}$ on the $4 \times 4$
+Octet~I on the $4 \times 4$
 matrix. Connectedness of an octet refers to the
 connectedness of this pattern under $4$-adjacency
 of matrix cells. Among the $24$ calligrams, Panov
@@ -3275,32 +3406,32 @@ specificity. A first layer is independent of any
 choice of nucleon contributions for the service codons,
 and it carries the central finding of this work: summed
 over the sixty sense codons, the neutron pool is an exact
-multiple of the modulus, $N(\mathrm{All~sense}) = 3589 =
+multiple of the modulus, $N(\mathcal{C}_{\mathrm{SE}}) = 3589 =
 97 \cdot 37$, while the proton pool falls one unit short
-of an odd multiple, $P(\mathrm{All~sense}) \equiv -1
+of an odd multiple, $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1
 \pmod{37}$---a property of the proton/neutron split that
 is invisible at the level of the total count $T$. Two
 further parametrization-independent facts sit alongside it.
-The eight families of $\mathrm{Octet}~\mathrm{I}$ carry
-$T(\mathrm{Octet}~\mathrm{I}) = 3700 = 100 \cdot 37$, with
-$P(\mathrm{Octet}~\mathrm{I}) = 2000$ and
-$N(\mathrm{Octet}~\mathrm{I}) = 1700$, the latter combining
+The eight families of Octet~I carry
+$T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$, with
+$P(\mathrm{Octet~I}) = 2000$ and
+$N(\mathrm{Octet~I}) = 1700$, the latter combining
 with the Octet~II sense pool as $1700 + 1889 = 3589$; and
 the entire Keto/Amino asymmetry of the code localizes,
 after exclusion of the service codons, to the single
 amino-acid pair $\mathrm{Trp}$--$\mathrm{Ile}$, with
 $|\delta N| = 37$ and $|\delta P| = 36$. The universal
-pyrimidine synonymy within $\mathrm{Octet}~\mathrm{II}$
+pyrimidine synonymy within Octet~II
 produces identities between the twin sixteen-codon groups
 $\mathrm{Keto}$/$\mathrm{Strong}$ and
 $\mathrm{Amino}$/$\mathrm{Weak}$ within
-$\mathrm{Octet}~\mathrm{II}$.
+Octet~II.
 
 A second layer arises under the naive reading,
 where the proton and neutron counts
 $P$ and $N$ are analyzed separately. The total nucleon
 count $T$ is divisible by~$37$ for the four
-chemical-axis groups and for $\mathrm{Octet}~\mathrm{II}$.
+chemical-axis groups and for Octet~II.
 For the $\mathrm{Amino}$ and $\mathrm{Weak}$ groups,
 $P$ and $N$ are individually divisible by~$37$,
 aligning these groups with the lattice of step~$37$
@@ -3318,8 +3449,8 @@ the service codons unassigned are exactly what make the
 assignment solvable in small integers. The neutron balance
 across the Keto/Amino axis reproduces the
 $\mathrm{Trp}$--$\mathrm{Ile}$ difference $|\delta N| = 37$;
-the global neutron deficit $T(\mathrm{Octet}~\mathrm{I}) -
-N(\mathrm{All~sense}) = 111 = 3 \cdot 37$ closes because it
+the global neutron deficit $T(\mathrm{Octet~I}) -
+N(\mathcal{C}_{\mathrm{SE}}) = 111 = 3 \cdot 37$ closes because it
 is a common multiple of the number of stops and the modulus;
 the even-proton parity theorem forbids $|\delta P| = 37$ and bars
 the sense-pool proton pool from the odd multiples of the modulus,
@@ -3338,8 +3469,8 @@ alignment of the four chemical-axis groups along the
 axes $T$, $P$, $N$, and $\Delta$
 (Section~\ref{sec:results-key1-axisalignment}),
 macroscopic identities including
-$N(\mathrm{All}) = T(\mathrm{Octet}~\mathrm{I}) = 3700$
-and $P(\mathrm{All}) = T(\mathrm{Octet}~\mathrm{II}) =
+$N(\mathrm{All}) = T(\mathrm{Octet~I}) = 3700$
+and $P(\mathrm{All}) = T(\mathrm{Octet~II}) =
 4292$
 (Section~\ref{sec:results-key1-macroidentities}), the
 uniform invariant $\Delta = 296$ across all six
@@ -3365,7 +3496,7 @@ counted once. The nucleon composition and the degeneracy of coding
 are therefore not independent quantities within this structure: the
 regularity is a joint property of how nucleon mass is distributed and
 how many codons each amino acid receives. Second, the entire first
-layer above, including the values over $\mathrm{Octet}~\mathrm{I}$ and
+layer above, including the values over Octet~I and
 the twin-group identities, is established with the service codons
 carrying no nucleon values at all; the derived parametrization of the
 service codons enters only at the later layers and does not affect the
