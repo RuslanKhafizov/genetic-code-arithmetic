@@ -104,12 +104,13 @@ regularities occurs only in the standard genetic code table and in its
 exact equivalent with respect to codon-to-amino-acid mapping. The specificity of the structure is examined further by deterministic controls, which test its dependence on the third codon position, on the modulus, and on the molecular representation of the amino acids, and by a Monte Carlo test against an explicit random-code null model.
 
 The analysis is divided into three levels. The principal regularities are established at a parametrization-independent level, at which the three stop codons and $\mathrm{ATG}$ in its initiator role are excluded and only the remaining $60$ codons are summed; these are the central results of the paper, and they involve no assigned values. To obtain sums for the complete table of $64$ codons, however, the four service codons must be given some nucleon contributions. The second level is the naive reading (Key~0), in which the stop codons are assigned zero and $\mathrm{ATG}$ is counted as methionine. Assigning zero is also a choice of value, not the absence of one. The third level is the symmetrization (Key~1), in which the four
-service codons carry derived nucleon contributions. Key~1 does not establish the parametrization-independent core of the
-structure: that core is already present in sums over the $60$ codons
-remaining after the service codons are excluded. The role of Key~1 is
-to show how the structure extends to the complete table, taking into
-account the fixed distribution of the service codons across the groups
-in the standard code. For the chosen
+service codons carry derived nucleon contributions. Key~1 does not
+establish the parametrization-independent core of the structure: that
+core is already present in sums over the $60$ codons remaining after
+the service codons are excluded. The role of Key~1 is to show how the
+structure extends to the complete table, taking into account the fixed
+distribution of the service codons across the groups in the standard
+code. For the chosen
 symmetry conditions, these contributions are determined as the unique
 minimal non-negative integer solution of the corresponding system
 (Section~\ref{sec:results}), and the resulting regularities are
@@ -445,12 +446,13 @@ not change the multiset of encoded amino acids. Consequently, the
 Keto group $\{\mathrm{G},\mathrm{T}\}$ and the Strong group
 $\{\mathrm{C},\mathrm{G}\}$ have the same amino-acid composition,
 as do the Amino group $\{\mathrm{A},\mathrm{C}\}$ and the Weak
-group $\{\mathrm{A},\mathrm{T}\}$. The two groups in each pair contain exactly the same service codons:
-Keto and Strong contain $\mathrm{ATG}$ and $\mathrm{TAG}$, whereas
-Amino and Weak contain $\mathrm{TAA}$ and $\mathrm{TGA}$. Therefore,
-under any assignment $K$ that associates a pair of values $(P,N)$
-with each service codon (Section~\ref{sec:parametrization}), the
-following identities hold for $Q\in\{T,P,N,\Delta\}$:
+group $\{\mathrm{A},\mathrm{T}\}$. The two groups in each pair contain
+exactly the same service codons: Keto and Strong contain $\mathrm{ATG}$
+and $\mathrm{TAG}$, whereas Amino and Weak contain $\mathrm{TAA}$ and
+$\mathrm{TGA}$. Therefore, under any assignment $K$ that associates a
+pair of values $(P,N)$ with each service codon
+(Section~\ref{sec:parametrization}), the following identities hold for
+$Q\in\{T,P,N,\Delta\}$:
 \[
 Q_K(\mathrm{Keto})=Q_K(\mathrm{Strong}),\qquad
 Q_K(\mathrm{Amino})=Q_K(\mathrm{Weak}).
@@ -493,37 +495,43 @@ $\mathcal{C}_{\mathrm{SE}}$ below as the \emph{service-excluded pool};
 its technical identifier in the code and file names is
 \texttt{pool60}.
 Every codon in $\mathcal{C}_{\mathrm{SE}}$ is unambiguously assigned
-to a canonical amino acid. For a codon group $G$ and a nucleon quantity
-$Q\in\{T,P,N,\Delta\}$, define
+to a canonical amino acid. For
+$c\in\mathcal{C}_{\mathrm{SE}}$ and
+$Q\in\{T,P,N,\Delta\}$, $Q(c)$ denotes the corresponding quantity
+of the free neutral form of the amino acid encoded by $c$, as defined
+in Section~\ref{sec:composition}.
+
+For any codon set $A\subseteq\mathcal{C}_{64}$ containing no service
+codons, define
+\[
+Q(A):=\sum_{c\in A}Q(c).
+\]
+For a codon group $G$, its sum over the service-excluded pool is
+defined by
 \[
 Q_{\mathrm{SE}}(G)
 :=
-\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}} Q(c).
+\sum_{c\in G\cap\mathcal{C}_{\mathrm{SE}}}Q(c).
 \]
-Here $Q(c)$ is the corresponding quantity of the neutral free form of
-the amino acid encoded by codon
-$c\in\mathcal{C}_{\mathrm{SE}}$, as specified in
-Section~\ref{sec:composition}. For $c\in\mathcal{S}$, the bare form
-$Q(c)$ is not used: its formal contribution carries the subscript of
-the selected key. Since $G\cap\mathcal{C}_{\mathrm{SE}}$ contains no
-service codons, the same restricted sum may be written as
-$Q(G\cap\mathcal{C}_{\mathrm{SE}})$. The subscript $\mathrm{SE}$
-denotes a restriction of the summation domain, not a parametric key.
-Neither these sums nor the number of included codons
-$|G\cap\mathcal{C}_{\mathrm{SE}}|$ depends on assignments to the
+For a service codon $c$, the notation $Q(c)$ without a key subscript
+is not used because the formal contribution of such a codon depends
+on the selected key. The
+subscript $\mathrm{SE}$ indicates a restriction of the summation
+domain, not a parametrization key. Neither the sum
+$Q_{\mathrm{SE}}(G)$ nor the number of codons included in it,
+$|G\cap\mathcal{C}_{\mathrm{SE}}|$, depends on the assignments to the
 service codons.
 
-If $G\cap\mathcal{S}=\varnothing$, the full sum over the group is
-written as
+If the group $G$ itself contains no service codons, the restriction
+removes nothing and
 \[
-Q(G):=\sum_{c\in G}Q(c),
+Q(G)=Q_{\mathrm{SE}}(G).
 \]
-in which case $Q(G)=Q_{\mathrm{SE}}(G)$.
 
 To analyze the complete 64-position table, we introduce a
 \emph{parametric key} $K$: a fixed assignment of a pair of numbers
-$\bigl(P_K(c),N_K(c)\bigr)$ to every service codon
-$c\in\mathcal{S}$. Under such a key, the group sums are
+$\bigl(P_K(c),N_K(c)\bigr)$ to every service codon $c$.
+Under such a key, the group sums are
 \[
 \bigl(P_K(G),N_K(G)\bigr)
 =
@@ -545,8 +553,8 @@ Key~0 and Key~1 assignments, respectively. The subscripts $0$ and $1$
 label these two assignments; they are not numerical values of a
 scalar parameter. Thus $Q_{\mathrm{SE}}(G)$ is independent of the key,
 whereas $Q_0(G)$ and $Q_1(G)$ can differ only through the
-contributions of codons in $G\cap\mathcal{S}$. If
-$G\cap\mathcal{S}=\varnothing$, then
+contributions of the service codons contained in group $G$. If group
+$G$ contains no service codons, then
 $Q_K(G)=Q(G)=Q_{\mathrm{SE}}(G)$ for every $K$. The subscript
 $\mathrm{SE}$ applies only to codon groups; the subscripts $K$, $0$,
 and $1$ apply to full group sums and to the formal contributions of
@@ -558,13 +566,13 @@ Each of the three stop codons is assigned the zero contribution
 $(P,N)=(0,0)$ because a termination signal has no amino acid product.
 The $\mathrm{ATG}$ codon is treated as an ordinary methionine codon
 and receives the values of the free methionine molecule,
-$(P,N)=(80,69)$. This simple convention corresponds to the ordinary
-reading of the amino-acid-coding part of the table without nonzero
-contributions from stop signals, but it remains a parametrization.
-In particular, Key~0 is not identical to the
-$\mathcal{C}_{\mathrm{SE}}$ pool: Key~0 retains all 64 positions and
-counts $\mathrm{ATG}$ as methionine, whereas
-$\mathcal{C}_{\mathrm{SE}}$ directly excludes all four service codons.
+$(P,N)=(80,69)$. This simple convention corresponds to the ordinary reading of the
+amino-acid-coding part of the table, in which the stop signals are
+assigned a zero contribution, but it remains a parametrization. In
+particular, Key~0 is not identical to the service-excluded pool:
+Key~0 retains all $64$ positions and counts $\mathrm{ATG}$ as
+methionine, whereas in the pool the summation runs over the remaining
+$60$ codons only.
 
 \paragraph{Symmetrization (Key~1).}
 Each of the three stop codons is assigned $(P,N)=(37,37)$, while
@@ -580,8 +588,8 @@ of the resulting system. Here Key~1 is introduced as the result
 of that formal construction, not as a biochemical property of
 termination signals or the initiator.
 
-For groups that do not intersect $\mathcal{S}$, the values under
-Key~0 and Key~1 coincide with the direct amino acid sums. If a group
+For codon groups containing no service codons, the values under
+Key~0 and Key~1 coincide with the direct amino-acid sums. If a group
 contains service codons, the Key~1 assignments have only a formal
 arithmetic meaning: the corresponding sums do not represent the
 nucleon composition of a physical ensemble of molecules. The terms
@@ -595,17 +603,17 @@ reference assignments, \texttt{Key~2}--\texttt{Key~9}, considered
 during the exploratory stage. They are not used to obtain the results
 of this study and do not have the status of the derived Key~1. The
 following analysis therefore distinguishes three levels explicitly:
-the service-excluded pool $\mathcal{C}_{\mathrm{SE}}$, the naive
-reading (Key~0), and the symmetrization (Key~1).
+the service-excluded pool, the naive reading (Key~0), and the
+symmetrization (Key~1).
 
 \subsection{Analytical criteria and classification of equalities}
 \label{sec:criteria}
 
 For each of the $33$ codon groups defined in
 Section~\ref{sec:partitioning}, we examine $P$, $N$, $T$, and
-$\Delta$ at three analytical levels: the service-excluded pool
-$\mathcal{C}_{\mathrm{SE}}$, Key~0, and Key~1. Three reporting
-procedures are described below: tests of divisibility by~$37$ and
+$\Delta$ at three analytical levels: the service-excluded pool,
+Key~0, and Key~1. Three reporting procedures are described below:
+tests of divisibility by~$37$ and
 decimal roundness, and a search for exact equalities. Divisibility
 by~$37$ is the primary preselected arithmetic criterion. Exact powers,
 reduced ratios, and matches to amino acid differences are considered
@@ -704,8 +712,8 @@ Equalities, divisibility relations or ratios obtained from one another
 through these identities are therefore not counted as separate
 evidence. The same applies to copies propagated through nested groups
 or twin-group identities. Section~\ref{sec:results} distinguishes
-(i) facts computed directly on $\mathcal{C}_{\mathrm{SE}}$ without
-service-codon assignments; (ii) identities whose invariance to the
+(i) facts computed directly for the service-excluded pool without
+assigning values to the service codons; (ii) identities whose invariance to the
 key is established algebraically; and (iii) results specific to
 Key~0 or Key~1.
 
@@ -716,10 +724,11 @@ The principal deterministic results of this study are produced by
 \texttt{reproduce.py}. The script reads five input datasets and
 writes 17 computed output datasets. A separate deterministic script,
 \texttt{controls.py}, writes four control datasets, whereas the
-statistical analysis is performed by \texttt{mc\_significance.py}
-and independently re-checked by \texttt{verify\_mc.py}. By default, all
-data paths
-are resolved relative to the directory of the corresponding script.
+statistical analysis is performed by \texttt{mc\_significance.py},
+which writes the summary table \texttt{mc\_significance.csv}, and is
+independently re-checked by \texttt{verify\_mc.py}. By default, all
+data paths are resolved relative to the directory of the corresponding
+script.
 
 \paragraph{Input datasets.}
 Five input files define the numerical and structural basis of the
@@ -764,15 +773,14 @@ For each of the two principal keys, Key~0 and Key~1,
 The two keys therefore produce eight output files.
 
 \paragraph{Service-excluded-pool datasets.}
-For $\mathcal{C}_{\mathrm{SE}}$, the script writes four analogous
+For the service-excluded pool, the script writes four analogous
 files:
 \texttt{pool60\_nucleon-data.csv},
 \texttt{pool60\_divisibility-37.csv},
 \texttt{pool60\_equalities.csv} and
-\texttt{pool60\_ratios.csv}. Before summation, the codons in
-$\mathcal{S}$ are directly removed from every group $G$, so that its
-actual cardinality is $|G\cap\mathcal{C}_{\mathrm{SE}}|$. No
-parametric key is applied.
+\texttt{pool60\_ratios.csv}. Before summation, the service codons are
+removed from every group $G$, so that the number of codons included is
+$|G\cap\mathcal{C}_{\mathrm{SE}}|$. No parametric key is applied.
 
 \paragraph{Amino acid differences.}
 Three files written once,
@@ -794,8 +802,8 @@ field. Model~2 excludes $\mathrm{ATG}$ and only the permanent stop
 codons marked \texttt{*} in the \texttt{Amino\_Acids} field;
 context-dependent stops are included in the analysis with the amino
 acid assignments recorded for them. The models coincide for tables
-without context-dependent stops. For the standard table, both reduce
-to the 60-codon $\mathcal{C}_{\mathrm{SE}}$. The actual number of
+without context-dependent stops. For the standard table, both models
+give the same 60-codon service-excluded pool. The actual number of
 codons in the analyzed pool is recorded for both models (columns
 \texttt{Pure\_Codons\_Count} and \texttt{Pure\_Codons\_Count\_Alt}).
 
@@ -860,7 +868,7 @@ Python standard library and writes four deterministic datasets:
         the three binary chemical classifications Keto/Amino,
         Strong/Weak and Purine/Pyrimidine to the first, second and
         third codon positions at three analytical levels:
-        $\mathcal{C}_{\mathrm{SE}}$, Key~0 and Key~1. For each side it
+        the service-excluded pool, Key~0 and Key~1. For each side it
         records the four nucleon quantities and their residues
         modulo~$37$;
   \item \texttt{prime\_divisibility\_scan.csv} scans every prime up
@@ -893,8 +901,10 @@ in Section~\ref{sec:discussion-controls}.
 \paragraph{Data and code availability.}
 The accompanying repository contains the manuscript sources, five
 input datasets, 17 core computed datasets, four control datasets, the
-Monte Carlo summary, four Python scripts and the interactive
-visualizer:
+Monte Carlo summary table \texttt{mc\_significance.csv}, four Python
+scripts and the interactive visualizer. Complete run commands and
+descriptions of the dataset columns are provided in the repository
+README:
 \url{https://github.com/RuslanKhafizov/genetic-code-arithmetic}.
 Versions of the materials are archived at Zenodo under the concept
 DOI
@@ -906,10 +916,8 @@ DOI
 
 The arithmetic properties are considered here at three analytical
 levels. The first level (Section~\ref{sec:results-independent})
-comprises facts independent of any assignment to the service codons:
-sums over the sixty codons of the service-excluded pool and over groups
-free of service codons. These facts constitute the central result of
-this work.
+comprises facts established without assigning values to the service
+codons. These facts constitute the central result of this work.
 
 The second level (Section~\ref{sec:results-key0}) is the naive reading
 (Key~0), in which the three stop codons are assigned a contribution of
@@ -935,24 +943,26 @@ for comparison and to assess the specificity of the results.
 \label{sec:results-independent}
 
 Parametrization-independence arises here for three distinct reasons.
-The first follows from the definition of the pool: the sums run over
-the sixty codons only, and the service codons are not among them
-(Section~\ref{sec:results-sensepool}). The second is that Octet~I with
-all its sub-groups, and the groups with a pyrimidine in the third
-position, contain no service codons. The third concerns twin pairs of
-groups: the service codons enter both members of a pair symmetrically,
-so the equality within the pair does not depend on the values assigned
-to the service codons. This subsection also establishes the three facts
-on which the derivation of Key~1 rests: the neutron sum of the pool is a
-multiple of~$37$, while the proton sum is one unit below the nearest
-multiple (Section~\ref{sec:results-sensepool}); the Keto/Amino asymmetry
-reduces to a single pair of amino acids; and the proton count of every
-canonical amino acid is even
+The first is built into the definition of the service-excluded pool:
+the sums run only over the sixty codons remaining after the service
+codons are excluded (Section~\ref{sec:results-sensepool}). The second
+is that Octet~I with all its sub-groups, and the groups restricted to
+pyrimidines in the third position, contain no service codons. The
+third concerns twin pairs of groups: both members of each pair contain
+the same service codons, so the equality between them is preserved
+under any values assigned to those codons.
+
+The derivation of Key~1 uses the following results from this
+subsection: the neutron sum of the pool is a multiple of~$37$, while
+the proton sum is one unit below the nearest multiple of~$37$
+(Section~\ref{sec:results-sensepool}); the Keto/Amino asymmetry
+localizes in the $\mathrm{Trp}$--$\mathrm{Ile}$ pair; and the proton
+count of every canonical amino acid is even
 (Section~\ref{sec:results-key1-trpile}).
 
-Once the service codons are excluded, every group reduces to a sum over
-its remaining codons; Figure~\ref{fig:pool60} shows these sums at all
-three levels of the codon-group hierarchy.
+Figure~\ref{fig:pool60} presents all $33$ groups across the three
+levels of the hierarchy; for each group, the sums include only its
+non-service codons.
 
 \subsubsection{The service-excluded pool: neutron divisibility and the
 proton residue}
@@ -975,7 +985,7 @@ by~$37$:
 \[
 N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37.
 \]
-The other three lie one unit below the nearest multiple:
+The other three lie one unit below the nearest multiple of~$37$:
 \[
 T(\mathcal{C}_{\mathrm{SE}}) = 210 \cdot 37 - 1, \qquad
 P(\mathcal{C}_{\mathrm{SE}}) = 113 \cdot 37 - 1,
@@ -983,8 +993,10 @@ P(\mathcal{C}_{\mathrm{SE}}) = 113 \cdot 37 - 1,
 \[
 \Delta(\mathcal{C}_{\mathrm{SE}}) = 16 \cdot 37 - 1.
 \]
-The values of $T$ and $\Delta$ are determined algebraically by $P$ and
-$N$ through $T = P + N$ and $\Delta = P - N$.
+Because $N(\mathcal{C}_{\mathrm{SE}})$ is divisible by~$37$, the
+relations $T = P + N$ and $\Delta = P - N$ imply
+$T \equiv \Delta \equiv P \equiv -1 \pmod{37}$; thus, among these
+three residues, only the proton residue is an independent fact.
 
 The Rumer partition of $\mathcal{C}_{\mathrm{SE}}$ shows how this
 divisibility is distributed between the two octet contributions.
@@ -1000,8 +1012,9 @@ N_{\mathrm{SE}}(\mathrm{Octet~II})
   &= 1889 = 51 \cdot 37 + 2.
 \end{aligned}
 \]
-Neither is a multiple of~$37$ on its own. By additivity over this
-partition, the residues $-2$ and~$+2$ cancel in the total sum:
+Neither is a multiple of~$37$ on its own. Because these two parts form
+a partition of $\mathcal{C}_{\mathrm{SE}}$, their residues $-2$
+and~$+2$ cancel in the total sum:
 \[
 N(\mathcal{C}_{\mathrm{SE}}) = 1700 + 1889 = 3589 = 97 \cdot 37.
 \]
@@ -1034,19 +1047,18 @@ twin-group identities
 (Section~\ref{sec:results-pyrimidine-synonymy}). On the
 Purine/Pyrimidine axis, all four service codons lie in the Purine half;
 after their exclusion, $\mathcal{C}_{\mathrm{SE}}$ is partitioned into
-a 28-codon Purine group and a 32-codon Pyrimidine group. None of the
-quantities $T$, $P$, and $N$ is
-divisible by~$37$: their residues modulo~$37$ are $(10,23,24)$ for
-Purine and $(26,13,13)$ for Pyrimidine. For~$\Delta$, a one-unit
-difference remains:
+a 28-codon Purine group and a 32-codon Pyrimidine group. Unlike the
+Keto/Amino axis, none of the quantities $T$, $P$, and $N$ is divisible
+by~$37$ for either of these groups. For~$\Delta$, a one-unit difference
+remains:
 \[
 \Delta_{\mathrm{SE}}(\mathrm{Purine}) = 295 = 8 \cdot 37 - 1,
 \qquad
 \Delta_{\mathrm{SE}}(\mathrm{Pyrimidine}) = 296 = 8 \cdot 37.
 \]
 
-At the level of the one-nucleotide groups, the residue $-1$
-in~$\Delta$ occurs only in the group~$\{\mathrm{G}\}$:
+The common source of the one-unit difference along the three chemical
+axes is visible at the level of the one-nucleotide groups:
 \[
 \begin{aligned}
 \Delta_{\mathrm{SE}}(\{\mathrm{G}\}) &= 147 = 4 \cdot 37 - 1, \\
@@ -1055,11 +1067,35 @@ in~$\Delta$ occurs only in the group~$\{\mathrm{G}\}$:
 \Delta_{\mathrm{SE}}(\{\mathrm{T}\}) &= 148 = 4 \cdot 37.
 \end{aligned}
 \]
-At the upper level of the three chemical axes, this residue is
-inherited by Keto, Strong, and Purine---the groups that admit
-$\mathrm{G}$ in the third position. The residue is further localized
-to $\{\mathrm{G}\} \cap \mathrm{Octet~II}$ and then to the
-$\mathrm{Trp}$--$\mathrm{Ile}$ pair in
+The equality at $148$ is not explained by equal group sizes: the
+$\{\mathrm{A}\}$ group contains $14$ counted codons, whereas the
+$\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ groups contain $16$ each.
+
+Partitioning by octet localizes the one-unit difference to Octet~II.
+In Octet~I, all four one-nucleotide sub-groups have $\Delta = 75$.
+Within Octet~II,
+\[
+\begin{aligned}
+\Delta_{\mathrm{SE}}
+  (\{\mathrm{G}\}\cap\mathrm{Octet~II}) &= 72, \\
+\Delta_{\mathrm{SE}}
+  (\{\mathrm{A}\}\cap\mathrm{Octet~II}) &=
+\Delta_{\mathrm{SE}}
+  (\{\mathrm{C}\}\cap\mathrm{Octet~II}) =
+\Delta_{\mathrm{SE}}
+  (\{\mathrm{T}\}\cap\mathrm{Octet~II}) = 73.
+\end{aligned}
+\]
+The groups $\{\mathrm{A}\}\cap\mathrm{Octet~II}$ and
+$\{\mathrm{G}\}\cap\mathrm{Octet~II}$ each contain six codons in the
+service-excluded pool, so the difference between $73$ and $72$ cannot
+be attributed to group size.
+
+Thus, at the upper level of the three chemical axes, the residue $-1$
+in~$\Delta$ occurs in Keto, Strong, and Purine---the groups that admit
+$\mathrm{G}$ in the third position. The further reduction of the
+deviation within $\{\mathrm{G}\}\cap\mathrm{Octet~II}$ to the
+$\mathrm{Trp}$--$\mathrm{Ile}$ pair is considered in
 Section~\ref{sec:results-key1-trpile}.
 
 \begin{figure}[p]
