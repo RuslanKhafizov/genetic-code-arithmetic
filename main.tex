@@ -923,14 +923,20 @@ The second level (Section~\ref{sec:results-key0}) is the naive reading
 (Key~0), in which the three stop codons are assigned a contribution of
 zero and the initiator $\mathrm{ATG}$ is counted as methionine.
 
-The third level
-(Sections~\ref{sec:results-key1-derivation}--%
-\ref{sec:results-key1-consequences}) introduces Key~1, the unique
-minimal non-negative integer assignment to the service codons, derived
-analytically from the joint conditions of Keto/Amino nucleon-pool
-balance and divisibility of the global pools by~$37$. This assignment
-extends the structure to the complete $64$-codon table and serves as a
-formal device for exhibiting its arithmetic.
+At the third level, Section~\ref{sec:results-key1-derivation}
+derives Key~1, the unique minimal non-negative integer assignment to
+the service codons determined by the joint conditions of nucleon-pool
+balance along the Keto/Amino axis and divisibility of the global pools
+by~$37$; equivalently, this balance augments the
+$\mathrm{C}/\mathrm{T}$ symmetry imposed by the code with
+$\mathrm{G}/\mathrm{A}$ symmetry in proton and neutron sums grouped by
+the nucleotide in the third position.
+
+Section~\ref{sec:results-key1-consequences} uses this formal assignment
+to extend the arithmetic analysis to the complete $64$-codon table and
+distinguishes between identities that follow directly from the
+derivation conditions and additional regularities not used to select
+Key~1.
 
 Section~\ref{sec:results-synthesis} draws together the findings of all
 three levels.
@@ -964,163 +970,136 @@ amino acid has an even proton count explains why such proton sums and
 differences cannot equal odd multiples of~$37$
 (Section~\ref{sec:results-key1-trpile}).
 
-\subsubsection{The service-excluded pool: neutron divisibility and the
-proton residue}
+\subsubsection{The service-excluded pool}
 \label{sec:results-sensepool}
 
-For the service-codon-excluded 60-codon pool
-$\mathcal{C}_{\mathrm{SE}}$---the complete $64$-codon table excluding
-the three stop codons and the initiator $\mathrm{ATG}$---the four
-nucleon quantities are
-\[
-T(\mathcal{C}_{\mathrm{SE}}) = 7769, \qquad
-P(\mathcal{C}_{\mathrm{SE}}) = 4180,
-\]
-\[
-N(\mathcal{C}_{\mathrm{SE}}) = 3589, \qquad
-\Delta(\mathcal{C}_{\mathrm{SE}}) = 591.
-\]
-Of the four quantities, only the neutron sum is exactly divisible
-by~$37$:
-\[
-N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37.
-\]
-The other three lie one unit below the nearest multiple of~$37$:
-\[
-T(\mathcal{C}_{\mathrm{SE}}) = 210 \cdot 37 - 1, \qquad
-P(\mathcal{C}_{\mathrm{SE}}) = 113 \cdot 37 - 1,
-\]
-\[
-\Delta(\mathcal{C}_{\mathrm{SE}}) = 16 \cdot 37 - 1.
-\]
-Because $N(\mathcal{C}_{\mathrm{SE}})$ is divisible by~$37$, the
-relations $T = P + N$ and $\Delta = P - N$ imply
-$T \equiv \Delta \equiv P \equiv -1 \pmod{37}$; thus, among these
-three residues, only the proton residue is an independent fact.
-
-The Rumer partition of $\mathcal{C}_{\mathrm{SE}}$ shows how this
-divisibility is distributed between the two octet contributions.
-Octet~I lies entirely within
-$\mathcal{C}_{\mathrm{SE}}$, whereas the intersection of Octet~II with
-$\mathcal{C}_{\mathrm{SE}}$ contains $28$ codons, since all four
-service codons belong to Octet~II. The neutron sums are
+The Keto/Amino and Strong/Weak partitions of $\mathcal{C}_{\mathrm{SE}}$
+give pairwise equal neutron and proton sums, owing to pyrimidine synonymy
+(Section~\ref{sec:results-pyrimidine-synonymy}):
 \[
 \begin{aligned}
-N(\mathrm{Octet~I})
-  &= 1700 = 46 \cdot 37 - 2, \\
-N_{\mathrm{SE}}(\mathrm{Octet~II})
-  &= 1889 = 51 \cdot 37 + 2.
+N_{\mathrm{SE}}(\mathrm{Keto}) = N_{\mathrm{SE}}(\mathrm{Strong})
+  &= 1813 = 49 \cdot 37, \\
+N_{\mathrm{SE}}(\mathrm{Amino}) = N_{\mathrm{SE}}(\mathrm{Weak})
+  &= 1776 = 48 \cdot 37, \\
+P_{\mathrm{SE}}(\mathrm{Keto}) = P_{\mathrm{SE}}(\mathrm{Strong})
+  &= 2108 = 57 \cdot 37 - 1, \\
+P_{\mathrm{SE}}(\mathrm{Amino}) = P_{\mathrm{SE}}(\mathrm{Weak})
+  &= 2072 = 56 \cdot 37.
 \end{aligned}
 \]
-Neither is a multiple of~$37$ on its own. Because these two parts form
-a partition of $\mathcal{C}_{\mathrm{SE}}$, their residues $-2$
-and~$+2$ cancel in the total sum:
+Both neutron sums lie on the $37$-lattice separately. The proton sum of
+the Amino half lands on it exactly, whereas the Keto half falls one unit
+short of the nearest multiple. Adding the halves gives, for the pool as a
+whole,
 \[
-N(\mathcal{C}_{\mathrm{SE}}) = 1700 + 1889 = 3589 = 97 \cdot 37.
+N(\mathcal{C}_{\mathrm{SE}}) = 3589 = 97 \cdot 37,
+\qquad
+P(\mathcal{C}_{\mathrm{SE}}) = 4180 = 113 \cdot 37 - 1,
+\qquad
+\Delta(\mathcal{C}_{\mathrm{SE}}) = 591 = 16 \cdot 37 - 1.
 \]
-The remaining Octet~I quantities and their scaling across its
-sub-groups are considered below.
 
-Partitioning the pool into the two 30-codon halves of the Keto/Amino
-axis gives a different pattern:
+Analysis of $\Delta$ localizes the single-unit deviation of the proton sum
+of the pool from the nearest multiple of~$37$ in the group $\{\mathrm{G}\}
+\cap \mathrm{Octet~II}$. On the Keto/Amino and Strong/Weak axes the
+neutron sums are multiples of~$37$, so $\Delta = P - N$ has the same
+residue as the proton sum. On the Purine/Pyrimidine axis neither $P$ nor
+$N$ lies on the lattice, but their residues coincide for Pyrimidine and
+differ by one for Purine:
 \[
 \begin{aligned}
-N_{\mathrm{SE}}(\mathrm{Keto}) &= 1813 = 49 \cdot 37, \\
-N_{\mathrm{SE}}(\mathrm{Amino}) &= 1776 = 48 \cdot 37, \\
-P_{\mathrm{SE}}(\mathrm{Keto}) &= 2108 = 57 \cdot 37 - 1, \\
-P_{\mathrm{SE}}(\mathrm{Amino}) &= 2072 = 56 \cdot 37.
+\Delta_{\mathrm{SE}}(\mathrm{Keto}) = \Delta_{\mathrm{SE}}(\mathrm{Strong})
+  = \Delta_{\mathrm{SE}}(\mathrm{Purine})
+  &= 295 = 8 \cdot 37 - 1, \\
+\Delta_{\mathrm{SE}}(\mathrm{Amino}) = \Delta_{\mathrm{SE}}(\mathrm{Weak})
+  = \Delta(\mathrm{Pyrimidine})
+  &= 296 = 8 \cdot 37.
 \end{aligned}
 \]
-Under the Keto/Amino partition, the divisibility is distributed
-differently: both neutron sums are divisible by~$37$ on their own, and
-no cancellation of residues is involved. At this level, the
-proton residue $-1$ is carried by the Keto half, whereas the proton sum
-of the Amino half is divisible by~$37$. Accordingly,
-\[
-\Delta_{\mathrm{SE}}(\mathrm{Keto}) = 295 = 8 \cdot 37 - 1,
-\qquad
-\Delta_{\mathrm{SE}}(\mathrm{Amino}) = 296 = 8 \cdot 37.
-\]
 
-The Strong/Weak axis reproduces the same values because of the
-twin-group identities
-(Section~\ref{sec:results-pyrimidine-synonymy}). On the
-Purine/Pyrimidine axis, all four service codons lie in the Purine half;
-after their exclusion, $\mathcal{C}_{\mathrm{SE}}$ is partitioned into
-a 28-codon Purine group and a 32-codon Pyrimidine group. Unlike the
-Keto/Amino axis, none of the quantities $T$, $P$, and $N$ is divisible
-by~$37$ for either of these groups. For~$\Delta$, a one-unit difference
-remains:
-\[
-\Delta_{\mathrm{SE}}(\mathrm{Purine}) = 295 = 8 \cdot 37 - 1,
-\qquad
-\Delta_{\mathrm{SE}}(\mathrm{Pyrimidine}) = 296 = 8 \cdot 37.
-\]
+Keto, Strong, Amino, and Weak each contain $30$ codons in the pool, Purine
+contains $28$, and Pyrimidine contains $32$. The same two values of
+$\Delta$, $295$ and $296$, arise in all three partitions --- both for
+parts of equal size $30/30$ and for the unequal split $28/32$.
 
-The common source of the one-unit difference along the three chemical
-axes is visible at the level of the one-nucleotide groups:
+At the level of the one-nucleotide groups none of the sums $P$ and $N$ is
+a multiple of~$37$, and the deficit in~$\Delta$ is carried by one group
+--- the branch $\{\mathrm{G}\}$, common to Keto, Strong, and Purine:
 \[
-\begin{aligned}
-\Delta_{\mathrm{SE}}(\{\mathrm{G}\}) &= 147 = 4 \cdot 37 - 1, \\
+\Delta_{\mathrm{SE}}(\{\mathrm{G}\}) = 147 = 4 \cdot 37 - 1,
+\qquad
 \Delta_{\mathrm{SE}}(\{\mathrm{A}\}) =
-\Delta_{\mathrm{SE}}(\{\mathrm{C}\}) =
-\Delta_{\mathrm{SE}}(\{\mathrm{T}\}) &= 148 = 4 \cdot 37.
-\end{aligned}
+\Delta(\{\mathrm{C}\}) =
+\Delta(\{\mathrm{T}\}) = 148 = 4 \cdot 37.
 \]
-The equality at $148$ is not explained by equal group sizes: the
-$\{\mathrm{A}\}$ group contains $14$ counted codons, whereas the
-$\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ groups contain $16$ each.
+Keto, Strong, and Purine are the unions of $\{\mathrm{G}\}$ with
+$\{\mathrm{T}\}$, $\{\mathrm{C}\}$, and $\{\mathrm{A}\}$ respectively. The
+single-unit deficit localized in $\Delta_{\mathrm{SE}}(\{\mathrm{G}\})$
+can therefore be traced across all three axes.
 
-Partitioning by octet localizes the one-unit difference to Octet~II.
-In Octet~I, all four one-nucleotide sub-groups have $\Delta = 75$.
-Within Octet~II,
+Within Octet~I all four one-nucleotide groups have $\Delta = 75$, so
+the difference falls entirely in Octet~II:
 \[
-\begin{aligned}
-\Delta_{\mathrm{SE}}
-  (\{\mathrm{G}\}\cap\mathrm{Octet~II}) &= 72, \\
-\Delta_{\mathrm{SE}}
-  (\{\mathrm{A}\}\cap\mathrm{Octet~II}) &=
-\Delta_{\mathrm{SE}}
-  (\{\mathrm{C}\}\cap\mathrm{Octet~II}) =
-\Delta_{\mathrm{SE}}
-  (\{\mathrm{T}\}\cap\mathrm{Octet~II}) = 73.
-\end{aligned}
+\Delta_{\mathrm{SE}}(\{\mathrm{G}\} \cap \mathrm{Octet~II}) = 72,
+\qquad
+\Delta_{\mathrm{SE}}(\{\mathrm{A}\} \cap \mathrm{Octet~II}) =
+\Delta(\{\mathrm{C}\} \cap \mathrm{Octet~II}) =
+\Delta(\{\mathrm{T}\} \cap \mathrm{Octet~II}) = 73.
 \]
-The groups $\{\mathrm{A}\}\cap\mathrm{Octet~II}$ and
-$\{\mathrm{G}\}\cap\mathrm{Octet~II}$ each contain six codons in the
-service-excluded pool, so the difference between $73$ and $72$ cannot
-be attributed to group size.
+In the pool the groups $\{\mathrm{G}\} \cap \mathrm{Octet~II}$ and
+$\{\mathrm{A}\} \cap \mathrm{Octet~II}$ contain six codons each, whereas
+$\{\mathrm{C}\} \cap \mathrm{Octet~II}$ and $\{\mathrm{T}\} \cap
+\mathrm{Octet~II}$ contain eight. The observed distribution of the values
+$72$ and $73$ therefore cannot be attributed to group size.
 
-Thus, at the upper level of the three chemical axes, the residue $-1$
-in~$\Delta$ occurs in Keto, Strong, and Purine---the groups that admit
-$\mathrm{G}$ in the third position. The further reduction of the
-deviation within $\{\mathrm{G}\}\cap\mathrm{Octet~II}$ to the
-$\mathrm{Trp}$--$\mathrm{Ile}$ pair is considered in
-Section~\ref{sec:results-key1-trpile}.
+On passing to the complete $64$-codon table, these two six-codon branches
+are supplemented by different pairs of service codons: $\{\mathrm{A}\}
+\cap \mathrm{Octet~II}$ by the stop codons $\mathrm{TAA}$ and
+$\mathrm{TGA}$, and $\{\mathrm{G}\} \cap \mathrm{Octet~II}$ by the stop
+codon $\mathrm{TAG}$ and the initiator $\mathrm{ATG}$. As will be shown in
+the derivation of Key~1 (Section~\ref{sec:results-key1-derivation}), the
+formal $\Delta$-contribution under that assignment equals~$1$ for the
+initiator $\mathrm{ATG}$ and~$0$ for each stop codon. Therefore, under
+Key~1,
+\[
+\Delta_{1}(\{\mathrm{G}\} \cap \mathrm{Octet~II})
+  = 72 + 1 + 0 = 73,
+\qquad
+\Delta_{1}(\{\mathrm{A}\} \cap \mathrm{Octet~II})
+  = 73 + 0 + 0 = 73.
+\]
+The missing unit is thus returned through the initiator $\mathrm{ATG}$,
+aligning the two branches. Since $\mathrm{ATG}$ belongs to the branch
+$\{\mathrm{G}\}$ and to Keto, Strong, and Purine, the same single
+contribution simultaneously compensates for the deviation in all of these
+groups and in the value of $\Delta$ for the complete table under Key~1.
+
+The full hierarchy of groups for the service-excluded pool, together with
+the corresponding nucleon quantities, is shown in Figure~\ref{fig:pool60}.
 
 \begin{figure}[p]
 \centering
 \includegraphics[width=0.72\textwidth]{pool60_structure.png}
-\caption{Structure of the service-excluded 60-codon pool
-$\mathcal{C}_{\mathrm{SE}}$ (\texttt{pool60}). Each group is summed
-only over its non-service codons; the three stop codons and the
-initiator $\mathrm{ATG}$ are excluded, so every quantity shown is
-independent of parametrization. Four quantities are given for each
-group: the total nucleon count~$T$, proton sum~$P$, neutron sum~$N$,
-and hydrogen count $\Delta = P - N$. Cell layout: the group name
-appears in the upper-left corner, the number of codons remaining in
-the group in the upper-right corner, and the identifier from
-\texttt{codon\_groups.csv} in the lower-right corner; pairs of twin
-groups with identical values are collapsed into a single cell, with
-the second name in the lower-left corner and both identifiers listed,
-separated by a comma, in the lower-right corner. Green, blue, and
-purple highlights indicate divisibility by~$37$,
-$111 = 3 \cdot 37$, and $999 = 27 \cdot 37$, respectively; the
-largest applicable modulus is marked.
-Figures~\ref{fig:groups-key0} and~\ref{fig:groups-key1} use the same
-grid and color code, but represent the complete $64$-codon table.
-All three figures were generated by the
-\texttt{visualization.html} script.}
+\caption{Structure of the service-codon-excluded 60-codon pool
+$\mathcal{C}_{\mathrm{SE}}$ (\texttt{pool60}). For each group, all four
+quantities are computed using only the non-service codons it contains; the
+three stop codons and the initiator $\mathrm{ATG}$ are excluded, so every
+quantity shown is independent of parametrization. The quantities shown are
+the total
+nucleon sum~$T$, proton sum~$P$, neutron sum~$N$,
+and hydrogen atom count $\Delta = P - N$. Cell layout: the group name
+appears in the upper-left corner, the number of codons remaining in the
+group in the upper-right corner, and the identifier from
+\texttt{codon\_groups.csv} in the lower-right corner; twin pairs of groups
+with identical values are collapsed into a single cell, with the second
+name in the lower-left corner and both identifiers listed, separated by a
+comma, in the lower-right corner. Green, blue, and purple highlights
+indicate divisibility by~$37$, $111 = 3 \cdot 37$, and $999 = 27 \cdot
+37$, respectively; the largest applicable modulus is marked.
+Figures~\ref{fig:groups-key0} and~\ref{fig:groups-key1} use the same grid
+and color code, but represent the complete $64$-codon table. All three
+figures were generated by the \texttt{visualization.html} script.}
 \label{fig:pool60}
 \end{figure}
 
