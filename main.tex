@@ -437,43 +437,49 @@ the row with id~1. In this article, that group is denoted
 $\mathrm{All}$, whereas $\mathcal{C}_{64}$ denotes the codon set
 itself.
 
-A direct consequence of the structure of the standard code is the
-\emph{twin-group property}. Within every codon family, the codons
-$\mathrm{NNC}$ and $\mathrm{NNT}$ with identical first two
-positions encode the same amino acid. Therefore, exchanging
-$\mathrm{C}\leftrightarrow\mathrm{T}$ at the third position does
-not change the multiset of encoded amino acids. Consequently, the
-Keto group $\{\mathrm{G},\mathrm{T}\}$ and the Strong group
-$\{\mathrm{C},\mathrm{G}\}$ have the same amino-acid composition,
-as do the Amino group $\{\mathrm{A},\mathrm{C}\}$ and the Weak
-group $\{\mathrm{A},\mathrm{T}\}$. The two groups in each pair contain
-exactly the same service codons: Keto and Strong contain $\mathrm{ATG}$
-and $\mathrm{TAG}$, whereas Amino and Weak contain $\mathrm{TAA}$ and
-$\mathrm{TGA}$. Therefore, under any assignment $K$ that associates a
-pair of values $(P,N)$ with each service codon
-(Section~\ref{sec:parametrization}), the following identities hold for
-$Q\in\{T,P,N,\Delta\}$:
+\subsubsection{Pyrimidine synonymy and twin-group identities}
+\label{sec:twin-identities}
+
+Within every codon family of the standard genetic code, the codons
+$\mathrm{NNC}$ and $\mathrm{NNT}$ with identical first two positions
+encode the same amino acid. Therefore, exchanging
+$\mathrm{C}\leftrightarrow\mathrm{T}$ at the third position does not
+change the multiset of encoded amino acids. This exchange maps Keto
+$\{\mathrm{G},\mathrm{T}\}$ to Strong
+$\{\mathrm{C},\mathrm{G}\}$, and Amino
+$\{\mathrm{A},\mathrm{C}\}$ to Weak
+$\{\mathrm{A},\mathrm{T}\}$.
+
+The two members of each pair contain the same service codons: Keto and
+Strong contain $\mathrm{ATG}$ and $\mathrm{TAG}$, whereas Amino and
+Weak contain $\mathrm{TAA}$ and $\mathrm{TGA}$. Therefore, under any
+assignment $K$ that associates a pair of values $(P,N)$ with each
+service codon (Section~\ref{sec:parametrization}) and for
+$Q\in\{T,P,N,\Delta\}$, the identities
 \[
 Q_K(\mathrm{Keto})=Q_K(\mathrm{Strong}),\qquad
-Q_K(\mathrm{Amino})=Q_K(\mathrm{Weak}).
+Q_K(\mathrm{Amino})=Q_K(\mathrm{Weak})
 \]
-The same identities hold after intersecting each pair with Octet~I or
-Octet~II. We refer to these pairs of two-nucleotide groups as
-\emph{twin groups}; in the dataset \texttt{codon\_groups.csv}, the
-twin relationship is recorded in the column
-\texttt{Twin\_Group\_ID}.
+hold. Intersecting both groups in either pair with the same octet
+preserves these identities. The equalities are independent of
+parametrization, although the full-group values themselves may depend
+on~$K$. We refer to the Keto/Strong and Amino/Weak pairs, and to the
+corresponding pairs formed by intersection with the same octet, as
+\emph{twin groups}. In the dataset \texttt{codon\_groups.csv}, this
+relationship is recorded in the \texttt{Twin\_Group\_ID} column.
 
-A separate direct consequence of the same pyrimidine synonymy is
-the equality of the one-nucleotide groups $\{\mathrm{C}\}$ and
-$\{\mathrm{T}\}$ at the full-code level and after their
-intersection with either octet. At the full-code level, each
-contains $16$ codons; within either octet, each contains $8$ codons.
-Because they do not arise by comparing two branches of a chemical
-axis, the term ``twin groups'' and the column
-\texttt{Twin\_Group\_ID} are not used for them in the present work.
-Both groups and their intersections with the octets contain no
-service codons; hence, both their values and the equalities between
-them are independent of parametrization.
+Purine and Pyrimidine are not twin groups: exchanging
+$\mathrm{C}\leftrightarrow\mathrm{T}$ preserves each of these groups
+rather than mapping one to the other. The same pyrimidine synonymy
+directly gives equality of all four nucleon quantities for the
+one-nucleotide groups $\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ and for
+their intersections with either octet. These groups and their
+intersections with the octets contain no service codons, so both the
+values themselves and the equalities between them are independent of
+parametrization. Because this is a pair of one-nucleotide groups rather
+than a pair of two-nucleotide branches of the chemical axes, the term
+\emph{twin groups} and the \texttt{Twin\_Group\_ID} column are not used
+for it.
 
 \subsection{Parametrization of service codons}
 \label{sec:parametrization}
@@ -680,7 +686,7 @@ All identified equalities are listed in
 \texttt{pool60\_equalities.csv},
 \texttt{key0\_equalities.csv} and
 \texttt{key1\_equalities.csv}. Twin-group identities from
-Section~\ref{sec:partitioning} are also recorded, but are treated as
+Section~\ref{sec:twin-identities} are also recorded, but are treated as
 consequences of identical amino acid composition rather than as new
 coincidences.
 
@@ -948,15 +954,10 @@ for comparison and to assess the specificity of the results.
 \subsection{Parametrization-independent results}
 \label{sec:results-independent}
 
-Parametrization-independence arises here for three distinct reasons.
-The first is built into the definition of the service-excluded pool:
-the sums run only over the sixty codons remaining after the service
-codons are excluded (Section~\ref{sec:results-sensepool}). The second
-is that Octet~I with all its sub-groups, and the groups restricted to
-pyrimidines in the third position, contain no service codons. The
-third concerns twin pairs of groups: both members of each pair contain
-the same service codons, so the equality between them is preserved
-under any values assigned to those codons.
+The parametrization-independent results for group-level nucleon
+quantities in this subsection are obtained under one of two conditions:
+either the summation domain is restricted to the service-excluded pool,
+or the group under consideration itself contains no service codons.
 
 The analytical derivation of Key~1 uses two pairs of numerical results
 from this subsection. For the service-excluded pool, the neutron sum
@@ -975,7 +976,7 @@ differences cannot equal odd multiples of~$37$
 
 The Keto/Amino and Strong/Weak partitions of $\mathcal{C}_{\mathrm{SE}}$
 give pairwise equal neutron and proton sums, owing to pyrimidine synonymy
-(Section~\ref{sec:results-pyrimidine-synonymy}):
+(Section~\ref{sec:twin-identities}):
 \[
 \begin{aligned}
 N_{\mathrm{SE}}(\mathrm{Keto}) = N_{\mathrm{SE}}(\mathrm{Strong})
@@ -1111,9 +1112,9 @@ are independent of any parametrization:
 \[
 \begin{aligned}
 T(\mathrm{Octet~I}) &= 3700 = 100 \cdot 37, &
-P(\mathrm{Octet~I}) &= 2000, \\
-N(\mathrm{Octet~I}) &= 1700, &
-\Delta(\mathrm{Octet~I}) &= 300.
+P(\mathrm{Octet~I}) &= 2000 = 2 \cdot 1000, \\
+N(\mathrm{Octet~I}) &= 1700 = 17 \cdot 100, &
+\Delta(\mathrm{Octet~I}) &= 300 = 3 \cdot 100.
 \end{aligned}
 \]
 All four quantities are multiples of~$100$, while the proton sum
@@ -1126,7 +1127,7 @@ every family, so each of its nucleon quantities equals half the
 corresponding quantity of the whole octet:
 \[
 T = 1850 = 50 \cdot 37, \qquad
-P = 1000, \qquad
+P = 1000 = 10^{3}, \qquad
 N = 850, \qquad
 \Delta = 150.
 \]
@@ -1135,7 +1136,7 @@ every family, so its quantities equal one quarter of the whole-octet
 values:
 \[
 T = 925 = 25 \cdot 37, \qquad
-P = 500, \qquad
+P = 500 = 5 \cdot 100, \qquad
 N = 425, \qquad
 \Delta = 75 = 2 \cdot 37 + 1.
 \]
@@ -1181,139 +1182,98 @@ $\{\mathrm{T}\} \cap \mathrm{Octet~I}$ (id~21)---form the Pyrimidine
 group within Octet~I (id~18), which enters the pyrimidine cascade in
 Section~\ref{sec:results-pyrimidine}.
 
-
-\subsubsection{Pyrimidine synonymy and twin-group identities}
-\label{sec:results-pyrimidine-synonymy}
-
-In the standard genetic code, the codons $\mathrm{NNC}$ and
-$\mathrm{NNT}$ (where $\mathrm{C}$ and $\mathrm{T}$ are
-pyrimidine bases) encode the same amino acid.
-
-A direct algebraic consequence of pyrimidine synonymy is the
-equality of nucleon quantities between the groups
-\textbf{Keto} $\{\mathrm{G,T}\}$ (id~2) and \textbf{Strong}
-$\{\mathrm{C,G}\}$ (id~3), and between \textbf{Amino}
-$\{\mathrm{A,C}\}$ (id~4) and \textbf{Weak}
-$\{\mathrm{A,T}\}$ (id~5). Each of these four groups
-contains $32$ codons. The distribution of service codons
-across them is uneven: Keto and Strong contain the stop
-codon $\mathrm{TAG}$ and the initiator $\mathrm{ATG}$,
-while Amino and Weak contain two stop codons,
-$\mathrm{TAA}$ and $\mathrm{TGA}$, and no start codon. Each
-of the four groups therefore has an intersection of $30$
-codons with $\mathcal{C}_{\mathrm{SE}}$. Although these
-groups themselves contain service codons --- so their
-individual full-group nucleon values depend on the assignment
-to those codons --- the service codons enter both members of
-each twin pair symmetrically, and the equality of nucleon
-quantities holds under any such assignment.
-
-Analogous equalities hold between
-$\mathrm{Keto} \cap \mathrm{Octet~II}$ and
-$\mathrm{Strong} \cap \mathrm{Octet~II}$ (id~24 and id~25),
-between $\mathrm{Amino} \cap \mathrm{Octet~II}$ and
-$\mathrm{Weak} \cap \mathrm{Octet~II}$ (id~26 and id~27),
-and between the corresponding pairs within Octet~I (id~13
-and id~14, id~15 and id~16). All these twin pairs are
-recorded in the \texttt{Twin\_Group\_ID} column of
-\texttt{codon\_groups.csv}. Within Octet~I, full four-fold degeneracy forces all six
-$16$-codon sub-groups to be mathematically identical, but
-only the Keto/Strong and Amino/Weak pairs are recorded in
-\texttt{Twin\_Group\_ID}. The Purine/Pyrimidine pair is
-excluded because outside Octet~I the two groups have
-substantially different amino acid composition: Purine
-contains all four service codons, while Pyrimidine contains
-none. Their equality within Octet~I is a degeneracy-specific
-artifact, not a manifestation of pyrimidine synonymy.
-
-A separate phenomenon of the same origin is the equality
-of the single-nucleotide groups $\{\mathrm{C}\}$ (id~8) and
-$\{\mathrm{T}\}$ (id~10), together with their intersections
-with each octet. This equality is qualitatively different:
-it does not relate groups across a chemical axis of
-partitioning, but follows directly from pyrimidine
-synonymy itself --- a codon with $\mathrm{C}$ at the third
-position and the same codon with $\mathrm{T}$ encode the
-same amino acid by definition. For this reason the
-single-nucleotide pairs $\{\mathrm{C}\}/\{\mathrm{T}\}$ are
-not recorded in \texttt{Twin\_Group\_ID}, which is reserved
-for pairs whose identical amino acid composition arises
-from pyrimidine synonymy across a two-nucleotide chemical
-axis (Keto/Strong or Amino/Weak).
-$\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ form the only such
-pair in the standard code that is entirely free of service
-codons, and is therefore parametrization-independent both
-in its values and in their equality.
-
 \subsubsection{Arithmetic of pyrimidine-restricted groups}
 \label{sec:results-pyrimidine}
 
-The Pyrimidine group (id~7) and its sub-groups form the
-second class of parametrization-independent groups of the
-standard code. Unlike Octet~I, these groups span both
-octets and contain partially degenerate codon families;
-their arithmetic is therefore not inherited from a single
-set of values and must be examined separately at each level.
+By pyrimidine synonymy (Section~\ref{sec:twin-identities}), the
+$\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ groups have identical nucleon
+quantities at the full-code level and after intersection with either
+octet. Together they form the Pyrimidine group (id~7). These groups and
+their octet intersections contain no service codons, so their values
+are independent of parametrization. Unlike the Octet~I hierarchy, the
+full Pyrimidine group spans both octets and includes partially
+degenerate codon families. Therefore, not all values at its lower
+levels are obtained by a single exact scaling; they are examined
+separately below.
 
-\paragraph{The full pyrimidine group (id~7).}
-The nucleon quantities are
+For the full Pyrimidine group, the nucleon quantities are
 \[
-T = 4096, \qquad P = 2196, \qquad N = 1900, \qquad
-\Delta = 296.
+\begin{aligned}
+T(\mathrm{Pyrimidine}) &= 4096 = 2^{12}, &
+P(\mathrm{Pyrimidine}) &= 2196, \\
+N(\mathrm{Pyrimidine}) &= 1900 = 19 \cdot 100, &
+\Delta(\mathrm{Pyrimidine}) &= 296 = 8 \cdot 37.
+\end{aligned}
 \]
-Three of these four values simultaneously satisfy distinct
-criteria: $T = 4096 = 2^{12}$ is an exact power of two;
-$N = 1900$ is an exact multiple of $100$; and
-$\Delta = 296 = 8 \cdot 37$ is divisible by $37$.
+Here, $\Delta$ satisfies the primary preselected criterion of
+divisibility by~$37$, and $N = 1900$ satisfies the roundness criterion.
+The exact power of two $T = 2^{12}$ is an additional descriptive
+observation.
 
-\paragraph{At the $16$-codon level,} the groups
-$\{\mathrm{C}\}$ (id~8) and $\{\mathrm{T}\}$ (id~10)
-partition Pyrimidine into two identical halves with values
-$T = 2048 = 2^{11}$, $P = 1098$, $N = 950$, and
-$\Delta = 148 = 4 \cdot 37$.
+By the C/T identity, the two $16$-codon groups $\{\mathrm{C}\}$
+(id~8) and $\{\mathrm{T}\}$ (id~10) have identical nucleon
+quantities. Because they partition the Pyrimidine group, each value is
+half the corresponding full-group value:
+\[
+\begin{aligned}
+T(\{\mathrm{C}\}) = T(\{\mathrm{T}\})
+  &= 2048 = 2^{11}, &
+P(\{\mathrm{C}\}) = P(\{\mathrm{T}\})
+  &= 1098, \\
+N(\{\mathrm{C}\}) = N(\{\mathrm{T}\})
+  &= 950, &
+\Delta(\{\mathrm{C}\}) = \Delta(\{\mathrm{T}\})
+  &= 148 = 4 \cdot 37.
+\end{aligned}
+\]
+The entire profile at this level is therefore obtained by exact scaling
+and does not form a separate set of independent regularities.
 
-\paragraph{Pyrimidine-restricted groups at the $8$-codon
-level.}
-Intersecting $\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ with
-each octet yields four groups of $8$ codons whose
-$\Delta$ values, under any parametric key, are
+At the $8$-codon level, all four Octet~I groups, including
+$\{\mathrm{C}\} \cap \mathrm{Octet~I}$ (id~19) and
+$\{\mathrm{T}\} \cap \mathrm{Octet~I}$ (id~21), have
+$\Delta = 75$ (Section~\ref{sec:results-octetI}). The corresponding
+$\{\mathrm{C}\} \cap \mathrm{Octet~II}$ (id~30) and
+$\{\mathrm{T}\} \cap \mathrm{Octet~II}$ (id~32) groups have
+$\Delta = 73$. Their unions within the octets form the
+$\mathrm{Pyrimidine} \cap \mathrm{Octet~I}$ (id~18) and
+$\mathrm{Pyrimidine} \cap \mathrm{Octet~II}$ (id~29) groups. These
+values form the following cascade:
 \[
-\Delta = 75 = 2 \cdot 37 + 1
-\quad \text{for } \{\mathrm{C}\} \cap \mathrm{Octet~I}
-\text{ (id~19) and } \{\mathrm{T}\} \cap \mathrm{Octet~I}
-\text{ (id~21),}
+\begin{aligned}
+\Delta(\{\mathrm{C}\} \cap \mathrm{Octet~I})
+  = \Delta(\{\mathrm{T}\} \cap \mathrm{Octet~I})
+  &= 75 = 2 \cdot 37 + 1, \\
+\Delta(\{\mathrm{C}\} \cap \mathrm{Octet~II})
+  = \Delta(\{\mathrm{T}\} \cap \mathrm{Octet~II})
+  &= 73 = 2 \cdot 37 - 1, \\
+\Delta(\mathrm{Pyrimidine} \cap \mathrm{Octet~I})
+  &= 2 \cdot 75 = 150 = 4 \cdot 37 + 2, \\
+\Delta(\mathrm{Pyrimidine} \cap \mathrm{Octet~II})
+  &= 2 \cdot 73 = 146 = 4 \cdot 37 - 2, \\
+\Delta(\mathrm{Pyrimidine})
+  &= 150 + 146 = 296 = 8 \cdot 37.
+\end{aligned}
 \]
-\[
-\Delta = 73 = 2 \cdot 37 - 1
-\quad \text{for } \{\mathrm{C}\} \cap \mathrm{Octet~II}
-\text{ (id~30) and } \{\mathrm{T}\} \cap \mathrm{Octet~II}
-\text{ (id~32).}
-\]
-These four values exhibit a systematic $\pm 1$ deviation
-from a multiple of $37$: the Octet~I values lie one unit
-above $74 = 2 \cdot 37$, while the Octet~II values lie one
-unit below. Adding the two $8$-codon halves
-$\{\mathrm{C}\}$ and $\{\mathrm{T}\}$ within each octet
-recovers the intersections of the full pyrimidine group
-with the corresponding octet:
-\[
-\Delta(\mathrm{Pyrimidine} \cap \mathrm{Octet~I}) = 150 =
-4 \cdot 37 + 2 \quad \text{(id~18)},
-\]
-\[
-\Delta(\mathrm{Pyrimidine} \cap \mathrm{Octet~II}) = 146 =
-4 \cdot 37 - 2 \quad \text{(id~29)}.
-\]
-The $\pm 1$ deviations at the $8$-codon level double to
-$\pm 2$ at the $16$-codon level within each octet. Adding
-across both octets recovers $\Delta(\mathrm{Pyrimidine}) =
-296 = 8 \cdot 37$, with the deviations of opposite sign
-cancelling exactly. The resulting cascade $\pm 1 \to \pm 2
-\to 0$ --- a systematic small deviation at the $8$-codon
-level that doubles upon intra-octet combination and cancels
-upon inter-octet combination --- extends to further groups under Key~0
-(Section~\ref{sec:results-key0}), where analogous one-unit
-deviations also appear in the proton and neutron residues.
+The signed deviations $+1$ and $-1$ double to $+2$ and $-2$ when the
+groups within each octet are added, and cancel when the octets are
+added. Thus, the values $150$, $146$, and $296$ belong to one additive
+scheme rather than constituting independent results.
+
+The relation of the pyrimidine cascade to a separate pattern of
+one-unit deviations in the proton and neutron sums is considered under
+Key~0 (Section~\ref{sec:results-key0}).
+
+The pyrimidine cascade should also be distinguished from the one-unit
+deviation of $\Delta_{\mathrm{SE}}(\{\mathrm{G}\})$ from the lattice
+of step~$37$ (Section~\ref{sec:results-sensepool}). The pyrimidine
+deviations cancel between the octets, whereas the deficit of the
+$\{\mathrm{G}\}$ group is not compensated when it is combined with
+another one-nucleotide group and propagates to the Keto, Strong, and
+Purine groups. Because the neutron sums of Keto and Strong in the
+service-excluded pool are multiples of~$37$, the identity
+$P = N + \Delta$ transfers the same signed deviation of $-1$ to their
+proton sums.
 
 \subsubsection{Localization of the Keto/Amino asymmetry, and proton parity}
 \label{sec:results-key1-trpile}
@@ -1647,7 +1607,7 @@ Amino branch contains two stops and no start. The same
 distribution applies to the Strong and Weak branches
 respectively, by the Keto~$\equiv$~Strong and
 Amino~$\equiv$~Weak identities of
-Section~\ref{sec:results-pyrimidine-synonymy}.
+Section~\ref{sec:twin-identities}.
 
 \paragraph{Balance equation for Keto and Amino.}
 The neutron pools of Keto and Amino, expressed through
@@ -2040,7 +2000,7 @@ divisibility requires these same sums to be $\equiv 1$ and $\equiv 0
 \pmod{37}$; since $212 \equiv 27$ and $211 \equiv 26$, the two
 demands are incompatible, and among the third-position axes only a balance on Keto/Amino
 (equivalently, by the twin identity of
-Section~\ref{sec:results-pyrimidine-synonymy}, on Strong/Weak) is
+Section~\ref{sec:twin-identities}, on Strong/Weak) is
 compatible with the $37$-lattice. The obstruction is specific to $P$ and $N$, whose service sums are
 large ($212$ and $211$) and land at the wrong residues. For
 $\Delta = P - N$ the situation differs: the Purine/Pyrimidine
@@ -2138,7 +2098,7 @@ derivation of $n_{\text{stop}}$ and $p_{\text{stop}}$;
 the identities $\mathrm{Keto} \equiv \mathrm{Strong}$
 and $\mathrm{Amino} \equiv \mathrm{Weak}$ are
 parametrization-independent
-(Section~\ref{sec:results-pyrimidine-synonymy}). The
+(Section~\ref{sec:twin-identities}). The
 numerical values of all group quantities under Key~1 are
 tabulated in \texttt{key1\_nucleon-data.csv}.
 
@@ -2457,7 +2417,7 @@ while $\Delta$ remains uniform across all four groups
 pyrimidine equality $\{\mathrm{C}\} \equiv
 \{\mathrm{T}\}$ is parametrization-independent and
 follows from the universal C/T synonymy at the family
-level (Section~\ref{sec:results-pyrimidine-synonymy}).
+level (Section~\ref{sec:twin-identities}).
 The purine equality $\{\mathrm{G}\} \equiv
 \{\mathrm{A}\}$ is specific to Key~1, with the
 mechanism local to Octet~II: the branches
@@ -2558,7 +2518,7 @@ directly equate the Keto and Amino groups in $N$ and
 $P$. Combined with the parametrization-independent
 identities $\mathrm{Keto} \equiv \mathrm{Strong}$ and
 $\mathrm{Amino} \equiv \mathrm{Weak}$
-(Section~\ref{sec:results-pyrimidine-synonymy}), this
+(Section~\ref{sec:twin-identities}), this
 aligns the four $32$-codon groups along the Keto/Amino
 and Strong/Weak axes in all four nucleon quantities
 $(T, P, N, \Delta)$
@@ -3311,7 +3271,7 @@ coincides with $T(\mathrm{Keto} \cap
 \mathrm{Octet~II})$ in our analysis: the
 universal pyrimidine synonymy within
 Octet~II
-(Section~\ref{sec:results-pyrimidine-synonymy})
+(Section~\ref{sec:twin-identities})
 implies that the sixteen codons of $\mathrm{Keto}$
 (or of $\mathrm{Strong}$) intersected with
 Octet~II contain each coding role
