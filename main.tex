@@ -929,6 +929,11 @@ The second level (Section~\ref{sec:results-key0}) is the naive reading
 (Key~0), in which the three stop codons are assigned a contribution of
 zero and the initiator $\mathrm{ATG}$ is counted as methionine.
 
+Section~\ref{sec:results-localization} reduces the asymmetry of the
+Keto and Amino branches to the nucleon differences of the
+$\mathrm{Trp}$--$\mathrm{Ile}$ pair and examines the parity constraint
+on the proton quantities.
+
 At the third level, Section~\ref{sec:results-key1-derivation}
 derives Key~1, the unique minimal non-negative integer assignment to
 the service codons determined by the joint conditions of nucleon-pool
@@ -959,17 +964,18 @@ quantities in this subsection are obtained under one of two conditions:
 either the summation domain is restricted to the service-excluded pool,
 or the group under consideration itself contains no service codons.
 
-The analytical derivation of Key~1 uses two pairs of numerical results
-from this subsection. For the service-excluded pool, the neutron sum
-is divisible by~$37$, whereas the proton sum is one unit below the
-nearest multiple of~$37$ (Section~\ref{sec:results-sensepool});
-between the Keto and Amino branches, the neutron and proton
-differences are respectively $37$ and $36$ and reduce to the
-$\mathrm{Trp}$--$\mathrm{Ile}$ pair
-(Section~\ref{sec:results-key1-trpile}). The fact that every canonical
-amino acid has an even proton count explains why such proton sums and
-differences cannot equal odd multiples of~$37$
-(Section~\ref{sec:results-key1-trpile}).
+The neutron sum of the service-excluded pool is divisible by~$37$,
+whereas the proton sum falls one unit short of the nearest multiple.
+Through the difference~$\Delta$ this deviation is traced to the codons
+with $\mathrm{G}$ at the third position within Octet~II~--- the group
+that contains the initiator $\mathrm{ATG}$ in the full table
+(Section~\ref{sec:results-sensepool}). The nucleon sum of Octet~I is
+divisible by~$37$, and all four of its quantities are divisible
+by~$100$ (Section~\ref{sec:results-octetI}). For the
+pyrimidine-restricted groups of the full code the difference~$\Delta$
+lies on the lattice of step~$37$, whereas the deviations arising on
+intersection with the octets cancel within the group
+(Section~\ref{sec:results-pyrimidine}).
 
 \subsubsection{The service-excluded pool}
 \label{sec:results-sensepool}
@@ -1275,96 +1281,6 @@ service-excluded pool are multiples of~$37$, the identity
 $P = N + \Delta$ transfers the same signed deviation of $-1$ to their
 proton sums.
 
-\subsubsection{Localization of the Keto/Amino asymmetry, and proton parity}
-\label{sec:results-key1-trpile}
-
-Over the sense pool---parametrization-independent by
-construction---the differences between the Keto and Amino nucleon
-sums are
-\begin{align*}
-T_{\mathrm{SE}}(\mathrm{Keto}) - T_{\mathrm{SE}}(\mathrm{Amino}) &= 3921 - 3848 = 73, \\
-P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino}) &= 2108 - 2072 = 36, \\
-N_{\mathrm{SE}}(\mathrm{Keto}) - N_{\mathrm{SE}}(\mathrm{Amino}) &= 1813 - 1776 = 37, \\
-\Delta_{\mathrm{SE}}(\mathrm{Keto}) - \Delta_{\mathrm{SE}}(\mathrm{Amino}) &= 295 - 296 = -1,
-\end{align*}
-These differences reduce to the nucleon counts of a single pair of
-molecules, and the reduction is structural.
-
-\paragraph{Reduction to a single pair.}
-Of the $16$ codon families, $13$ contain no service codon, and in
-each the codons $\mathrm{NNG}$ (Keto branch) and $\mathrm{NNA}$
-(Amino branch) encode the same amino acid, contributing equally to
-both sums. The family $\mathrm{TA}$ also contributes equally: its
-pyrimidine pair $\mathrm{TAC}/\mathrm{TAT}$ encodes $\mathrm{Tyr}$
-in both branches, and its purine pair $\mathrm{TAG}/\mathrm{TAA}$
-consists of two stop codons, one in each branch, excluded from the
-sense pool. Asymmetry is realized only in the families $\mathrm{AT}$
-(with $\mathrm{ATA} = \mathrm{Ile}$ in the Amino branch; the Keto
-codon $\mathrm{ATG}$ is the excluded initiator) and $\mathrm{TG}$
-(with $\mathrm{TGG} = \mathrm{Trp}$ in the Keto branch; the Amino
-codon $\mathrm{TGA}$ is an excluded stop). In $\mathrm{TG}$,
-$\mathrm{Cys}$ is present symmetrically and does not contribute; in
-$\mathrm{AT}$, the remaining $\mathrm{Ile}$ codons $\mathrm{ATT}$
-and $\mathrm{ATC}$ are likewise symmetric. The sense-pool asymmetry
-therefore reduces to the differences of the pair
-$\mathrm{Trp}$--$\mathrm{Ile}$, that is $(73, 36, 37, -1)$. This
-localization holds for any assignment giving equal values to the
-three stop codons and depends only on the code's synonymy
-structure. (Under the naive reading, Key~0, the same
-asymmetry appears over the full code with the initiator's product
-included, $T(\mathrm{Keto}) - T(\mathrm{Amino}) = 222 =
-T(\mathrm{Trp}) + T(\mathrm{Met}) - T(\mathrm{Ile})$.)
-
-\paragraph{The pair and the modulus.}
-The two nucleon differences that matter for what follows are
-$|\delta N(\mathrm{Trp},\mathrm{Ile})| = 37$, equal to the
-modulus, and $|\delta P(\mathrm{Trp},\mathrm{Ile})| = 36$, one unit
-below it. Among the $190$ pairs of canonical amino acids,
-$|\delta N| = 37$ is realized only by
-$\mathrm{Trp}$--$\mathrm{Ile}$ and $\mathrm{Trp}$--$\mathrm{Leu}$,
-and $|\delta P| = 36$ only by the same two; $\mathrm{Leu}$ gives the
-same values as $\mathrm{Ile}$ because the two are isomers with
-identical counts $P = 72$, $N = 59$, so a single nucleon profile is
-involved. The proton value follows from the neutron value and the
-hydrogen difference,
-$\delta P = \delta N - (\Delta_{\mathrm{Ile}} - \Delta_{\mathrm{Trp}})
-= 37 - 1 = 36$, one below because isoleucine carries one more
-hydrogen than tryptophan.
-
-These differences are properties of the two molecules alone and
-carry no independent statistical weight: the neutron difference
-coincides with the modulus at roughly the rate expected by chance
-among amino-acid pairs. They enter the derivation of
-Section~\ref{sec:results-key1-derivation} as the offsets that the
-service-codon balance must reproduce, not as evidence in
-themselves; the atypicality of the arithmetic resides in the
-aggregate (Section~\ref{sec:discussion-montecarlo}), not in this
-pair. The induced total difference $|\delta T| = |\delta P| +
-|\delta N| = 73 = 2 \cdot 37 - 1$ is not independent. Full
-distributions of $|\delta N|$, $|\delta P|$, and $|\delta T|$ over
-the $190$ pairs are given in
-\texttt{amino\_acids\_neutron\_differences.csv},
-\texttt{amino\_acids\_proton\_differences.csv}, and
-\texttt{amino\_acids\_nucleon\_differences.csv}.
-
-\paragraph{Proton parity.}
-That $|\delta P|$ is even---so that it cannot equal the odd
-value~$37$ and sits at $36$ rather than on the modulus---reflects a
-general parity constraint on the proton counts. Every one of the
-$20$ canonical amino acids has an even proton count: each value
-of~$P$ in \texttt{amino\_acids\_nucleons.csv} is even. The reason is
-electronic. In their neutral ground states the canonical amino
-acids are closed-shell molecules and therefore contain an even
-number of electrons; since a neutral molecule has equal numbers of
-electrons and protons, its proton count is even. Consequently every
-proton sum or pairwise difference over the amino acids is even, and
-no such quantity can equal an odd multiple of~$37$. This is the
-constraint behind the one-unit proton deficit of the sense pool
-(Section~\ref{sec:results-sensepool}) and behind $|\delta P| = 36$
-here; parity fixes that these quantities miss the odd multiples
-of~$37$, while the size of the miss---one unit in both cases---is a
-property of the specific nucleon counts.
-
 \subsection{Results under the zero parametrization}
 \label{sec:results-key0}
 
@@ -1540,6 +1456,158 @@ the pattern at this level; this group contains both the
 start codon $\mathrm{ATG}$ and the stop codon
 $\mathrm{TAG}$.
 
+\subsection{Localization of the Keto/Amino asymmetry and proton parity}
+\label{sec:results-localization}
+
+The asymmetry of the Keto and Amino branches is visible at both levels
+considered so far: over the service-excluded pool and over the full
+table under Key~0. It is shown that in both cases it reduces to the
+nucleon counts of a small number of molecules --- two and three
+respectively.
+
+\subsubsection{Localization of the Keto/Amino asymmetry}
+\label{sec:results-key1-trpile}
+
+Over the full table under Key~0, the differences between the nucleon
+quantities of the Keto and Amino branches are
+\[
+\begin{aligned}
+T_{0}(\mathrm{Keto}) - T_{0}(\mathrm{Amino})
+  &= 4070 - 3848 = 222 = 6 \cdot 37, \\
+P_{0}(\mathrm{Keto}) - P_{0}(\mathrm{Amino})
+  &= 2188 - 2072 = 116, \\
+N_{0}(\mathrm{Keto}) - N_{0}(\mathrm{Amino})
+  &= 1882 - 1776 = 106, \\
+\Delta_{0}(\mathrm{Keto}) - \Delta_{0}(\mathrm{Amino})
+  &= 306 - 296 = 10.
+\end{aligned}
+\]
+
+\paragraph{Reduction at the family level.}
+Of the $16$ codon families, $13$ contain no service codon, and in each
+of them the codons $\mathrm{NNG}$ (Keto branch) and $\mathrm{NNA}$
+(Amino branch) encode the same amino acid, contributing equally to
+both sums. The family $\mathrm{TA}$ also contributes equally: its
+pyrimidine pair $\mathrm{TAC}$ and $\mathrm{TAT}$ encodes
+$\mathrm{Tyr}$ in both branches, and its purine pair $\mathrm{TAG}$
+and $\mathrm{TAA}$ consists of two stop codons, one in each branch,
+which cancel under any assignment giving equal values to the three
+stop codons.
+
+The asymmetry remains in two families. In the family $\mathrm{AT}$ the
+Keto branch is represented by the initiator $\mathrm{ATG}$ and the
+Amino branch by the codon $\mathrm{ATA}$ of the amino acid
+$\mathrm{Ile}$. In the family $\mathrm{TG}$ the Keto branch is
+represented by the codon $\mathrm{TGG}$ of the amino acid
+$\mathrm{Trp}$ and the Amino branch by the stop codon $\mathrm{TGA}$.
+The remaining codons of these two families enter both branches
+symmetrically: $\mathrm{TGT}$ and $\mathrm{TGC}$ encode
+$\mathrm{Cys}$, and $\mathrm{ATT}$ and $\mathrm{ATC}$ encode
+$\mathrm{Ile}$.
+
+Under Key~0 the initiator is counted as its product $\mathrm{Met}$, so
+the asymmetry of the full table reduces to the nucleon counts of three
+molecules:
+\[
+T_{0}(\mathrm{Keto}) - T_{0}(\mathrm{Amino})
+  = T(\mathrm{Trp}) + T(\mathrm{Met}) - T(\mathrm{Ile})
+  = 204 + 149 - 131 = 222.
+\]
+
+\paragraph{Reduction to the $\mathrm{Trp}$--$\mathrm{Ile}$ pair.}
+The initiator $\mathrm{ATG}$ is the only service codon contributing to
+this difference under Key~0. Over the service-excluded pool it is not
+summed, and the asymmetry reduces to the nucleon counts of two
+molecules:
+\[
+\begin{aligned}
+T_{\mathrm{SE}}(\mathrm{Keto}) - T_{\mathrm{SE}}(\mathrm{Amino})
+  &= 3921 - 3848 = 73, \\
+P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino})
+  &= 2108 - 2072 = 36, \\
+N_{\mathrm{SE}}(\mathrm{Keto}) - N_{\mathrm{SE}}(\mathrm{Amino})
+  &= 1813 - 1776 = 37, \\
+\Delta_{\mathrm{SE}}(\mathrm{Keto})
+  - \Delta_{\mathrm{SE}}(\mathrm{Amino})
+  &= 295 - 296 = -1.
+\end{aligned}
+\]
+
+\paragraph{Arithmetic uniqueness of the Trp--Ile pair.}
+Although the nucleon differences of $\mathrm{Trp}$--$\mathrm{Ile}$ are
+determined solely by the nucleon composition of the two molecules and
+bear no direct relation to the structure of the code, both components
+of the difference --- the proton and the neutron one --- turn out to
+be aligned with the number $37$ that acts as the organizing multiplier
+in the arithmetic of the standard code:
+$|\delta N(\mathrm{Trp}, \mathrm{Ile})| = 37$ coincides with it
+exactly, and $|\delta P(\mathrm{Trp}, \mathrm{Ile})| = 36$ lies one
+unit away from it. The two quantities are connected by the relation
+$\delta P = \delta N - (\Delta_{\mathrm{Ile}} - \Delta_{\mathrm{Trp}})
+= 37 - 1 = 36$: the proton difference is one unit smaller than the
+neutron one because isoleucine contains one more hydrogen atom than
+tryptophan. Parity forbids the odd value~$37$ for any pair
+(Section~\ref{sec:results-proton-parity}), leaving $36$ and~$38$ as
+the nearest attainable values, of which the standard code realizes the
+smaller. That the value is exactly $36$ is determined by the nucleon
+composition of the two molecules, and it is this value that later
+allows the service-codon parameters to reduce to
+$p_{\text{stop}} = n_{\text{stop}} = 37$ with $p_{\text{start}} = 1$
+(Section~\ref{sec:results-key1-uniqueness}).
+
+\emph{The value $|\delta N| = 37$.} Among the $190$ pairs of canonical
+amino acids the value $|\delta N| = 37$ is realized only by two pairs:
+$\mathrm{Trp}$--$\mathrm{Ile}$ and $\mathrm{Trp}$--$\mathrm{Leu}$.
+The latter pair gives the same value because $\mathrm{Leu}$ and
+$\mathrm{Ile}$ are isomers with identical nucleon counts $P = 72$,
+$N = 59$; the pair realized structurally, through the families
+$\mathrm{AT}$ and $\mathrm{TG}$, is
+$\mathrm{Trp}$--$\mathrm{Ile}$. The full distribution of
+$|\delta N|$ over the $190$ pairs is given in
+\texttt{amino\_acids\_neutron\_differences.csv}.
+
+\emph{The value $|\delta P| = 36$.} Among the $190$ pairs of canonical
+amino acids the value $|\delta P| = 36$ is realized only by the same
+two pairs --- $\mathrm{Trp}$--$\mathrm{Ile}$ and
+$\mathrm{Trp}$--$\mathrm{Leu}$. The full distribution of
+$|\delta P|$ over the $190$ pairs is given in
+\texttt{amino\_acids\_proton\_differences.csv}.
+
+\emph{The derived value $|\delta T| = 73$.} The total nucleon
+difference of the pair satisfies
+$|\delta T| = |\delta P| + |\delta N| = 36 + 37 = 73 =
+2 \cdot 37 - 1$ and is therefore not an independent observation. For
+completeness we note that $|\delta T| = 73$ is realized by exactly the
+same two pairs, $\mathrm{Trp}$--$\mathrm{Ile}$ and
+$\mathrm{Trp}$--$\mathrm{Leu}$, among the $190$ pairs of canonical
+amino acids; the full distribution of $|\delta T|$ is given in
+\texttt{amino\_acids\_nucleon\_differences.csv}.
+
+\subsubsection{Proton parity}
+\label{sec:results-proton-parity}
+
+Every one of the $20$ canonical amino acids has an even proton count:
+all values of $P$ in \texttt{amino\_acids\_nucleons.csv} are even. In
+their neutral ground states these molecules have a closed electron
+shell and therefore contain an even number of electrons; a neutral
+molecule has equal numbers of electrons and protons, whence the
+evenness of~$P$.
+
+Consequently, every proton sum over the amino acids and every pairwise
+difference is even, and no such quantity can equal an odd multiple
+of~$37$. Thus $|\delta P(\mathrm{Trp},\mathrm{Ile})|$ cannot equal
+$37$: the even values nearest to the modulus are $36$ and~$38$, and
+the standard code realizes the smaller. For the same reason the proton
+sum of the service-excluded pool cannot equal the nearest multiple
+above it, $113 \cdot 37$, which is odd
+(Section~\ref{sec:results-sensepool}).
+
+Parity imposes a prohibition only. It excludes the odd multiples
+of~$37$, but fixes neither the direction of the deviation nor its
+size: the even numbers nearest to an odd multiple lie one unit away on
+either side. That both quantities fall one unit below follows from the
+specific nucleon counts, not from parity.
+
 \subsection{Analytical derivation of Key~1}
 \label{sec:results-key1-derivation}
 
@@ -1562,7 +1630,7 @@ $|\delta N| = 37$ and $|\delta P| = 36$
 proton totals are $97 \cdot 37$ and $\equiv -1 \pmod{37}$
 (Section~\ref{sec:results-sensepool}); and the proton counts are
 even, so $|\delta P| = 37$ is excluded by parity
-(Section~\ref{sec:results-key1-trpile}). From these,
+(Section~\ref{sec:results-proton-parity}). From these,
 Sections~\ref{sec:results-key1-neutrons}
 and~\ref{sec:results-key1-protons} determine the stop and start
 parameters through symmetry conditions---first for neutrons, then
@@ -1773,7 +1841,7 @@ $P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino})$
 established in Section~\ref{sec:results-key1-trpile}; its
 value is $36$ rather than $37$, the parity-constrained
 value of $|\delta P(\mathrm{Trp},\mathrm{Ile})|$
-(Section~\ref{sec:results-key1-trpile}). The condition is a
+(Section~\ref{sec:results-proton-parity}). The condition is a
 one-parameter family of solutions in two unknowns; a second
 independent constraint is required to fix the parameters
 individually.
@@ -1854,7 +1922,7 @@ Three arithmetic facts combine in the derivation:
         $P_{\mathrm{SE}}(\mathrm{Keto}) - P_{\mathrm{SE}}(\mathrm{Amino})
         = 36$, the parity-constrained value of
         $|\delta P(\mathrm{Trp},\mathrm{Ile})|$
-        (Section~\ref{sec:results-key1-trpile});
+        (Section~\ref{sec:results-proton-parity});
   \item the residue
         $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$, a
         deficit of one proton on the $37$-lattice and a
@@ -2497,7 +2565,7 @@ the sense pool carries $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37$
 and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$
 (Section~\ref{sec:results-sensepool}); and the even-proton
 property forbids $|\delta P| = 37$
-(Section~\ref{sec:results-key1-trpile}). The deficits then
+(Section~\ref{sec:results-proton-parity}). The deficits then
 close arithmetically: the neutron deficit
 $T(\mathrm{Octet~I}) - N(\mathcal{C}_{\mathrm{SE}}) = 3 \cdot 37 =
 111$ is a multiple both of the number of stops and of the
@@ -2583,7 +2651,7 @@ then closes the offset with one extra proton on the
 start codon, $p_{\text{start}} = 1$, where the neutron
 side requires none, $n_{\text{start}} = 0$. The common
 cause is the even-proton property of the canonical amino
-acids (Section~\ref{sec:results-key1-trpile}): a sum or
+acids (Section~\ref{sec:results-proton-parity}): a sum or
 difference of even proton counts is even and cannot equal
 an odd multiple of $37$, so both $37$ itself and
 $113 \cdot 37$ are unreachable on the proton side. That
@@ -2906,7 +2974,7 @@ distinct values so that quantities forced to coincide by the
 structure of the code are not counted more than once.
 
 Three primes divide their share at essentially the chance rate
-($3$, $7$ and $13$). Two exceed it modestly, by less than a factor of three across the three value sets: $2$, because every canonical amino acid has an even proton count (Section~\ref{sec:results-key1-trpile}), and $5$,
+($3$, $7$ and $13$). Two exceed it modestly, by less than a factor of three across the three value sets: $2$, because every canonical amino acid has an even proton count (Section~\ref{sec:results-proton-parity}), and $5$,
 reflecting the round-number regularity already reported in
 Section~\ref{sec:results-synthesis}, which the scan thus
 corroborates. Against this background $37$ divides five of the
