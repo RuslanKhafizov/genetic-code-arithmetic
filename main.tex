@@ -1261,10 +1261,11 @@ values form the following cascade:
   &= 150 + 146 = 296 = 8 \cdot 37.
 \end{aligned}
 \]
-The signed deviations $+1$ and $-1$ double to $+2$ and $-2$ when the
-groups within each octet are added, and cancel when the octets are
-added. Thus, the values $150$, $146$, and $296$ belong to one additive
-scheme rather than constituting independent results.
+The one-unit deviations of opposite sign, $+1$ and $-1$, double to
+$+2$ and $-2$ when the groups within each octet are added, and cancel
+when the octets are added. Thus, the values $150$, $146$, and $296$
+belong to one additive scheme rather than constituting independent
+results.
 
 The relation of the pyrimidine cascade to a separate pattern of
 one-unit deviations in the proton and neutron sums is considered under
@@ -1278,31 +1279,38 @@ $\{\mathrm{G}\}$ group is not compensated when it is combined with
 another one-nucleotide group and propagates to the Keto, Strong, and
 Purine groups. Because the neutron sums of Keto and Strong in the
 service-excluded pool are multiples of~$37$, the identity
-$P = N + \Delta$ transfers the same signed deviation of $-1$ to their
-proton sums.
+$P = N + \Delta$ implies that their proton sums have the same one-unit
+deviation, $-1$.
 
-\subsection{Results under the zero parametrization}
+\subsection{Results under Key~0}
 \label{sec:results-key0}
 
-Key~0 is the naive reading of the code: the three stop codons, which
-have no translation product, are assigned no nucleons, and the
-initiator $\mathrm{ATG}$ is counted as its product methionine. It
-introduces no derived parameters. We call it naive rather than
-physical because assigning zero to the stop codons is itself an
-assignment of values, not the absence of one; the genuinely
-assignment-free level is the sense pool of
-Section~\ref{sec:results-independent}, over which the service codons
-are not summed at all. The properties
-below show that much of the arithmetic structure is already present
-at this reading, before the minimal parametrization of
-Section~\ref{sec:results-key1-derivation} is introduced---indeed the
-concentration on the lattice of step~$37$ is already atypical here
-(statistic~S4a of Section~\ref{sec:discussion-montecarlo}). This
-bears on how the derived parametrization should be read: the
-structure is not created by assigning values to the service codons,
-only sharpened by it. Figure~\ref{fig:groups-key0} gives a graphical
-overview of the quantities computed under Key~0 that are discussed
-below.
+Under the naive reading (Key~0), summation is performed over the
+complete $64$-codon table: the stop-codon contribution is zero, whereas
+the initiator $\mathrm{ATG}$ is counted as methionine
+(Section~\ref{sec:parametrization}). Thus, in passing from the
+service-excluded pool to the complete table, the only new nonzero
+contribution comes from methionine:
+\[
+\bigl(T(\mathrm{Met}),P(\mathrm{Met}),N(\mathrm{Met}),
+\Delta(\mathrm{Met})\bigr)=(149,80,69,11).
+\]
+These four quantities deviate from the nearest multiples of~$37$ by
+$(+1,+6,-5,+11)$, respectively.
+
+For the entire pool, the deviations from the nearest multiples of~$37$
+in the same order are $(-1,-1,0,-1)$. The methionine contribution
+therefore brings only the nucleon sum $T$ exactly onto the $37$-lattice,
+since $149=4\cdot37+1$ exactly compensates the one-unit deviation $-1$.
+
+Below, we show how this transformation propagates through the nested
+groups containing $\mathrm{ATG}$. In the Amino and Weak groups, restoring
+the stop codons preserves the pool values while completing the
+$32$-codon groups. The deviation in $\Delta$ remains localized in the
+$\{\mathrm{G}\}$ branch.
+
+The overall pattern of group quantities under Key~0 is shown in
+Fig.~\ref{fig:groups-key0}.
 
 \begin{figure}[!htbp]
   \centering
