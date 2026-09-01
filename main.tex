@@ -1308,18 +1308,23 @@ although it is divisible by~$37$ in the pool
 (Section~\ref{sec:results-sensepool}).
 
 Below, we show how this transformation propagates through the nested
-groups containing $\mathrm{ATG}$. In the Amino and Weak groups, the
-restored positions are occupied by stop codons, so the sums of the
+groups containing $\mathrm{ATG}$. In the Amino and Weak groups, all
+the restored positions are occupied by stop codons, so the sums of the
 complete $32$-codon groups coincide numerically with the sums over the
 $30$ codons in the corresponding branches of the service-excluded
-pool. Under Key~0, restoring the service positions allows the two
-sides of the mirror pattern of one-unit deviations to be compared
-using groups of equal size: at the $16$-codon level, the pattern
-concerns the proton and neutron sums, whereas at the $8$-codon level
-it concerns the difference $\Delta$; within Octet~II, the
-$\{\mathrm{A}\}$ group enters this comparison alongside the
-pyrimidine groups. The sole exception is the $\{\mathrm{G}\}$ branch,
-which contains $\mathrm{ATG}$.
+pool. These sums already lie on the $37$-lattice
+(Section~\ref{sec:results-sensepool}), and the divisibility is
+therefore preserved in passing to the complete table. Under Key~0,
+restoring the service positions makes the groups on the two sides of
+the mirror pattern of one-unit deviations equal in size. The pattern
+appears at two levels: at the $16$-codon level in the proton and
+neutron sums, and at the $8$-codon level in the difference $\Delta$.
+Within Octet~II at the $8$-codon level, this pattern, established
+earlier for the pyrimidine groups
+(Section~\ref{sec:results-pyrimidine}), now also covers the
+$\{\mathrm{A}\}$ group, which is now equal to them in size. The sole
+exception is the $\{\mathrm{G}\}$ branch, which contains
+$\mathrm{ATG}$.
 
 The overall pattern of group quantities under Key~0 is shown in
 Fig.~\ref{fig:groups-key0}.
@@ -1339,80 +1344,130 @@ Fig.~\ref{fig:groups-key0}.
 \subsubsection{Divisibility of \texorpdfstring{$T$}{T} by
 \texorpdfstring{$37$}{37} at the upper levels of partitioning}
 
-Under Key~0, the total nucleon count $T$ is divisible by
-$37$ for the four $32$-codon groups along the chemical
-axes Keto/Amino and Strong/Weak:
+The $\mathrm{ATG}$ contribution falls in Octet~II. Under Key~0, its
+four $8$-codon groups have the following profile:
 \[
-T(\mathrm{Keto}) = T(\mathrm{Strong}) = 4070 = 110 \cdot 37
-\quad \text{(id~2 and id~3);}
+\begin{aligned}
+T(\{\mathrm{C}\}\cap\mathrm{Octet~II})
+  =T(\{\mathrm{T}\}\cap\mathrm{Octet~II})
+  &=1123=30\cdot37+13, \\
+T_{0}(\{\mathrm{A}\}\cap\mathrm{Octet~II})
+  &=875=24\cdot37-13, \\
+T_{0}(\{\mathrm{G}\}\cap\mathrm{Octet~II})
+  &=1097=30\cdot37-13.
+\end{aligned}
 \]
+The pyrimidine branches deviate from the nearest multiple by $+13$,
+the purine branches by $-13$. In the service-excluded pool, the
+deviation of the $\{\mathrm{G}\}$ branch differs by one unit from
+that of the $\{\mathrm{A}\}$ branch:
 \[
-T(\mathrm{Amino}) = T(\mathrm{Weak}) = 3848 = 104 \cdot 37
-\quad \text{(id~4 and id~5).}
+T_{\mathrm{SE}}(\{\mathrm{G}\}\cap\mathrm{Octet~II})
+  =948=26\cdot37-14.
 \]
-Divisibility of $T$ by $37$ extends also to Octet~II and
-its $16$-codon sub-groups:
-\[
-T(\mathrm{Octet~II}) = 4218 = 114 \cdot 37
-\quad \text{(id~23);}
-\]
-\[
-T(\mathrm{Keto} \cap \mathrm{Octet~II}) =
-T(\mathrm{Strong} \cap \mathrm{Octet~II}) = 2220 = 60 \cdot 37
-\quad \text{(id~24 and id~25);}
-\]
-\[
-T(\mathrm{Amino} \cap \mathrm{Octet~II}) =
-T(\mathrm{Weak} \cap \mathrm{Octet~II}) = 1998 = 54 \cdot 37
-\quad \text{(id~26 and id~27).}
-\]
-Combined with $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$
-from Section~\ref{sec:results-octetI}, this gives
-divisibility by $37$ for the total nucleon count of the
-full code: $T(\mathrm{All}) = 7918 = 214 \cdot 37$ (id~1).
+The $\mathrm{ATG}$ contribution changes the deviation of the
+$\{\mathrm{G}\}$ branch from $-14$ to $-13$, so that both purine
+branches have the same deviation.
 
-The divisibilities $T(\mathrm{Octet~I}) = 3700$,
-$T(\mathrm{Octet~II}) = 4218$, and
-$T(\mathrm{Keto} \cap \mathrm{Octet~II}) =
-T(\mathrm{Strong} \cap \mathrm{Octet~II}) = 2220$ by $37$
-correspond, within our partitioning, to results
-established by Shcherbak and Makukov~\cite{makukov2013}
-and Panov and Filatov~\cite{panov2024} (see
-Section~\ref{sec:discussion-prior-work} for further
-discussion); the remaining divisibilities of $T$ by $37$ given in
-this subsection follow algebraically from those of
-these groups. The numerical values of all group
-quantities under Key~0 are tabulated in
-\texttt{key0\_nucleon-data.csv}.
+Among the groups of Octet~II, the nucleon sum is divisible by~$37$
+exactly for those that contain equal numbers of purine and
+pyrimidine branches:
+\[
+\begin{aligned}
+T_{0}(\mathrm{Keto}\cap\mathrm{Octet~II})
+  =T_{0}(\mathrm{Strong}\cap\mathrm{Octet~II})
+  &=2220=60\cdot37, \\
+T_{0}(\mathrm{Amino}\cap\mathrm{Octet~II})
+  =T_{0}(\mathrm{Weak}\cap\mathrm{Octet~II})
+  &=1998=54\cdot37, \\
+T_{0}(\mathrm{Octet~II})
+  &=4218=114\cdot37.
+\end{aligned}
+\]
+The intersections of the Purine and Pyrimidine groups with Octet~II
+consist of branches of a single type, so their deviations do not
+cancel but double.
 
-\subsubsection{Alignment of Amino and Weak with the lattice of step \texorpdfstring{$37$}{37}}
+Each $16$-codon half of a chemical axis in Octet~I has
+$T=1850=50\cdot37$ (Section~\ref{sec:results-octetI}). Adding the
+corresponding half carries the divisibility over to the complete
+groups of the Keto/Amino and Strong/Weak axes, and adding the two
+octets carries it over to the whole table:
+\[
+\begin{aligned}
+T_{0}(\mathrm{Keto})=T_{0}(\mathrm{Strong})
+  &=1850+2220=4070=110\cdot37, \\
+T_{0}(\mathrm{Amino})=T_{0}(\mathrm{Weak})
+  &=1850+1998=3848=104\cdot37, \\
+T_{0}(\mathrm{All})
+  &=3700+4218=7918=214\cdot37.
+\end{aligned}
+\]
+The divisibilities listed follow from the mirror deviations
+$+13/-13$ between the branches of Octet~II and from the
+divisibility of Octet~I, and do not form an independent set of
+results.
+
+The divisibilities $T(\mathrm{Octet~I})=3700$,
+$T_{0}(\mathrm{Octet~II})=4218$, and
+$T_{0}(\mathrm{Keto}\cap\mathrm{Octet~II})
+=T_{0}(\mathrm{Strong}\cap\mathrm{Octet~II})=2220$ correspond, in
+the group formalism adopted here, to results of Shcherbak and
+Makukov~\cite{makukov2013} and Panov and
+Filatov~\cite{panov2024}; see
+Section~\ref{sec:discussion-prior-work} for further discussion.
+The complete values of the group quantities under Key~0 are given
+in \texttt{key0\_nucleon-data.csv}.
+
+\subsubsection{Alignment of Amino and Weak with the lattice of step
+\texorpdfstring{$37$}{37}}
 \label{sec:results-key0-aminoweak}
 
-Under Key~0, the groups Amino (id~4) and Weak (id~5) are
-the only $32$-codon groups of the standard code in which
-all four nucleon quantities are simultaneously divisible by
-$37$:
+Among the six $32$-codon groups of the three chemical axes, only
+Amino (id~4) and Weak (id~5) have all four nucleon quantities
+divisible by~$37$:
 \[
-T = 3848 = 104 \cdot 37, \qquad
-P = 2072 = 56 \cdot 37,
+\begin{aligned}
+T_{0}(\mathrm{Amino})=T_{0}(\mathrm{Weak})
+  &=3848=104\cdot37, \\
+P_{0}(\mathrm{Amino})=P_{0}(\mathrm{Weak})
+  &=2072=56\cdot37, \\
+N_{0}(\mathrm{Amino})=N_{0}(\mathrm{Weak})
+  &=1776=48\cdot37, \\
+\Delta_{0}(\mathrm{Amino})=\Delta_{0}(\mathrm{Weak})
+  &=296=8\cdot37.
+\end{aligned}
 \]
+The divisibility of $T$ was obtained above. In Octet~I the halves of
+both groups have residues $+1$ for $P$ and $-1$ for $N$
+(Section~\ref{sec:results-octetI}), and in Octet~II the opposite:
 \[
-N = 1776 = 48 \cdot 37, \qquad
-\Delta = 296 = 8 \cdot 37.
+\begin{aligned}
+P(\mathrm{Amino}\cap\mathrm{Octet~I})
+  =P(\mathrm{Weak}\cap\mathrm{Octet~I})
+  &=1000=27\cdot37+1, \\
+P_{0}(\mathrm{Amino}\cap\mathrm{Octet~II})
+  =P_{0}(\mathrm{Weak}\cap\mathrm{Octet~II})
+  &=1072=29\cdot37-1, \\
+N(\mathrm{Amino}\cap\mathrm{Octet~I})
+  =N(\mathrm{Weak}\cap\mathrm{Octet~I})
+  &=850=23\cdot37-1, \\
+N_{0}(\mathrm{Amino}\cap\mathrm{Octet~II})
+  =N_{0}(\mathrm{Weak}\cap\mathrm{Octet~II})
+  &=926=25\cdot37+1.
+\end{aligned}
 \]
-The only service codons in the Amino and Weak groups are stop
-codons, which contribute zero under Key~0; these sums therefore
-coincide with the sense-pool sums of the two groups, so the
-divisibility is in fact parametrization-independent, not specific
-to Key~0.
+When the halves are added, these residues cancel each other, and with
+them the residue of the difference $\Delta=P-N$.
 
-For these same groups, the ratios reduce to
+For the Amino and Weak groups, the ratios to the nucleon sum form a
+profile with a common denominator of~$13$:
 \[
-\frac{P}{T} = \frac{7}{13},
+\frac{P}{T}=\frac{7}{13},
 \qquad
-\frac{N}{T} = \frac{6}{13},
+\frac{N}{T}=\frac{6}{13},
 \qquad
-\frac{\Delta}{T} = \frac{1}{13}.
+\frac{\Delta}{T}=\frac{1}{13}.
 \]
 
 \subsubsection{The \texorpdfstring{$\pm 1$}{±1} deviation
