@@ -437,7 +437,7 @@ the row with id~1. In this article, that group is denoted
 $\mathrm{All}$, whereas $\mathcal{C}_{64}$ denotes the codon set
 itself.
 
-\subsubsection{Pyrimidine synonymy and twin-group identities}
+\subsection{Pyrimidine synonymy and twin-group identities}
 \label{sec:twin-identities}
 
 Within every codon family of the standard genetic code, the codons
@@ -635,8 +635,9 @@ opened by \citet{makukov2013} and developed by
 \citet{panov2024}. When a value is divisible by~$37$, its displayed
 factorization also exposes any further factors of the quotient; these
 are not assigned separate evidential weight without an additional
-analysis. Nonzero residues are reported descriptively only where they
-enter an exact relation between predefined groups.
+analysis. Nonzero residues are reported descriptively only when they enter
+exact relations among predefined groups or form recurring patterns of
+one-unit deviations from the nearest multiple of~$37$.
 
 Complete expressions of the form $q\cdot37+r$ for all groups and all
 four quantities are provided in
@@ -964,7 +965,8 @@ quantities in this subsection are obtained under one of two conditions:
 either the summation domain is restricted to the service-excluded pool,
 or the group under consideration itself contains no service codons.
 
-The neutron sum of the service-excluded pool is divisible by~$37$,
+These results form the basis of the arithmetic structure that is
+traced further as the service codons are restored. The neutron sum of the service-excluded pool is divisible by~$37$,
 whereas the proton sum falls one unit short of the nearest multiple.
 Through the difference~$\Delta$ this deviation is traced to the codons
 with $\mathrm{G}$ at the third position within Octet~II~--- the group
@@ -1007,7 +1009,7 @@ P(\mathcal{C}_{\mathrm{SE}}) = 4180 = 113 \cdot 37 - 1,
 \Delta(\mathcal{C}_{\mathrm{SE}}) = 591 = 16 \cdot 37 - 1.
 \]
 
-Analysis of $\Delta$ localizes the single-unit deviation of the proton sum
+Analysis of $\Delta$ localizes the one-unit deviation of the proton sum
 of the pool from the nearest multiple of~$37$ in the group $\{\mathrm{G}\}
 \cap \mathrm{Octet~II}$. On the Keto/Amino and Strong/Weak axes the
 neutron sums are multiples of~$37$, so $\Delta = P - N$ has the same
@@ -1031,7 +1033,7 @@ $\Delta$, $295$ and $296$, arise in all three partitions --- both for
 parts of equal size $30/30$ and for the unequal split $28/32$.
 
 At the level of the one-nucleotide groups none of the sums $P$ and $N$ is
-a multiple of~$37$, and the deficit in~$\Delta$ is carried by one group
+a multiple of~$37$, and the one-unit deviation in~$\Delta$ is carried by one group
 --- the branch $\{\mathrm{G}\}$, common to Keto, Strong, and Purine:
 \[
 \Delta_{\mathrm{SE}}(\{\mathrm{G}\}) = 147 = 4 \cdot 37 - 1,
@@ -1042,7 +1044,7 @@ a multiple of~$37$, and the deficit in~$\Delta$ is carried by one group
 \]
 Keto, Strong, and Purine are the unions of $\{\mathrm{G}\}$ with
 $\{\mathrm{T}\}$, $\{\mathrm{C}\}$, and $\{\mathrm{A}\}$ respectively. The
-single-unit deficit localized in $\Delta_{\mathrm{SE}}(\{\mathrm{G}\})$
+one-unit deviation localized in $\Delta_{\mathrm{SE}}(\{\mathrm{G}\})$
 can therefore be traced across all three axes.
 
 Within Octet~I all four one-nucleotide groups have $\Delta = 75$, so
@@ -1274,7 +1276,7 @@ deviations in the proton and neutron sums is considered under Key~0
 The pyrimidine cascade should also be distinguished from the one-unit
 deviation of $\Delta_{\mathrm{SE}}(\{\mathrm{G}\})$ from the lattice
 of step~$37$ (Section~\ref{sec:results-sensepool}). The pyrimidine
-deviations cancel between the octets, whereas the deficit of the
+deviations cancel between the octets, whereas the deviation of the
 $\{\mathrm{G}\}$ group is not compensated when it is combined with
 another one-nucleotide group and propagates to the Keto, Strong, and
 Purine groups. Because the neutron sums of Keto and Strong in the
@@ -1546,7 +1548,7 @@ $(P,N)\equiv(-1,+1)\pmod{37}$ in Octet~II.
 The asymmetry between the Keto and Amino branches is visible at both
 levels considered here. It is shown first for the full table under
 Key~0, where it reduces to the nucleon quantities of three molecules,
-and then for the service-codon-excluded pool, where two remain.
+and then for the service-excluded pool, where two remain.
 
 \subsubsection{Localization of the Keto/Amino asymmetry}
 \label{sec:results-key1-trpile}
@@ -1610,7 +1612,7 @@ T_{0}(\mathrm{Keto}) - T_{0}(\mathrm{Amino})
 
 \paragraph{Reduction to the $\mathrm{Trp}$--$\mathrm{Ile}$ pair.}
 The initiator $\mathrm{ATG}$ is the only service codon that contributes
-to these differences under Key~0. In the service-codon-excluded pool,
+to these differences under Key~0. In the service-excluded pool,
 it is removed from the sums together with the three stop codons, and
 the asymmetry reduces to the nucleon differences of a single molecular
 pair, $\mathrm{Trp}$--$\mathrm{Ile}$:
@@ -1659,7 +1661,7 @@ to one hydrogen atom: tryptophan contains $12$ hydrogen atoms, whereas
 isoleucine contains $13$.
 
 The same residues modulo~$37$ were previously established at the
-global level for the entire service-codon-excluded pool
+global level for the entire service-excluded pool
 (Section~\ref{sec:results-sensepool}):
 \[
 \begin{array}{c@{\qquad}cc}
@@ -1670,7 +1672,7 @@ P & -1 & -1
 \]
 
 The global and local facts do not follow from one another: the former
-refer to the entire service-codon-excluded pool, whereas the latter
+refer to the entire service-excluded pool, whereas the latter
 refer to the nucleon profile of the $\mathrm{Trp}$--$\mathrm{Ile}$
 pair to which the Keto/Amino asymmetry reduces in this pool.
 
@@ -1729,7 +1731,7 @@ multiple of~$37$. Thus,
 $|\delta P(\mathrm{Trp},\mathrm{Ile})|$ cannot equal $37$: the nearest
 even values to $37$ are $36$ and $38$, and the actual difference for
 the localized pair is $36$. For the same reason, the proton sum of the
-service-codon-excluded pool cannot equal the next higher multiple
+service-excluded pool cannot equal the next higher multiple
 $113 \cdot 37$, which is odd
 (Section~\ref{sec:results-sensepool}).
 
