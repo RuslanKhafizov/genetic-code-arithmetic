@@ -121,6 +121,15 @@ the arithmetic of the complete table as a single object; neither the
 assigned values nor the sums that include them are given a physical
 interpretation.
 
+On the basis of the specificity of the standard genetic code
+established in this work across the $27$ translation tables of the
+NCBI registry examined here, we predict that newly described natural
+alternative codes that are not equivalent to the standard code will
+not reproduce its proton and neutron agreements: in particular, the
+minimal compensation of the Keto/Amino imbalance will not yield
+equality between the total neutron sum and the nucleon content of
+that code's structural Octet~I.
+
 \section{Methods}
 \label{sec:methods}
 
@@ -181,8 +190,9 @@ particular, for all group sums over the service-excluded pool
 
 To avoid a notational collision, we use uppercase $\Delta$ exclusively
 for the proton--neutron imbalance of a single molecule or codon group,
-and reserve lowercase $\delta$ for pairwise differences between two
-such objects (for example, $\delta P=P_i-P_j$ between two amino acids
+and reserve lowercase $\delta$ for pairwise differences between the
+molecular quantities of two amino acids (for example, $\delta P=P_i-P_j$
+between two amino acids
 $i$ and $j$). When both amino acids are identified explicitly, their
 labels are placed in parentheses:
 \[
@@ -537,10 +547,10 @@ Q(G)=Q_{\mathrm{SE}}(G).
 To analyze the complete 64-position table, we introduce a
 \emph{parametric key} $K$: a fixed assignment of a pair of numbers
 $\bigl(P_K(c),N_K(c)\bigr)$ to every service codon $c$.
-Under such a key, the group sums are
+Under such a key, the group sums are defined by
 \[
 \bigl(P_K(G),N_K(G)\bigr)
-=
+:=
 \bigl(P_{\mathrm{SE}}(G),N_{\mathrm{SE}}(G)\bigr)
 +
 \sum_{c\in G\cap\mathcal{S}}
@@ -553,6 +563,8 @@ T_K(G)=P_K(G)+N_K(G),
 \qquad
 \Delta_K(G)=P_K(G)-N_K(G).
 \]
+The same two relations define $T_K(c)$ and $\Delta_K(c)$ for each
+service codon~$c$.
 For $Q\in\{T,P,N,\Delta\}$, $Q_0(G)$ and $Q_1(G)$ below denote the
 full group sums, including service-codon contributions, under the
 Key~0 and Key~1 assignments, respectively. The subscripts $0$ and $1$
@@ -826,7 +838,7 @@ residue modulo~$37$, and three neutron deficits relative to:
         families that occupy Octet~I positions in the standard table;
   \item functional $T(\mathrm{Octet~I})$, selecting in table $t$
         those four-codon families that have one amino acid assignment
-        and no permanent stop.
+        and no permanent stop codon.
 \end{enumerate}
 
 \texttt{keto\_amino\_balance\_models.csv} uses the same two models
@@ -1389,8 +1401,8 @@ T_{0}(\mathrm{Octet~II})
 \end{aligned}
 \]
 The intersections of the Purine and Pyrimidine groups with Octet~II
-consist of branches of a single type, so their branchwise offsets do
-not cancel but double relative to the sums of the corresponding
+consist of branches of a single type, so the branch deviations do not
+cancel but double relative to the sums of the corresponding
 multiples of~$37$.
 
 Each $16$-codon half of a chemical axis in Octet~I has
@@ -3156,7 +3168,7 @@ odd-core counts are tabulated in the corresponding column of
 \texttt{prime\_divisibility\_scan.csv}.
 
 \paragraph{Representation dependence and the invariant relational core.}
-The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(\delta P, \delta N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37$ and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,\delta N \equiv 0 \pmod{37}$, i.e., $\delta N \equiv 0$ (since $\gcd(60, 37) = 1$), which among the representations considered excludes the peptide residue, while the neutral and zwitterionic forms of the free amino acid have the same elemental composition and therefore the same nucleon counts; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
+The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(s_P, s_N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37$ and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,s_N \equiv 0 \pmod{37}$, i.e., $s_N \equiv 0$ (since $\gcd(60, 37) = 1$), which among the representations considered excludes the peptide residue, while the neutral and zwitterionic forms of the free amino acid have the same elemental composition and therefore the same nucleon counts; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
 
 \paragraph{The functional-group asymmetry across positions.}
 One observation on the Keto/Amino axis reaches beyond the third
