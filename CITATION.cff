@@ -28,8 +28,8 @@ keywords:
   - arithmetic regularities
   - divisibility by 37
 license: CC-BY-4.0
-version: "2.0.0"
-date-released: "2026-09-03"
+version: "2.0.1"
+date-released: "2026-09-06"
 repository-code: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 url: "https://github.com/RuslanKhafizov/genetic-code-arithmetic"
 preferred-citation:
