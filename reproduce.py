@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-reproduce.py — Generates all 17 derived CSV files from 5 input CSV files.
+reproduce.py — Generates all 18 derived CSV files from 5 input CSV files.
 
 Unified output rules for every file:
   - Encoding UTF-8, LF line endings, trailing newline.
@@ -328,9 +328,18 @@ def _per_table_metrics(nr):
     """
     aa_str = nr["Amino_Acids"]
     stops = set(c.strip() for c in nr["Stop_Codons"].split(","))
-    ctx = nr["Stop_Context_Dependent"].strip() == "True"
+    # Unconditional stops are those the registry marks with '*' in the
+    # amino-acid string; every other declared stop is context-dependent.
+    # Model 2 returns the context-dependent ones to the pool and keeps the
+    # unconditional ones as service positions. Deriving the set this way
+    # rather than from the per-table Stop_Context_Dependent flag also
+    # covers a table that would declare both kinds at once; on the present
+    # registry the two definitions coincide, so published outputs are
+    # unchanged.
+    unconditional = {c for k, c in enumerate(NCBI_CODONS) if aa_str[k] == "*"}
+    assert unconditional <= stops, (nr["Transl_Table"], sorted(unconditional))
     excl_m1 = stops | {"ATG"}
-    excl_m2 = {"ATG"} if ctx else excl_m1
+    excl_m2 = unconditional | {"ATG"}
 
     n_all = p_all = 0
     n_pure_m1 = p_pure_m1 = 0
@@ -392,10 +401,16 @@ def _per_table_metrics(nr):
             aa = AA_BY_CODE1[letters[0]]
             oct_func_t += 4 * (aa["P"] + aa["N"])
 
+    # Service stop positions carrying the shared stop parameter, per model.
+    # Model 2 keeps only unconditional stops; ATG is never a stop.
+    service_m1 = set(stops)
+    service_m2 = set(unconditional)
+
     return {
         "tt": int(nr["Transl_Table"]),
         "name": nr["Code_Name"],
         "excl_m1": excl_m1, "excl_m2": excl_m2,
+        "service_m1": service_m1, "service_m2": service_m2,
         "n_all": n_all, "p_all": p_all,
         "n_pure_m1": n_pure_m1, "n_pure_m2": n_pure_m2,
         "p_pure_m1": p_pure_m1, "p_pure_m2": p_pure_m2,
@@ -472,6 +487,215 @@ def write_keto_amino_balance(metrics_list):
     write_csv("keto_amino_balance_models.csv", header, rows)
 
 
+# ---------------------------------------------------------------------------
+# Minimal Keto/Amino compensation, with and without global divisibility by 37.
+#
+# For each quantity Q in {P, N} independently:
+#   Q_pool   -- service-excluded pool total for the model in question;
+#   dQ       -- Q_pool(Keto) - Q_pool(Amino);
+#   s_k, s_a -- stop positions in the Keto and Amino branches;
+#   S        -- s_k + s_a;
+#   y        -- the shared Q value carried by every stop codon;
+#   x        -- the separate Q value carried by ATG (ATG lies in Keto).
+#
+# Balance:    dQ + s_k*y + x - s_a*y = 0   =>   x = (s_a - s_k)*y - dQ
+# Objective:  C_Q = S*y + x = 2*s_a*y - dQ   (total added contribution)
+#
+# Two procedures:
+#   Bal -- balance, non-negativity, integrality, minimal C_Q;
+#   Mod -- the same plus (Q_pool + C_Q) % 37 == 0.
+#
+# P and N are solved independently. No equality between the P and N stop
+# parameters is imposed, and no unit offset on ATG is assumed.
+#
+# Because C_Q = 2*s_a*y - dQ is strictly increasing in y whenever s_a > 0,
+# minimising the total contribution selects the smallest admissible y even
+# when s_a <= s_k. When s_a == 0 the contribution does not depend on y at
+# all: the total is fixed while the split between stops and ATG is not,
+# which is reported as "total_only".
+# ---------------------------------------------------------------------------
+
+BALANCE_MODULUS = 37
+
+
+def _egcd(a, b):
+    """Extended Euclid: return (g, u, v) with a*u + b*v == g == gcd(a, b)."""
+    old_r, r = a, b
+    old_u, u = 1, 0
+    old_v, v = 0, 1
+    while r != 0:
+        q = old_r // r
+        old_r, r = r, old_r - q * r
+        old_u, u = u, old_u - q * u
+        old_v, v = v, old_v - q * v
+    return old_r, old_u, old_v
+
+
+def _admissible_y(dq, s_k, s_a):
+    """Integer bounds (lo, hi) for y >= 0 with x = (s_a - s_k)*y - dq >= 0.
+
+    hi is None when y is unbounded above. Returns None when no y qualifies.
+    """
+    d = s_a - s_k
+    if d > 0:
+        lo = -((-dq) // d)          # ceil(dq / d)
+        return (max(0, lo), None)
+    if d == 0:
+        return (0, None) if dq <= 0 else None
+    hi = dq // d                    # floor(dq / d); d < 0 flips the inequality
+    return (0, hi) if hi >= 0 else None
+
+
+def _solve_component(dq, q_pool, s_k, s_a, require_divisible):
+    """Minimal compensation for one quantity.
+
+    Returns a dict with:
+      status  -- "unique", "total_only" or "none";
+      y, x    -- the parameters when they are uniquely determined, else None
+                 (y is always None when there is no stop position at all);
+      added   -- C_Q, defined whenever status != "none";
+      total   -- q_pool + C_Q, defined whenever status != "none".
+    """
+    empty = {"status": "none", "y": None, "x": None,
+             "added": None, "total": None}
+    stops = s_k + s_a
+
+    if stops == 0:
+        # No stop position exists: y is absent and x is forced by the balance.
+        x = -dq
+        if x < 0:
+            return empty
+        added = x
+        if require_divisible and (q_pool + added) % BALANCE_MODULUS != 0:
+            return empty
+        return {"status": "unique", "y": None, "x": x,
+                "added": added, "total": q_pool + added}
+
+    span = _admissible_y(dq, s_k, s_a)
+    if span is None:
+        return empty
+    lo, hi = span
+
+    if s_a == 0:
+        # C_Q does not depend on y: the total is fixed, the split is not.
+        added = -dq
+        if require_divisible and (q_pool + added) % BALANCE_MODULUS != 0:
+            return empty
+        count = hi - lo + 1          # hi is finite here because s_k > 0
+        if count == 1:
+            y = lo
+            return {"status": "unique", "y": y, "x": (s_a - s_k) * y - dq,
+                    "added": added, "total": q_pool + added}
+        return {"status": "total_only", "y": None, "x": None,
+                "added": added, "total": q_pool + added}
+
+    # s_a > 0: the objective is strictly increasing in y.
+    if not require_divisible:
+        y = lo
+    else:
+        a = (2 * s_a) % BALANCE_MODULUS
+        b = (dq - q_pool) % BALANCE_MODULUS
+        g, u, _ = _egcd(a, BALANCE_MODULUS)
+        if b % g != 0:
+            return empty
+        step = BALANCE_MODULUS // g
+        y0 = (u * (b // g)) % step
+        # smallest y >= lo congruent to y0 modulo step
+        y = y0 + ((lo - y0 + step - 1) // step) * step
+    if hi is not None and y > hi:
+        return empty
+    x = (s_a - s_k) * y - dq
+    added = 2 * s_a * y - dq
+    return {"status": "unique", "y": y, "x": x,
+            "added": added, "total": q_pool + added}
+
+
+def _fmt(v):
+    """CSV cell: empty string for an undefined value."""
+    return "" if v is None else v
+
+
+def _flag(v):
+    return "" if v is None else ("True" if v else "False")
+
+
+def write_service_codon_balance_comparison(metrics_list):
+    """Compare minimal Keto/Amino compensation with and without divisibility.
+
+    One row per (translation table, sense-pool model). Model 1 excludes ATG
+    and every declared stop position, context-dependent ones included;
+    Model 2 returns context-dependent positions to the pool and keeps only
+    unconditional stops as service positions. In the present registry all
+    three context-dependent tables (27, 28, 31) declare no unconditional
+    stop, so their Model 2 rows carry no stop parameter at all.
+    """
+    header = ["Transl_Table", "Code_Name", "Model",
+              "Stop_Count", "Stops_Keto", "Stops_Amino", "Octet1_Struct_T"]
+    for pref in ("Bal", "Mod"):
+        header += [f"{pref}_Stop_P", f"{pref}_Stop_N",
+                   f"{pref}_Start_P", f"{pref}_Start_N",
+                   f"{pref}_Added_P", f"{pref}_Added_N",
+                   f"{pref}_P_All", f"{pref}_N_All",
+                   f"{pref}_Status_P", f"{pref}_Status_N",
+                   f"{pref}_N_Diff_Octet1_Struct",
+                   f"{pref}_N_All_eq_Octet1_Struct"]
+    header += ["Bal_P_Divisible37", "Bal_N_Divisible37",
+               "Cost_P", "Cost_N", "Mod_Stop_Params_Equal"]
+
+    rows = []
+    for m in metrics_list:
+        for model in (1, 2):
+            sfx = "m1" if model == 1 else "m2"
+            service = sorted(m[f"service_{sfx}"])
+            s_k = sum(1 for c in service if c[2] in "GT")
+            s_a = len(service) - s_k
+            p_pool = m[f"p_pure_{sfx}"]
+            n_pool = m[f"n_pure_{sfx}"]
+            dp = m[f"p_keto_{sfx}"] - m[f"p_amino_{sfx}"]
+            dn = m[f"n_keto_{sfx}"] - m[f"n_amino_{sfx}"]
+            oct1 = m["oct_struct_t"]
+
+            sol = {}
+            for pref, need in (("Bal", False), ("Mod", True)):
+                sol[pref] = {
+                    "P": _solve_component(dp, p_pool, s_k, s_a, need),
+                    "N": _solve_component(dn, n_pool, s_k, s_a, need),
+                }
+
+            row = [m["tt"], m["name"], model,
+                   len(service), s_k, s_a, oct1]
+            for pref in ("Bal", "Mod"):
+                sp, sn = sol[pref]["P"], sol[pref]["N"]
+                n_diff = None if sn["total"] is None else sn["total"] - oct1
+                row += [_fmt(sp["y"]), _fmt(sn["y"]),
+                        _fmt(sp["x"]), _fmt(sn["x"]),
+                        _fmt(sp["added"]), _fmt(sn["added"]),
+                        _fmt(sp["total"]), _fmt(sn["total"]),
+                        sp["status"], sn["status"],
+                        _fmt(n_diff),
+                        _flag(None if n_diff is None else n_diff == 0)]
+
+            bal_p, bal_n = sol["Bal"]["P"], sol["Bal"]["N"]
+            mod_p, mod_n = sol["Mod"]["P"], sol["Mod"]["N"]
+            div_p = (None if bal_p["total"] is None
+                     else bal_p["total"] % BALANCE_MODULUS == 0)
+            div_n = (None if bal_n["total"] is None
+                     else bal_n["total"] % BALANCE_MODULUS == 0)
+            cost_p = (None if (bal_p["added"] is None or mod_p["added"] is None)
+                      else mod_p["added"] - bal_p["added"])
+            cost_n = (None if (bal_n["added"] is None or mod_n["added"] is None)
+                      else mod_n["added"] - bal_n["added"])
+            equal = None
+            if service and mod_p["y"] is not None and mod_n["y"] is not None:
+                equal = mod_p["y"] == mod_n["y"]
+            row += [_flag(div_p), _flag(div_n),
+                    _fmt(cost_p), _fmt(cost_n), _flag(equal)]
+            rows.append(row)
+
+    rows.sort(key=lambda r: (r[0], r[2]))
+    write_csv("service_codon_balance_comparison.csv", header, rows)
+
+
 def main():
     write_differences("P", "Proton_Difference",
                       "amino_acids_proton_differences.csv")
@@ -489,7 +713,8 @@ def main():
     metrics = [_per_table_metrics(nr) for nr in ncbi_rows]
     write_deficit_models(metrics)
     write_keto_amino_balance(metrics)
-    print("Done. 17 files written.")
+    write_service_codon_balance_comparison(metrics)
+    print("Done. 18 files written.")
     return counts
 
 
