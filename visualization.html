@@ -294,7 +294,26 @@
         const { useState, useMemo, useEffect, Fragment, useCallback } = React;
 
         const baseNucleotidesInternalGlobal = ['T', 'C', 'A', 'G'];
-        const SERVICE_CODONS = ['ATG', 'TAA', 'TAG', 'TGA'];
+        // NCBI context-dependent termination sites; Model 1 excludes these
+        // even when the elongation table assigns an amino acid (Model 2).
+        const CONTEXT_STOP_CODONS = {
+            transl_table_27: ['TGA'],
+            transl_table_28: ['TAA', 'TAG', 'TGA'],
+            transl_table_31: ['TAA', 'TAG']
+        };
+        const getStopCodons = (code) => Object.keys(code.table).filter(c => code.table[c] === 'STOP');
+        const getStopMergeSource = (stopCodons, stopValues) =>
+            stopCodons.find(c => stopValues[c]) || stopCodons[0];
+        const getPoolServiceCodons = (code) => {
+            const stops = getStopCodons(code);
+            const contextual = code.poolModel === 'amino' ? [] : (CONTEXT_STOP_CODONS[code.id] || []);
+            return new Set(['ATG', ...stops, ...contextual]);
+        };
+        const filterCodonPool = (codons, includeServiceCodons, code) => {
+            if (includeServiceCodons) return new Set(codons);
+            const excluded = getPoolServiceCodons(code);
+            return new Set([...codons].filter(c => !excluded.has(c)));
+        };
 
         function transformPair(pair, mode) {
             const [n1, n2] = pair.split('');
@@ -373,7 +392,7 @@
             transl_table_30: parseNcbICode("Peritrich Nuclear", 30, "FFLLSSSSYYEECC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'nuclear'),
             transl_table_31: parseNcbICode("Blastocrithidia Nuclear", 31, "FFLLSSSSYYEECCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'nuclear'),
             transl_table_32: parseNcbICode("Balanophoraceae Plastid",32, "FFLLSSSSYY*WCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'bacterial_plastid'),
-            transl_table_33: parseNcbICode("Cephalodiscidae Mitochondrial", 33, "FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'mitochondrial')
+            transl_table_33: parseNcbICode("Cephalodiscidae Mitochondrial", 33, "FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSSKVVVVAAAADDEEGGGG", "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG", "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG", "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG", 'mitochondrial')
         };
 
         const KEY_SETS = {
@@ -785,9 +804,7 @@
             .replace(/-+$/, '');
 
         const usesDefaultAminoAcidValues = (customKeys, activeGeneticCode, exportScope) => {
-            const fields = exportScope === 'full'
-                ? ['sideChainMass', 'backboneMass', 'protons', 'neutrons']
-                : ['protons', 'neutrons'];
+            const fields = ['sideChainMass', 'backboneMass', 'protons', 'neutrons'];
 
             return Object.entries(STANDARD_AMINO_ACIDS).every(([aa, standardValues]) => {
                 const expected = {
@@ -813,7 +830,7 @@
         }) => {
             const datasetId = includeServiceCodons
                 ? (!activeKeySet ? 'custom-key' : activeKeySet.toLowerCase())
-                : 'pool60';
+                : (activeGeneticCode.type === 'standard' ? 'pool60' : 'sepool');
             const defaultAminoAcids = usesDefaultAminoAcidValues(
                 customKeys, activeGeneticCode, exportScope
             );
@@ -836,6 +853,9 @@
             }
 
             const parts = [datasetId, sanitizeFilePart(codeName)];
+            if (!includeServiceCodons && CONTEXT_STOP_CODONS[activeGeneticCode.id]) {
+                parts.push(activeGeneticCode.poolModel === 'amino' ? 'model2' : 'model1');
+            }
             if (tabFileTag && tabFileTag !== 'pos3') parts.push(tabFileTag);
             if (equalityScope === 'all') parts.push('all-tabs');
             if (exportScope === 'full') parts.push('full');
@@ -1038,7 +1058,7 @@
             });
 
             const groupData = allFlattenedGroups.map(set => {
-                const codons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                const codons = filterCodonPool(set.getCodons(), includeServiceCodons, activeGeneticCode);
                 const sums = calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id);
                 sums.deltaPN = sums.protons - sums.neutrons; // Calculate the proton-neutron difference.
                 return {
@@ -1320,7 +1340,7 @@
              }
 
              flattenedSets.forEach(set => {
-                 const codons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                 const codons = filterCodonPool(set.getCodons(), includeServiceCodons, activeGeneticCode);
                  const sum = calculateSums_New(codons, customKeys, activeGeneticCode.table, activeGeneticCode.id);
                  const symmetryId = set.symmetryId || set.id;
                  const twinId = set._twinRef || "";
@@ -1524,7 +1544,7 @@
             );
         };
 
-        const SubRowItem = ({ codon, aminoAcid, style, isSelected, onCodonSelect, customKeys, numeralSystem, includeServiceCodons }) => {
+        const SubRowItem = ({ codon, aminoAcid, style, isSelected, onCodonSelect, customKeys, numeralSystem, includeServiceCodons, activeGeneticCode }) => {
             const { displayMass, protons, neutrons } = useMemo(() => {
                 if (!aminoAcid) return { displayMass: 0, protons: 0, neutrons: 0 };
                 let sc = 0, bb = 0, p = 0, n = 0;
@@ -1553,7 +1573,7 @@
                 return { displayMass: sc + bb, protons: p, neutrons: n };
             }, [codon, aminoAcid, customKeys]);
             
-            const isExcluded = !includeServiceCodons && SERVICE_CODONS.includes(codon);
+            const isExcluded = !includeServiceCodons && getPoolServiceCodons(activeGeneticCode).has(codon);
             let itemStyle = { backgroundColor: style.bg, color: style.text };
             
             if (isExcluded) {
@@ -1603,7 +1623,7 @@
                         {thirdPosOrder.map(thirdInternal => { 
                             const codon = `${firstInternal}${secondInternal}${thirdInternal}`; 
                             const aminoAcid = activeGeneticCode.table[codon] || '?'; 
-                            return ( <SubRowItem key={thirdInternal} codon={codon} aminoAcid={aminoAcid} style={cellStyle} isSelected={selectedCodons.has(codon)} onCodonSelect={onCodonSelect} customKeys={customKeys} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} /> ); 
+                            return ( <SubRowItem activeGeneticCode={activeGeneticCode} key={thirdInternal} codon={codon} aminoAcid={aminoAcid} style={cellStyle} isSelected={selectedCodons.has(codon)} onCodonSelect={onCodonSelect} customKeys={customKeys} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} /> ); 
                         })}
                     </div>
                 </td> 
@@ -1635,7 +1655,7 @@
                 const processSet = (set) => {
                     const sum = demoSetSums[set.id];
                     if (!sum) return;
-                    const filteredCodons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                    const filteredCodons = filterCodonPool(set.getCodons(), includeServiceCodons, activeGeneticCode);
                     const level = filteredCodons.size;
                     addValue(sum.fullMass, set.id, level, 'fullMass');
                     addValue(sum.sideChainMass, set.id, level, 'sideChainMass');
@@ -1660,7 +1680,7 @@
                     }
                 });
                 return map;
-            }, [demoSetSums, demoStructure, includeServiceCodons]);
+            }, [demoSetSums, demoStructure, includeServiceCodons, activeGeneticCode]);
 
             const getHighlightClass = (val, currentLevel, currentId, currentType) => {
                 if (['sideChainMass', 'backboneMass', 'delta'].includes(currentType)) return "sum-value";
@@ -1678,7 +1698,7 @@
                 const hasRef = !!set.refLabel;
                 const labelColorClass = hasRef ? "text-gray-700 font-bold" : "text-[#adb5bd] font-medium";
                 
-                const filteredCodons = includeServiceCodons ? set.getCodons() : new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                const filteredCodons = filterCodonPool(set.getCodons(), includeServiceCodons, activeGeneticCode);
                 const currentLevel = filteredCodons.size;
                 const displayLevel = currentLevel;
                 const currentDelta = sum ? sum.protons - sum.neutrons : 0;
@@ -1689,7 +1709,7 @@
                         <span className="level-label">{displayLevel}</span>
                         {set.pair && ( <span className="paired-alias" onClick={(e) => { 
                             e.stopPropagation(); 
-                            const pairedFiltered = includeServiceCodons ? set.pair.getCodons() : new Set([...set.pair.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                            const pairedFiltered = filterCodonPool(set.pair.getCodons(), includeServiceCodons, activeGeneticCode);
                             onSelectSet(pairedFiltered, set.refLabel); 
                         }}>
                             {set.pair.label}
@@ -1757,12 +1777,12 @@
             );
         };
         
-        const CrossSetEqualityFinder = ({ currentSums, currentCodonCount, allDemoSetSums, scope, activeTab, numeralSystem, includeServiceCodons }) => {
+        const CrossSetEqualityFinder = ({ currentSums, currentCodonCount, allDemoSetSums, scope, activeTab, numeralSystem, includeServiceCodons, activeGeneticCode }) => {
             const setIdToLabelMap = useMemo(() => {
                 const map = {};
                 const structuresToSearch = scope === 'tab' ? [TABS_INFO[activeTab].data] : Object.values(TABS_INFO).map(t => t.data);
                 
-                const getFilteredSize = (codons) => includeServiceCodons ? codons.size : [...codons].filter(c => !SERVICE_CODONS.includes(c)).length;
+                const getFilteredSize = (codons) => filterCodonPool(codons, includeServiceCodons, activeGeneticCode).size;
 
                 structuresToSearch.forEach(structure => {
                     if (!structure) return;
@@ -1787,7 +1807,7 @@
                     });
                 });
                 return map;
-            }, [scope, activeTab, includeServiceCodons]);
+            }, [scope, activeTab, includeServiceCodons, activeGeneticCode]);
 
             const propLabels = { fullMass: "Total Nucleons (T)", protons: "Protons (P)", neutrons: "Neutrons (N)" };
 
@@ -1985,7 +2005,7 @@
                         <div className="border-t pt-2 mt-2 border-gray-300"><h4 className="text-center font-semibold text-gray-600 mb-1 text-xs">Detailed Numerical Analysis</h4><NumericalAnalysisSection label="Total Nucleons (T)" value={sums.fullMass} /><NumericalAnalysisSection label="Side-Chain Nucleons (S)" value={sums.sideChainMass} /><NumericalAnalysisSection label="Backbone Nucleons (B)" value={sums.backboneMass} /><NumericalAnalysisSection label="Protons (P)" value={sums.protons} /><NumericalAnalysisSection label="Neutrons (N)" value={sums.neutrons} /><NumericalAnalysisSection label="Δ (P-N)" value={deltaPN} /></div>
                         
                         <div className="border-t pt-2 mt-2 border-gray-300">
-                             <CrossSetEqualityFinder 
+                             <CrossSetEqualityFinder activeGeneticCode={activeGeneticCode} 
                                 currentSums={sums} 
                                 currentCodonCount={L} 
                                 allDemoSetSums={allDemoSetSums} 
@@ -2053,12 +2073,13 @@
             );
         };
 
-        const CustomKeysPanel = ({ keys, onKeyChange, activeKeySet, onOpenAAEditor }) => {
-            return ( <div className="mt-2 p-2 w-full custom-input-panel"><button className="w-full mb-3 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition-colors" onClick={onOpenAAEditor}>Open Amino Acid Editor</button><div className="grid grid-cols-1 gap-y-2"><div><h4 className="text-sm font-semibold text-gray-700 mb-1">ATG (Start, Met) Modifier</h4><div className="flex flex-col gap-y-1"><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Side Chain</label><input type="number" value={keys.START.sideChainMass} onChange={e => onKeyChange('START', null, 'sideChainMass', e.target.value)} /></div><div><label className="block text-xs">Backbone</label><input type="number" value={keys.START.backboneMass ?? ''} placeholder="Std (74)" onChange={e => onKeyChange('START', null, 'backboneMass', e.target.value)} /></div></div><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Protons</label><input type="number" value={keys.START.protons} onChange={e => onKeyChange('START', null, 'protons', e.target.value)} /></div><div><label className="block text-xs">Neutrons</label><input type="number" value={keys.START.neutrons} onChange={e => onKeyChange('START', null, 'neutrons', e.target.value)} /></div></div></div></div><div><button className="mode-btn center-text mt-1 w-full" onClick={() => onKeyChange('TOGGLE_INDIVIDUAL_STOPS')}>{keys.useIndividualStops ? 'Merge to Single STOP' : 'Split to Individual STOPs'}</button></div>{keys.useIndividualStops ? (['TAA', 'TAG', 'TGA'].map(codon => ( <div key={codon}><h4 className="text-sm font-semibold text-gray-700 mb-1">STOP ({codon}) Modifier</h4><div className="flex flex-col gap-y-1"><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Side Chain</label><input type="number" value={(keys.STOP[codon] || {}).sideChainMass || 0} onChange={e => onKeyChange('STOP', codon, 'sideChainMass', e.target.value)} /></div><div><label className="block text-xs">Backbone</label><input type="number" value={(keys.STOP[codon] || {}).backboneMass || 0} onChange={e => onKeyChange('STOP', codon, 'backboneMass', e.target.value)} /></div></div><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Protons</label><input type="number" value={(keys.STOP[codon] || {}).protons || 0} onChange={e => onKeyChange('STOP', codon, 'protons', e.target.value)} /></div><div><label className="block text-xs">Neutrons</label><input type="number" value={(keys.STOP[codon] || {}).neutrons || 0} onChange={e => onKeyChange('STOP', codon, 'neutrons', e.target.value)} /></div></div></div></div>))) : (<div><h4 className="text-sm font-semibold text-gray-700 mb-1">STOP (All) Modifier</h4><div className="flex flex-col gap-y-1"><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Side Chain</label><input type="number" value={(keys.STOP.ALL || {}).sideChainMass || 0} onChange={e => onKeyChange('STOP', 'ALL', 'sideChainMass', e.target.value)} /></div><div><label className="block text-xs">Backbone</label><input type="number" value={(keys.STOP.ALL || {}).backboneMass || 0} onChange={e => onKeyChange('STOP', 'ALL', 'backboneMass', e.target.value)} /></div></div><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Protons</label><input type="number" value={(keys.STOP.ALL || {}).protons || 0} onChange={e => onKeyChange('STOP', 'ALL', 'protons', e.target.value)} /></div><div><label className="block text-xs">Neutrons</label><input type="number" value={(keys.STOP.ALL || {}).neutrons || 0} onChange={e => onKeyChange('STOP', 'ALL', 'neutrons', e.target.value)} /></div></div></div></div>)}</div></div> );
+        const CustomKeysPanel = ({ keys, onKeyChange, activeKeySet, onOpenAAEditor, stopCodons }) => {
+            return ( <div className="mt-2 p-2 w-full custom-input-panel"><button className="w-full mb-3 px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition-colors" onClick={onOpenAAEditor}>Open Amino Acid Editor</button><div className="grid grid-cols-1 gap-y-2"><div><h4 className="text-sm font-semibold text-gray-700 mb-1">ATG (Start, Met) Modifier</h4><div className="flex flex-col gap-y-1"><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Side Chain</label><input type="number" value={keys.START.sideChainMass} onChange={e => onKeyChange('START', null, 'sideChainMass', e.target.value)} /></div><div><label className="block text-xs">Backbone</label><input type="number" value={keys.START.backboneMass ?? ''} placeholder="Std (74)" onChange={e => onKeyChange('START', null, 'backboneMass', e.target.value)} /></div></div><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Protons</label><input type="number" value={keys.START.protons} onChange={e => onKeyChange('START', null, 'protons', e.target.value)} /></div><div><label className="block text-xs">Neutrons</label><input type="number" value={keys.START.neutrons} onChange={e => onKeyChange('START', null, 'neutrons', e.target.value)} /></div></div></div></div><div><button className="mode-btn center-text mt-1 w-full" disabled={stopCodons.length === 0} onClick={() => onKeyChange('TOGGLE_INDIVIDUAL_STOPS')}>{keys.useIndividualStops ? 'Merge to Single STOP' : 'Split to Individual STOPs'}</button>{keys.useIndividualStops && stopCodons.length > 0 && <p className="mt-1 text-xs text-gray-600">Merging uses values from {getStopMergeSource(stopCodons, keys.STOP)}. Unassigned stops show 0.</p>}{stopCodons.length === 0 && <p className="mt-1 text-xs text-gray-600">No STOP assignments in this code table.</p>}</div>{keys.useIndividualStops ? (stopCodons.map(codon => ( <div key={codon}><h4 className="text-sm font-semibold text-gray-700 mb-1">STOP ({codon}) Modifier</h4><div className="flex flex-col gap-y-1"><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Side Chain</label><input type="number" value={(keys.STOP[codon] || {}).sideChainMass || 0} onChange={e => onKeyChange('STOP', codon, 'sideChainMass', e.target.value)} /></div><div><label className="block text-xs">Backbone</label><input type="number" value={(keys.STOP[codon] || {}).backboneMass || 0} onChange={e => onKeyChange('STOP', codon, 'backboneMass', e.target.value)} /></div></div><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Protons</label><input type="number" value={(keys.STOP[codon] || {}).protons || 0} onChange={e => onKeyChange('STOP', codon, 'protons', e.target.value)} /></div><div><label className="block text-xs">Neutrons</label><input type="number" value={(keys.STOP[codon] || {}).neutrons || 0} onChange={e => onKeyChange('STOP', codon, 'neutrons', e.target.value)} /></div></div></div></div>))) : (<div><h4 className="text-sm font-semibold text-gray-700 mb-1">STOP (All) Modifier</h4><div className="flex flex-col gap-y-1"><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Side Chain</label><input type="number" value={(keys.STOP.ALL || {}).sideChainMass || 0} onChange={e => onKeyChange('STOP', 'ALL', 'sideChainMass', e.target.value)} /></div><div><label className="block text-xs">Backbone</label><input type="number" value={(keys.STOP.ALL || {}).backboneMass || 0} onChange={e => onKeyChange('STOP', 'ALL', 'backboneMass', e.target.value)} /></div></div><div className="grid grid-cols-2 gap-x-1"><div><label className="block text-xs">Protons</label><input type="number" value={(keys.STOP.ALL || {}).protons || 0} onChange={e => onKeyChange('STOP', 'ALL', 'protons', e.target.value)} /></div><div><label className="block text-xs">Neutrons</label><input type="number" value={(keys.STOP.ALL || {}).neutrons || 0} onChange={e => onKeyChange('STOP', 'ALL', 'neutrons', e.target.value)} /></div></div></div></div>)}</div></div> );
         };
 
         const GeneticCodeMatrixApp = () => {
-            const [axisOrder, setAxisOrder] = useState(['C', 'G', 'T', 'A']); const [activeCodeId, setActiveCodeId] = useState('transl_table_1_pro73'); const activeGeneticCode = useMemo(() => geneticCodesForRumerExplorer[activeCodeId], [activeCodeId]);
+            const [axisOrder, setAxisOrder] = useState(['C', 'G', 'T', 'A']); const [activeCodeId, setActiveCodeId] = useState('transl_table_1_pro73'); const [poolModel, setPoolModel] = useState('declared');
+            const activeGeneticCode = useMemo(() => ({ ...geneticCodesForRumerExplorer[activeCodeId], poolModel }), [activeCodeId, poolModel]);
             const orbitsData = useMemo(() => generateRumerOrbitsData(), []); const [selectedCodons, setSelectedCodons] = useState(new Set()); const [activeKeySet, setActiveKeySet] = useState('Key0');
             const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
             const [isAAEditorOpen, setIsAAEditorOpen] = useState(false);
@@ -2070,6 +2091,14 @@
             const [numeralSystem, setNumeralSystem] = useState('decimal');
             const [exportScope, setExportScope] = useState('strict');
             const [includeServiceCodons, setIncludeServiceCodons] = useState(true);
+            const visibleSelectedCodons = useMemo(() => filterCodonPool(selectedCodons, includeServiceCodons, activeGeneticCode), [selectedCodons, includeServiceCodons, activeGeneticCode]);
+            const poolSize = useMemo(() => filterCodonPool(Object.keys(activeGeneticCode.table), false, activeGeneticCode).size, [activeGeneticCode]);
+            useEffect(() => {
+                setSelectedCodons(prev => {
+                    const filtered = filterCodonPool(prev, includeServiceCodons, activeGeneticCode);
+                    return filtered.size === prev.size ? prev : filtered;
+                });
+            }, [includeServiceCodons, activeGeneticCode]);
             const [hoveredPair, setHoveredPair] = useState(null);
             const [symmetryMode, setSymmetryMode] = useState('rumer');
             
@@ -2100,8 +2129,7 @@
                 const allStructures = Object.values(TABS_INFO).map(t => t.data).flat();
                 
                 const getFiltered = (set) => {
-                    if (includeServiceCodons) return set.getCodons();
-                    return new Set([...set.getCodons()].filter(c => !SERVICE_CODONS.includes(c)));
+                    return filterCodonPool(set.getCodons(), includeServiceCodons, activeGeneticCode);
                 };
 
                  allStructures.forEach(structure => {
@@ -2137,16 +2165,16 @@
                     }
                     return newKeys;
                 });
-            }, [activeGeneticCode]);
+            }, [activeCodeId]);
 
             const handleCodonSelect = (codon) => { 
-                if (!includeServiceCodons && SERVICE_CODONS.includes(codon)) return;
+                if (!includeServiceCodons && getPoolServiceCodons(activeGeneticCode).has(codon)) return;
                 setSelectedCodons(prev => { const newSet = new Set(prev); if (newSet.has(codon)) newSet.delete(codon); else newSet.add(codon); return newSet; }); 
                 setActiveRefLabel('');
             };
             const handleResetSelection = () => { setSelectedCodons(new Set()); setActiveRefLabel(''); };
             const handleDemoSetSelect = (codonSet, refLabel) => { 
-                setSelectedCodons(codonSet); 
+                setSelectedCodons(filterCodonPool(codonSet, includeServiceCodons, activeGeneticCode)); 
                 setActiveRefLabel(refLabel || ''); 
             };
             const handleSetKeySet = (keySetId) => { 
@@ -2160,15 +2188,10 @@
             };
             const handleToggleServiceCodons = (include) => {
                 setIncludeServiceCodons(include);
-                if (!include) {
-                    setSelectedCodons(prev => {
-                        const newSet = new Set(prev);
-                        SERVICE_CODONS.forEach(c => newSet.delete(c));
-                        return newSet;
-                    });
-                }
             };
             const handleCustomKeyChange = (codonType, codon, param, value) => { 
+                const stopCodons = getStopCodons(activeGeneticCode);
+                if (codonType === 'TOGGLE_INDIVIDUAL_STOPS' && stopCodons.length === 0) return;
                 setActiveKeySet(null); 
                 if(codonType === 'TOGGLE_INDIVIDUAL_STOPS') { 
                     setCustomKeys(prev => {
@@ -2177,9 +2200,12 @@
                         newKeys.useIndividualStops = newUseIndividual;
                         if (newUseIndividual) {
                             const source = prev.STOP.ALL || {};
-                            ['TAA', 'TAG', 'TGA'].forEach(stop => {
+                            stopCodons.forEach(stop => {
                                 newKeys.STOP[stop] = { ...source };
                             });
+                        } else {
+                            const sourceCodon = getStopMergeSource(stopCodons, prev.STOP);
+                            newKeys.STOP.ALL = { ...(prev.STOP[sourceCodon] || {}) };
                         }
                         return newKeys;
                     }); 
@@ -2231,7 +2257,7 @@
                                 <option value="Key9">Key 9</option>
                             </select>
                         </div>
-                        <CustomKeysPanel keys={customKeys} onKeyChange={handleCustomKeyChange} activeKeySet={activeKeySet} onOpenAAEditor={() => setIsAAEditorOpen(true)}/>
+                        <CustomKeysPanel keys={customKeys} onKeyChange={handleCustomKeyChange} activeKeySet={activeKeySet} onOpenAAEditor={() => setIsAAEditorOpen(true)} stopCodons={getStopCodons(activeGeneticCode)}/>
                         
                         <div className="control-panel-section">
                             <h3>Codon Pool</h3>
@@ -2239,21 +2265,30 @@
                                 <div 
                                     className={`scope-toggle-btn ${includeServiceCodons ? 'active' : ''}`}
                                     onClick={() => handleToggleServiceCodons(true)}
-                                    title="Include standard service codons (ATG, TAA, TAG, TGA)"
+                                    title="Include all 64 codons of the selected code"
                                 >
                                     ALL CODE
                                 </div>
                                 <div 
                                     className={`scope-toggle-btn ${!includeServiceCodons ? 'active' : ''}`}
                                     onClick={() => handleToggleServiceCodons(false)}
-                                    title="Exclude standard service codons (ATG, TAA, TAG, TGA)"
+                                    title="Exclude ATG and stop codons of the selected code"
                                 >
-                                    POOL60
+                                    {activeGeneticCode.type === 'standard' ? 'POOL60' : `SERVICE-EXCLUDED POOL (${poolSize})`}
                                 </div>
                             </div>
+                            {!includeServiceCodons && CONTEXT_STOP_CODONS[activeGeneticCode.id] && (
+                                <label className="block mt-2 text-xs text-gray-600">
+                                    Context-dependent stops (pool only)
+                                    <select className="w-full mt-1" aria-label="Context-dependent stops" value={poolModel} onChange={e => setPoolModel(e.target.value)}>
+                                        <option value="declared">Exclude (Model 1)</option>
+                                        <option value="amino">Include as amino acids (Model 2)</option>
+                                    </select>
+                                </label>
+                            )}
                             {!includeServiceCodons && (
                                 <p className="mt-1 text-[0.65rem] leading-tight text-gray-500">
-                                    Excludes ATG, TAA, TAG, and TGA. Service-codon key values do not affect these sums.
+                                    Excludes {Array.from(getPoolServiceCodons(activeGeneticCode)).join(', ')}. {poolSize} codons remain; service-codon key values do not affect these sums.
                                 </p>
                             )}
                         </div>
@@ -2326,9 +2361,9 @@
                         <OrbitSelector orbitsData={orbitsData} currentOrder={axisOrder.join('')} onOrderSelect={setAxisOrder} />
                     </div>
                     <div className="flex-1 p-4 flex flex-col items-center overflow-auto relative">
-                        <MatrixTable axisOrder={axisOrder} thirdPosOrder={axisOrder} selectedCodons={selectedCodons} onCodonSelect={handleCodonSelect} customKeys={customKeys} activeGeneticCode={activeGeneticCode} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} activeRefLabel={activeRefLabel} symmetryMode={symmetryMode} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} />
+                        <MatrixTable axisOrder={axisOrder} thirdPosOrder={axisOrder} selectedCodons={visibleSelectedCodons} onCodonSelect={handleCodonSelect} customKeys={customKeys} activeGeneticCode={activeGeneticCode} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} activeRefLabel={activeRefLabel} symmetryMode={symmetryMode} numeralSystem={numeralSystem} includeServiceCodons={includeServiceCodons} />
                         <Calculator 
-                            selectedCodons={selectedCodons} 
+                            selectedCodons={visibleSelectedCodons} 
                             onResetSelection={handleResetSelection} 
                             customKeys={customKeys} 
                             activeGeneticCode={activeGeneticCode} 
@@ -2370,7 +2405,7 @@
                                 <button 
                                     onClick={() => exportData(
                                         TABS_INFO[activeRightPanelTab].data, 
-                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, selectedCodons, 'pure', activeKeySet, numeralSystem, exportScope, includeServiceCodons
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, visibleSelectedCodons, 'pure', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
@@ -2379,7 +2414,7 @@
                                 <button 
                                     onClick={() => exportData(
                                         TABS_INFO[activeRightPanelTab].data, 
-                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, selectedCodons, 'analysis', activeKeySet, numeralSystem, exportScope, includeServiceCodons
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, visibleSelectedCodons, 'analysis', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
@@ -2388,7 +2423,7 @@
                                 <button 
                                     onClick={() => exportData(
                                         TABS_INFO[activeRightPanelTab].data, 
-                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, selectedCodons, 'ratios', activeKeySet, numeralSystem, exportScope, includeServiceCodons
+                                        customKeys, activeGeneticCode, TABS_INFO[activeRightPanelTab].exportName, TABS_INFO[activeRightPanelTab].fileTag, allDemoSetSums, visibleSelectedCodons, 'ratios', activeKeySet, numeralSystem, exportScope, includeServiceCodons
                                     )}
                                     className="export-btn"
                                 >
