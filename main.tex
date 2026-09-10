@@ -593,7 +593,14 @@ Sections~\ref{sec:results-key1-derivation}--%
 stop codons share a common parameter pair and under the conditions of
 balance and divisibility by~$37$ specified there. Under these
 assumptions, Key~1 is the unique minimal non-negative integer solution
-of the resulting system. Here Key~1 is introduced as the result
+of the resulting system. Minimality here means the smallest total contribution of
+the service codons---the sum of the contributions of the
+three stop codons and $\mathrm{ATG}$---determined
+separately for protons and for neutrons. For the standard
+code the balance fixes the difference between the stop and
+start parameters, so the total contribution increases with
+the start parameter and is minimal at its smallest
+admissible value. Here Key~1 is introduced as the result
 of that formal construction, not as a biochemical property of
 termination signals or the initiator.
 
@@ -1747,38 +1754,40 @@ multiple of~$37$ follows from the specific nucleon counts.
 \subsection{Analytical derivation of Key~1}
 \label{sec:results-key1-derivation}
 
-The parametrization-independent facts of
-Section~\ref{sec:results-independent}, and their naive reading in
-Section~\ref{sec:results-key0}, leave the service codons unassigned.
-There is a unique minimal integer assignment to those codons that
-extends the structure to the full 64-codon table, and this section
-derives it. The assignment is a device for exhibiting the arithmetic
-of the complete table rather than a foundation: as
-Section~\ref{sec:results-key0} shows, the structure is already
-present at the naive reading, and the derivation below only fixes
-the values under which it extends cleanly across the service codons.
+The results of Sections~\ref{sec:results-independent}
+and~\ref{sec:results-key0} show that whether the arithmetic
+regularities appear depends on which service codons a group
+contains.
 
-The values are obtained from three inputs, all established earlier.
-The Keto/Amino asymmetry localizes in the single pair
-$\mathrm{Trp}$--$\mathrm{Ile}$, with sense-pool differences
-$|\delta N| = 37$ and $|\delta P| = 36$
-(Section~\ref{sec:results-key1-trpile}); the sense-pool neutron and
-proton totals are $97 \cdot 37$ and $\equiv -1 \pmod{37}$
-(Section~\ref{sec:results-sensepool}); and the proton counts are
-even, so $|\delta P| = 37$ is excluded by parity
-(Section~\ref{sec:results-proton-parity}). From these,
-Sections~\ref{sec:results-key1-neutrons}
-and~\ref{sec:results-key1-protons} determine the stop and start
-parameters through symmetry conditions---first for neutrons, then
-for protons---and Section~\ref{sec:results-key1-uniqueness} shows
-that the solution is the minimal non-negative integer element of an
-infinite family, and that the equality of the stop parameters and
-the unit offset of the start parameter follow already from two of
-the chemical-axis balances, without reference to the modulus. The
-specificity of the result across natural codes is examined in
+Octet~I and the pyrimidine-restricted groups contain no
+service codons at all, and they exhibit arithmetic order
+(Sections~\ref{sec:results-octetI}
+and~\ref{sec:results-pyrimidine}). The Amino and Weak
+branches contain stop codons but not the initiator
+$\mathrm{ATG}$: all four of their nucleon quantities are
+divisible by~$37$ already in the service-excluded pool, and
+the zero contribution of the stop codons leaves them
+unchanged, so the divisibility is preserved under Key~0
+(Section~\ref{sec:results-key0-aminoweak}). In the Keto and
+Strong branches, which contain the initiator $\mathrm{ATG}$,
+the proton and neutron sums and the difference $\Delta$
+deviate under Key~0 from the $37$-lattice. The deviation in
+$\Delta$ is localized in the $\{\mathrm{G}\}$ branch, which
+contains $\mathrm{ATG}$: the other three one-nucleotide
+groups share a single value of $\Delta$, divisible by~$37$
+(Section~\ref{sec:results-key0-delta}).
+
+This points to the possibility of a different
+parametrization of the service codons, one that reconciles
+the arithmetic regularities of the groups considered. In this
+section we derive such a parametrization analytically from
+conditions of symmetry, divisibility, and minimality. The
+resulting assignment serves as a formal device for
+reconciling the sums of the complete table; the underlying
+arithmetic regularities are established in the
+service-excluded pool. The specificity of the result across
+natural codes is examined in
 Section~\ref{sec:results-key1-ncbi}.
-
-
 
 \subsubsection{Determination of neutron parameters}
 \label{sec:results-key1-neutrons}
@@ -1877,16 +1886,26 @@ $\gcd(4, 37) = 1$, this reduces to
 \[
 n_{\text{start}} \equiv 0 \pmod{37},
 \]
-giving the family of integer solutions
-$n_{\text{start}} = 0, 37, 74, \ldots$ The minimal
-non-negative integer solution is
+giving the family of non-negative integer solutions
+$n_{\text{start}} = 0, 37, 74, \ldots$.
+The minimal solution is
 \[
 n_{\text{start}} = 0,
 \quad
 n_{\text{stop}} = 37.
 \]
-The structure of the solution family and the minimality
-of this choice are addressed in
+The divisibility requirement does not change the minimum
+just obtained. With non-negative integer parameters, the
+Keto/Amino balance alone admits
+$n_{\text{start}} = 0, 1, 2, \ldots$ with
+$n_{\text{stop}} = n_{\text{start}} + 37$; divisibility
+narrows this family to
+$n_{\text{start}} = 0, 37, 74, \ldots$, but in both cases
+the minimal total added contribution is attained at
+$n_{\text{start}} = 0$ and $n_{\text{stop}} = 37$. For the
+proton component the divisibility requirement does change
+the minimum. The structure of the solution families and
+the role of each condition are addressed in
 Section~\ref{sec:results-key1-uniqueness}.
 
 \paragraph{Emergent cross-parameter equality.}
@@ -2024,7 +2043,7 @@ $\gcd(4, 37) = 1$, this reduces to
 p_{\text{start}} \equiv 1 \pmod{37},
 \]
 giving the family of integer solutions
-$p_{\text{start}} = 1, 38, 75, \ldots$ The minimal
+$p_{\text{start}} = 1, 38, 75, \ldots$. The minimal
 non-negative integer solution is
 \[
 p_{\text{start}} = 1,
@@ -2179,6 +2198,50 @@ same constraints but lack this combination. We adopt
 Key~1 as the parametrization of the standard genetic code
 throughout the remainder of the paper.
 
+\paragraph{The contribution of the divisibility condition.}
+We compare the assignments with the minimal total added
+contribution, obtained separately for protons and for
+neutrons, under the Keto/Amino balance alone and under the
+additional requirement of divisibility by~$37$; in both
+cases the parameters are non-negative integers:
+\[
+\begin{aligned}
+\text{balance only:}\quad
+&(p_{\text{stop}}, n_{\text{stop}}) = (36, 37), &
+&(p_{\text{start}}, n_{\text{start}}) = (0, 0), \\
+\text{balance and divisibility:}\quad
+&(p_{\text{stop}}, n_{\text{stop}}) = (37, 37), &
+&(p_{\text{start}}, n_{\text{start}}) = (1, 0).
+\end{aligned}
+\]
+The divisibility requirement does not change the minimal
+neutron assignment: the neutron sum of the complete table
+equals $3700$ and is divisible by~$37$ under the balance
+alone. Under the balance alone the minimal proton sum is
+$4288 = 116 \cdot 37 - 4$; adding one proton to each of the
+four service positions raises it to $4292 = 116 \cdot 37$.
+The balance is preserved, since each half of the Keto/Amino
+axis contains two service positions. The additional
+divisibility requirement therefore increases the minimal
+contribution by four protons and requires no additional
+neutrons.
+
+The same increment removes the difference in $\Delta$
+across the Purine/Pyrimidine axis. For the Pyrimidine
+branch $\Delta = 296$ is independent of the parametrization
+(Section~\ref{sec:results-pyrimidine}), whereas under the
+minimal assignment that secures the Keto/Amino balance
+alone the Purine branch has $\Delta = 292$: each stop codon
+carries $\Delta = 36 - 37 = -1$, which shifts the
+service-excluded pool value $295$
+(Section~\ref{sec:results-sensepool}) down by three units.
+All four service codons belong to the Purine branch, so
+adding one proton to each of them equalizes the values of
+the two branches. An alternative derivation is considered
+below, in which this equality is imposed together with the
+Keto/Amino balance and the divisibility requirement is not
+introduced.
+
 \paragraph{The stop-parameter equality as a two-axis condition.}
 The equality $p_{\text{stop}} = n_{\text{stop}}$ and the offset
 $p_{\text{start}} - n_{\text{start}} = 1$, obtained in
@@ -2217,9 +2280,16 @@ Purine/Pyrimidine $\Delta$-balance are therefore mutually
 compatible, which is what makes the two-axis condition available.
 
 This fixes only the proton--neutron differences of the service
-codons, not their absolute values: the modulus $37$ and the
-minimality condition remain necessary to obtain $(37, 37)$ and
-$(1, 0)$. Its content is that the equality of the stop parameters
+codons, not their absolute values: together with the Keto/Amino balance there remains a
+one-parameter family
+$(p_{\text{stop}}, n_{\text{stop}}) = (37 + t,\, 37 + t)$,
+$(p_{\text{start}}, n_{\text{start}}) = (1 + t,\, t)$ with integer
+$t \ge 0$, along which the total neutron sum is $3700 + 4t$ and
+the total proton sum is $4292 + 4t$. Non-negativity and
+minimality suffice to obtain $(37, 37)$ and $(1, 0)$; the modulus
+$37$ is not needed at this step. Global divisibility holds along
+the family only for $t \equiv 0 \pmod{37}$, so at $t = 0$ it is a
+consequence of the minimal choice rather than a premise. Its content is that the equality of the stop parameters
 is not tied to the modulus---it holds whenever the Keto/Amino and
 Purine/Pyrimidine $\Delta$-balances hold---and that it reduces to
 the agreement of two sense-pool unit offsets: the proton--neutron
