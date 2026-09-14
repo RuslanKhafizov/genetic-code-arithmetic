@@ -226,7 +226,7 @@ nucleotide alphabet $\{\mathrm{A}, \mathrm{T}, \mathrm{G}, \mathrm{C}\}$
 onto the twenty canonical amino acids and a translation-termination
 signal. Throughout this paper, we use DNA notation (with thymine
 $\mathrm{T}$ rather than uracil $\mathrm{U}$) and adopt the codon
-assignments of The Standard Code (NCBI translation
+assignments of the standard code (NCBI translation
 table~1)~\cite{ncbi2024geneticcodes}. The three codons $\mathrm{TAA}$,
 $\mathrm{TAG}$ and $\mathrm{TGA}$ act as stop signals, whereas
 $\mathrm{ATG}$ encodes methionine and serves as the canonical
@@ -2984,8 +2984,11 @@ roundness, discussed in Sections~\ref{sec:results-proton-parity}
 and~\ref{sec:results-synthesis}.
 
 The ratio to $1/p$ is a descriptive statistic: the scan specifies no
-null model of genetic codes and yields no $p$-value. Removing
-duplicate values does not remove the dependencies induced by the
+null model of genetic codes and yields no $p$-value. If $k$ of the $m$ distinct
+values are divisible by $p$, the ratio equals $pk/m$: it does
+not exceed $p$ and changes in steps of $p/m$. The range and
+the step of the statistic therefore depend on the size of the
+modulus. Removing duplicate values does not remove the dependencies induced by the
 addition and the scaling of the group sums. The range of comparison
 is limited to the primes up to~$97$. Powers of primes impose
 additional divisibility conditions and are not part of this
@@ -3003,10 +3006,10 @@ $\Delta$ cascade; for $61$ it is the value $549=9\cdot61$, to which
 the proton sums of the pyrimidine groups reduce: $2196=4\cdot549$
 and $1098=2\cdot549$. This count does not establish the independence
 of the remaining values. The full counts are given in
-\texttt{prime\_divisibility\_scan.csv}. The first place of~$37$ in
-the sets where divisibility is not imposed shows that its
-distinction under the chosen metric is present before the derivation
-of Key~1.
+\texttt{prime\_divisibility\_scan.csv}. The first place of~$37$ under the
+chosen metric is already observed in the set for the groups without
+service codons and under Key~0; it is not due to the Key~1
+assignments.
 
 \paragraph{Dependence on the molecular representation.}
 We compare the adopted representation of the free neutral amino acid
