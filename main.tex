@@ -2907,151 +2907,205 @@ of genetic codes.
 \subsection{Specificity of the third codon position, the modulus~\texorpdfstring{$37$}{37}, and the molecular representation}
 \label{sec:discussion-controls}
 
-Two features are built into the framework of this work rather
-than derived from the data: the three chemical axes are read
-off the third codon position
-(Section~\ref{sec:partitioning}), and divisibility by $37$ is
-the primary criterion (Section~\ref{sec:criteria}). Two
-deterministic controls test whether the observed structure is
-specific to these two choices or would arise generically.
+The third codon position, the modulus~$37$ and the representation of
+free neutral amino acids define the framework of the analysis
+(Sections~\ref{sec:partitioning}, \ref{sec:criteria}
+and~\ref{sec:composition}). What follows tests which properties are
+preserved when these choices are changed. The positional control
+compares the divisibility of the sums along the same chemical axes;
+the prime scan, how widely divisibility occurs across different
+moduli; the representation control, the stability of the absolute
+sums and of the differences. An additional a posteriori observation
+on the Keto/Amino asymmetry across the three positions is then
+considered.
 
 \paragraph{Codon position.}
-Applying the same three chemical axes to the first and second
-codon position, instead of the third, removes the structure
-almost entirely. At the third position the Amino and Weak
-groups have all four nucleon quantities divisible by $37$, the
-Keto and Strong groups have their neutron pool divisible, and
-the Pyrimidine group has $\Delta$ divisible. At the first
-position the only divisibility is the neutron pool of the
-Keto/Amino axis, present in both its complementary halves, and
-this is not an independent fact: Keto and Amino are
-complementary, so their sense-pool neutron counts sum
-to $N(\mathcal{C}_{\mathrm{SE}}) = 3589 = 97 \cdot 37$
-(Section~\ref{sec:results-key1-neutrons}), and divisibility of
-one half forces divisibility of the other. At the second
-position no nucleon quantity of any axis is divisible by $37$.
-The control thus shows that divisibility by $37$ along the
-chemical axes is confined to the third codon position: the same
-axes applied to the first and second positions do not meet the
-$37$-lattice, the single first-position exception being the
-dependent one noted above. This excludes the alternative in
-which any equal-size split of the sense pool into chemical halves
-would align with the $37$-lattice irrespective of position. The full values for all three positions are
-tabulated in \texttt{position\_axis\_analysis.csv}.
+We take the positional control over the service-excluded pool: its
+sums do not depend on the assignments to the service codons. The
+three chemical axes are applied to each position in turn. At the
+third position the Amino and Weak groups have all four quantities
+divisible by~$37$; the Keto and Strong groups have their neutron
+sums divisible by~$37$, and the Pyrimidine group its
+difference~$\Delta$ (Section~\ref{sec:results-sensepool}). For Keto
+and Strong the proton and nucleon sums lie one unit below the
+nearest multiple of~$37$:
+\[
+\begin{aligned}
+P_{\mathrm{SE}}(\mathrm{Keto})
+  = P_{\mathrm{SE}}(\mathrm{Strong}) &= 2108=57\cdot37-1,\\
+T_{\mathrm{SE}}(\mathrm{Keto})
+  = T_{\mathrm{SE}}(\mathrm{Strong}) &= 3921=106\cdot37-1.
+\end{aligned}
+\]
+Since the neutron sums are divisible by~$37$, the identities $T=P+N$
+and $\Delta=P-N$ carry the residue of the proton sum over to $T$ and
+$\Delta$. At the first position only the neutron sums of Keto and
+Amino are divisible. Given the divisibility of the total sum of the
+pool, $N(\mathcal C_{\mathrm{SE}})=3589=97\cdot37$, divisibility of
+one of these halves forces divisibility of the other, so the two
+matches are not independent. At the second position none of the four
+quantities of any of the six groups is divisible by~$37$.
+
+The chemical axes split the full table into halves of $32$ codons,
+but once the service positions are excluded the sizes may differ. In
+particular, Keto and Amino at the first position contain $29$ and
+$31$ codons, and at the third position $30$ each. In the pool
+considered here the divisibilities of the group sums are thus
+concentrated at the third position; carrying the same chemical
+classifications over to the other positions does not reproduce this
+set of divisibilities. The values for all three positions in the
+service-excluded pool (identified in the file by the value
+\texttt{sense}), under Key~0 and under Key~1 are given in
+\texttt{position\_axis\_analysis.csv}.
 
 \paragraph{Choice of modulus.}
-For every prime up to $97$ we count how many of the four
-nucleon quantities of the codon groups it divides, over three
-value sets: the parametrization-independent groups (those with
-no service codon, on which $37$ cannot be imposed), the groups
-under Key~0 (which does not impose $37$), and the groups under
-Key~1 (whose derivation does). The scan ranges over primes
-rather than all integers because divisibility by a composite is
-the conjunction of divisibilities by its prime-power factors and
-introduces no new modulus, and because raising a prime to a
-higher power lowers the chance rate $1/m$ and thereby inflates
-the excess over the same quantities without adding information;
-the prime is the appropriate unit. The informative statistic is
-accordingly the excess over the chance rate $1/p$, computed over
-distinct values so that quantities forced to coincide by the
-structure of the code are not counted more than once.
+The scan covers all primes up to~$97$ and three sets of group
+quantities: the values of $T$, $P$, $N$ and $\Delta$ for those $17$
+groups of the $33$ that contain no service codons; the values of all
+$33$ groups under Key~0; and the values of the same groups under
+Key~1. In the file the sets are identified by the values
+\texttt{param\_independent}, \texttt{key0} and \texttt{key1}. In the
+first set the assignments to the service codons do not enter the
+sums; in the second, divisibility by~$37$ is not imposed; and in the
+main derivation of Key~1 it enters the conditions on the full sums
+$P$ and $N$.
 
-Three primes divide their share at essentially the chance rate
-($3$, $7$ and $13$). Two exceed it modestly, by less than a factor of three across the three value sets: $2$, because every canonical amino acid has an even proton count (Section~\ref{sec:results-proton-parity}), and $5$,
-reflecting the round-number regularity already reported in
-Section~\ref{sec:results-synthesis}, which the scan thus
-corroborates. Against this background $37$ divides five of the
-twenty-eight distinct parametrization-independent quantities,
-thirteen of the seventy distinct Key~0 quantities, and ten of
-the forty-seven under Key~1 --- in each case several times the
-naive rate $1/37$. This excess ratio is descriptive, not a
-$p$-value: the scan is deterministic and has no null model, and
-the nested group hierarchy makes the quantities non-independent,
-so the ratio alone cannot be read as a significance. An additional
-descriptive distinction not captured by that ratio is that the
-multiples of $37$ contain several distinct odd cores, whereas the
-comparable factors $73$ and $61$ each reduce to a single core. Because the
-effect is already present in the value sets where $37$ is not
-imposed, it is in any case not an artifact of the Key~1
-derivation.
+For each prime $p$ we count the share of the distinct non-zero
+values that it divides. Repeated numerical values are counted once.
+This share is compared with the value $1/p$, which corresponds to a
+uniform distribution of residues. In all three sets the largest
+ratio to this value belongs to~$37$: it divides $5$ of the $28$
+distinct values in the first set, $13$ of $70$ under Key~0 and $10$
+of $47$ under Key~1. The corresponding ratios are approximately
+$6.61$, $6.87$ and $7.87$. For $2$ and $5$ they are below three in
+all three sets; divisibility by these primes is connected,
+respectively, with the parity of the proton counts and with decimal
+roundness, discussed in Sections~\ref{sec:results-proton-parity}
+and~\ref{sec:results-synthesis}.
 
-Three features set $37$ apart from the two small primes, all
-independent of the number base. It is a larger prime, so each
-divisible quantity is rarer under the null. It has no structural
-counterpart to proton parity. And, unlike $5$ --- whose
-multiples in these value sets are almost all multiples of $25$,
-so that the larger excess one would attribute to $25$, $50$ or
-$100$ only re-scores the same quantities against a smaller chance
-rate --- the modulus $37$ occurs at a single power: no quantity
-is divisible by $37^2$, so its excess does not grow when the
-modulus is enlarged. Reducing each quantity to its odd part ---
-dividing out the powers of two that the nested group hierarchy
-(Octet~I and its sixteen- and eight-codon sub-groups) introduces
-mechanically, since a group of size $2k$ has twice the nucleon
-counts of its size-$k$ refinement --- sharpens this. Among the
-Key~0 quantities, $37$ divides ten distinct odd cores; the
-multiples of $73 = 2 \cdot 37 - 1$ (the value of $\Delta$ for
-the Octet~II eight-codon groups) collapse to that single core,
-and the multiples of $61$ to the single core $549 = 9 \cdot 61$,
-to which the pyrimidine proton pool
-$P(\mathrm{Pyrimidine}) = 2196 = 2^2 \cdot 3^2 \cdot 61 = 4 \cdot 549$
-and the proton count of each pyrimidine letter
-$1098 = 2 \cdot 549$ both reduce. The factor $73$ is thus an echo of the modulus
-itself; the factor $61$ is an isolated factorization unrelated
-to $37$ (its quantities deviate from the nearest multiples of
-$37$ by $+13$ and $-12$, not by $\pm1$ or $\pm2$); and the
-factor $5$ reduces entirely to $10$ and $25$, every quantity
-here divisible by $5$ being divisible by $10$ or by $25$. The
-odd-core counts are tabulated in the corresponding column of
-\texttt{prime\_divisibility\_scan.csv}.
+The ratio to $1/p$ is a descriptive statistic: the scan specifies no
+null model of genetic codes and yields no $p$-value. Removing
+duplicate values does not remove the dependencies induced by the
+addition and the scaling of the group sums. The range of comparison
+is limited to the primes up to~$97$. Powers of primes impose
+additional divisibility conditions and are not part of this
+comparison. It is established separately that no value in the three
+sets is divisible by~$37^2$.
 
-\paragraph{Representation dependence and the invariant relational core.}
-The nucleon counts throughout are those of the free (neutral) amino acids --- the canonical molecular identity of the species each codon encodes --- under the most-abundant-isotope convention ($^{1}\mathrm{H}$, $^{12}\mathrm{C}$, $^{14}\mathrm{N}$, $^{16}\mathrm{O}$, $^{32}\mathrm{S}$). Any alternative representation of the encoded amino acid differs from this one by a fixed nucleon offset per residue: the peptide residue removes one water ($10$ protons, $8$ neutrons), the zwitterion removes nothing. Under such a uniform offset $(s_P, s_N)$, a linear combination of the counts is invariant if and only if its signed codon coefficients sum to zero; the control \texttt{representation\_sensitivity.csv} records every anchor under all three representations. This splits the regularities in two. The relational regularities --- the neutron and proton differences of the localizing pair $\mathrm{Trp}$--$\mathrm{Ile}$ ($|\delta N| = 37$, $|\delta P| = 36$) and the Keto/Amino and Strong/Weak axis differences ($37$, $36$) --- are differences between codon sets of equal cardinality and are therefore invariant under every such re-representation. The absolute regularities --- the sense-pool sums $N(\mathcal{C}_{\mathrm{SE}}) = 97 \cdot 37$ and $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1 \pmod{37}$, the deficit $111 = 3 \cdot 37$, and the divisibility of the individual axis half-pools --- are not: a uniform offset preserves the neutron alignment only when $60\,s_N \equiv 0 \pmod{37}$, i.e., $s_N \equiv 0$ (since $\gcd(60, 37) = 1$), which among the representations considered excludes the peptide residue, while the neutral and zwitterionic forms of the free amino acid have the same elemental composition and therefore the same nucleon counts; under the peptide residue the sums become $N = 3109 \equiv 1$ and $P = 3580 \equiv 28 \pmod{37}$. The absolute alignment is therefore a property of the standard code's assignment in the canonical free-amino-acid representation, fixed a priori by molecular convention rather than by tuning, while the relational structure --- the load-bearing part of the analysis --- is representation-independent.
+In addition, each positive value is reduced to its odd core by
+removing all factors of~$2$. This eliminates repetitions of the form
+$v$, $2v$ and $4v$ that arise, in particular, from the exact scaling
+of the Octet~I groups (Section~\ref{sec:results-octetI}). Under
+Key~0 the number~$37$ divides ten distinct odd cores, whereas the
+multiples of each of $73$ and $61$ reduce to a single core. For $73$
+this is the value itself, $73=2\cdot37-1$, from the Octet~II
+$\Delta$ cascade; for $61$ it is the value $549=9\cdot61$, to which
+the proton sums of the pyrimidine groups reduce: $2196=4\cdot549$
+and $1098=2\cdot549$. This count does not establish the independence
+of the remaining values. The full counts are given in
+\texttt{prime\_divisibility\_scan.csv}. The first place of~$37$ in
+the sets where divisibility is not imposed shows that its
+distinction under the chosen metric is present before the derivation
+of Key~1.
 
-\paragraph{The functional-group asymmetry across positions.}
-One observation on the Keto/Amino axis reaches beyond the third
-position. The asymmetry $N(\mathrm{Keto}) - N(\mathrm{Amino})$
-that localizes to the Trp--Ile pair at the third position
-(Section~\ref{sec:discussion-trpile-robustness}) equals $37$
-there; the same Keto/Amino axis --- the $\{G,T\}$ versus
-$\{A,C\}$ split --- yields a quantity divisible by $37$ at the
-first position as well ($N$-asymmetry $-333 = -9 \cdot 37$) and
-at the second ($T$-asymmetry $185 = 5 \cdot 37$). The divisible
-quantity is $N$, $T$, $N$ by position, fixed after inspection
-rather than in advance, so this is a single observation along
-one axis rather than a control of the kind above. The three are
-arithmetically independent: each is a sum over a different
-partition of the same sixty codons, and the divisibility at one
-position neither follows from nor implies it at another; what
-they share is only the choice of axis. Across the $27$ NCBI
-translation tables, the result depends on the sense-pool model.
-Under Model~1, the full three-position signature occurs for
-Tables~1, 11, and 28, whereas under Model~2 it occurs only for
-Tables~1 and 11. Table~28 is not an independent replication
-under Model~1: after its three context-dependent stop codons are
-excluded, its analyzed pool is identical to that of the standard
-code. Thus, in neither model is the full signature reproduced by
-a table with a non-equivalent analyzed pool. Apart from these full
-matches, no table reaches more than one position. In particular,
-Tables~6, 29, and 30 reach only the third position under both
-models, whereas Table~27 reaches only the third position and only
-under Model~1. Three caveats further qualify it. Unlike the
-third-position case, the first- and
-second-position asymmetries do not localize to a single
-amino-acid pair --- each receives contributions from nineteen
-of the twenty amino acids, because the cancellation that
-isolates Trp and Ile relies on third-position synonymy, which
-the other positions lack. Their non-divisible components carry
-no analogue of the parity-induced residue $-1$ that
-accompanies the third-position value. And, as in
-Section~\ref{sec:discussion-trpile-robustness}, the $27$ tables
-are not statistically independent, so this is evidence of
-specificity among natural codes rather than of improbability
-under a null model. The per-table values are tabulated in
+\paragraph{Dependence on the molecular representation.}
+We compare the adopted representation of the free neutral amino acid
+with the peptide residue and with the zwitterion, keeping the
+isotope convention of Section~\ref{sec:composition}. In the
+peptide-residue model one water molecule, that is $10$ protons and
+$8$ neutrons, is subtracted from the formula of each amino acid. The
+zwitterionic form has the same atomic composition as the free
+neutral molecule, so its nucleon counts coincide with the original
+ones.
+
+These changes are described by a homogeneous integer shift
+$(s_P,s_N)$: the same pair of values is added to the counts of every
+amino acid. In the difference of two sums of one quantity the
+additions cancel if the number of summands is the same. The
+differences of the molecular counts of tryptophan and isoleucine are
+therefore preserved, $\delta N(\mathrm{Trp},\mathrm{Ile})=37$ and
+$\delta P(\mathrm{Trp},\mathrm{Ile})=36$. The differences of the
+Keto/Amino and Strong/Weak sums at the third position are preserved
+as well: in the service-excluded pool each of these groups contains
+$30$ codons. This is stability with respect to homogeneous shifts;
+an arbitrary change of the molecular representation may change
+different amino acids differently.
+
+In the absolute sums equal additions do not cancel. Divisibility of
+the neutron sum of the pool by~$37$ is preserved under the condition
+$60s_N\equiv0\pmod{37}$, that is $s_N\equiv0\pmod{37}$, since $60$
+and $37$ are coprime. For the peptide residues the neutron and
+proton sums are, respectively,
+\[
+\begin{aligned}
+3589-60\cdot8&=3109=84\cdot37+1,\\
+4180-60\cdot10&=3580=97\cdot37-9.
+\end{aligned}
+\]
+Both lose their original residues modulo~$37$. The neutron sums of
+Keto and Amino at the third position become $1573$ and $1536$: the
+difference~$37$ is preserved, but neither sum is a multiple of~$37$
+any longer. The nucleon sum of Octet~I in the same representation
+equals $3700-32\cdot18=3124$, so its difference from the neutron sum
+of the pool is $3124-3109=15$ instead of the original~$111$.
+
+The absolute arithmetic properties thus belong to the adopted
+molecular representation. The differences between groups of the pool
+of equal cardinality and between molecules are preserved under the
+homogeneous shifts tested here, but the stability of the whole
+structure does not follow from this. All $13$ quantities tested
+under the three representations are given in
+\texttt{representation\_sensitivity.csv}.
+
+\paragraph{The Keto/Amino asymmetry across the three positions.}
+We now compare the differences of the Keto minus Amino sums in the
+service-excluded pool. In the standard code, at each position
+exactly one of the four differences in $T$, $P$, $N$ and $\Delta$ is
+divisible by~$37$:
+\[
+\begin{array}{c@{\qquad}ccc}
+\text{Position} & 1 & 2 & 3 \\
+\text{Quantity} & N & T & N \\
+\text{Difference} & -333=-9\cdot37 & 185=5\cdot37 & 37
+\end{array}
+\]
+At the second position the divisibility arises in the subtraction:
+the nucleon sums themselves are not multiples of~$37$, but they have
+equal residues, which cancel in the difference.
+
+At the first two positions the contributions of all nineteen amino
+acids of the pool remain in the differences (methionine drops out
+together with $\mathrm{ATG}$). At the third position synonymy
+cancels the contributions of every amino acid except tryptophan and
+isoleucine. The neutron difference of the two groups thereby reduces
+to the difference of a single pair of molecules
+(Section~\ref{sec:results-key1-trpile}):
+\[
+N_{\mathrm{SE}}(\mathrm{Keto})
+-N_{\mathrm{SE}}(\mathrm{Amino})
+=N(\mathrm{Trp})-N(\mathrm{Ile})=37.
+\]
+
+The comparison of the $27$ NCBI tables shows that the combination of
+divisibilities in $N$, $T$, $N$ across the three positions is
+reproduced only in tables $1$, $11$ and $28$ under Model~1 and in
+tables $1$ and $11$ under Model~2. In all these cases the
+composition of the analyzed pool and its amino acid assignments
+coincide with the standard ones. For table~$28$ this agreement is
+obtained when the context-dependent stop codons are excluded under
+Model~1; Model~2 returns them to the pool
+(Section~\ref{sec:discussion-trpile-robustness}). In the remaining
+tables the divisibility for this sequence is preserved at no more
+than one position. The full results are given in
 \texttt{position\_asymmetry\_ncbi.csv}.
 
-All four controls are deterministic, use exact integer
-arithmetic, and are regenerated by \texttt{controls.py}
+The sequence $N$, $T$, $N$ was singled out after inspection of the
+data. The comparison of the tables describes how widely this
+combination occurs in the registry and gives no estimate of the
+probability of its arising by chance.
+
+All four control datasets are computed deterministically in exact
+integer arithmetic by the script \texttt{controls.py}
 (Section~\ref{sec:datasets}).
 
 \subsection{Significance under a random-code null}
