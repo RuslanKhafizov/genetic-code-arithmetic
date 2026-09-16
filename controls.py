@@ -1,62 +1,47 @@
 #!/usr/bin/env python3
 """
-controls.py — Supplementary specificity controls for the standard genetic code.
+controls.py — Three specificity controls and a cross-table comparison.
 
-This script is NOT part of the core reproducible pipeline (reproduce.py). It is
-a standalone, deterministic, exact-integer companion that consumes the same
-input datasets and writes four supplementary control datasets:
+This deterministic, exact-arithmetic companion reads the same five inputs as
+reproduce.py and writes four supplementary datasets for Section 4.2. It is
+separate from the 18-output reproduce.py pipeline.
 
   * position_axis_analysis.csv
-        The three chemical axes (Keto/Amino, Strong/Weak, Purine/Pyrimidine)
-        applied separately to the FIRST, SECOND and THIRD codon position,
-        under the sense pool, Key 0, and Key 1. Establishes that the divisibility
-        structure modulo 37 is specific to the third codon position.
+        Three chemical axes at each codon position under the service-excluded
+        pool, Key 0, and Key 1. The legacy mode "sense" excludes ATG and the
+        three stop codons. The positional comparison in the manuscript uses
+        this pool; key-dependent values remain available in the CSV.
 
   * prime_divisibility_scan.csv
-        For every prime p up to 97 and for three value sets -- the
-        parametrization-independent groups (no service codons, so 37 cannot be
-        imposed), the groups under Key 0 (37 not imposed by construction), and
-        the groups under Key 1 (37 imposed by the derivation) -- the number of
-        group quantities divisible by p, counted both over all instances and
-        over distinct nonzero values. Establishes that, after the small primes
-        2 (proton parity) and 5 (the round-number regularity), 37 is the only
-        modulus dividing a non-chance share of the quantities, and that this
-        holds in the value sets where 37 is not imposed, so the result is not
-        an artifact of the Key 1 derivation. The scan ranges over primes, not
-        all integers, because divisibility by a composite is the conjunction of
-        divisibilities by its prime-power factors (no new modulus), and because
-        a higher prime power only re-scores the SAME quantities against a
-        smaller chance rate 1/m and so inflates the excess factor without
-        adding information. 37 is distinguished from 2 and 5 on base-independent
-        grounds: it is a larger prime (rarer per hit under the null), has no
-        parity-type structural cause, and occurs at a single power -- no
-        quantity is divisible by 37^2, so its excess does not grow with the
-        modulus, unlike 5, whose multiples here are almost all multiples of 25.
+        Primes up to 97, for the 17 complete groups with no service codon and
+        all 33 groups under each key. Counts retain all instances, distinct
+        nonzero values, and distinct odd cores. The ratio of the divisible
+        distinct-value share to the uniform-residue benchmark 1/p is pk/m,
+        bounded by p with step p/m. It is descriptive, not a p-value under a
+        genetic-code null model. Prime powers impose additional divisibility
+        conditions and are outside the scan. Removing duplicates or factors
+        of two does not establish statistical independence.
 
   * position_asymmetry_ncbi.csv
-        For each of the 27 NCBI translation tables, the Keto/Amino
-        functional-group axis ({G,T} vs {A,C}) sense-pool asymmetry for T, P, N
-        and Delta at each of the three codon positions, with residues modulo 37
-        under two parallel sense-pool models. Model 1 excludes every codon
-        listed as a stop for that table and the ATG initiator. Model 2 returns
-        context-dependent stop codons to the pool with their amino-acid
-        assignments. Under Model 1, Tables 1, 11 and 28 reach all three
-        positions; under Model 2, only Tables 1 and 11 do. In neither model
-        does a table with an analyzed codon-to-amino-acid pool nonequivalent
-        to the standard code reach all three positions.
+        Keto-minus-Amino T/P/N/Delta differences at all three positions for
+        27 NCBI tables and two pool models. Model 1 excludes ATG and all
+        listed stops; Model 2 restores context-dependent stops with their
+        amino-acid assignments. The manuscript's N/T/N sequence is post hoc.
+        The CSV flags are broader: any divisible quantity at each position.
+        In this registry both conditions select 1/11/28 under Model 1 and
+        1/11 under Model 2. Their analyzed pools match the standard pool;
+        counts of related tables are not probability estimates.
 
   * representation_sensitivity.csv
-        The load-bearing sense-pool quantities recomputed under alternative
-        molecular representations of the encoded amino acid: the neutral free
-        amino acid (baseline), the peptide residue (free minus one water), and
-        the zwitterion, each a fixed per-residue nucleon offset from the free
-        amino acid. Establishes which regularities are properties of the
-        representation and which are not: every relational quantity (the
-        Trp/Ile and the Keto/Amino, Strong/Weak axis differences) is invariant
-        across representations, whereas the absolute lattice alignments
-        (N(All sense) = 97*37, the deficit, the axis half-pools) hold only for
-        the free amino acid, since an offset (dP, dN) preserves neutron
-        divisibility by 37 only when dN is itself a multiple of 37.
+        Thirteen quantities under uniform shifts from neutral free amino
+        acids: (0,0), (-10,-8) for a peptide residue (one H2O subtracted),
+        and (0,0) for a zwitterion with the same atoms as the baseline.
+        Molecular and equal-size-group differences survive these shifts.
+        Absolute values change for peptide residues; zwitterions preserve
+        all values. Full pool N remains divisible by 37 iff 60*dN = 0 mod 37,
+        equivalently dN = 0 mod 37. This is not a claim of robustness under
+        arbitrary molecular representations. Legacy anchor names containing
+        "sense" refer to the service-excluded pool and are not renamed.
 
 Output rules match reproduce.py:
   - Encoding UTF-8, LF line endings, trailing newline.
@@ -148,7 +133,7 @@ def codon_pn(codon, mode):
 
     mode == "sense" : service codons are excluded (contribute nothing).
     mode == a key id : service codons take their Key parameters.
-    Sense (non-service) codons always take their amino acid's (P, N).
+    Codons outside SERVICE_CODONS always take their amino acid's (P, N).
     """
     if codon in SERVICE_CODONS:
         if mode == "sense":
@@ -217,7 +202,7 @@ def verify_position3_against_registry():
                 f"not match codon_groups.csv")
 
 
-# ── Control 2: prime divisibility scan over Key 1 group quantities ─────────
+# ── Control 2: prime divisibility scan over three value sets ─────────
 
 def sieve(limit):
     flags = [True] * (limit + 1)
@@ -239,7 +224,7 @@ def reduced(num, den):
 def odd_core(value):
     """The odd part of a positive integer (all factors of two removed).
 
-    The nested group hierarchy (Octet I and its 16- and 8-codon subgroups)
+    The nested group hierarchy (Octet I and its nested 16- and 8-codon groups)
     mechanically produces, for any quantity V, the multiples 2V and 4V as
     well. A prime that divides V then scores up to three times over the same
     underlying fact. Reducing each divisible value to its odd core collapses
@@ -256,7 +241,7 @@ def build_modulus_scan():
     # using the same counting rule as reproduce.py. A group is
     # parametrization-independent -- in the literal sense -- when its four
     # nucleon quantities are identical under Key 0 and Key 1; equivalently
-    # (Section 3.1) these are exactly Octet I with its sub-groups and the
+    # (Section 3.1) these are exactly Octet I with its nested groups and the
     # pyrimidine-restricted groups, the only groups containing no service codon.
     # 37 cannot be imposed on this value set by any parametrization.
     key0_values, key1_values, indep_values = [], [], []
@@ -275,18 +260,16 @@ def build_modulus_scan():
         ("key1", key1_values),
     ]
 
-    # Counts are pure integers; the chance expectation of divisible distinct
-    # values, Total_Distinct / Prime, is stored as an exact reduced fraction
-    # (no float numerics). The excess factor over chance is read off as
-    # Divisible_Distinct relative to Expected_Distinct.
+    # Expected_Distinct = m/p is an exact uniform-residue benchmark, not
+    # an expectation under a random-genetic-code null model. If k distinct
+    # values are divisible, k/(m/p) = p*k/m is descriptive (not a p-value).
+    # Its maximum is p and its step is p/m; dependencies remain.
     header = ["Value_Set", "Prime", "Divisible_All", "Total_All",
               "Divisible_Distinct", "Total_Distinct", "Expected_Distinct",
               "Divisible_Distinct_OddCores"]
-    # The scan ranges over primes only: divisibility by a composite is the
-    # conjunction of its prime-power factors (no new modulus), and a higher
-    # prime power merely re-scores the same values against a smaller chance
-    # rate 1/m, inflating the excess factor without adding information. The
-    # prime is therefore the irreducible unit of comparison.
+    # Scope: primes up to PRIME_LIMIT. Prime powers require additional
+    # divisibility conditions; they are not redundant tests and are not
+    # included in this scan.
     primes = sieve(PRIME_LIMIT)
     rows = []
     for set_name, values in value_sets:
@@ -305,8 +288,9 @@ def build_modulus_scan():
 # ── Main ───────────────────────────────────────────────────────────────────
 
 def build_position_asymmetry_ncbi():
-    # Control 3. For each of the 27 NCBI translation tables, the Keto/Amino
-    # functional-group axis ({G,T} vs {A,C}) sense-pool asymmetry
+    # Cross-table comparison (post hoc interpretation). For each of the 27
+    # NCBI translation tables, the Keto/Amino functional-group axis
+    # ({G,T} vs {A,C}) service-excluded-pool asymmetry
     # (Keto minus Amino) for T, P, N and Delta at each of the three codon
     # positions, with residues modulo 37, under two parallel pool models.
     #
@@ -391,19 +375,17 @@ def build_position_asymmetry_ncbi():
     return header, rows
 
 
-# -- Control 4: representation (counting-convention) sensitivity ------------
+# -- Control 3: molecular-representation sensitivity ----------------------
 
-# Alternative molecular representations of the amino acid a codon encodes, each
-# a fixed per-residue nucleon offset from the neutral free amino acid (the
-# baseline used throughout). The free amino acid is the canonical molecular
-# identity of the encoded species; a peptide residue is that molecule minus one
-# water lost on peptide-bond formation (H2O = 10 protons, 8 neutrons); the
-# zwitterion has the same atoms as the neutral form. All are UNIFORM offsets, so
-# every difference between codon sets of equal cardinality is invariant across
-# them, while an absolute sum's divisibility by 37 survives an offset (dP, dN)
-# only when 60*dN is a multiple of 37, i.e. dN is a multiple of 37 (gcd(60,37)=1)
-# -- which among chemically meaningful representations selects the free amino
-# acid alone.
+# Uniform per-amino-acid offsets preserve molecular differences and
+# differences between equal-size codon groups. The peptide model subtracts
+# one H2O (10 protons, 8 neutrons) from each formula; the zwitterion keeps
+# the baseline atoms and nucleon counts. Full pool N remains divisible by
+# 37 iff 60*dN = 0 mod 37, hence dN = 0 mod 37. This condition concerns
+# that neutron sum, not every absolute quantity. In particular baseline
+# pool P = 4180 is not divisible by 37. The deficit compares T(Octet I)
+# and pool N within the same representation: 3124 - 3109 = 15 for peptides.
+# No conclusion about arbitrary molecular representations is implied.
 REPRESENTATIONS = [
     ("free",            0,   0),   # neutral free amino acid (baseline)
     ("peptide_residue", -10, -8),  # free minus one H2O (10 protons, 8 neutrons)
@@ -422,7 +404,7 @@ def _octet1_codons():
             for c in cs]
 
 def _shifted_sense(codons, dP, dN):
-    """(T, P, N, Delta) over the SENSE codons of a list, each amino acid shifted
+    """(T, P, N, Delta) over a list with service codons excluded, each amino acid shifted
     by a per-residue offset (dP, dN); service codons excluded."""
     p = n = 0
     for c in codons:
@@ -474,7 +456,7 @@ def build_representation_sensitivity():
     return header, rows
 
 def verify_representation_free_against_preprint():
-    # The free-amino-acid row must reproduce the preprint's sense-pool values.
+    # The free-amino-acid row must reproduce the preprint's service-excluded-pool values.
     want = {"N_sense": 3589, "P_sense": 4180,
             "deficit_T_OctetI_minus_N_sense": 111,
             "N_Keto": 1813, "N_Amino": 1776,
