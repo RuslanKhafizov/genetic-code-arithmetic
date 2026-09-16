@@ -1833,11 +1833,6 @@ The 27 tables and two models produce 54 rows, one per table–model
 combination. The number of service positions is the selected model's
 stop-position count plus the ATG position.
 
-The current preprint version describes 17 output datasets. This
-comparative dataset was added later and brings the number of outputs
-of `reproduce.py` to 18; its description will be incorporated into
-the next manuscript revision.
-
 #### The two procedures
 
 For each quantity `Q` in {P, N} independently, write `Q_pool` for the
