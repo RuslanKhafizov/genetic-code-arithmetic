@@ -331,9 +331,9 @@ does not upload selected codons or calculated results.
 - **Symmetry highlighting.** Three predefined nucleotide
   permutations can be applied to highlight related codons on
   the matrix: the Rumer transformation $R = (T \leftrightarrow
-  G,\, C \leftrightarrow A)$, the transition $(T \leftrightarrow
-  C,\, A \leftrightarrow G)$, and the transversion
-  $(T \leftrightarrow A,\, G \leftrightarrow C)$. The Rumer
+  G, C \leftrightarrow A)$, the transition $(T \leftrightarrow
+  C, A \leftrightarrow G)$, and the transversion
+  $(T \leftrightarrow A, G \leftrightarrow C)$. The Rumer
   transformation discussed in the preprint can be visually
   verified through this feature. Independently of the selected preset, hovering over any codon
   block in the matrix outlines that block together with its image
@@ -721,7 +721,7 @@ benchmark, not an expectation under a random-genetic-code null model.
    preserving the tryptophan–isoleucine and third-position Keto/Amino and
    Strong/Weak differences. This does not imply robustness to arbitrary
    changes of molecular representation. Divisibility of the full pool N
-   survives if and only if $60\,s_N \equiv 0 \pmod{37}$, hence $s_N \equiv 0 \pmod{37}$.
+   survives if and only if $60\cdot s_N \equiv 0 \pmod{37}$, hence $s_N \equiv 0 \pmod{37}$.
    The peptide model gives N=3109 and P=3580, and Keto/Amino neutron sums
    of 1573/1536: the difference 37 survives, while divisibility of the sums
    is lost. The deficit is computed within one representation:
@@ -2303,7 +2303,7 @@ that same representation is 3124−3109=15. In all three representations,
 tryptophan–isoleucine differences remain 37 in N and 36 in P. The zwitterion
 also preserves all absolute values; these are therefore not preserved only
 by the neutral free form. For the full neutron sum, divisibility survives
-when $60\,s_N \equiv 0 \pmod{37}$, equivalent to $s_N \equiv 0 \pmod{37}$.
+when $60\cdot s_N \equiv 0 \pmod{37}$, equivalent to $s_N \equiv 0 \pmod{37}$.
 The original proton sum 4180 is itself not divisible by 37.
 Before writing the file, the script checks baseline N=3589, P=4180,
 deficit=111, and the molecular differences 37/36.
