@@ -97,12 +97,13 @@ and the interactive visualizer is hosted at
     difference Delta) over the 60-codon service-codon-excluded
     pool (POOL60). The three stop codons and the initiator ATG
     are excluded from the sums, so every quantity shown is
-    parametrization-independent. The figure displays the
-    two-sided regularity discussed in the preprint: on the
-    third-position axes the neutron sums lie on the
-    37-lattice while the hydrogen counts Delta lie on it or
-    one atom away, and the proton sums (P = N + Delta)
-    follow accordingly.
+    parametrization-independent. On the Keto/Amino and
+    Strong/Weak axes the neutron sums are multiples of 37,
+    while the proton sums and the hydrogen counts Delta are
+    multiples of 37 or one unit below a multiple; on the
+    Purine/Pyrimidine axis neither P nor N is a multiple of
+    37, but Delta takes the same two values, 295 = 8·37 − 1
+    and 296 = 8·37.
   - `groups_key0.png` — graphical overview of nucleon
     parameters (T, P, N, Δ) for all codon groups under
     Key 0. Divisibility relations by 37, 111 and 999 are
@@ -130,13 +131,16 @@ complete set of assumptions on which all computed results depend.
   translation tables maintained by NCBI (numbered 1–33, with gaps),
   used for the comparative analysis across natural genetic code
   variants.
-- `codon_groups.csv` — definitions of all 33 codon groups
-  (macro-groups, L16 sub-groups and L8 sub-groups) used in the
-  study, together with twin-group assignments.
+- `codon_groups.csv` — definitions of all 33 codon groups used
+  in the study (the full code, the two octets, ten groups
+  defined by the third-position nucleotide, and their twenty
+  intersections with Octet I and Octet II), together with
+  twin-group assignments.
 - `key_parameters.csv` — parametric keys assigning nucleon values
   `(P, N)` to each of the four service codons. Keys 0 and 1 are
-  the two keys analyzed in the preprint; Keys 2–9 are included
-  for reference and are not discussed in the main text.
+  the two keys analyzed in the preprint; Keys 2–9 are reference
+  assignments from the exploratory stage and are not used to
+  obtain the preprint's results.
 
 ### Computed datasets
 
@@ -190,16 +194,16 @@ Comparative dataset across NCBI codes:
   bookkeeping to all 27 NCBI translation tables (numbered
   1–33, with gaps) to support the comparative analysis
   between the standard code and its natural variants.
-- `keto_amino_balance_models.csv` — reports the keto/amino
-  partition of the sense pool (third-position G/T vs A/C)
-  in both neutron and proton counts, across all 27 NCBI
+- `keto_amino_balance_models.csv` — reports the Keto/Amino
+  partition of the service-excluded pool (third-position G/T
+  vs A/C) in both neutron and proton sums, across all 27 NCBI
   translation tables (numbered 1–33, with gaps) and under
-  both sense-pool models.
+  both pool models.
 - `service_codon_balance_comparison.csv` — for every NCBI
   translation table and both service-excluded pool models,
   the minimal Keto/Amino compensation carried by the service
   codons, computed twice: with the balance condition alone and
-  with the additional requirement that the global sum be
+  with the additional requirement that the full P and N sums each be
   divisible by 37. Reports the resulting assignments, the totals
   they produce, and the difference between the two procedures.
 
@@ -265,8 +269,8 @@ does not upload selected codons or calculated results.
   "ALL CODE", the prefix follows the active key (for example,
   `key0_*` or `key1_*`). `Code_Section` identifies the group section.
 
-- **Parametric keys.** Quick switching between the zero
-  parametrization (Key 0), the symmetrization (Key 1), and
+- **Parametric keys.** Quick switching between the naive
+  reading (Key 0), the symmetrization (Key 1), and
   additional reference keys defined in `key_parameters.csv`.
   Custom keys can be constructed by manually editing the
   nucleon contributions assigned to ATG and the actual STOPs
@@ -310,7 +314,7 @@ does not upload selected codons or calculated results.
   representing the structural partition based on the chemical
   type of the nucleotide at the corresponding codon position.
   The Pos 3 tab corresponds to the codon-group partitioning
-  used in this study, including the macro-groups defined by the
+  used in this study, including the groups defined by the
   third nucleotide and the Octet I / Octet II partition.
   Additional experimental groupings (Quartets, Combinatorial)
   are reached through a dropdown; some of these were introduced
@@ -547,9 +551,8 @@ Run the script from the repository directory:
 
     python3 reproduce.py
 
-The script reads the five input CSV files from the current
-directory and writes the eighteen computed CSV files to the same
-directory, overwriting any existing files of the same name.
+The script reads the five input CSV files from its own directory and writes
+the eighteen computed CSV files there, overwriting any existing files of the same name.
 No command-line arguments, configuration files, environment
 variables, or interactive prompts are used. On successful
 completion the script prints a single summary line and exits with
@@ -710,7 +713,7 @@ benchmark, not an expectation under a random-genetic-code null model.
    yield one each (73 and 549, respectively).
 
 3. **Molecular representation** (`representation_sensitivity.csv`).
-   Thirteen quantities are checked under uniform shifts (ΔP, ΔN): (0,0)
+   Thirteen quantities are checked under uniform shifts $(s_P, s_N)$: (0,0)
    for the neutral free amino acid, (−10,−8) for the peptide residue, and
    (0,0) for the zwitterion. The peptide model subtracts one H2O from each
    molecular formula; the zwitterion retains the original atoms. Shifts
@@ -718,7 +721,7 @@ benchmark, not an expectation under a random-genetic-code null model.
    preserving the tryptophan–isoleucine and third-position Keto/Amino and
    Strong/Weak differences. This does not imply robustness to arbitrary
    changes of molecular representation. Divisibility of the full pool N
-   survives if and only if 60·ΔN ≡ 0 (mod 37), hence ΔN ≡ 0 (mod 37).
+   survives if and only if $60\,s_N \equiv 0 \pmod{37}$, hence $s_N \equiv 0 \pmod{37}$.
    The peptide model gives N=3109 and P=3580, and Keto/Amino neutron sums
    of 1573/1536: the difference 37 survives, while divisibility of the sums
    is lost. The deficit is computed within one representation:
@@ -793,11 +796,12 @@ extreme as the standard code, the estimate
 ### Six statistical summaries
 
 1. **S1 — joint divisibility of two anchors.**
-   `N(service-excluded pool) = 3589 = 97·37` and
-   `T(Octet I) = 3700 = 100·37` are both divisible by 37 in a fraction
-   0.000800 of random codes (95% interval 0.000746–0.000856).
-   This is the directly estimated joint probability; independence of the
-   anchors is not assumed.
+   In the standard code, the service-excluded pool neutron sum is
+   3589 = 97·37 and the Octet I nucleon sum is 3700 = 100·37. Both sums
+   were jointly divisible by 37 in 799 of 1,000,000 permutations; the joint
+   event is counted directly, without assuming independence of the two
+   divisibilities. The estimate is $p_{\mathrm{MC}} = (b+1)/(M+1) \approx 0.000800$
+   (95% Wilson interval 0.000746–0.000856).
 2. **S2 — divisibility count for the headline service-excluded partition.**
    Across T/P/N/Δ for nine groups, the standard code has 13 divisible
    quantities out of 36, against a null mean of 1.0299. A value of 13 or
@@ -1090,9 +1094,9 @@ All pair counts reported in this table sum to 190.
 
 For each unordered pair of amino acids (i, j), the neutron difference is defined as:
 
-ΔN = |Nᵢ − Nⱼ|
+$\lvert\delta N(i,j)\rvert = \lvert N(i)-N(j)\rvert$
 
-where Nᵢ and Nⱼ are the total neutron counts of the two amino acids.
+where $N(i)$ and $N(j)$ are the total neutron counts of the two amino acids.
 
 Only non-negative integer differences are possible by construction.
 
@@ -1118,27 +1122,25 @@ amino acids from different groups are always odd.
 
 #### Coverage
 
-The table includes all integer values of ΔN from 0 to the observed maximum of 61.
+The table includes all integer values of $\lvert\delta N(i,j)\rvert$ from 0 to the observed maximum of 61.
 Integer values for which no amino acid pair exists are explicitly listed with
 Number_of_Pairs = 0 and Amino_Acid_Pairs = "No pairs found".
 
 Of the 62 possible integer values in this range, 47 correspond to at least one
-amino acid pair, and 15 are not realized by any pair. The unrealized values are
-not uniformly distributed: their pattern is consistent with the parity partition
-described above, as cross-group differences (always odd) and within-group
-differences (always even) together constrain which values are achievable.
+amino acid pair, and 15 are not realized by any pair: 7 odd and 8 even. The
+parity partition fixes the parity of each difference but excludes neither
+parity: both within-group (even) and cross-group (odd) differences occur.
 
 #### Degenerate cases
 
-Pairs with ΔN = 0 correspond to amino acids that have exactly the same total
-neutron count despite differing molecular composition.
+A zero difference means that two distinct amino acids have the same total neutron count.
 
 Such degeneracies arise naturally within the canonical amino acid set and are
 explicitly included in the dataset as a separate table entry.
 
 #### Columns
 
-- `Neutron_Difference` — absolute difference in total neutron count (ΔN)
+- `Neutron_Difference` — absolute difference in total neutron count ($\lvert\delta N(i,j)\rvert$)
 - `Number_Of_Pairs` — number of unordered amino acid pairs exhibiting this difference
 - `Amino_Acid_Pairs` — semicolon-separated list of amino acid name pairs
   corresponding to the given neutron difference, or "No pairs found" if no pair exists
@@ -1172,9 +1174,9 @@ All pair counts reported in this table sum to 190.
 
 For each unordered pair of amino acids (i, j), the proton difference is defined as:
 
-ΔP = |Pᵢ − Pⱼ|
+$\lvert\delta P(i,j)\rvert = \lvert P(i)-P(j)\rvert$
 
-where Pᵢ and Pⱼ are the total proton counts of the two amino acids.
+where $P(i)$ and $P(j)$ are the total proton counts of the two amino acids.
 
 Only non-negative integer differences are possible by construction.
 
@@ -1183,35 +1185,36 @@ Only non-negative integer differences are possible by construction.
 All observed proton differences are even; no unordered amino acid pair exhibits
 an odd proton difference.
 
-This follows from a structural property of the canonical amino acid set: all 20
-amino acids have an even total proton count. This in turn reflects the molecular
-architecture of amino acids — the backbone NH₂–CH–COOH combined with any
-standard side chain always yields an even proton sum.
+This follows from the fact that all 20 canonical amino acids have an even total
+proton count. In their electronic ground states, their neutral molecules are
+closed-shell systems in which electrons occupy orbitals in pairs; the number of
+electrons is therefore even, and in a neutral molecule it equals the number of
+protons.
 
-A direct consequence is that ΔP = 37 is structurally forbidden for any pair
+A direct consequence is that $\lvert\delta P(i,j)\rvert = 37$ is structurally forbidden for any pair
 of canonical amino acids, since 37 is odd. 
 
 #### Coverage
 
-The table includes all integer values of ΔP from 0 to the observed maximum of 68.
+The table includes all integer values of $\lvert\delta P(i,j)\rvert$ from 0 to the observed maximum of 68.
 Integer values for which no amino acid pair exists are explicitly listed with
 Number_of_Pairs = 0 and Amino_Acid_Pairs = "No pairs found".
 
 Of the 69 possible integer values in this range, 30 correspond to at least one
-amino acid pair, and 39 are not realized by any pair. All 39 unrealized values
-are odd integers, consistent with the parity constraint described above.
+amino acid pair, and 39 are not realized by any pair. Of these, 34 are all the
+odd values in the range, excluded by parity, and 5 are even (50, 58, 62, 64,
+and 66). All 30 realized values are even.
 
 #### Degenerate cases
 
-Pairs with ΔP = 0 correspond to amino acids that have exactly the same total
-proton count despite differing molecular composition.
+A zero difference means that two distinct amino acids have the same total proton count.
 
 Such degeneracies arise naturally within the canonical amino acid set and are
 explicitly included in the dataset as a separate table entry.
 
 #### Columns
 
-- `Proton_Difference` — absolute difference in total proton count (ΔP)
+- `Proton_Difference` — absolute difference in total proton count ($\lvert\delta P(i,j)\rvert$)
 - `Number_Of_Pairs` — number of unordered amino acid pairs exhibiting this difference
 - `Amino_Acid_Pairs` — semicolon-separated list of amino acid name pairs
   corresponding to the given proton difference, or "No pairs found" if no pair exists
@@ -1245,15 +1248,15 @@ All pair counts reported in this table sum to 190.
 
 For each unordered pair of amino acids (i, j), the nucleon difference is defined as:
 
-ΔT = |Tᵢ − Tⱼ|
+$\lvert\delta T(i,j)\rvert = \lvert T(i)-T(j)\rvert$
 
-where Tᵢ and Tⱼ are the total nucleon counts of the two amino acids, and T = P + N.
+where $T(i)$ and $T(j)$ are the total nucleon counts of the two amino acids, and T = P + N.
 
 Only non-negative integer differences are possible by construction.
 
 #### Coverage
 
-The table includes all integer values of ΔT from 0 to the observed maximum of 129.
+The table includes all integer values of $\lvert\delta T(i,j)\rvert$ from 0 to the observed maximum of 129.
 Integer values for which no amino acid pair exists are explicitly listed with
 Number_of_Pairs = 0 and Amino_Acid_Pairs = "No pairs found".
 
@@ -1262,15 +1265,14 @@ amino acid pair, and 58 are not realized by any pair.
 
 #### Degenerate cases
 
-Pairs with ΔT = 0 correspond to amino acids that have exactly the same total
-nucleon count despite differing molecular composition.
+A zero difference means that two distinct amino acids have the same total nucleon count.
 
 Such degeneracies arise naturally within the canonical amino acid set and are
 explicitly included in the dataset as a separate table entry.
 
 #### Columns
 
-- `Nucleon_Difference` — absolute difference in total nucleon count (ΔT)
+- `Nucleon_Difference` — absolute difference in total nucleon count ($\lvert\delta T(i,j)\rvert$)
 - `Number_Of_Pairs` — number of unordered amino acid pairs exhibiting this difference
 - `Amino_Acid_Pairs` — semicolon-separated list of amino acid name pairs
   corresponding to the given nucleon difference, or "No pairs found" if no pair exists
@@ -1395,12 +1397,14 @@ which specifies nucleon values assigned to the four service
 codons of the standard genetic code (the start codon ATG and the
 three stop codons TAA, TAG, TGA). Two of these keys, key0 and
 key1, are analyzed in the accompanying preprint as the two
-principal parametrizations; key0 is the zero parametrization, in
+principal parametrizations; key0 is the naive reading, in
 which stop codons contribute zero and ATG is treated as ordinary
 methionine, and key1 is the symmetrization, in which stop codons
-and ATG are assigned values derived analytically from symmetry
-constraints. The remaining keys key2–key9 are included for
-reference and are not discussed in the preprint.
+and ATG are assigned values derived analytically from the joint
+conditions of Keto/Amino balance and divisibility by 37. The
+remaining keys key2–key9 are reference assignments from the
+exploratory stage and are not used to obtain the preprint's
+results.
 
 #### Purpose
 
@@ -1408,22 +1412,28 @@ Each parameter set represents a different configuration of nucleon counts assign
 - The start codon (ATG, encoding Methionine)
 - The stop codons (TAA, TAG, TGA)
 
-By varying these parameters, the analysis tests whether observed nucleon patterns persist across different boundary conditions of the genetic code.
+The keys affect only sums over groups that contain service codons; sums over
+the service-excluded pool do not depend on them. Only key0 and key1 are used to
+obtain the preprint's results.
 
 #### Key sets
 
-key0 — **zero parametrization**. Start codon ATG is assigned the
+key0 — **naive reading**. Start codon ATG is assigned the
 standard methionine nucleon values; the three stop codons are
-assigned zero nucleon values in all parameters. This is the
-reference configuration used whenever service codons should not
-contribute to nucleon sums.
+assigned zero nucleon values in all parameters. Key 0 is not
+identical to the service-excluded pool: all 64 positions are
+retained, and ATG contributes the values of methionine.
 
 key1 — **symmetrization**. Start codon ATG is assigned
 `(P, N) = (1, 0)`; each of the three stop codons is assigned
 `(P, N) = (37, 37)`. These values are derived analytically in
-the preprint as the minimal nonnegative integer solution of a
-system of symmetry constraints on nucleon quantities across
-codon macro-groups.
+the preprint from the joint conditions of Keto/Amino balance of
+the complete table and divisibility of the total P and N sums
+by 37. Under the assumption that the three stop codons share a
+common parameter pair, Key 1 is the unique minimal non-negative
+integer solution of this system; minimality means the smallest
+total contribution of the service codons, determined separately
+for protons and for neutrons.
 
 key2–key9 — additional parametric keys not analyzed in the main
 text of the preprint. Included in the dataset for reference and
@@ -1513,8 +1523,8 @@ where amino acid letters are used instead (see below).
 This code is identical to the Standard Code (transl_table=1) in its
 amino acid assignments and stop codons. It is listed as a separate entry
 because bacteria, archaea, and plant plastids use an extended set of
-start codons: in addition to ATG, the codons GTG, TTG, ATT, and CTG can
-initiate translation in these organisms.
+start codons: in addition to ATG, the codons TTG, CTG, ATT, ATC, ATA, and
+GTG can initiate translation in these organisms.
 
 #### Context-dependent stop codons (transl_table=27, 28, 31)
 
@@ -1552,26 +1562,28 @@ in the Starts line.
 ### deficit_models_analysis.csv
 
 This dataset provides a comparative arithmetic analysis of
-the sense-pool of the standard code across all genetic
+the service-excluded pool across all genetic
 code variants recognized by NCBI (27 translation tables,
 numbered 1–33, with gaps). Two structurally distinct tests
 are tabulated:
 
-(1) the neutron deficit of the sense pool relative to
+(1) the neutron deficit of the service-excluded pool relative to
 three reference anchors derived from Octet I (the constant
 3700, the structural T(Octet I), and the functional
 T(Octet I)). For the standard code all three deficits
 equal 111 = 3·37.
 
-(2) the residue of the sense-pool proton count modulo 37,
+(2) the residue of the pool's proton sum modulo 37,
 without reference to any Octet I-based anchor. For the
-standard code this residue is -1 ≡ 36 (mod 37), the
-parity-induced unit shift consistent with the structural
-forbiddenness of |δP| = 37 for any pair of canonical
-amino acids.
+standard code this residue is 36 ≡ −1 (mod 37): the sum
+4180 = 113·37 − 1 lies one unit below a multiple of 37.
+Proton parity excludes the odd multiple 113·37, as it
+excludes |δP| = 37 for any pair of canonical amino acids,
+but it determines neither the direction nor the size of the
+deviation.
 
 The two tests reflect different aspects of how the
-standard code's sense pool aligns with the 37-lattice: the
+standard code's service-excluded pool aligns with the 37-lattice: the
 neutron test through dimensional matching against the
 Octet I scale, the proton test through residue analysis
 alone.
@@ -1584,12 +1596,11 @@ section above for details on how to regenerate it.
 
 #### Sense codons excluding the ATG initiator
 
-The columns `N_Pure` and `Pure_Codons_Count` are computed over the set
-of sense codons excluding the ATG initiator. ATG encodes Methionine and
-is a fully functional sense codon at any internal position; it is
-excluded here solely in its role as the universal initiation codon. All other sense codons, including alternative start codons such as
-GTG and TTG, retain their amino acid meaning during elongation and are
-included.
+The columns `N_Pure` and `Pure_Codons_Count` describe the Model 1 pool.
+Both models exclude ATG in its initiator role (a convention of this work);
+at internal positions it encodes methionine. Other potential start codons,
+such as GTG and TTG, contribute their elongation amino acid values
+when included in the pool for the selected model.
 
 Stop codons are taken from the `Stop_Codons` column of
 `ncbi_genetic_code_registry.csv` rather than inferred from the
@@ -1607,12 +1618,14 @@ where Stop_Count is the number of codons listed in the `Stop_Codons`
 column of `ncbi_genetic_code_registry.csv` for the given translation
 table.
 
-In the notation of the preprint, this sense pool is written
-`N(All sense)` and `P(All sense)`; the dataset columns with the
+In the preprint, this 60-codon set of the standard code is called
+the service-excluded pool $\mathcal{C}_{\mathrm{SE}}$ (identifier
+`pool60`), and its sums are written $N(\mathcal{C}_{\mathrm{SE}})$
+and $P(\mathcal{C}_{\mathrm{SE}})$; the dataset columns with the
 `_Pure` suffix (`N_Pure`, `P_Pure`, `N_Keto_Pure`, `P_Amino_Pure`,
-and so on) correspond to these sense-pool quantities. The preprint's
-term *sense codons* denotes exactly this 64 − Stop_Count − 1 set
-(stop codons and the ATG initiator excluded).
+and so on) hold the same sums over the pool of each table. In this
+README, *sense codons* has its usual meaning of non-stop codons,
+ATG included; the preprint does not use the term for the pool.
 
 The codon order used for the `Amino_Acids` string follows the standard
 NCBI enumeration described in the `ncbi_genetic_code_registry.csv`
@@ -1628,7 +1641,7 @@ deficit (111). This follows directly from the methodology above.
 
 Code 11 (Bacterial, Archaeal and Plant Plastid) has an amino acid
 mapping identical to the Standard Code. Since alternative start codons
-are not excluded, its sense codon set matches Code 1.
+are not excluded, its service-excluded pool matches that of Code 1.
 
 Code 28 (Condylostoma Nuclear) has three context-dependent stop codons
 (TAA, TAG, TGA). Once these are excluded alongside ATG, the resulting
@@ -1642,7 +1655,7 @@ function as amino acids in mid-sequence and as stop signals at the end
 of a gene. Two models are evaluated for these codes.
 
 Model 1 (`N_Pure`): codons listed in the `Stop_Codons` column are
-excluded from the sense codon set even if they encode an amino acid in
+excluded from the pool even if they encode an amino acid in
 the `Amino_Acids` string. This is the primary model used throughout the
 analysis.
 
@@ -1697,7 +1710,7 @@ The same three deficits are also provided for Model 2 as
 
 Unlike the neutron deficit test described above, the proton
 residue test makes no reference to Octet I. It records the
-residue of the sense-coding proton pool modulo 37, computed
+residue of the pool's proton sum modulo 37, computed
 directly from `P_Pure` (Model 1) or `P_Pure_Alt` (Model 2):
 
 `P_Pure_mod37` = `P_Pure` mod 37
@@ -1705,11 +1718,14 @@ directly from `P_Pure` (Model 1) or `P_Pure_Alt` (Model 2):
 
 For the standard code, `P_Pure_mod37` equals 36, which
 corresponds to −1 modulo 37 (the dataset records the
-non-negative representative). This residue of −1 is the
-parity-induced unit shift discussed in the preprint: the
-even-proton property of canonical amino acids forces
-|δP(Trp, Ile)| = 36 rather than the lattice multiplier 37,
-and the same shift propagates to the global sense pool.
+non-negative representative). The preprint discusses this
+one-unit deviation together with proton parity: because every
+canonical amino acid has an even proton count, the pool sum
+cannot equal the odd multiple 113·37, and |δP(Trp, Ile)|
+cannot equal 37. Parity imposes only this constraint: that the
+global sum and the local difference both lie one unit below a
+multiple of 37 follows from the specific nucleon counts, and
+neither fact follows from the other.
 
 The distribution of `P_Pure_mod37` across NCBI tables
 identifies which alternative codes preserve this −1 mod 37
@@ -1766,11 +1782,10 @@ results under Model 2 are recorded in `P_Pure_Alt_mod37`.
   initiator (Model 2); identical to `P_Pure` for all codes except
   transl_table 27, 28, and 31
 - `P_Pure_mod37` — residue of `P_Pure` modulo 37; for the standard code
-  this is 36 ≡ −1 (mod 37), a parity-induced deficit of one proton on
-  the 37-lattice. The deficit is a consequence of the parity property
-  of the canonical amino acids — every canonical amino acid has an
-  even proton count — which forces the localizing pair Trp/Ile to give
-  |δP| = 36 instead of 37. The distribution of this residue across
+  this is 36 ≡ −1 (mod 37): the sum lies one unit below a multiple of
+  37. Proton parity excludes the odd multiple 113·37 but determines
+  neither the direction nor the size of the deviation (see "Proton
+  residue calculations" above). The distribution of this residue across
   NCBI tables shows which alternative codes preserve this −1 mod-37
   alignment and which do not.
 - `P_Pure_Alt_mod37` — residue of `P_Pure_Alt` modulo 37 (Model 2);
@@ -1779,13 +1794,13 @@ results under Model 2 are recorded in `P_Pure_Alt_mod37`.
 
 ### keto_amino_balance_models.csv
 
-This dataset reports the keto/amino partition of the sense pool across all genetic code variants recognized by NCBI (27 translation tables, numbered 1–33, with gaps), in both neutron and proton quantities, under the same two sense-pool models as `deficit_models_analysis.csv`.
+This dataset reports the Keto/Amino partition of the service-excluded pool across all genetic code variants recognized by NCBI (27 translation tables, numbered 1–33, with gaps), in both neutron and proton quantities, under the same two pool models as `deficit_models_analysis.csv`.
 
 The third codon position partitions all 64 codons into two halves of
 32 codons each: the `Keto` half (third position is G or T) and the
 `Amino` half (third position is A or C). For each NCBI table, the
-total neutron and proton counts of each half are computed over the
-sense pool only — service codons are excluded from both sums. Under
+neutron and proton sums of each half are computed over the
+service-excluded pool only: service codons are excluded from both sums. Under
 Model 1, the excluded service codons are all codons listed in the
 `Stop_Codons` column plus the ATG initiator; under Model 2, only
 unconditional stop codons — those marked `*` in the `Amino_Acids`
@@ -1799,7 +1814,7 @@ them; deriving the set from the `*` markers rather than from a
 per-table flag keeps the convention well defined should a future table
 declare both kinds at once.
 
-For the standard code, the sense-pool keto/amino differences are
+For the standard code, the Keto/Amino differences in the service-excluded pool are
 N_Keto − N_Amino = 37 and P_Keto − P_Amino = 36. Across the NCBI tables, this signature partitions the codes into those that preserve
 the (37, 36) signature and those that perturb it.
 
@@ -1807,15 +1822,15 @@ the (37, 36) signature and those that perturb it.
 
 - `Transl_Table` — NCBI translation table identifier (1..33, with gaps)
 - `Code_Name` — full name of the genetic code variant
-- `N_Keto_Pure` — total neutron count of sense codons in the Keto half
-  (third position G or T) under Model 1
-- `N_Amino_Pure` — total neutron count of sense codons in the Amino half
-  (third position A or C) under Model 1
+- `N_Keto_Pure` — neutron sum of the Keto half (third position G or T)
+  of the service-excluded pool under Model 1
+- `N_Amino_Pure` — neutron sum of the Amino half (third position A or C)
+  of the same pool under Model 1
 - `N_Diff_Pure` — `N_Keto_Pure − N_Amino_Pure` (Model 1)
-- `P_Keto_Pure` — total proton count of sense codons in the Keto half
-  under Model 1
-- `P_Amino_Pure` — total proton count of sense codons in the Amino half
-  under Model 1
+- `P_Keto_Pure` — proton sum of the Keto half of the same pool under
+  Model 1
+- `P_Amino_Pure` — proton sum of the Amino half of the same pool under
+  Model 1
 - `P_Diff_Pure` — `P_Keto_Pure − P_Amino_Pure` (Model 1)
 - `N_Keto_Pure_Alt`, `N_Amino_Pure_Alt`, `N_Diff_Pure_Alt`,
   `P_Keto_Pure_Alt`, `P_Amino_Pure_Alt`, `P_Diff_Pure_Alt` — the
@@ -1972,8 +1987,8 @@ stop codons; these configurations are explicitly defined in the study.
 
 #### Nucleon quantities
 
-Four strict, structurally independent nucleon quantities are reported
-for each group:
+Four nucleon quantities are reported for each group; only two of
+them are independent, since T = P + N and Δ = P − N:
 
 `Total_Nucleons` — total nucleon count, defined as:
 
@@ -1987,9 +2002,10 @@ isotopes of each element).
 
 Δ = P − N
 
-This value is numerically equal to the number of hydrogen atoms in the
-molecular composition, as hydrogen is the only element in amino acid
-molecules for which the neutron count is zero.
+For sums of amino-acid contributions this value equals the number of
+hydrogen atoms, because ¹H is the only isotope used whose proton and
+neutron counts differ. No such interpretation is claimed for the formal
+Key 1 contributions of service codons.
 
 #### Columns
 
@@ -2094,10 +2110,9 @@ between the compared parameters:
 
 #### Directionality
 
-Source and target reflect the algorithmic traversal order used by the
-program when scanning group pairs. This ordering is not based on
-Group_ID magnitude and does not imply a directional or causal
-relationship between source and target.
+The script traverses groups in increasing `Group_ID` order, so
+`Source_ID ≤ Target_ID`. The IDs coincide when two quantities of the
+same group are compared. The order has only a computational meaning.
 
 #### Columns
 
@@ -2139,7 +2154,8 @@ fixed by the definitions above (e.g., P/T is reported, not T/P).
 
 #### Dual representation
 
-For each ratio, two representations are provided in adjacent columns:
+The six exact fractions appear first, followed by the six decimal
+approximations in the same ratio order.
 
 `_Rational` columns contain the exact value as a fully reduced fraction
 string of the form `"p/q"`, where p and q are coprime integers. This
@@ -2275,7 +2291,7 @@ give the same list of tables passing all three positions.
 Output of `controls.py`: 13 quantities × 3 representations = 39 rows.
 The neutral free amino acid is the baseline; the peptide model subtracts
 one water (10 protons, 8 neutrons) from each molecular formula; the zwitterion
-has the same atoms as the baseline. These are uniform shifts (ΔP, ΔN).
+has the same atoms as the baseline. These are uniform shifts $(s_P, s_N)$.
 They preserve the molecular tryptophan–isoleucine differences and the
 third-position Keto/Amino and Strong/Weak differences, whose groups each
 contain 30 codons. The conclusion concerns the tested shifts, not arbitrary
@@ -2287,7 +2303,7 @@ that same representation is 3124−3109=15. In all three representations,
 tryptophan–isoleucine differences remain 37 in N and 36 in P. The zwitterion
 also preserves all absolute values; these are therefore not preserved only
 by the neutral free form. For the full neutron sum, divisibility survives
-when 60·ΔN ≡ 0 (mod 37), equivalent to ΔN ≡ 0 (mod 37).
+when $60\,s_N \equiv 0 \pmod{37}$, equivalent to $s_N \equiv 0 \pmod{37}$.
 The original proton sum 4180 is itself not divisible by 37.
 Before writing the file, the script checks baseline N=3589, P=4180,
 deficit=111, and the molecular differences 37/36.
@@ -2299,7 +2315,7 @@ They are retained for compatibility.
 #### Columns
 
 - `Representation` — the molecular representation (`free`, `peptide_residue`, `zwitterion`)
-- `Delta_P`, `Delta_N` — the per-residue proton and neutron offset from the free amino acid
+- `Delta_P`, `Delta_N` — the per-residue proton and neutron shift $(s_P, s_N)$ from the free amino acid
 - `Anchor` — the quantity computed (e.g. `N_sense`, `dN_Trp_Ile`, `KetoAmino_dN`)
 - `Class` — `absolute` (a sum or deficit that changes under a shift) or `relational` (a tested molecular or equal-size-group difference preserved under uniform shifts)
 - `Value` — the integer value of the anchor under this representation
