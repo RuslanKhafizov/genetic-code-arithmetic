@@ -59,9 +59,9 @@ the nearest multiple. The same pattern appears in the
 Keto/Amino asymmetry, which reduces to the tryptophan--isoleucine
 pair with neutron and proton differences of $37$ and $36$.
 Proton parity excludes a difference of $37$
-but does not determine the one-unit deviation. To analyse the symmetries of the complete table, we derive
-equal formal contributions for the three stop codons
-and a separate contribution for the initiator. Keto/Amino
+but does not determine the one-unit deviation. To analyze the symmetries of the complete table, we assign
+equal formal contributions to the three stop codons
+and a separate one to the initiator. Keto/Amino
 balance and divisibility of the global proton and neutron
 sums by~$37$ yield a unique minimal non-negative integer
 solution. The three stop codons contribute $111=3\cdot37$ neutrons
@@ -994,7 +994,8 @@ on the proton quantities.
 
 At the third level, Section~\ref{sec:results-key1-derivation}
 derives Key~1, the unique minimal non-negative integer assignment to
-the service codons determined by the joint conditions of nucleon-pool
+the service codons with equal stop-codon contributions, determined by
+the joint conditions of nucleon-pool
 balance along the Keto/Amino axis and divisibility of the global pools
 by~$37$; equivalently, this balance augments the
 $\mathrm{C}/\mathrm{T}$ symmetry imposed by the code with
@@ -2211,15 +2212,58 @@ and its structural copy on Strong/Weak. Balance in $\Delta$
 on Purine/Pyrimidine does not impose these two separate
 equalities and is compatible with the assignment obtained.
 
-\paragraph{The common basis of the derivations.}
+\paragraph{The common basis and the additional condition.}
 Both derivations use equal assignments to the three stop
-codons, the same initial sums, and Keto/Amino balance.
-The additional condition differs: divisibility of the
-total sums by~$37$ or equality of $\Delta$ between
-Purine and Pyrimidine. With non-negativity, integrality,
-and minimality, both variants give Key~1. This is
-agreement between two systems of conditions with a common
-basis, rather than independent confirmations.
+codons, the same initial sums, Keto/Amino balance,
+non-negative integer parameters, and minimality of the total
+contribution. This basis alone already gives a unique minimum:
+as shown above, it coincides with Key~1 in neutrons and is one
+proton lower at each service position. An additional condition
+narrows the set of admissible assignments, and the minimum is
+sought again within the narrowed set. With separate minimization
+of the proton and neutron contributions, the new minimum is
+Key~1 if and only if the condition admits Key~1 and excludes
+all assignments with $p_{\text{start}}=0$. Both conditions
+considered above are of this kind: divisibility leaves
+$p_{\text{start}}=1,38,75,\ldots$, and equality of $\Delta$
+between Purine and Pyrimidine gives
+$p_{\text{start}}=n_{\text{start}}+1$. So is the requirement
+that $\Delta$ be non-negative for all service-codon assignments,
+$\Delta_{\text{start}}\ge0$ and $\Delta_{\text{stop}}\ge0$:
+given $\Delta_{\text{start}}=\Delta_{\text{stop}}+1$, it
+reduces to $p_{\text{start}}\ge n_{\text{start}}+1$. These
+examples do not exhaust such conditions. Divisibility of the
+nucleon sum~$T$ alone, by contrast, does not meet the criterion:
+it also admits the assignment
+$(p_{\text{start}},n_{\text{start}})=(0,1)$,
+$(p_{\text{stop}},n_{\text{stop}})=(36,38)$, and the smallest
+proton and neutron contributions are then reached at different
+assignments. The main derivation therefore requires divisibility
+separately for $P$ and $N$.
+
+The coincidence of the minima under different conditions does
+not make these conditions equivalent and is not an independent
+confirmation of Key~1. It follows from the properties of the
+service-excluded pool established above. Non-negativity of
+$\Delta$ leads to Key~1 because of the difference
+$\delta P(\mathrm{Trp},\mathrm{Ile})-
+\delta N(\mathrm{Trp},\mathrm{Ile})=-1$, from which the balance
+gives $\Delta_{\text{start}}=\Delta_{\text{stop}}+1$;
+divisibility does so because the pool sums and the differences
+of the tryptophan--isoleucine pair have the same signed residues
+modulo~$37$, $-1$ for $P$ and $0$ for $N$
+(Section~\ref{sec:results-key1-trpile}); equality of $\Delta$
+between Purine and Pyrimidine does so because of the agreement
+of the differences across two axes given above. Under
+non-negativity of $\Delta$ and under equality of $\Delta$
+between Purine and Pyrimidine, divisibility of the total sums
+by~$37$ is not imposed but holds at the minimum obtained.
+The main derivation uses divisibility because Key~1 is
+constructed to reconcile the sums of the complete table with
+the primary arithmetic criterion of the analysis, divisibility
+by~$37$ (Section~\ref{sec:criteria}). The choice of the
+additional condition is determined by this aim, not by the
+number of conditions that lead to the same minimum.
 
 The resulting value $1850=\tfrac12\,T(\mathrm{Octet~I})$
 allows the neutron assignments to be checked in reverse:
@@ -2228,7 +2272,7 @@ codons in Amino, and $1850-1813=37$ to the stop codon
 and initiator in Keto. This again gives
 $n_{\text{stop}}=37$ and $n_{\text{start}}=0$.
 This check uses equality with half the Octet~I sum after
-it has been obtained; it is not a third independent
+it has been obtained; it is not an independent
 basis for the derivation.
 
 \subsection{Consequences under Key~1}
@@ -3330,363 +3374,342 @@ of a natural code arising or identify a biological mechanism.
 \subsection{Relation to prior work}
 \label{sec:discussion-prior-work}
 
-Three prior contributions are particularly relevant
-to the arithmetic structure analyzed in this work.
-Yu.~B.~Rumer~\cite{rumer1966,rumer1968} introduced the
-partition of the $64$ codons of the standard code into
-two equal classes: Octet~I
-consisting of the eight fully degenerate families, and
-Octet~II consisting of the eight
-heterogeneous families. The two classes are related by
-the involution
+Previous work by Rumer, Shcherbak and Makukov,
+and Panov and Filatov is particularly relevant to
+the arithmetic structure analyzed in the present study.
+Yu.~B.~Rumer~\cite{rumer1966,rumer1968}
+introduced a partition of the $64$ codons of the standard code
+into two equal classes: Octet~I,
+consisting of eight fully degenerate families, and
+Octet~II, consisting of eight heterogeneous families.
+These two classes are related by the involution
 $R = (\mathrm{T} \leftrightarrow \mathrm{G},
-\mathrm{C} \leftrightarrow \mathrm{A})$, under which
-each family of one class is mapped to a family of the
-other. Shcherbak and Makukov~\cite{makukov2013}
-observed that the number~$37$ plays a recurrent role
-in the genetic code, appearing as a divisor of amino acid nucleon sums
-across various groupings of codons. Panov and Filatov~\cite{panov2024}
-revisited and extended this analysis. They introduced
-the per-codon counting rule, in which each of the $64$
-codons contributes independently the nucleon count of
-the amino acid it encodes. They also proposed that stop codons be assigned a
-total nucleon count of~$74$ each rather than zero.
+\mathrm{C} \leftrightarrow \mathrm{A})$, which maps
+each family in one class to a family in the other.
+Shcherbak and Makukov~\cite{makukov2013}
+noted the recurring role of~$37$ in the genetic code
+as a divisor of amino acid nucleon sums across different
+codon groupings. Panov and Filatov~\cite{panov2024}
+revisited and extended this analysis. In particular,
+they considered octet sums under per-codon counting,
+where each codon contributes the total nucleon count of
+the amino acid it encodes, and stop codons are assigned zero.
+They also proposed an alternative assignment of
+a total nucleon count of~$74$ to each stop codon.
 
-The present work differs from these in several
-methodological choices. Shcherbak and Makukov, and
-Panov and Filatov following them, decompose each amino
-acid into a constant part with nucleon count~$74$ and
-a variable side chain, and many of their nucleon sums
-are formed over side chains alone. This decomposition
-forces a special treatment of proline, whose
-cyclic side chain reduces the nucleon count of its
-constant part to~$73$ rather than~$74$: to bring it in line with
-the other nineteen amino acids, Shcherbak and Makukov
-introduce a virtual transfer of one nucleon from its
-side chain to its constant part, an operation they
-call the \emph{activation key}. The present work uses
-full amino acid nucleon counts without separation into
-constant and side-chain components, and the question
-of how to treat proline does not arise. Shcherbak and
-Makukov also adopt a counting rule in which each amino
-acid contributes once per codon family rather than
-once per codon; Panov and Filatov replace this with
-the per-codon rule, which the present work also uses.
-Finally, all nucleon sums in the prior works are
-formed over the total nucleon count~$T$ (or over its
-restriction to side chains); the separation of $T$
-into protons~$P$ and neutrons~$N$, and the analysis of
-the difference $\Delta = P - N$, are introduced in the
-present work and underlie a class of arguments
-unavailable when only $T$ is considered.
+The present work differs from these studies in several
+methodological choices. Alongside whole molecules,
+Shcherbak and Makukov, and subsequently Panov and Filatov,
+consider the decomposition of an amino acid into a standard
+block and a variable side chain, and many of their nucleon
+sums involve side chains alone. Making the blocks uniform
+requires special treatment of proline, whose cyclic side
+chain reduces the nucleon count of its block to~$73$
+rather than~$74$: to bring it into line with the other
+nineteen amino acids, Shcherbak and Makukov introduce
+a virtual transfer of one nucleon from its side chain
+to its block --- an operation they call the
+\emph{activation key}. The total nucleon count of proline
+is unchanged: $42+73=41+74=115$.
+The present work uses the total nucleon counts of amino
+acids without separating blocks and side chains,
+so the question of this redistribution for proline does not arise.
+Both previous studies use per-codon counting as well as
+contracted counting, in which each amino acid is counted
+once in each family that encodes it, regardless of the number
+of corresponding codons in that family. The present work
+consistently uses per-codon counting. Finally, the results
+of previous work considered below concern the total nucleon
+count~$T$ or its decomposition into blocks and side chains.
+Our analysis separately considers protons~$P$ and neutrons~$N$,
+as well as the difference $\Delta = P - N$; this allows us to
+investigate relations that are not determined by the sum~$T$ alone.
 
-The two prior works also differ from ours in the
-systematics by which codons are grouped. They apply
-several different grouping schemes in parallel
-(Gamow's sorting and others), each tailored to a
-particular set of patterns. The present work formulates
-a single grouping system based on the Rumer octets and
-the third-position chemical axes, and analyzes the
-arithmetic structure within it consistently. The
-parametrization of service codons also differs:
-Shcherbak and Makukov treat stop codons as contributing
-zero and identify $\mathrm{ATG}$ with $\mathrm{Met}$
-throughout, Panov and Filatov propose in addition the
-assignment of total nucleon count~$74$ to stop codons
-as an alternative, while the present work considers
-the parametrization of service codons as part of the
-derivation of Key~1
-(Section~\ref{sec:results-key1-derivation}). Finally,
-Shcherbak and Makukov work extensively with the
-euplotid code variant (in which $\mathrm{TGA}$ is
-reassigned to $\mathrm{Cys}$), which they take as a
-symmetrized counterpart of the standard code; Panov
-and Filatov treat this as a switchable alternative.
-The present work focuses on the standard code, and
-compares its arithmetic structure with the $26$
-alternative NCBI translation tables on equal footing
-(Sections~\ref{sec:results-key1-ncbi},
-\ref{sec:discussion-trpile-robustness}).
+The two previous studies also differ from ours in the schemes
+used to group codons. They employ several grouping schemes
+in parallel (Gamow's sorting and others), within which
+different arithmetic regularities are considered.
+The present work formulates a single grouping system based
+on Rumer's octets and the chemical axes of the third position,
+and consistently analyzes the arithmetic structure within it.
+The parametrization of service codons also differs:
+Shcherbak and Makukov treat stop codons as contributing zero
+and count $\mathrm{ATG}$ as encoding methionine;
+Panov and Filatov additionally propose assigning a total
+nucleon count of~$74$ to stop codons, whereas the present
+work treats the parametrization of service codons as part
+of the derivation of Key~1
+(Section~\ref{sec:results-key1-derivation}).
+The same stop-codon contribution of~$74$ does not mean
+that the assignments coincide: Panov and Filatov retain
+the methionine contribution of $\mathrm{ATG}$,
+equal to $149$, whereas under Key~1
+$T_{1}(\mathrm{ATG})=1$; our key also specifies
+proton and neutron contributions separately.
+Finally, alongside the standard code, Shcherbak and Makukov
+consider the euplotid variant (in which $\mathrm{TGA}$
+is reassigned to cysteine) as a symmetrized counterpart
+of the standard code; Panov and Filatov also consider this
+reassignment. The present work focuses on the standard code
+and compares its arithmetic structure with
+$26$ alternative NCBI translation tables under common
+counting rules
+(Section~\ref{sec:discussion-trpile-robustness}).
 
-We now describe how the divisibility findings of these
-prior works project onto the groups defined in the
-present analysis. Shcherbak and Makukov, counting one
-molecule per distinct coding role within a family,
-observed that the sum of amino acid nucleon counts
-over Octet~I is divisible by~$37$,
-with $T(\mathrm{Octet~I}) = 925 = 25 \cdot
-37$, and that the same holds for
-Octet~II under the assignment of
-zero to stop codons, with
-$T(\mathrm{Octet~II}) = 2220 = 60 \cdot 37$.
-Panov and Filatov, having introduced the per-codon
-counting rule, obtained the corresponding totals under
-codon-level counting:
+We now describe how divisibility results from these previous
+studies map onto the groups defined in the present analysis.
+Under contracted counting, where each amino acid is counted
+once in each family that encodes it, Shcherbak and Makukov
+obtained the sum $925 = 25 \cdot 37$ for Octet~I.
+For Octet~II, with stop codons contributing zero,
+their balance between blocks and side chains implies
+the sum $1110+1110=2220=60\cdot37$.
+These sums refer to the contracted representation,
+not to summation over all codons in the octet.
+Using per-codon counting, Panov and Filatov obtained
+sums corresponding to our Key~0:
 $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$
-and $T(\mathrm{Octet~II}) = 4218 = 114 \cdot
-37$ (or $4440 = 120 \cdot 37$ under their alternative
-assignment of $74$ to stop codons).
+and $T_{0}(\mathrm{Octet~II}) = 4218 = 114 \cdot
+37$. Under their alternative assignment of~$74$
+to each stop codon, the second sum becomes
+$4440 = 120 \cdot 37$.
 
-The relation between the per-coding-role total and the
-per-codon total is direct for
-Octet~I, which is fully four-fold
-degenerate: $3700 = 4 \cdot 925$. For
-Octet~II, whose families contain
-different numbers of distinct coding roles, the
-per-codon total $4218$ is not a multiple of the
-per-coding-role total $2220$ and is an independent
-fact. The per-coding-role total $2220$ itself
-coincides with $T(\mathrm{Keto} \cap
-\mathrm{Octet~II}) = T(\mathrm{Strong} \cap
-\mathrm{Octet~II})$ in our analysis: the
-universal pyrimidine synonymy within
-Octet~II
-(Section~\ref{sec:twin-identities})
-implies that the sixteen codons of $\mathrm{Keto}$
-(or of $\mathrm{Strong}$) intersected with
-Octet~II contain each coding role
-exactly once, so their per-codon total equals the
-per-coding-role total.
+The relationship between the contracted sum and the per-codon
+sum is direct for Octet~I, which is fully four-fold degenerate:
+$3700 = 4 \cdot 925$. For Octet~II, whose coding series have
+different multiplicities, the per-codon sum $4218$
+cannot be obtained by uniformly scaling the contracted sum $2220$:
+each contribution must be counted with its own codon multiplicity.
+The contracted sum $2220$ itself coincides with
+$T_{0}(\mathrm{Keto} \cap
+\mathrm{Octet~II}) = T_{0}(\mathrm{Strong} \cap
+\mathrm{Octet~II})$ in our analysis.
+In the standard code, each of these sixteen-codon halves
+of Octet~II contains one codon for each amino acid of its
+respective family, while stop codons contribute zero.
+Its per-codon sum therefore equals the contracted sum.
+The equality of the Keto and Strong halves follows from
+pyrimidine synonymy
+(Section~\ref{sec:twin-identities}); the agreement with
+contracted counting additionally uses the actual distribution
+of products within the families.
 
-From these primary facts, the divisibility by~$37$ of
-several further groups in our systematics follows
-trivially. The total over the entire code is the sum
-of the two octet totals; the sixteen-codon and
-eight-codon sub-groups of Octet~I
-are mutually identical by four-fold degeneracy; and
-the four chemical-axis groups $\mathrm{Keto}$,
-$\mathrm{Strong}$, $\mathrm{Amino}$, $\mathrm{Weak}$
-each decompose into an Octet~I
-sixteen-codon sub-group and an
-Octet~II sixteen-codon sub-group,
-of which the first is automatically divisible by~$37$
-and the second reduces to a separate question
-addressed in the present work.
+These facts imply divisibility by~$37$ for several further
+groups in our system under Key~0. The sum for the full code
+is the sum of the two octet sums; the sixteen-codon chemical-axis
+groups within Octet~I have equal sums of $1850$, and the
+eight-codon groups with a fixed third base have sums of
+$925$, owing to four-fold degeneracy.
+Each of the four groups Keto, Strong, Amino and Weak
+splits into a sixteen-codon part of Octet~I and a
+sixteen-codon part of Octet~II. For Keto and Strong,
+the sum of the second part is $2220$, and for Amino
+and Weak it is $4218-2220=1998=54\cdot37$.
+Thus, divisibility of the total sums~$T$ of these four groups
+under Key~0 already follows from the equalities above;
+their proton and neutron sums require separate analysis.
 
 \subsection{Limitations and outlook}
 \label{sec:discussion-limitations}
 
-The statistical significance of the observed arithmetic
-regularities is assessed in
-Section~\ref{sec:discussion-montecarlo} under the main null model,
-which fixes the code's degeneracy architecture and the amino-acid
-nucleon counts and randomly permutes amino acids among codon
-families. An additional conditional model fixes methionine at
-$\mathrm{ATG}$, preserving the set of amino acids represented in
-the service-excluded pool. The observed divisibility count
-(\texttt{S2}) and mean distance to the nearest multiple of $37$
-(\texttt{S4sense}) are atypical under both models. These comparisons
-are exploratory and depend on the choice of groups and statistics,
-including the repeated counting of related quantities. They do
-not estimate the probability of finding an arbitrary arithmetic
-regularity after searching the data. The narrower \texttt{S3} test,
-restricted to nested groups that contain no service codon at all,
-is only weakly atypical ($p_{\mathrm{MC}} \approx 0.025$) and mainly
-reflects copies of the divisibility of the Octet~I total
-$T(\mathrm{Octet~I})$. The choice of null is not unique: other
-generative models, for example randomizing the block sizes
-themselves or the nucleon counts, would probe different aspects
-of the regularity and are left for future work, as is any account
-of a mechanism that could produce it.
+The results characterize the arithmetic structure of the
+genetic code table under explicitly specified counting rules.
+Each codon is counted once, so the weight of an amino acid
+is set by the number of codons encoding it in the group
+considered. Such sums do not describe the composition of a
+particular protein or cell, where codon usage frequencies
+matter. The service-excluded pool is likewise an analytical
+object: excluding $\mathrm{ATG}$ together with the three stop
+codons separates the results from the choice of service-codon
+assignments, but does not mean that $\mathrm{ATG}$ lacks its
+function of encoding methionine.
 
-The parametrization of service codons in the present
-work is restricted to Key~0 and Key~1; additional
-parametric assignments are tabulated in
-\texttt{key\_parameters.csv} and in the accompanying
-\texttt{visualization.html} for illustration of other
-choices.
+The nucleon quantities refer to the adopted molecular
+and isotopic representation (Section~\ref{sec:composition}).
+Isotopic substitutions that leave the elemental composition
+unchanged alter $N$ and $T$ while preserving $P$. In the
+transition to peptide residues, some divisibilities of the
+absolute sums are lost, whereas differences between groups
+of equal cardinality are preserved under homogeneous shifts
+of the molecular quantities (Section~\ref{sec:discussion-controls}).
+The established stability of these differences therefore does
+not imply that the whole arithmetic structure is independent
+of the representation.
 
-A further direction concerns the group-theoretic
-structure of the codon table. Following~\citet{panov2024},
-to each of the $24$ orderings of the four bases on
-the axes of the codon matrix we associate its
-\emph{calligram}: the geometric pattern formed by
-the eight homogeneous codon families of
-Octet~I on the $4 \times 4$
-matrix. Connectedness of an octet refers to the
-connectedness of this pattern under $4$-adjacency
-of matrix cells. Among the $24$ calligrams, Panov
-and Filatov~\cite{panov2024} identified four ---
-$\mathrm{CTGA}$, $\mathrm{CGTA}$, $\mathrm{ATGC}$,
-and $\mathrm{AGTC}$ --- in which each of the Rumer
-octets forms a connected region, and showed that
-these four form a closed set under the
-transformations
-$R = (\mathrm{T} \leftrightarrow \mathrm{G},
-\mathrm{C} \leftrightarrow \mathrm{A})$,
-$R_1 = (\mathrm{T} \leftrightarrow \mathrm{G})$, and
-$R_2 = (\mathrm{C} \leftrightarrow \mathrm{A})$.
-These three transformations together with the
-identity form the Klein four-group $V_4$, and the
-action of $V_4$ extends naturally to the full set
-of $24$ calligrams. This action of $V_4$ on the
-full set of $24$ calligrams is free, partitioning
-it into six orbits of four calligrams each. Exactly
-one of these six orbits consists of connected
-calligrams, accounting for the four calligrams
-above; the remaining five orbits contain no
-connected calligram. This connected orbit
-furthermore contains the canonical chemical
-ordering $C, G, T, A$ of Rumer~\cite{rumer1968}
-(Section~\ref{sec:genetic-code}); the
-correspondence between this chemical ordering and
-the geometric property of connectedness is
-non-automatic, since only two of the eight chemically alternating orderings of the four bases yield connected octets. The
-search for further structural invariants
-distinguishing the orbits --- and for connections
-between the group-theoretic orbits and the
-arithmetic systematics of the present work --- is
-left to future investigation.
+The statistical comparison assesses the placement of amino
+acids within a fixed code architecture: in the main model the
+twenty amino acids are permuted among the synonymous blocks,
+and in the additional model methionine is fixed at $\mathrm{ATG}$
+(Section~\ref{sec:discussion-montecarlo}). These models
+do not describe the evolutionary origin of the architecture
+itself. The modulus~$37$ is motivated by prior literature,
+but the summaries were chosen after inspection of the observed
+structure. Their nominal $p$-values do not estimate the
+probability of finding an arbitrary arithmetic regularity after
+a search over groups, moduli, and metrics. Dependencies between
+quantities are preserved in every permutation and are accounted
+for in the comparison, but recurring relations receive
+additional weight in the summaries. The robustness of the
+conclusions to changes in these weights and to other null
+models remains a separate question.
+
+The uniqueness of Key~1 refers to the minimum under the
+adopted conditions: equal assignments to the three stop codons,
+non-negative integer parameters, Keto/Amino balance, and
+separate divisibility of the total sums $P$ and $N$ by~$37$.
+The same minimum is also given by other additional conditions,
+in particular by an additional balance in~$\Delta$
+(Section~\ref{sec:results-key1-uniqueness}). The coincidence of
+the results follows from the properties of the service-excluded
+pool and is not an independent confirmation. The uniqueness of
+the minimum does not imply a unique choice of conditions. The
+resulting assignments have a formal arithmetic meaning and are
+not interpreted as the composition of actual products of the
+service codons. Equalities imposed by the conditions of the
+derivation, or following from them, likewise do not serve as
+independent evidence for these conditions. The equality
+$N_1(\mathrm{All})=T(\mathrm{Octet~I})$ also depends on the
+premise of equal assignments to the stop codons: without it,
+with the other conditions retained, the minimal neutron sum of
+the complete table is $3626$, and the assignments to individual
+service codons are not unique.
+
+The specificity among the $27$ NCBI tables is limited to the
+registry examined and to the rules for treating context-dependent
+stop codons. The tables do not form an independent random
+sample, so the number of matches has no probabilistic
+interpretation. After the assignment to the service codons is
+re-derived, different codes can reproduce the same profile of
+all $33$ groups (Section~\ref{sec:discussion-trpile-robustness}).
+This profile therefore does not determine the code uniquely;
+agreement of the resulting sums must be distinguished from
+agreement of the initial pool and of the assignments themselves.
+
+The immediate directions for further work are tests of
+sensitivity to biochemical constraints on the permutations and
+to group weights, with both choices justified a priori, and a
+description of the classes of codes with identical arithmetic
+profiles. The search
+for biological mechanisms that could link the observed
+divisibilities and equalities to the functioning or origin of
+the code is left for future research. Such hypotheses should
+yield testable predictions beyond the numerical relations
+already established.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-The standard genetic code exhibits arithmetic
-regularities visible at several levels of parametric
-specificity. A first layer is independent of any
-choice of nucleon contributions for the service codons,
-and it carries the central finding of this work: summed
-over the sixty codons of $\mathcal{C}_{\mathrm{SE}}$, the neutron
-pool is an exact multiple of the modulus,
-$N(\mathcal{C}_{\mathrm{SE}}) = 3589 =
-97 \cdot 37$, while the proton pool falls one unit short
-of an odd multiple, $P(\mathcal{C}_{\mathrm{SE}}) \equiv -1
-\pmod{37}$---a property of the proton/neutron split that
-is invisible at the level of the total count $T$. Two
-further parametrization-independent facts sit alongside it.
-The eight families of Octet~I carry
-$T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$, with
-$P(\mathrm{Octet~I}) = 2000$ and
-$N(\mathrm{Octet~I}) = 1700$, the latter combining
-with $N_{\mathrm{SE}}(\mathrm{Octet~II})$ as
-$1700 + 1889 = 3589$; and
-the entire Keto/Amino asymmetry of the code localizes,
-after exclusion of the service codons, to the single
-amino-acid pair $\mathrm{Trp}$--$\mathrm{Ile}$, with
-$|\delta N| = 37$ and $|\delta P| = 36$. The universal
-pyrimidine synonymy within Octet~II
-produces identities between the twin sixteen-codon groups
-$\mathrm{Keto}$/$\mathrm{Strong}$ and
-$\mathrm{Amino}$/$\mathrm{Weak}$ within
-Octet~II.
+The regularities examined here link the chemical organization
+of the codon table to the nucleon composition of the encoded
+amino acids. Partitioning by the Rumer octets and by the
+properties of the third base gives rise to mutually consistent
+divisibilities, equalities, and one-unit deviations from
+multiples of~$37$. Their values depend jointly on the
+composition of the amino acids and on which codons correspond
+to them: each amino acid enters a group sum with the
+multiplicity of its codons. Counting protons and neutrons
+separately brings out relations that are not apparent when
+only nucleon sums are considered.
 
-A second layer arises under the naive reading,
-where the proton and neutron counts
-$P$ and $N$ are analyzed separately. The total nucleon
-count $T$ is divisible by~$37$ for the four
-chemical-axis groups and for Octet~II.
-For the $\mathrm{Amino}$ and $\mathrm{Weak}$ groups,
-$P$ and $N$ are individually divisible by~$37$,
-aligning these groups with the lattice of step~$37$
-along both axes.
+The principal agreement is present already in the
+service-excluded pool. Its neutron sum is $3589=97\cdot37$,
+and its proton sum is $4180=113\cdot37-1$. The same pattern
+of deviation appears in the difference between Keto and Amino:
+after mutual cancellation of contributions, what remains is
+the difference of a single pair, tryptophan--isoleucine, equal
+to $37$ in neutrons and $36$ in protons. The agreement of the
+local differences with the global sums makes both the Keto and
+the Amino neutron sums divisible by~$37$, while the one-unit
+proton deviation is concentrated in Keto. The parity of the
+proton counts of the amino acids rules out a difference of
+$37$, but the value $36$ itself is determined by the specific
+molecular composition of this pair.
 
-A third layer introduces the service-codon assignment.
-There is a unique minimal non-negative integer assignment,
-Key~1 (Section~\ref{sec:results-key1-derivation}), under
-which the parametrization-independent structure extends to
-the full $64$-codon table. Key~1 is not a foundation for the
-findings above but a device that renders them on the
-complete table: the same divisibility in the service-excluded
-pool, the same localized pair, and the same proton parity that
-hold with
-the service codons unassigned are exactly what make the
-assignment solvable in small integers. The neutron balance
-across the Keto/Amino axis reproduces the
-$\mathrm{Trp}$--$\mathrm{Ile}$ difference $|\delta N| = 37$;
-the global neutron deficit $T(\mathrm{Octet~I}) -
-N(\mathcal{C}_{\mathrm{SE}}) = 111 = 3 \cdot 37$ closes because it
-is a common multiple of the number of stops and the modulus;
-the even-proton parity theorem forbids $|\delta P| = 37$ and bars
-the proton sum of the service-excluded pool from the odd
-multiples of the modulus,
-so that it sits one unit below---by a margin that the specific
-nucleon counts make exactly one---which the start codon's minimal
-contribution $p_{\text{start}} = 1$ restores; and $\gcd(4, 37) = 1$ leaves
-a unique minimal solution. None of these is a parametric
-assumption; each is an empirical property of the standard
-code established at the parametrization-independent level,
-and Key~1 exists as the minimal extension precisely because
-they hold simultaneously.
+Another link between the levels of the partition is shown by
+the difference $\Delta=P-N$. In the eight-codon groups of
+Octet~I it equals $75=2\cdot37+1$, and in the corresponding
+pyrimidine groups of Octet~II it equals $73=2\cdot37-1$.
+When the octets are combined, the deviations cancel:
+$75+73=148=4\cdot37$. The relation $75+73=148$ recurs for the
+codon groups with $\mathrm{C}$ and $\mathrm{T}$ in the third
+position, because such codons pairwise encode the same amino
+acids. Under Key~0 a further agreement arises: counting
+methionine with its $149=4\cdot37+1$ nucleons compensates for
+the remainder of $-1$ in the nucleon sum of the pool. Thus,
+a number of exact divisibilities are obtained before Key~1 is
+derived.
 
-Under the derived parametrization, the arithmetic
-regularities organize into a connected family:
-alignment of the four chemical-axis groups along the
-axes $T$, $P$, $N$, and $\Delta$
-(Section~\ref{sec:results-key1-axisalignment}),
-macroscopic identities including
-$N(\mathrm{All}) = T(\mathrm{Octet~I}) = 3700$
-and $P(\mathrm{All}) = T(\mathrm{Octet~II}) =
-4292$
-(Section~\ref{sec:results-key1-macroidentities}), the
-uniform invariant $\Delta = 296$ across all six
-$32$-codon groups
-(Section~\ref{sec:results-key1-deltainvariant}), and
-divisibility patterns by~$37$ and~$999$ at multiple
-levels of partitioning
-(Section~\ref{sec:results-key1-divisibility37and999}).
-The comparative analysis across the $27$ NCBI
-translation tables
-(Section~\ref{sec:results-key1-ncbi}) shows that the
-simultaneous holding of all structural preconditions
-enumerated above is a property of the standard code
-alone.
+Key~1 links the initial asymmetry to the placement of the
+service codons. The Keto group contains one stop codon and
+$\mathrm{ATG}$, and the Amino group contains two stop codons.
+With the same assignment to all stop codons, Keto/Amino balance
+in protons and neutrons, and divisibility of the total sums $P$
+and $N$ by~$37$, the unique minimal non-negative integer
+assignment is $(P,N)=(37,37)$ for each stop codon and $(1,0)$
+for $\mathrm{ATG}$. The neutron equality is especially
+instructive:
+\[
+N_1(\mathrm{All})=3589+3\cdot37
+                 =3700=T(\mathrm{Octet~I}).
+\]
+The size of the local imbalance and the number of stop codons
+give exactly the increment that brings the neutron sum of the
+complete table to the nucleon sum of Octet~I. This coincidence
+with Octet~I was not used as a condition in deriving the
+assignment.
 
-Two features of this structure constrain how it may be read. First,
-the regularities reside in group sums rather than in individual
-molecules: no single canonical amino acid has a nucleon count
-divisible by~$37$, and in groups of variable coding degeneracy, such
-as $\mathrm{Amino}$, the divisibility holds only when codons are
-counted with their multiplicity and fails when each amino acid is
-counted once. The nucleon composition and the degeneracy of coding
-are therefore not independent quantities within this structure: the
-regularity is a joint property of how nucleon mass is distributed and
-how many codons each amino acid receives. Second, the entire first
-layer above, including the values over Octet~I and
-the twin-group identities, is established with the service codons
-carrying no nucleon values at all; the derived parametrization of the
-service codons enters only at the later layers and does not affect the
-parameter-independent results. The assigned values are thus a device
-for exhibiting the arithmetic of the complete table, not a foundation
-on which the principal findings rest.
+The resulting assignment also brings other partitions into
+agreement. Keto/Amino balance, together with the twin-group
+identities, ensures that each of the four quantities is equal
+across the Keto, Amino, Strong, and Weak groups. The difference
+$\Delta=296=8\cdot37$ takes one and the same value for all six
+chemical-axis halves, including Purine and Pyrimidine, whose
+separate sums $P$ and $N$ remain different. The link with
+Octet~I can also be written equivalently as
+$P_1(\mathrm{All})=T_1(\mathrm{Octet~II})=4292$; the nucleon
+sum of the complete table equals $7992=8\cdot999$, although
+divisibility by~$999$ was not separately required.
+These equalities form a system of dependent consequences and
+additional numerical agreements. Its content is therefore
+determined by the relations between the quantities, and the
+number of recurring equalities is not a count of independent
+pieces of evidence.
 
-The specificity established by the comparison across
-natural codes is complemented by deterministic
-controls and by a Monte Carlo analysis. The controls show
-that divisibilities concentrate in third-position groupings
-and that $37$ stands out among the tested prime moduli.
-Under an explicit random-code null that fixes
-the degeneracy architecture and permutes the twenty real paired
-proton and neutron profiles over the twenty blocks, two dependent
-summaries of the service-excluded pool place the standard code
-in the far tail: the discrete \texttt{S2} count gives
-$p_{\mathrm{MC}} = 4.0 \times 10^{-5}$, and the \texttt{S4sense} mean
-distance gives $p_{\mathrm{MC}} = 2.74 \times 10^{-4}$. The narrower
-\texttt{S3} test, restricted to groups that contain no service
-codon at all, is only weakly atypical
-($p_{\mathrm{MC}} \approx 0.025$) and mainly
-reflects dependent copies of the divisibility of
-$T(\mathrm{Octet~I})$. The concentration persists under Key~0
-($p_{\mathrm{MC}} \approx 0.0028$), whereas the symmetric test of
-the Key~1 derivation gives moderate atypicality
-($p_{\mathrm{MC}} \approx 0.021$). These probabilities refer to
-different, dependent summaries and are not combined by
-multiplication.
-Additional post hoc checks show that the deviation persists after
-zero distances are excluded and when methionine is fixed at
-$\mathrm{ATG}$. These results characterize atypicality under the
-combinatorial models considered here, distinct from specificity
-among the $27$ natural codes, and do not indicate a biological
-mechanism. Other null models are left for future work.
+The checks delimit the domain in which this structure stands
+out. In the grouping system considered, the third position
+differs from the first two, and the modulus~$37$ ranks first
+among the tested primes under the chosen descriptive metric,
+already without the Key~1 assignments. The absolute
+divisibilities, however, depend on the molecular representation.
+The comparison with the NCBI tables requires distinguishing the
+initial arithmetic of the pool from the profile after the
+assignment to the service codons: some alternative codes
+reproduce the entire resulting group profile of the standard
+code with other assignments. This profile alone therefore does
+not determine the standard code uniquely.
 
-The methodological choice underlying the present work
-is to restrict attention to parameters whose
-definition is unambiguous --- the total nucleon
-count~$T$, its decomposition into protons~$P$ and
-neutrons~$N$, and the difference $\Delta = P - N$ ---
-and to a single grouping system based on the Rumer
-octets and the third-position chemical axes. The
-interpretation of the arithmetic facts collected here
-is left open.
+Permutation tests show that, with the synonymous blocks
+preserved, random redistribution of the amino acids rarely
+produces an equally high concentration of group quantities
+near multiples of~$37$. The deviation is most pronounced in
+the service-excluded pool: for the number of divisibilities
+and the mean distance, the nominal values are
+$p_{\mathrm{MC}}=4.0\times10^{-5}$ and $2.74\times10^{-4}$,
+respectively. Proximity to multiples persists after exact hits
+are excluded, and fixing methionine at $\mathrm{ATG}$ does not
+remove the atypicality either. These dependent checks
+characterize different aspects of the observed agreement under
+the adopted models; they do not give a probability that the
+code arose by chance.
+
+Thus, the work describes how the specific correspondence between
+codons and amino acids links the local asymmetry, the sums of
+large groups, and the conditions of a formal assignment to the
+service codons. The initial relations are established without
+such an assignment, and Key~1 shows that they can be reconciled
+in the complete table under explicitly stated conditions.
+The search for biological mechanisms that could explain these
+links remains a direction for further research.
 
 \bibliography{references}
 
