@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>Арифметика генетического кода — объяснение статьи</title>
+<title>Arithmetic of the genetic code — a paper explainer</title>
 <meta name="description" content="Пошаговое объяснение препринта «Арифметическая структура стандартного генетического кода»: что считается, пул из 60 кодонов, группы по третьей букве, Октет I, назначения Key 0 и Key 1, сравнение с другими таблицами кода, контрольные расчёты и случайные коды.">
 <link rel="icon" href="data:,">
 <style>
@@ -214,6 +214,19 @@ sup {
   gap: 12px 20px;
   flex-wrap: wrap;
   padding: 14px 0 10px;
+}
+
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 16px;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.byline__author {
+  font-weight: 700;
+  color: var(--ink-2);
 }
 
 .eyebrow {
@@ -2359,11 +2372,11 @@ button.level__seg {
   <div class="wrap">
     <div class="top__bar">
       <div class="top__brand">
-        <p class="eyebrow" id="siteEyebrow">Объяснение статьи · прототип</p>
+        <p class="eyebrow byline" id="siteEyebrow">Руслан Хафизов</p>
         <h1 id="siteTitle">Арифметика генетического кода</h1>
       </div>
       <div class="top__tools">
-        <button type="button" class="verify" id="verifyBtn" data-act="verify-open" aria-haspopup="dialog">…</button>
+        <button type="button" class="verify" id="verifyBtn" hidden data-act="verify-open" aria-haspopup="dialog">…</button>
         <div class="lang" role="group" id="langGroup" aria-label="Язык">
           <button type="button" data-act="lang" data-lang="ru" lang="ru">RU</button>
           <button type="button" data-act="lang" data-lang="en" lang="en">EN</button>
@@ -5272,7 +5285,8 @@ button.level__seg {
   var ui = {
     ru: {
       docTitle: "Арифметика генетического кода — объяснение статьи",
-      siteEyebrow: "Объяснение статьи · прототип",
+      author: "Руслан Хафизов",
+      linkZenodo: "Данные и код в Zenodo",
       siteTitle: "Арифметика генетического кода",
       skip: "К тексту шага",
       langLabel: "Язык",
@@ -5716,14 +5730,15 @@ button.level__seg {
       about2: "Страница описывает арифметику таблицы кода при явно заданных правилах подсчёта. Она не утверждает биологического механизма, замысла или уникальности стандартного кода. Первоисточник — статья и её данные.",
       about3: "Прототип. Страница передаёт разделы «Результаты» и «Обсуждение» статьи в её порядке; методы изложены кратко, в первых двух главах. Полный текст — в препринте.",
       linkPreprint: "Препринт (DOI)",
-      linkRepo: "Данные и код статьи",
+      linkRepo: "Данные и код в GitHub",
       linkViz: "Интерактивный визуализатор статьи",
       dataLine: "Данные: выпуск {release}.",
     },
 
     en: {
       docTitle: "Arithmetic of the genetic code — a paper explainer",
-      siteEyebrow: "Paper explainer · prototype",
+      author: "Ruslan Khafizov",
+      linkZenodo: "Data and code on Zenodo",
       siteTitle: "Arithmetic of the genetic code",
       skip: "Skip to the step text",
       langLabel: "Language",
@@ -6167,7 +6182,7 @@ button.level__seg {
       about2: "The page describes the arithmetic of the code table under explicitly stated counting rules. It does not claim a biological mechanism, design, or uniqueness of the standard code. The primary source is the paper and its data.",
       about3: "A prototype. The page conveys the Results and Discussion sections of the paper in its order; the methods are given briefly, in the first two chapters. The full text is in the preprint.",
       linkPreprint: "Preprint (DOI)",
-      linkRepo: "Data and code of the paper",
+      linkRepo: "Data and code on GitHub",
       linkViz: "Interactive visualizer of the paper",
       dataLine: "Data: release {release}.",
     },
@@ -8268,7 +8283,9 @@ button.level__seg {
     ncbiNames: ncbiNames,
     chapters: chapters,
     links: {
+      author: "https://www.facebook.com/trivoniz",
       preprint: "https://doi.org/10.5281/zenodo.20751290",
+      zenodo: "https://zenodo.org/records/24053788",
       repo: "https://github.com/RuslanKhafizov/genetic-code-arithmetic",
       viz: "https://ruslankhafizov.github.io/genetic-code-arithmetic/visualization.html",
     },
@@ -10779,7 +10796,13 @@ button.level__seg {
 
   function renderChrome() {
     doc.documentElement.lang = state.lang;
-    $("siteEyebrow").textContent = t("siteEyebrow");
+    // Author and links in one line above the title.
+    $("siteEyebrow").innerHTML =
+      '<a class="byline__author" href="' + C.links.author + '" rel="noopener">' + t("author") + "</a>" +
+      '<a href="' + C.links.preprint + '" rel="noopener">' + t("linkPreprint") + "</a>" +
+      '<a href="' + C.links.repo + '" rel="noopener">' + t("linkRepo") + "</a>" +
+      '<a href="' + C.links.zenodo + '" rel="noopener">' + t("linkZenodo") + "</a>" +
+      '<a href="' + C.links.viz + '" rel="noopener">' + t("linkViz") + "</a>";
     $("siteTitle").textContent = t("siteTitle");
     $("skipLink").textContent = t("skip");
     $("langGroup").setAttribute("aria-label", t("langLabel"));
@@ -10794,14 +10817,7 @@ button.level__seg {
     $("tblTitle").textContent = t("tblTitle");
     $("pnlTitle").textContent = t("pnlTitle");
 
-    var src = GCA.DATA.source;
-    $("foot").innerHTML =
-      '<h2 class="foot__title">' + t("aboutTitle") + "</h2><p>" + t("about1") + "</p><p>" + t("about2") + "</p><p>" +
-      t("about3") + '</p><ul class="foot__links">' +
-      '<li><a href="' + C.links.preprint + '" rel="noopener">' + t("linkPreprint") + "</a></li>" +
-      '<li><a href="' + C.links.repo + '" rel="noopener">' + t("linkRepo") + "</a></li>" +
-      '<li><a href="' + C.links.viz + '" rel="noopener">' + t("linkViz") + "</a></li></ul>" +
-      '<p class="foot__data">' + t("dataLine", { release: src.release }) + "</p>";
+    $("foot").hidden = true;
   }
 
   /* ---------- rendering and navigation ---------- */
@@ -11078,8 +11094,8 @@ button.level__seg {
     if (fromUrl) return fromUrl[1];
     var saved = loadPref("gca-lang");
     if (saved === "ru" || saved === "en") return saved;
-    var nav = (root.navigator && root.navigator.language) || "";
-    return /^ru\b/i.test(nav) ? "ru" : "en";
+    // English by default; Russian by the RU button or ?lang=ru.
+    return "en";
   }
 
   state.lang = initialLang();
