@@ -4871,6 +4871,19 @@ button.level__seg {
     f.kaBoth = tables(function (id) { return kaIs(id, 1) && kaIs(id, 2); });
     f.kaM1only = tables(function (id) { return kaIs(id, 1) && !kaIs(id, 2); });
     f.kaShift = tables(function (id) { return kaIs(id, 1) && !same(halfResidues(id, 1), halfResidues(1, 1)); });
+    // The same split by pool model: under both models, or under Model 1 only.
+    f.kaShiftBoth = tables(function (id) {
+      return [1, 2].every(function (pm) { return kaIs(id, pm) && !same(halfResidues(id, pm), halfResidues(1, 1)); });
+    });
+    f.kaShiftM1 = tables(function (id) {
+      return kaIs(id, 1) && !same(halfResidues(id, 1), halfResidues(1, 1)) && !kaIs(id, 2);
+    });
+    // Tables with the assignments and stop codons of the standard code.
+    f.sameAsStd = tables(function (id) {
+      var t = model.ncbiById[id];
+      var std = model.ncbiById[1];
+      return id !== 1 && t.string === std.string && same(t.listed.slice().sort(), std.listed.slice().sort());
+    });
     f.mito = tables(function (id) { return /Mitochondrial/.test(model.ncbiById[id].name); });
     f.nMito = f.mito.length;
 
@@ -6292,12 +6305,12 @@ button.level__seg {
           body: {
             ru: [
               "Эта страница объясняет статью «Арифметическая структура стандартного генетического кода». Статья считает протоны и нейтроны в молекулах аминокислот и смотрит, как эти числа складываются по таблице генетического кода.",
-              "Генетический код — таблица соответствия. Каждое «слово» из трёх букв (кодон) составлено из четырёх нуклеотидов: A, C, G и T; всего таких слов {{nCodons}}. В стандартном коде {{nAAcodons}} кодон обозначает одну из {{nAA}} аминокислот, а три — TAA, TAG и TGA — служат сигналом остановки (стоп-кодоны).",
+              "Генетический код — таблица соответствия. Кодон — «слово» из трёх букв, и каждую букву выбирают из четырёх нуклеотидов: A, C, G и T. Поэтому кодонов 4 × 4 × 4 = {{nCodons}}. В стандартном коде {{nAAcodons}} кодон обозначает одну из {{nAA}} аминокислот, а три — TAA, TAG и TGA — служат сигналом остановки (стоп-кодоны).",
               "В таблице строка — первая буква кодона, столбец — вторая, строки внутри клетки — третья. Буквы идут в порядке C, G, T, A, как на рисунке 1 статьи. Запись — как в ДНК: T вместо U. Нажмите на любой кодон.",
             ],
             en: [
               "This page explains the paper “Arithmetic structure of the standard genetic code”. The paper counts the protons and neutrons in amino acid molecules and looks at how these numbers add up across the genetic code table.",
-              "The genetic code is a lookup table. Each three-letter “word” (a codon) is built from four nucleotides: A, C, G and T; there are {{nCodons}} such words. In the standard code, {{nAAcodons}} codons stand for one of {{nAA}} amino acids, and three — TAA, TAG and TGA — signal a stop (stop codons).",
+              "The genetic code is a lookup table. A codon is a three-letter “word”, and each letter is chosen from four nucleotides: A, C, G and T. So there are 4 × 4 × 4 = {{nCodons}} codons. In the standard code, {{nAAcodons}} codons stand for one of {{nAA}} amino acids, and three — TAA, TAG and TGA — signal a stop (stop codons).",
               "In the table, the row is the first letter of a codon, the column the second, and the lines inside a cell the third. The letters run in the order C, G, T, A, as in Figure 1 of the paper. DNA notation is used: T instead of U. Click any codon.",
             ],
           },
@@ -6310,12 +6323,12 @@ button.level__seg {
           title: { ru: "Одна молекула: протоны и нейтроны", en: "One molecule: protons and neutrons" },
           body: {
             ru: [
-              "Каждая аминокислота берётся как свободная нейтральная молекула. Пример — глицин, {{GlyFormula}}. В ядре каждого атома есть протоны и нейтроны. Для каждого элемента берём самый распространённый изотоп: {{isotopes}}.",
+              "Каждая аминокислота берётся как свободная нейтральная молекула. Пример — глицин, {{GlyFormula}}. Ядро атома состоит из протонов и нейтронов; у обычного водорода в ядре один протон и ни одного нейтрона. Для каждого элемента берём самый распространённый изотоп: {{isotopes}}.",
               "Складываем по всем атомам молекулы. У глицина получается {{GlyP}} протонов и {{GlyN}} нейтронов. Это точные целые числа, вычисленные из состава молекулы, а не измеренные массы.",
               "Нажмите на кодон другой аминокислоты и посмотрите, как изменятся её формула и числа протонов и нейтронов.",
             ],
             en: [
-              "Each amino acid is taken as a free neutral molecule. An example is glycine, {{GlyFormula}}. The nucleus of every atom contains protons and neutrons. For each element we take its most abundant isotope: {{isotopes}}.",
+              "Each amino acid is taken as a free neutral molecule. An example is glycine, {{GlyFormula}}. An atomic nucleus is made of protons and neutrons; the nucleus of ordinary hydrogen is a single proton with no neutrons. For each element we take its most abundant isotope: {{isotopes}}.",
               "Add up over all atoms of the molecule. Glycine has {{GlyP}} protons and {{GlyN}} neutrons. These are exact integers computed from the composition of the molecule, not measured masses.",
               "Select a codon for another amino acid to see its formula and its proton and neutron counts.",
             ],
@@ -6997,12 +7010,12 @@ button.level__seg {
           title: { ru: "Остаются триптофан и изолейцин", en: "Tryptophan and isoleucine remain" },
           body: {
             ru: [
-              "В пуле служебных кодонов нет. От клетки TA не остаётся ничего, от клетки AT — только ATA (изолейцин, половина Амино), от клетки TG — только TGG (триптофан, половина Кето).",
+              "В пуле служебных кодонов нет. Поэтому вклад клетки TA в разность Кето − Амино равен нулю: стоп-кодоны TAA и TAG в пул не входят, а TAT и TAC — оба тирозин — сокращаются при вычитании. От клетки AT в разности остаётся только ATA (изолейцин, половина Амино), от клетки TG — только TGG (триптофан, половина Кето).",
               "Поэтому разность половин Кето и Амино равна разности двух молекул — триптофана и изолейцина. По нейтронам: {{TrpN}} − {{IleN}} = {{tiN}}. По протонам: {{TrpP}} − {{IleP}} = {{tiP}}.",
               "Само сведение к одной паре следует из устройства таблицы. Числа {{tiN}} и {{tiP}} — свойства двух молекул.",
             ],
             en: [
-              "The pool contains no service codons. Nothing is left of cell TA; of cell AT only ATA remains (isoleucine, the Amino half); of cell TG only TGG (tryptophan, the Keto half).",
+              "The pool contains no service codons. So cell TA contributes nothing to the Keto − Amino difference: the stop codons TAA and TAG are not in the pool, and TAT and TAC — both tyrosine — cancel in the subtraction. Of cell AT only ATA remains in the difference (isoleucine, the Amino half); of cell TG only TGG (tryptophan, the Keto half).",
               "So the difference between the Keto and Amino halves equals the difference between two molecules — tryptophan and isoleucine. In neutrons: {{TrpN}} − {{IleN}} = {{tiN}}. In protons: {{TrpP}} − {{IleP}} = {{tiP}}.",
               "The reduction to a single pair follows from the layout of the table. The numbers {{tiN}} and {{tiP}} are properties of the two molecules.",
             ],
@@ -7014,6 +7027,7 @@ button.level__seg {
         },
         {
           id: "6-6",
+          key: "pairPool",
           level: "pool",
           kind: { ru: "сопоставление двух фактов", en: "comparing two facts" },
           title: { ru: "Одна пара и весь пул", en: "One pair and the whole pool" },
@@ -7291,12 +7305,12 @@ button.level__seg {
           title: { ru: "Δ одинаково во всех шести половинах", en: "The same Δ in all six halves" },
           body: {
             ru: [
-              "При Key 1 число атомов водорода Δ одинаково у всех шести половин по третьей букве: {{k1_all_GT_D}} = {{dec k1_all_GT_D}}. Для Кето, Амино, Сильных и Слабых это следует из равенства по P и N. Для Пуринов и Пиримидинов равенство Δ условием не задавалось.",
+              "При Key 1 разность Δ = P − N одинакова у всех шести половин по третьей букве: {{k1_all_GT_D}} = {{dec k1_all_GT_D}}. В пуле эта разность равна числу атомов водорода в аминокислотах; при Key 1 в неё входит и единица, приписанная ATG (у стоп-кодонов P и N равны, и к Δ они ничего не добавляют). Для Кето, Амино, Сильных и Слабых равенство Δ следует из равенства по P и N. Для Пуринов и Пиримидинов равенство Δ условием не задавалось.",
               "На уровне одной буквы: в Октете I у каждой из четырёх групп Δ = {{se_oct1_C_D}}, в Октете II при Key 1 — {{k1_oct2_G_D}} у каждой. У пиримидиновых групп C и T это значение от назначений не зависит. У пуриновой группы G в пуле было {{se_oct2_G_D}}; недостающую единицу добавляет ATG, которому Key 1 приписывает {{k1StartP}} протон и {{k1StartN}} нейтронов.",
               "Сумма по октетам даёт {{k1_all_G_D}} = {{dec k1_all_G_D}} у каждой из четырёх групп по одной букве. При Key 0 у группы G было {{k0_all_G_D}}. Переключайте уровень под заголовком и следите за группой G.",
             ],
             en: [
-              "At Key 1 the hydrogen count Δ is the same for all six halves by third letter: {{k1_all_GT_D}} = {{dec k1_all_GT_D}}. For Keto, Amino, Strong and Weak this follows from their equality in P and N. For Purine and Pyrimidine the equality of Δ was not a condition.",
+              "At Key 1 the difference Δ = P − N is the same for all six halves by third letter: {{k1_all_GT_D}} = {{dec k1_all_GT_D}}. In the pool this difference counts the hydrogen atoms of the amino acids; at Key 1 it also includes the unit assigned to ATG (stop codons have equal P and N and add nothing to Δ). For Keto, Amino, Strong and Weak the equality of Δ follows from their equality in P and N. For Purine and Pyrimidine the equality of Δ was not a condition.",
               "At the one-letter level: in Octet I each of the four groups has Δ = {{se_oct1_C_D}}; in Octet II at Key 1 each has {{k1_oct2_G_D}}. For the pyrimidine groups C and T this value does not depend on any assignment. The purine group G had {{se_oct2_G_D}} in the pool; the missing unit is added by ATG, to which Key 1 assigns {{k1StartP}} proton and {{k1StartN}} neutrons.",
               "The sum over the octets gives {{k1_all_G_D}} = {{dec k1_all_G_D}} for each of the four one-letter groups. At Key 0 group G had {{k0_all_G_D}}. Switch the level under the heading and watch group G.",
             ],
@@ -7422,8 +7436,8 @@ button.level__seg {
               "Отклонения на единицу от делений 37 встречались несколько раз. Происхождение у них разное.",
               {
                 list: [
-                  "<b>Протонное.</b> Протонная сумма пула ({{poolP}} = {{dec poolP}}), протонная разность триптофана и изолейцина ({{tiP}}), Δ половины Кето ({{se_all_GT_D}}) и Δ группы G ({{se_all_G_D}}). Это одно отклонение, прослеженное по вложенным группам — от всего пула до одной группы и одной пары молекул. При Key 1 его закрывает протон, приписанный ATG.",
-                  "<b>Октетное.</b> Δ групп по одной букве: {{se_oct1_C_D}} = {{dec se_oct1_C_D}} в Октете I и {{se_oct2_C_D}} = {{dec se_oct2_C_D}} в Октете II. Эти отклонения гасят друг друга при сложении октетов и от назначений не зависят.",
+                  "<b>Протонное.</b> У протонной суммы всего пула ({{poolP}} = {{dec poolP}}) и у протонной разности триптофана и изолейцина ({{tiP}}) одинаковый остаток: до числа, кратного 37, в обоих случаях не хватает единицы. Это два разных наблюдения. Первое число получается сложением вкладов {{nPool}} кодонов, второе остаётся при сравнении половин Кето и Амино, когда остальные вклады сокращаются (шаг {{step pairPool}}). Внутри пула недостающая единица приходится на половину Кето — протонная сумма Амино кратна 37 — и переходит во вложенные группы: Δ половины Кето ({{se_all_GT_D}}) и Δ группы G ({{se_all_G_D}}) тоже на единицу ниже деления. При Key 1 её закрывает протон, приписанный ATG.",
+                  "<b>Октетное.</b> Возьмём кодоны, оканчивающиеся на C. В Октете I у них Δ = {{se_oct1_C_D}} = {{dec se_oct1_C_D}}, в Октете II — {{se_oct2_C_D}} = {{dec se_oct2_C_D}}; при сложении октетов отклонения гасят друг друга: {{se_all_C_D}} = {{dec se_all_C_D}}. То же верно для T. В этих группах служебных кодонов нет, поэтому результат сохраняется при любом назначении.",
                   "<b>При Key 0.</b> У метионина {{MetT}} = {{dec MetT}} нуклонов; эта единица закрывает недостающую единицу нуклонной суммы пула.",
                 ],
               },
@@ -7433,8 +7447,8 @@ button.level__seg {
               "One-unit deviations from the marks of 37 have appeared several times. Their origins differ.",
               {
                 list: [
-                  "<b>Proton.</b> The proton sum of the pool ({{poolP}} = {{dec poolP}}), the proton difference of tryptophan and isoleucine ({{tiP}}), Δ of the Keto half ({{se_all_GT_D}}) and Δ of group G ({{se_all_G_D}}). This is one deviation traced through nested groups — from the whole pool down to one group and one pair of molecules. At Key 1 it is closed by the proton assigned to ATG.",
-                  "<b>Octet.</b> Δ of the one-letter groups: {{se_oct1_C_D}} = {{dec se_oct1_C_D}} in Octet I and {{se_oct2_C_D}} = {{dec se_oct2_C_D}} in Octet II. These deviations cancel when the octets are added and do not depend on any assignment.",
+                  "<b>Proton.</b> The proton sum of the whole pool ({{poolP}} = {{dec poolP}}) and the proton difference of tryptophan and isoleucine ({{tiP}}) have the same remainder: in both cases one unit is missing to a multiple of 37. These are two different observations. The first number is the sum of the contributions of {{nPool}} codons; the second is what remains when the Keto and Amino halves are compared and the other contributions cancel (step {{step pairPool}}). Within the pool the missing unit falls on the Keto half — the proton sum of Amino is a multiple of 37 — and passes on to nested groups: Δ of the Keto half ({{se_all_GT_D}}) and Δ of group G ({{se_all_G_D}}) are also one unit below a mark. At Key 1 it is closed by the proton assigned to ATG.",
+                  "<b>Octet.</b> Take the codons ending in C. In Octet I their Δ is {{se_oct1_C_D}} = {{dec se_oct1_C_D}}, in Octet II {{se_oct2_C_D}} = {{dec se_oct2_C_D}}; when the octets are added, the deviations cancel: {{se_all_C_D}} = {{dec se_all_C_D}}. The same holds for T. These groups contain no service codons, so the result holds under any assignment.",
                   "<b>At Key 0.</b> Methionine has {{MetT}} = {{dec MetT}} nucleons; this unit fills the unit missing from the nucleon sum of the pool.",
                 ],
               },
@@ -7533,13 +7547,13 @@ button.level__seg {
           title: { ru: "{{nNcbi}} таблиц и две модели пула", en: "{{nNcbi}} tables and two pool models" },
           body: {
             ru: [
-              "Насколько описанные числа особенны для стандартного кода? Первый способ проверить — сравнить его с другими природными вариантами. В реестре NCBI {{nNcbi}} таблиц генетического кода: стандартная и {{nNcbiAlt}} других — для ядерных геномов, митохондрий, бактерий и пластид. От стандартной каждая отличается несколькими кодонами.",
+              "Насколько описанные числа особенны для стандартного кода? Первый способ проверить — сравнить его с другими природными вариантами. В реестре NCBI {{nNcbi}} таблиц генетического кода: стандартная и {{nNcbiAlt}} других — для ядерных геномов, митохондрий, бактерий и пластид. Таблица {{list sameAsStd}} (бактерии, археи и пластиды растений) совпадает со стандартной по аминокислотным назначениям и стоп-кодонам, поэтому и пул у неё тот же. Остальные отличаются от стандартной в одном или нескольких кодонах.",
               "Выберите таблицу в списке над таблицей кодонов. Кодоны, которые читаются иначе, чем в стандартном коде, обведены рамкой. Правила подсчёта прежние: каждый кодон получает числа своей аминокислоты, стоп-кодоны и ATG в пул не входят.",
               "У трёх таблиц ({{list ctxTables}}) есть кодоны с двойной ролью: в зависимости от окружения они читаются как стоп или как аминокислота. Поэтому сравнение ведётся по двум моделям. Модель 1 исключает из пула ATG и все кодоны, которые реестр называет стоп-кодонами. Модель 2 исключает ATG и только постоянные стоп-кодоны, а кодоны с двойной ролью считает как аминокислоты. Для остальных таблиц модели совпадают.",
               "ATG исключается во всех таблицах. Другие стартовые кодоны, которые встречаются в некоторых вариантах кода, считаются по своей аминокислоте. Это общее соглашение сравнения, как и исключение ATG в стандартном коде.",
             ],
             en: [
-              "How special are these numbers to the standard code? The first way to check is to compare it with other natural variants. The NCBI registry lists {{nNcbi}} genetic code tables: the standard one and {{nNcbiAlt}} others — for nuclear genomes, mitochondria, bacteria and plastids. Each differs from the standard table in a few codons.",
+              "How special are these numbers to the standard code? The first way to check is to compare it with other natural variants. The NCBI registry lists {{nNcbi}} genetic code tables: the standard one and {{nNcbiAlt}} others — for nuclear genomes, mitochondria, bacteria and plastids. Table {{list sameAsStd}} (the bacterial, archaeal and plant plastid code) has the same amino acid assignments and stop codons as the standard table, so its pool is the same too. The others differ from the standard table in one or more codons.",
               "Pick a table from the list above the codon table. Codons that read differently from the standard code are framed. The counting rules stay the same: each codon gets the numbers of its amino acid, and stop codons and ATG are left out of the pool.",
               "Three tables ({{list ctxTables}}) have codons with a double role: depending on context they read as a stop or as an amino acid. The comparison therefore uses two models. Model 1 leaves out ATG and every codon the registry lists as a stop codon. Model 2 leaves out ATG and only the permanent stop codons, and counts the double-role codons as amino acids. For all other tables the two models coincide.",
               "ATG is left out in every table. Other start codons that occur in some variants of the code are counted by their amino acid. This is a convention of the comparison, like the exclusion of ATG in the standard code.",
@@ -7559,14 +7573,14 @@ button.level__seg {
           body: {
             ru: [
               "В стандартном коде нейтронная сумма пула меньше нуклонной суммы Октета I на {{oct1T}} − {{poolN}} = {{deficit}} = {{dec deficit}}. Протонная сумма пула стоит на единицу ниже деления: {{poolP}} = {{dec poolP}}. Первый тест: в каких ещё таблицах получаются те же два числа?",
-              "Оба признака по отдельности выделяют одни и те же таблицы: {{list dfM1}} в Модели 1 и {{list dfM2}} в Модели 2. В остальных {{dfRest}} таблицах не воспроизводится ни тот, ни другой, ни при одной модели.",
-              "Это не независимые повторения. В таблице 11 те же аминокислоты и те же стоп-кодоны, что в стандартной. В таблице 28 три кодона с двойной ролью при Модели 1 исключаются — и остаётся в точности стандартный пул; Модель 2 возвращает их в счёт, и оба совпадения исчезают. Совпавшие строки показывают одну и ту же арифметику одного и того же пула.",
+              "Оба признака по отдельности выделяют одни и те же таблицы: {{list dfM1}} в Модели 1, {{list dfM2}} в Модели 2. В остальных {{dfRest}} таблицах не воспроизводится ни тот, ни другой, ни при одной модели.",
+              "Это не независимые повторения. Таблица 11 совпадает со стандартной по назначениям и стоп-кодонам (шаг {{step ncbiSetup}}). В таблице 28 три кодона с двойной ролью при Модели 1 исключаются — и остаётся в точности стандартный пул; Модель 2 возвращает их в счёт, и оба совпадения исчезают. Совпавшие строки показывают одну и ту же арифметику одного и того же пула.",
               "Дефицит можно отсчитывать и от Октета I самой таблицы — от тех же восьми клеток с её аминокислотами или от всех её клеток, где третья буква не меняет аминокислоту. Вывод от этого не меняется.",
             ],
             en: [
               "In the standard code the neutron sum of the pool is lower than the nucleon sum of Octet I by {{oct1T}} − {{poolN}} = {{deficit}} = {{dec deficit}}. The proton sum of the pool sits one unit below a mark: {{poolP}} = {{dec poolP}}. The first test: in which other tables do the same two numbers appear?",
-              "Each of the two features, taken separately, singles out the same tables: {{list dfM1}} under Model 1 and {{list dfM2}} under Model 2. In the other {{dfRest}} tables neither is reproduced under either model.",
-              "These are not independent repetitions. Table 11 has the same amino acids and the same stop codons as the standard one. In table 28 the three double-role codons are left out under Model 1 — and exactly the standard pool remains; Model 2 counts them again, and both matches disappear. The matching rows show one and the same arithmetic of one and the same pool.",
+              "Each of the two features, taken separately, singles out the same tables: {{list dfM1}} under Model 1; {{list dfM2}} under Model 2. In the other {{dfRest}} tables neither is reproduced under either model.",
+              "These are not independent repetitions. Table 11 coincides with the standard one in assignments and stop codons (step {{step ncbiSetup}}). In table 28 the three double-role codons are left out under Model 1 — and exactly the standard pool remains; Model 2 counts them again, and both matches disappear. The matching rows show one and the same arithmetic of one and the same pool.",
               "The deficit can also be measured from Octet I of the table itself — the same eight cells with its own amino acids, or all its cells in which the third letter does not change the amino acid. The conclusion stays the same.",
             ],
           },
@@ -7608,14 +7622,14 @@ button.level__seg {
           title: { ru: "Разность сохраняется, делимость — нет", en: "The difference survives, the divisibility does not" },
           body: {
             ru: [
-              "В стандартном пуле нейтронные суммы обеих половин кратны 37, протонная сумма Амино тоже, а протонная сумма Кето на единицу ниже деления. Этот набор воспроизводят ровно те же таблицы, что и в первом тесте: {{list dfM1}} в Модели 1 и {{list dfM2}} в Модели 2.",
-              "В таблицах {{list kaShift}} разности те же, а делимости нет. Одинаковая аминокислота на TAA и TAG прибавляет к обеим половинам одно и то же число, не кратное 37. Разность от этого не меняется, но суммы сходят с делений: ни одна из четырёх больше не кратна 37. Нейтронные остатки половин одинаковы, а протонный остаток Кето на единицу меньше, чем у Амино.",
+              "В стандартном пуле нейтронные суммы обеих половин кратны 37, протонная сумма Амино тоже, а протонная сумма Кето на единицу ниже деления. Этот набор воспроизводят ровно те же таблицы, что и в первом тесте: {{list dfM1}} в Модели 1, {{list dfM2}} в Модели 2.",
+              "В таблицах {{list kaShiftBoth}}, а в таблице {{list kaShiftM1}} — только при Модели 1, разности те же, а делимости нет. Одинаковая аминокислота на TAA и TAG прибавляет к обеим половинам одно и то же число, не кратное 37. Разность от этого не меняется, но суммы сходят с делений: ни одна из четырёх больше не кратна 37. Нейтронные остатки половин одинаковы, а протонный остаток Кето на единицу меньше, чем у Амино.",
               "Вывод: локальная асимметрия — разность одной пары молекул — переживает некоторые изменения кода. Но её сохранение ещё не означает, что воспроизводится арифметика исходного пула.",
               "Выберите таблицу 6, 29 или 30 и сравните с таблицей 1: смотрите на полоску под числами.",
             ],
             en: [
-              "In the standard pool the neutron sums of both halves are multiples of 37, so is the proton sum of Amino, and the proton sum of Keto lies one unit below a mark. This set is reproduced by exactly the same tables as in the first test: {{list dfM1}} under Model 1 and {{list dfM2}} under Model 2.",
-              "In tables {{list kaShift}} the differences are the same, but the divisibility is gone. The same amino acid at TAA and TAG adds one and the same number, not a multiple of 37, to both halves. The difference does not change, but the sums leave the marks: none of the four is a multiple of 37 any more. The neutron remainders of the halves are equal, and the proton remainder of Keto is one less than that of Amino.",
+              "In the standard pool the neutron sums of both halves are multiples of 37, so is the proton sum of Amino, and the proton sum of Keto lies one unit below a mark. This set is reproduced by exactly the same tables as in the first test: {{list dfM1}} under Model 1; {{list dfM2}} under Model 2.",
+              "In tables {{list kaShiftBoth}}, and in table {{list kaShiftM1}} under Model 1 only, the differences are the same, but the divisibility is gone. The same amino acid at TAA and TAG adds one and the same number, not a multiple of 37, to both halves. The difference does not change, but the sums leave the marks: none of the four is a multiple of 37 any more. The neutron remainders of the halves are equal, and the proton remainder of Keto is one less than that of Amino.",
               "The conclusion: the local asymmetry — the difference of one pair of molecules — survives some changes of the code. But its survival does not mean that the arithmetic of the original pool is reproduced.",
               "Pick table 6, 29 or 30 and compare with table 1: watch the strip below the numbers.",
             ],
@@ -7639,13 +7653,13 @@ button.level__seg {
             ru: [
               "Теперь применим к каждой таблице процедуру, которая дала Key 1. Все стоп-кодоны таблицы получают одно значение, ATG — своё; значения целые и неотрицательные, отдельно для протонов и нейтронов; половины Кето и Амино должны сравняться, а суммарный вклад служебных кодонов — быть наименьшим. Параметры выводятся заново для каждой таблицы.",
               "Сначала — только равенство половин, без требования делимости. Для стандартного кода получается {{boStopN}} нейтронов на стоп-кодон и ноль у ATG, и нейтронная сумма всей таблицы равна {{poolN}} + {{nStops}} · {{boStopN}} = {{boAllN}} — нуклонной сумме Октета I. Ни это равенство, ни делимость на 37 в процедуре не задавались.",
-              "В других таблицах такого совпадения нет: нейтронная сумма равна нуклонной сумме тех же восьми клеток Октета I только у таблиц {{list balEqM1}} в Модели 1 и {{list balEqM2}} в Модели 2 — там, где пул совпадает со стандартным.",
+              "В других таблицах такого совпадения нет: нейтронная сумма равна нуклонной сумме тех же восьми клеток Октета I только у таблиц {{list balEqM1}} в Модели 1, {{list balEqM2}} в Модели 2 — там, где пул совпадает со стандартным.",
               "Решение есть не всегда. У таблицы {{list balNone}} половины нельзя уравнять по нейтронам неотрицательными числами; у таблиц {{list balLoose}} суммарный вклад определён, но распределить его между кодонами можно по-разному. Переключайте таблицу и режим над таблицей кодонов.",
             ],
             en: [
               "Now apply to every table the procedure that produced Key 1. All stop codons of a table get one value and ATG its own; the values are non-negative integers, separately for protons and neutrons; the Keto and Amino halves must become equal, and the total contribution of the service codons must be the smallest possible. The parameters are derived anew for each table.",
               "First, equal halves only, with no divisibility requirement. For the standard code this gives {{boStopN}} neutrons per stop codon and zero for ATG, and the neutron sum of the whole table is {{poolN}} + {{nStops}} · {{boStopN}} = {{boAllN}} — the nucleon sum of Octet I. Neither this equality nor divisibility by 37 was imposed by the procedure.",
-              "Other tables show no such coincidence: the neutron sum equals the nucleon sum of the same eight cells of Octet I only for tables {{list balEqM1}} under Model 1 and {{list balEqM2}} under Model 2 — where the pool coincides with the standard one.",
+              "Other tables show no such coincidence: the neutron sum equals the nucleon sum of the same eight cells of Octet I only for tables {{list balEqM1}} under Model 1; {{list balEqM2}} under Model 2 — where the pool coincides with the standard one.",
               "A solution does not always exist. For table {{list balNone}} the halves cannot be made equal in neutrons with non-negative numbers; for tables {{list balLoose}} the total contribution is determined, but it can be split between the codons in different ways. Switch the table and the mode above the codon table.",
             ],
           },
@@ -7671,13 +7685,13 @@ button.level__seg {
             ru: [
               "Добавим второе условие Key 1 — делимость протонной и нейтронной сумм всей таблицы на 37. Совместное решение есть не у всех: при Модели 1 его нет у таблиц {{list modNoneM1}}.",
               "Теперь равенство нейтронной суммы таблицы и суммы Октета I выполняется у {{modEqCountM1}} таблиц из {{modSolvedM1}} (при Модели 2 — у {{modEqCountM2}} из {{modSolvedM2}}). К таблицам со стандартным пулом добавляются {{list profileExtra}}. У этих {{nProfileExtra}} таблиц после назначения совпадают со стандартным кодом при Key 1 все четыре суммы во всех {{nGroups}} группах.",
-              "Но сами назначения другие. У таблицы 2 стоп-кодон получает ({{t2StopP}}, {{t2StopN}}), а ATG — ({{t2StartP}}, {{t2StartN}}); у таблицы 10 — ({{t10StopP}}, {{t10StopN}}) и ({{t10StartP}}, {{t10StartN}}). Назначение стандартного кода — стоп-кодон ({{k1StopP}}, {{k1StopN}}), ATG ({{k1StartP}}, {{k1StartN}}) — получается только при стандартном пуле: у таблиц {{list sameKeyM1}} в Модели 1 и {{list sameKeyM2}} в Модели 2.",
+              "Но сами назначения другие. У таблицы 2 стоп-кодон получает ({{t2StopP}}, {{t2StopN}}), а ATG — ({{t2StartP}}, {{t2StartN}}); у таблицы 10 — ({{t10StopP}}, {{t10StopN}}) и ({{t10StartP}}, {{t10StartN}}). Назначение стандартного кода — стоп-кодон ({{k1StopP}}, {{k1StopN}}), ATG ({{k1StartP}}, {{k1StartN}}) — получается только при стандартном пуле: у таблиц {{list sameKeyM1}} в Модели 1, {{list sameKeyM2}} в Модели 2.",
               "Одни и те же итоговые суммы, таким образом, не выделяют стандартный код: таблицы {{list cheaper}} дают весь профиль групп даже при меньшем суммарном вкладе служебных кодонов. А у таблиц {{list totalsOnly}} совпадают только полные суммы, {{k1AllP}} и {{k1AllN}}, но не суммы отдельных групп. Выберите таблицу 10 и сравните панель групп с таблицей 1.",
             ],
             en: [
               "Add the second condition of Key 1 — divisibility of the proton and neutron sums of the whole table by 37. Not every table has a joint solution: under Model 1 tables {{list modNoneM1}} have none.",
               "The neutron sum of the table now equals the sum of Octet I for {{modEqCountM1}} of {{modSolvedM1}} tables (under Model 2, for {{modEqCountM2}} of {{modSolvedM2}}). Tables {{list profileExtra}} join those with the standard pool. For these {{nProfileExtra}} tables, after the assignment, all four sums in all {{nGroups}} groups coincide with the standard code at Key 1.",
-              "But the assignments themselves differ. In table 2 a stop codon gets ({{t2StopP}}, {{t2StopN}}) and ATG gets ({{t2StartP}}, {{t2StartN}}); in table 10, ({{t10StopP}}, {{t10StopN}}) and ({{t10StartP}}, {{t10StartN}}). The assignment of the standard code — stop codon ({{k1StopP}}, {{k1StopN}}), ATG ({{k1StartP}}, {{k1StartN}}) — arises only with the standard pool: for tables {{list sameKeyM1}} under Model 1 and {{list sameKeyM2}} under Model 2.",
+              "But the assignments themselves differ. In table 2 a stop codon gets ({{t2StopP}}, {{t2StopN}}) and ATG gets ({{t2StartP}}, {{t2StartN}}); in table 10, ({{t10StopP}}, {{t10StopN}}) and ({{t10StartP}}, {{t10StartN}}). The assignment of the standard code — stop codon ({{k1StopP}}, {{k1StopN}}), ATG ({{k1StartP}}, {{k1StartN}}) — arises only with the standard pool: for tables {{list sameKeyM1}} under Model 1; {{list sameKeyM2}} under Model 2.",
               "So the same final sums do not single out the standard code: tables {{list cheaper}} give the whole group profile with an even smaller total contribution of the service codons. And for tables {{list totalsOnly}} only the full sums, {{k1AllP}} and {{k1AllN}}, coincide, not the sums of the individual groups. Pick table 10 and compare the group panel with table 1.",
             ],
           },
@@ -7809,13 +7823,13 @@ button.level__seg {
             ru: [
               "Ещё одно наблюдение статья делает уже после просмотра данных. Сравним в пуле разности Кето минус Амино на каждой из трёх позиций. На каждой ровно одна из четырёх разностей кратна 37: на первой — нейтронная ({{asym1N}} = {{dec asym1N}}), на второй — нуклонная ({{asym2T}} = {{dec asym2T}}), на третьей — нейтронная ({{asym3N}}).",
               "Устроены они по-разному. На первых двух позициях в разности остаются вклады всех {{nAAinPool}} аминокислот пула. На третьей почти всё сокращается, и остаётся одна пара молекул (глава {{chapter pair}}). На второй позиции делимость возникает только при вычитании: сами суммы не кратны 37, но имеют одинаковые остатки.",
-              "Среди {{nNcbi}} таблиц NCBI то же сочетание — нейтроны, нуклоны, нейтроны — есть только у таблиц {{list asymM1}} в Модели 1 и {{list asymM2}} в Модели 2, то есть там, где пул совпадает со стандартным. В остальных таблицах оно сохраняется не более чем на одной позиции.",
+              "Среди {{nNcbi}} таблиц NCBI то же сочетание — нейтроны, нуклоны, нейтроны — есть только у таблиц {{list asymM1}} в Модели 1, {{list asymM2}} в Модели 2, то есть там, где пул совпадает со стандартным. В остальных таблицах оно сохраняется не более чем на одной позиции.",
               "Сочетание выделено после просмотра данных, и сравнение таблиц не даёт вероятности его случайного появления.",
             ],
             en: [
               "The paper makes one more observation after looking at the data. Compare, in the pool, the Keto minus Amino differences at each of the three positions. At each position exactly one of the four differences is a multiple of 37: the neutron one at the first ({{asym1N}} = {{dec asym1N}}), the nucleon one at the second ({{asym2T}} = {{dec asym2T}}), and the neutron one at the third ({{asym3N}}).",
               "They arise in different ways. At the first two positions the contributions of all {{nAAinPool}} amino acids of the pool remain in the difference. At the third almost everything cancels and one pair of molecules is left (chapter {{chapter pair}}). At the second position divisibility appears only on subtraction: the sums themselves are not multiples of 37 but have equal remainders.",
-              "Among the {{nNcbi}} NCBI tables the same combination — neutrons, nucleons, neutrons — occurs only in tables {{list asymM1}} under Model 1 and {{list asymM2}} under Model 2, that is, where the pool coincides with the standard one. In the other tables it is kept at no more than one position.",
+              "Among the {{nNcbi}} NCBI tables the same combination — neutrons, nucleons, neutrons — occurs only in tables {{list asymM1}} under Model 1; {{list asymM2}} under Model 2, that is, where the pool coincides with the standard one. In the other tables it is kept at no more than one position.",
               "The combination was singled out after looking at the data, and the comparison of tables gives no probability of its chance occurrence.",
             ],
           },
@@ -7843,13 +7857,13 @@ button.level__seg {
           body: {
             ru: [
               "Сравнение с природными вариантами не говорит, насколько вероятны такие числа «просто так». Для этого статья строит случайные коды. Устройство таблицы сохраняется: {{nCodons}} кодона, три стоп-кодона и {{nAA}} блоков кодонов-синонимов с их размерами. Меняется только одно: какая аминокислота какому блоку досталась. Двадцать реальных аминокислот случайно переставляются между блоками.",
-              "Нажмите «Перемешать». Каждая аминокислота переезжает в чужой блок вместе со своими протонами и нейтронами, а группы кодонов остаются прежними. Посмотрите на панель групп: отметок {{sq}} обычно становится намного меньше.",
+              "Нажмите «Перемешать». Аминокислоты случайно распределяются по тем же блокам вместе со своими протонами и нейтронами; некоторые могут остаться на прежнем месте. Группы кодонов остаются прежними. Посмотрите на панель групп: отметок {{sq}} обычно становится намного меньше.",
               "Вместе с ATG из пула исключается та аминокислота, которая попала в его блок. Отдельный расчёт, где метионин закреплён за ATG, — на шаге {{step mcMet}}.",
               "Такое сравнение со случайными альтернативами применяется в исследованиях оптимальности генетического кода. Оно оценивает расстановку аминокислот при заданном устройстве таблицы — и ничего не говорит о том, как возникло само устройство.",
             ],
             en: [
               "Comparison with natural variants does not tell how likely such numbers are “just by chance”. For that the paper builds random codes. The layout of the table is kept: {{nCodons}} codons, three stop codons and {{nAA}} blocks of synonymous codons with their sizes. Only one thing changes: which amino acid goes to which block. The twenty real amino acids are randomly permuted among the blocks.",
-              "Press “Shuffle”. Each amino acid moves to another block together with its protons and neutrons, while the codon groups stay the same. Look at the group panel: there are usually far fewer {{sq}} marks.",
+              "Press “Shuffle”. The amino acids are randomly redistributed over the same blocks together with their protons and neutrons; some may stay where they were. The codon groups stay the same. Look at the group panel: there are usually far fewer {{sq}} marks.",
               "Together with ATG, the amino acid that landed in its block is left out of the pool. A separate calculation with methionine fixed at ATG is at step {{step mcMet}}.",
               "Such a comparison with random alternatives is used in studies of the optimality of the genetic code. It assesses the placement of amino acids for a given layout of the table — and says nothing about how the layout itself arose.",
             ],
@@ -8215,14 +8229,14 @@ button.level__seg {
               "Основное согласование видно уже в пуле без назначений: нейтронная сумма {{poolN}} = {{dec poolN}}, протонная {{poolP}} = {{dec poolP}}, а различие половин Кето и Амино сводится к одной паре молекул. Key 1 показывает, что эти исходные отношения можно согласовать в полной таблице при явно заданных условиях.",
               "Проверки уточняют, где эта структура выделяется, — они собраны в таблице под кодом. Эти проверки не дают вероятности случайного происхождения кода.",
               "Поиск биологических механизмов, которые могли бы объяснить найденные связи, остаётся делом дальнейших исследований: такие гипотезы должны давать проверяемые предсказания сверх уже известных числовых соотношений.",
-              "Полный текст, данные и программы — в препринте и в репозитории статьи; ссылки внизу страницы.",
+              "Полный текст, данные и программы — в препринте и в репозитории статьи; ссылки над заголовком.",
             ],
             en: [
               "The regularities found link the chemical layout of the code table with the nucleon composition of the amino acids. Their values depend on two things at once: the composition of the molecules and the codons they correspond to.",
               "The main agreement is already visible in the pool without assignments: the neutron sum is {{poolN}} = {{dec poolN}}, the proton sum {{poolP}} = {{dec poolP}}, and the difference between the Keto and Amino halves reduces to one pair of molecules. Key 1 shows that these original relations can be reconciled in the full table under explicitly stated conditions.",
               "The checks specify where this structure stands out — they are gathered in the table below the code. These checks do not give a probability that the code arose by chance.",
               "The search for biological mechanisms that could explain the links found is left to further research: such hypotheses must give testable predictions beyond the numerical relations already known.",
-              "The full text, the data and the programs are in the preprint and in the repository of the paper; the links are at the bottom of the page.",
+              "The full text, the data and the programs are in the preprint and in the repository of the paper; the links are above the title.",
             ],
           },
           scene: {

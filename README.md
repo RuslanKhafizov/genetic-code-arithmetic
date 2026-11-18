@@ -44,11 +44,18 @@ It provides:
    for reproducing any numerical result reported in the
    preprint.
 
-7. Metadata files (`LICENSE`, `LICENSE-CODE`,
+7. An **explainer page**, `explainer.html`, for readers:
+   a step-by-step account of the results and discussion
+   of the preprint with an interactive code table, hosted at
+   [ruslankhafizov.github.io/genetic-code-arithmetic/explainer.html](https://ruslankhafizov.github.io/genetic-code-arithmetic/explainer.html).
+   It is not required for reproducing any numerical
+   result reported in the preprint.
+
+8. Metadata files (`LICENSE`, `LICENSE-CODE`,
    `CITATION.cff`) supporting citation and reuse of the
    repository.
 
-8. **Russian-language companion materials** under
+9. **Russian-language companion materials** under
    `russian/`: the Russian manuscript source (`main_ru.tex`),
    its compiled PDF (`main_ru.pdf`), and a
    Russian-language repository guide (`README_ru.md`).
@@ -66,6 +73,8 @@ The development repository is available on GitHub at
 [github.com/RuslanKhafizov/genetic-code-arithmetic](https://github.com/RuslanKhafizov/genetic-code-arithmetic),
 and the interactive visualizer is hosted at
 [ruslankhafizov.github.io/genetic-code-arithmetic](https://ruslankhafizov.github.io/genetic-code-arithmetic).
+A step-by-step explainer of the preprint is hosted at
+[ruslankhafizov.github.io/genetic-code-arithmetic/explainer.html](https://ruslankhafizov.github.io/genetic-code-arithmetic/explainer.html).
 
 ## Repository contents
 
@@ -408,6 +417,39 @@ The visualization export additionally supports exploratory and
 custom configurations that are intentionally outside that core
 pipeline.
 
+### Explainer page
+
+`explainer.html` is a step-by-step explainer of the preprint
+for readers. It follows the Results and Discussion sections
+in their order and summarizes the methods in its first
+chapters. The text of each step is shown next to the code
+table and the panel of 33 codon groups. On steps that show
+group sums, the page indicates which codons and assignments
+enter the calculation.
+
+A hosted version is available at
+[https://ruslankhafizov.github.io/genetic-code-arithmetic/explainer.html](https://ruslankhafizov.github.io/genetic-code-arithmetic/explainer.html)
+
+The page opens in English; the RU button, or `?lang=ru` in
+the address, switches it to Russian. It is a single
+self-contained file: the texts, data, styles and program
+are inside, and no external
+libraries are loaded, so a saved copy also works offline.
+On opening, the page recomputes the group sums and the
+deterministic controls from copies of the input datasets of
+release v2.2.3 and checks them against copies of the
+published CSV files; if any value disagrees, it shows a
+warning. In Chapter 12, readers can rerun the Monte Carlo
+calculation of `mc_significance.py` and `mc_sensitivity.py`
+and compare the resulting counts with the published ones.
+The page uses the same pseudo-random number generator and
+the same seed, so a full run reproduces them exactly.
+
+The page is not part of the reproducibility pipeline and is
+not a source of published numbers: the scripts and CSV files
+of this repository remain the authoritative definitions of
+the results.
+
 ### Supplementary controls
 
 The script `controls.py` writes four files: results of three specificity
@@ -480,7 +522,8 @@ though seeded for reproducibility. See its dedicated section below.
 - `LICENSE-CODE` — MIT License, copyright © 2025–2026 Ruslan
   Khafizov. Covers the source code (`reproduce.py`, `controls.py`,
   `mc_significance.py`, `verify_mc.py`, `mc_sensitivity.py`,
-  `verify_mc_sensitivity.py`, `visualization.html`).
+  `verify_mc_sensitivity.py`, `visualization.html`,
+  `explainer.html`).
 - `index.html` — a redirect stub so that GitHub Pages serves
   `visualization.html` at the site root; it is not used by the analysis.
 - `CITATION.cff` — machine-readable citation metadata in Citation
