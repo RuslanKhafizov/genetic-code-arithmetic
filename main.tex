@@ -89,9 +89,11 @@ domains of life, and the limited scope of variation
 in the known alternative codes, indicate that the
 basic structure of the standard code was already
 established at the early stages of biological
-evolution. Any organizational regularities present in its arithmetic structure therefore require precise analysis as one of the few potential sources of information about the early stages of life.
+evolution~\cite{crick1968}. Any organizational regularities present in its arithmetic structure therefore require precise analysis as one of the few potential sources of information about the early stages of life.
 
-The arithmetic structure of the standard genetic code has been studied since shortly after its decipherment. Yu.~B.~Rumer~\cite{rumer1966,rumer1968} introduced the partition of the $64$ codons into two classes of $32$ codons each, Octet~I (the eight four-fold degenerate families) and Octet~II (the remaining codons), related by the involution $R = (\mathrm{T} \leftrightarrow \mathrm{G}, \mathrm{C} \leftrightarrow \mathrm{A})$. Shcherbak and Makukov~\cite{makukov2013} observed that the number $37$ plays a recurrent role in the arithmetic of the code, appearing as a divisor of amino acid nucleon sums across various groupings of codons. Panov and Filatov~\cite{panov2024} revisited and extended this analysis, using per-codon counting, which forms the methodological basis of the present study.
+The arithmetic structure of the standard genetic code has been studied since shortly after its decipherment. Yu.~B.~Rumer~\cite{rumer1966,rumer1968} introduced the partition of the $64$ codons into two classes of $32$ codons each, Octet~I (the eight four-fold degenerate families) and Octet~II (the remaining codons), related by the involution $R = (\mathrm{T} \leftrightarrow \mathrm{G}, \mathrm{C} \leftrightarrow \mathrm{A})$. Shcherbak~\cite{shcherbak1993,shcherbak2003} showed that for several codon
+groups the amino acid nucleon sums are divisible by~$37$. In joint work
+with Makukov~\cite{makukov2013}, he gave a systematic account of these regularities. Panov and Filatov~\cite{panov2024} revisited and extended this analysis, using per-codon counting, which forms the methodological basis of the present study.
 
 The present analysis uses the proton and neutron counts of the twenty canonical amino acids in their free neutral forms under the most-abundant-isotope convention; once these conventions are fixed, the counts are uniquely determined. These quantities are considered together with two natural grouping systems defined independently of the nucleon arithmetic. The first is the Rumer partition. The second is
 given by the three chemical axes of the third codon
@@ -404,7 +406,7 @@ classifications:
 These axes were not selected in response to the subsequent
 nucleon calculations: they are three conventional pairwise
 dichotomies of the nucleotides and are represented explicitly
-in the IUPAC--IUB ambiguity nomenclature by the symbol pairs
+in the IUPAC--IUB ambiguity nomenclature~\cite{cornishbowden1985} by the symbol pairs
 R/Y, S/W, and M/K. Together they exhaust the three
 possible partitions of four nucleotides into two unordered
 pairs, thereby yielding six two-element subsets
@@ -656,9 +658,9 @@ specified.
 \paragraph{Criterion 1: divisibility by 37.}
 For every group quantity $P$, $N$, $T$ and $\Delta$, we compute the
 quotient and remainder upon division by~$37$. A zero remainder denotes
-exact divisibility. This criterion continues the line of investigation
-opened by \citet{makukov2013} and developed by
-\citet{panov2024}. When a value is divisible by~$37$, its displayed
+exact divisibility. Divisibility of nucleon sums by~$37$ was studied previously by
+Shcherbak~\cite{shcherbak1993,shcherbak2003}, by Shcherbak and Makukov~\cite{makukov2013}, and by
+Panov and Filatov~\cite{panov2024}. When a value is divisible by~$37$, its displayed
 factorization also exposes any further factors of the quotient; these
 are not assigned separate evidential weight without an additional
 analysis. Nonzero residues are reported descriptively only when they enter
@@ -837,7 +839,7 @@ analyzed pool contains 60 codons. Two models are used. Model~1 excludes
 $\mathrm{ATG}$ and every codon listed in the \texttt{Stop\_Codons}
 field. Model~2 excludes $\mathrm{ATG}$ and only the permanent stop
 codons marked \texttt{*} in the \texttt{Amino\_Acids} field;
-context-dependent stops are included in the analysis with the amino
+context-dependent stops~\cite{swart2016,heaphy2016,zahonova2016} are included in the analysis with the amino
 acid assignments recorded for them. The models coincide for tables
 without context-dependent stops. For the standard table, both models
 give the same 60-codon service-excluded pool. The actual number of
@@ -1471,14 +1473,12 @@ $+13/-13$ between the branches of Octet~II and from the
 divisibility of Octet~I, and do not form an independent set of
 results.
 
-The divisibilities $T(\mathrm{Octet~I})=3700$,
-$T_{0}(\mathrm{Octet~II})=4218$, and
-$T_{0}(\mathrm{Keto}\cap\mathrm{Octet~II})
-=T_{0}(\mathrm{Strong}\cap\mathrm{Octet~II})=2220$ correspond, in
-the group formalism adopted here, to results of Shcherbak and
-Makukov~\cite{makukov2013} and Panov and
-Filatov~\cite{panov2024}; see
-Section~\ref{sec:discussion-prior-work} for further discussion.
+Mi\v{s}i\'c~\cite[Table~3]{misic2016} and Panov and Filatov~\cite{panov2024}
+reported the per-codon sums $T(\mathrm{Octet~I})=3700$ and $T_{0}(\mathrm{Octet~II})=4218$.
+Section~\ref{sec:discussion-prior-work} shows how the equality
+$T_{0}(\mathrm{Keto}\cap\mathrm{Octet~II})=T_{0}(\mathrm{Strong}\cap\mathrm{Octet~II})=2220$
+relates to the balance that Shcherbak~\cite{shcherbak1993,shcherbak2003}
+obtained under contracted counting.
 The complete values of the group quantities under Key~0 are given
 in \texttt{key0\_nucleon-data.csv}.
 
@@ -3191,7 +3191,7 @@ permutations of amino acids. Here we estimate how often randomly
 reassigning amino acids to the blocks of the standard code
 produces a comparable concentration of group quantities at
 and near multiples of $37$. Comparisons with random alternatives
-are used in studies of genetic-code optimality~\citep{freeland1998}.
+are used in studies of genetic-code optimality~\citep{haig1991,freeland1998}. Downes and Richardson~\cite{downes2002} compared the balance between the main-chain and side-chain masses of amino acid residues in the standard and alternative genetic codes. When the twenty amino acids were randomly reassigned among the synonymous codon groups of the standard code, the equality of sums observed in the standard code recurred in about one case in~$3300$.
 
 The null model preserves the $64$ codons, the twenty synonymous
 blocks with their sizes, the three stop codons, the Rumer
@@ -3207,12 +3207,12 @@ extend the analysis to the complete table under Key~0 and Key~1,
 respectively.
 
 For each of the six main summaries, $M=10^{6}$ trials give the estimated tail
-probability $p_{\mathrm{MC}}=(b+1)/(M+1)$, where $b$ is the
+probability $p_{\mathrm{MC}}=(b+1)/(M+1)$~\cite{north2002}, where $b$ is the
 number of random codes with a result at least as extreme as
 the observed one. Equal or greater values are counted for
 divisibility counts, and equal or smaller values for mean
 distances. Each estimate is accompanied by a $95\%$ Wilson
-interval for the proportion $b/M$, describing Monte Carlo uncertainty.
+interval~\cite{wilson1927} for the proportion $b/M$, describing Monte Carlo uncertainty.
 The calculation is implemented in \texttt{mc\_significance.py}
 with the random seed \texttt{seed=0};
 the summary identifiers and results are reported in
@@ -3363,7 +3363,7 @@ All reported $p_{\mathrm{MC}}$ values are nominal probabilities
 for individual summaries: no multiplicity correction was applied
 to either the main summaries or the additional checks, and dependent $p$-values
 are not combined by multiplication. The modulus $37$ is taken
-from prior literature; the main summaries were formally defined
+from prior literature~\cite{shcherbak1993,shcherbak2003,makukov2013,panov2024}; the main summaries were formally defined
 before the final Monte Carlo run but after inspection of the
 observed structure. The analysis was not preregistered and is
 exploratory. The resulting probabilities refer to the models considered here,
@@ -3374,9 +3374,6 @@ of a natural code arising or identify a biological mechanism.
 \subsection{Relation to prior work}
 \label{sec:discussion-prior-work}
 
-Previous work by Rumer, Shcherbak and Makukov,
-and Panov and Filatov is particularly relevant to
-the arithmetic structure analyzed in the present study.
 Yu.~B.~Rumer~\cite{rumer1966,rumer1968}
 introduced a partition of the $64$ codons of the standard code
 into two equal classes: Octet~I,
@@ -3386,7 +3383,7 @@ These two classes are related by the involution
 $R = (\mathrm{T} \leftrightarrow \mathrm{G},
 \mathrm{C} \leftrightarrow \mathrm{A})$, which maps
 each family in one class to a family in the other.
-Shcherbak and Makukov~\cite{makukov2013}
+Shcherbak~\cite{shcherbak1993,shcherbak2003}, and later Shcherbak and Makukov~\cite{makukov2013},
 noted the recurring role of~$37$ in the genetic code
 as a divisor of amino acid nucleon sums across different
 codon groupings. Panov and Filatov~\cite{panov2024}
@@ -3398,45 +3395,47 @@ They also proposed an alternative assignment of
 a total nucleon count of~$74$ to each stop codon.
 
 The present work differs from these studies in several
-methodological choices. Alongside whole molecules,
-Shcherbak and Makukov, and subsequently Panov and Filatov,
-consider the decomposition of an amino acid into a standard
-block and a variable side chain, and many of their nucleon
-sums involve side chains alone. Making the blocks uniform
+methodological choices. These studies treat amino acids as whole molecules or divide them into
+a standard block and a variable side chain~\cite{shcherbak1993,shcherbak2003,makukov2013,panov2024}.
+Many of their calculations count only the nucleons in the side chains. Making the blocks uniform
 requires special treatment of proline, whose cyclic side
 chain reduces the nucleon count of its block to~$73$
 rather than~$74$: to bring it into line with the other
-nineteen amino acids, Shcherbak and Makukov introduce
-a virtual transfer of one nucleon from its side chain
-to its block --- an operation they call the
-\emph{activation key}. The total nucleon count of proline
+nineteen amino acids, Shcherbak~\cite{shcherbak1993} formally transfers one nucleon
+from the proline side chain to its block. In joint work with
+Makukov~\cite{makukov2013}, he called this operation the \emph{activation key}. The total nucleon count of proline
 is unchanged: $42+73=41+74=115$.
 The present work uses the total nucleon counts of amino
 acids without separating blocks and side chains,
 so the question of this redistribution for proline does not arise.
-Both previous studies use per-codon counting as well as
+Shcherbak~\cite{shcherbak2003}, Shcherbak and Makukov~\cite{makukov2013}, and Panov and Filatov~\cite{panov2024} use per-codon counting as well as
 contracted counting, in which each amino acid is counted
 once in each family that encodes it, regardless of the number
 of corresponding codons in that family. The present work
 consistently uses per-codon counting. Finally, the results
 of previous work considered below concern the total nucleon
 count~$T$ or its decomposition into blocks and side chains.
+Rako\v{c}evi\'c~\cite{rakocevic2011} reported separate proton and neutron sums
+for the side chains of the twenty amino acids. Mi\v{s}i\'c~\cite{misic2016}
+proposed repeating her analysis using proton counts in place of nucleon counts.
 Our analysis separately considers protons~$P$ and neutrons~$N$,
 as well as the difference $\Delta = P - N$; this allows us to
 investigate relations that are not determined by the sum~$T$ alone.
 
-The two previous studies also differ from ours in the schemes
+The previous studies also differ from ours in the schemes
 used to group codons. They employ several grouping schemes
 in parallel (Gamow's sorting and others), within which
-different arithmetic regularities are considered.
+different arithmetic regularities are considered. N\'egadi~\cite{negadi2024} counted hydrogen atoms in amino acid side chains
+separately for Rumer's octets and for the four groups of codons defined by their third base.
+These calculations treated four amino acids as charged.
 The present work formulates a single grouping system based
 on Rumer's octets and the chemical axes of the third position,
 and consistently analyzes the arithmetic structure within it.
 The parametrization of service codons also differs:
-Shcherbak and Makukov treat stop codons as contributing zero
-and count $\mathrm{ATG}$ as encoding methionine;
-Panov and Filatov additionally propose assigning a total
-nucleon count of~$74$ to stop codons, whereas the present
+in Shcherbak's calculations and his joint work with Makukov,
+stop codons contribute zero and $\mathrm{ATG}$ is counted as a methionine codon~\cite{shcherbak1993,shcherbak2003,makukov2013}.
+Panov and Filatov~\cite{panov2024} also consider an assignment in which each stop codon
+receives a total nucleon count of~$74$, whereas the present
 work treats the parametrization of service codons as part
 of the derivation of Key~1
 (Section~\ref{sec:results-key1-derivation}).
@@ -3446,9 +3445,9 @@ the methionine contribution of $\mathrm{ATG}$,
 equal to $149$, whereas under Key~1
 $T_{1}(\mathrm{ATG})=1$; our key also specifies
 proton and neutron contributions separately.
-Finally, alongside the standard code, Shcherbak and Makukov
-consider the euplotid variant (in which $\mathrm{TGA}$
-is reassigned to cysteine) as a symmetrized counterpart
+Finally, alongside the standard code, Shcherbak~\cite{shcherbak2003}
+considers the euplotid variant (in which $\mathrm{TGA}$
+is reassigned to cysteine), which Shcherbak and Makukov regard as a symmetrized counterpart
 of the standard code; Panov and Filatov also consider this
 reassignment. The present work focuses on the standard code
 and compares its arithmetic structure with
@@ -3459,10 +3458,10 @@ counting rules
 We now describe how divisibility results from these previous
 studies map onto the groups defined in the present analysis.
 Under contracted counting, where each amino acid is counted
-once in each family that encodes it, Shcherbak and Makukov
+once in each family that encodes it, Shcherbak~\cite{shcherbak1993}
 obtained the sum $925 = 25 \cdot 37$ for Octet~I.
 For Octet~II, with stop codons contributing zero,
-their balance between blocks and side chains implies
+the balance between blocks and side chains given in the same work implies
 the sum $1110+1110=2220=60\cdot37$.
 These sums refer to the contracted representation,
 not to summation over all codons in the octet.
@@ -3470,7 +3469,7 @@ Using per-codon counting, Panov and Filatov obtained
 sums corresponding to our Key~0:
 $T(\mathrm{Octet~I}) = 3700 = 100 \cdot 37$
 and $T_{0}(\mathrm{Octet~II}) = 4218 = 114 \cdot
-37$. Under their alternative assignment of~$74$
+37$ (the same sums were given earlier by Mi\v{s}i\'c~\cite[Table~3]{misic2016}). Under their alternative assignment of~$74$
 to each stop codon, the second sum becomes
 $4440 = 120 \cdot 37$.
 
@@ -3542,7 +3541,7 @@ twenty amino acids are permuted among the synonymous blocks,
 and in the additional model methionine is fixed at $\mathrm{ATG}$
 (Section~\ref{sec:discussion-montecarlo}). These models
 do not describe the evolutionary origin of the architecture
-itself. The modulus~$37$ is motivated by prior literature,
+itself. The modulus~$37$ is motivated by prior literature~\cite{shcherbak1993,shcherbak2003,makukov2013,panov2024},
 but the summaries were chosen after inspection of the observed
 structure. Their nominal $p$-values do not estimate the
 probability of finding an arbitrary arithmetic regularity after
@@ -3567,12 +3566,15 @@ resulting assignments have a formal arithmetic meaning and are
 not interpreted as the composition of actual products of the
 service codons. Equalities imposed by the conditions of the
 derivation, or following from them, likewise do not serve as
-independent evidence for these conditions. The equality
-$N_1(\mathrm{All})=T(\mathrm{Octet~I})$ also depends on the
-premise of equal assignments to the stop codons: without it,
-with the other conditions retained, the minimal neutron sum of
-the complete table is $3626$, and the assignments to individual
-service codons are not unique.
+independent evidence for these conditions. The condition of equal
+assignments to the three stop codons is essential for the minimal
+solution to give the neutron sum $3700$, equal to the nucleon sum of
+Octet~I. If, with the other conditions retained, the stop codons are
+allowed different assignments, the minimal neutron sum drops to
+$3626$, and the assignments to individual codons are no longer unique:
+$37$ neutrons and $37$ protons can be split arbitrarily between
+$\mathrm{TAA}$ and $\mathrm{TGA}$, and one proton between
+$\mathrm{ATG}$ and $\mathrm{TAG}$.
 
 The specificity among the $27$ NCBI tables is limited to the
 registry examined and to the rules for treating context-dependent
